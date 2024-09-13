@@ -63,8 +63,8 @@ function installPrerequisites(){
 }
 
 function cloneRepositories(){
-    git clone https://github.com/steveicarus/iverilog.git $REPOS_DIR
-    git clone https://github.com/verilator/verilator.git $REPOS_DIR
+    git clone https://github.com/steveicarus/iverilog.git $REPOS_DIR/iverilog
+    git clone https://github.com/verilator/verilator.git $REPOS_DIR/verilator
 }
 
 function installTools(){
