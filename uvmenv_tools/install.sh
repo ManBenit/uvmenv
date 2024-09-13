@@ -24,8 +24,7 @@ C_N="\e[39m"
 
 
 function main(){
-    apt update
-    apt upgrade
+    apt update && apt upgrade -y
 
     createInstallingStructure
     installPrerequisites
