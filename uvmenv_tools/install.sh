@@ -36,7 +36,7 @@ function main(){
 }
 
 function createCommand(){
-    ln -s $TOOLS_DIR/uvmenv_command.sh $COMMAND
+    ln -s $TOOLS_DIR/command.sh $COMMAND
 }
 
 
