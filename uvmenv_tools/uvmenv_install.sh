@@ -5,83 +5,86 @@
 ############################################################################################################
 
 # Installation paths
-BASE_DIR=/opt/UVMEnv
-REPOS_DIR=$BASE_DIR/repos
-BASES_DIR=$BASE_DIR/bases
-TOOLS_DIR=$BASE_DIR/tools
+MAIN_DIR=/opt/UVMEnv
+REPOS_DIR=$MAIN_DIR/repos
+BASES_DIR=$MAIN_DIR/bases
+TOOLS_DIR=$MAIN_DIR/tools
+COMMAND=/usr/bin/uvmenv
 
 
 ### Bash colors ####
 C_RED="\e[31m"
 C_BLUE="\e[34m"
+C_CYAN="\e[36m"
 C_GREEN="\e[32m"
+C_YELLOW="\e[33m"
+C_WHITE="\e[37m"
 C_N="\e[39m"
 ####################
 
 
-# Path where repositories will be clonned and environment log files will be witten.
-# $(pwd) by default
-INSTALL_DIR=$(pwd)
-
 function main(){
-    mkdir $BASE_DIR
-    mkdir $REPOS_DIR $BASES_DIR $TOOLS_DIR
+    apt update
+    apt upgrade
 
-    # Descargar archivos y colocarlos en la ruta base
-    # CONTINUE_HERE
-
-    cd $INSTALL_DIR
-
-    sudo apt update
-    sudo apt upgrade
+    createInstallingStructure
     installPrerequisites
     cloneRepositories
     installTools
+    createCommand
 
-    #sudo mv env.txt /usr/bin/uvmenv
-    #sudo chmod 755 /usr/bin/uvmenv
+}
 
-    #sudo mkdir /opt/uvmenv/
+function createCommand(){
+    ln -s $TOOLS_DIR/uvmenv_command.sh $COMMAND
 }
 
 
-function createInstallStructure(){
-    
+function createInstallingStructure(){
+    mkdir $MAIN_DIR
+    mkdir $REPOS_DIR $BASES_DIR $TOOLS_DIR
+
+    # Copy file bases
+    cp -r uvmenv_bases/* $BASES_DIR
+
+    # Copy tools
+    cp -r uvmenv_tools/* $TOOLS_DIR
 }
 
 function installPrerequisites(){
-    echo -e "${C_GREEN}Verifying prerequisites...${C_N}"
-    sudo apt install -y git tree help2man perl python3 python3-pip make autoconf g++ flex bison ccache
-    sudo apt install -y libgoogle-perftools-dev numactl perl-doc
-    sudo apt install -y libfl2  # Ubuntu only (ignore if gives error)
-    sudo apt install -y libfl-dev  # Ubuntu only (ignore if gives error)
-    sudo apt install -y zlib1g zlib1g-dev #zlibc  # Ubuntu only (ignore if gives error)
+    # Necesary libraries for tools
+    echo -e "\n\n${C_GREEN}############### Verifying prerequisites... ###############${C_N}"
+    apt install -y git tree help2man perl python3 python3-pip make autoconf g++ flex bison ccache
+    apt install -y libgoogle-perftools-dev numactl perl-doc
+    apt install -y libfl2  # Ubuntu only (ignore if gives error)
+    apt install -y libfl-dev  # Ubuntu only (ignore if gives error)
+    apt install -y zlib1g zlib1g-dev #zlibc  # Ubuntu only (ignore if gives error)
     pip3 install cocotb
     pip3 install pyuvm
 }
 
 function cloneRepositories(){
-    git clone https://github.com/steveicarus/iverilog.git
-    git clone https://github.com/verilator/verilator.git
+    git clone https://github.com/steveicarus/iverilog.git $REPOS_DIR
+    git clone https://github.com/verilator/verilator.git $REPOS_DIR
 }
 
 function installTools(){
-    echo -e "${C_GREEN}Installing jq...${C_N}"
-    sudo apt install -y jq
+    echo -e "\n\n${C_GREEN}############### Installing jq... ###############${C_N}"
+    apt install -y jq
 
-    echo -e "${C_GREEN}Installing GTKWave...${C_N}"
-    sudo apt install -y gtkwave
+    echo -e "\n\n${C_GREEN}############### Installing GTKWave... ###############${C_N}"
+    apt install -y gtkwave
 
-    echo -e "${C_GREEN}Installing Icarus...${C_N}"
+    echo -e "\n\n${C_GREEN}############### Installing Icarus... ###############${C_N}"
     installIcarus
 
-    echo -e "${C_GREEN}Installing Verilator...${C_N}"
+    echo -e "\n\n${C_GREEN}############### Installing Verilator... ###############${C_N}"
     installVerilator
 }
 
 
 function installIcarus(){
-    cd iverilog
+    cd $REPOS_DIR/iverilog
 
     chmod 775 autoconf.sh
     ./autoconf.sh
@@ -94,13 +97,11 @@ function installIcarus(){
     fi
     
     make -j $(nproc)
-    sudo make install
-
-    cd ..
+    make install
 }
 
 function installVerilator(){
-    cd verilator
+    cd $REPOS_DIR/verilator
 
     local shell=$(ps -p $$ | grep -E 'ksh|bash|zsh|tcsh|sh|csh' | awk '{print $4}')
     if [ "$shell" == "bash" ]; then
@@ -125,9 +126,7 @@ function installVerilator(){
     #    read opt
     #fi
 
-    sudo make install
-
-    cd ..
+    make install
 }
 
 

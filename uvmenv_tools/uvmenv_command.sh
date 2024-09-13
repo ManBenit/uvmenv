@@ -12,8 +12,8 @@
 
 #************** DIRECTORIES **************#
 # Main paths
-TOOLS_DIR=/home/manbenit/Gitlab/mcic-tesis/Tesis/programas/UVMenv/uvmenv_tools
-BASES_DIR=/home/manbenit/Gitlab/mcic-tesis/Tesis/programas/UVMenv/uvmenv_bases
+TOOLS_DIR=/opt/UVMEnv/uvmenv_tools
+BASES_DIR=/opt/UVMEnv/uvmenv_bases
 BASES_REPRESENT_DIR=$BASES_DIR/representative_files
 BASES_COMPONENT_DIR=$BASES_DIR/component_files
 BASES_COMMAND_DIR=$BASES_DIR/command_files
@@ -41,7 +41,7 @@ BFMIMPL_DIR=$BFM_DIR/_impl
 
 #************** FILES **************#
 CONFIG_FILE=$PROJECT_DIR/config.json
-RUN_FILE=$TOOLS_DIR/run
+RUN_FILE=$TOOLS_DIR/run.sh
 
 # *** BASES *** #
 # Command files
@@ -239,7 +239,7 @@ function main(){
                 exit 0
             fi
 
-            $TOOLS_DIR/run
+            $RUN_FILE
         ;;
 
         *)
