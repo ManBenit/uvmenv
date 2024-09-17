@@ -35,7 +35,9 @@ function main(){
 
 function createFrameworkEnv(){
     # Copy tools
-    cp -r uvmenv_tools/* $TOOLS_DIR
+    cp uvmenv_tools/command.sh $TOOLS_DIR
+    cp uvmenv_tools/run.sh $TOOLS_DIR
+    cp uvmenv_tools/uninstall.sh $TOOLS_DIR
 
     # Copy bases
     cp -r uvmenv_bases/* $BASES_DIR
