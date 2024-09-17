@@ -5,7 +5,7 @@
 ############################################################################################################
 
 # Installation paths
-MAIN_DIR=/home/$(whoami)/.local/UVMEnv
+MAIN_DIR=/home/$(whoami)/UVMEnv
 REPOS_DIR=$MAIN_DIR/repos
 BASES_DIR=$MAIN_DIR/bases
 TOOLS_DIR=$MAIN_DIR/tools

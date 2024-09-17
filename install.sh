@@ -5,7 +5,7 @@
 ############################################################################################################
 
 # Installation paths
-MAIN_DIR=/home/$(whoami)/.local/UVMEnv
+MAIN_DIR=/home/$(whoami)/UVMEnv
 REPOS_DIR=$MAIN_DIR/repos
 BASES_DIR=$MAIN_DIR/bases
 TOOLS_DIR=$MAIN_DIR/tools
@@ -27,10 +27,10 @@ C_N="\e[39m"
 function main(){
     sudo apt update && sudo apt upgrade -y
 
-    createInstallingStructure
-    installPrerequisites
-    cloneRepositories
-    installTools
+    #createInstallingStructure
+    #installPrerequisites
+    #cloneRepositories
+    #installTools
     createFrameworkEnv
 
     if [ "echo $PATH | grep $DOTLOCAL_BIN" == "" ]; then
@@ -40,6 +40,9 @@ function main(){
         echo -e "Then run:\nsource .bashrc"
     fi
 }
+
+
+
 
 function createFrameworkEnv(){
     # Copy tools
