@@ -46,10 +46,10 @@ function main(){
 
 function createFrameworkEnv(){
     # Copy tools
-    cp ./uvmenv_tools/* $TOOLS_DIR
+    cp -r ./uvmenv_tools $TOOLS_DIR
 
     # Copy bases
-    cp -r ./uvmenv_bases/* $BASES_DIR
+    cp -r ./uvmenv_bases $BASES_DIR
 
     # Create command
     sudo ln -s $TOOLS_DIR/command.sh $COMMAND
@@ -64,12 +64,6 @@ function createInstallingStructure(){
 
     mkdir $MAIN_DIR
     mkdir $REPOS_DIR $BASES_DIR $TOOLS_DIR
-
-    # Copy file bases
-    cp -r ./uvmenv_bases/* $BASES_DIR
-
-    # Copy tools
-    cp -r ./uvmenv_tools/* $TOOLS_DIR
 }
 
 function installPrerequisites(){
