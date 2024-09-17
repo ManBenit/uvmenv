@@ -5,7 +5,7 @@
 ############################################################################################################
 
 # Installation paths
-MAIN_DIR=/opt/UVMEnv
+MAIN_DIR=/home/$(whoami)/.local/UVMEnv
 REPOS_DIR=$MAIN_DIR/repos
 BASES_DIR=$MAIN_DIR/bases
 TOOLS_DIR=$MAIN_DIR/tools
@@ -24,7 +24,7 @@ C_N="\e[39m"
 
 
 function main(){
-    apt update && apt upgrade -y
+    sudo apt update && sudo apt upgrade -y
 
     createInstallingStructure
     installPrerequisites
@@ -40,6 +40,11 @@ function createCommand(){
 
 
 function createInstallingStructure(){
+    if [ -d $MAIN_DIR ]; then
+        echo -e "${C_YELLOW}UVMEnv is already installed${C_N}"
+        exit 0
+    fi
+
     mkdir $MAIN_DIR
     mkdir $REPOS_DIR $BASES_DIR $TOOLS_DIR
 
@@ -53,11 +58,11 @@ function createInstallingStructure(){
 function installPrerequisites(){
     # Necesary libraries for tools
     echo -e "\n\n${C_GREEN}############### Verifying prerequisites... ###############${C_N}"
-    apt install -y git tree help2man perl python3 python3-pip make autoconf g++ flex bison ccache
-    apt install -y libgoogle-perftools-dev numactl perl-doc
-    apt install -y libfl2  # Ubuntu only (ignore if gives error)
-    apt install -y libfl-dev  # Ubuntu only (ignore if gives error)
-    apt install -y zlib1g zlib1g-dev #zlibc  # Ubuntu only (ignore if gives error)
+    sudo apt install -y git tree help2man perl python3 python3-pip make autoconf g++ flex bison ccache
+    sudo apt install -y libgoogle-perftools-dev numactl perl-doc
+    sudo apt install -y libfl2  # Ubuntu only (ignore if gives error)
+    sudo apt install -y libfl-dev  # Ubuntu only (ignore if gives error)
+    sudo apt install -y zlib1g zlib1g-dev #zlibc  # Ubuntu only (ignore if gives error)
     pip3 install cocotb
     pip3 install pyuvm
 }
@@ -69,10 +74,10 @@ function cloneRepositories(){
 
 function installTools(){
     echo -e "\n\n${C_GREEN}############### Installing jq... ###############${C_N}"
-    apt install -y jq
+    sudo apt install -y jq
 
     echo -e "\n\n${C_GREEN}############### Installing GTKWave... ###############${C_N}"
-    apt install -y gtkwave
+    sudo apt install -y gtkwave
 
     echo -e "\n\n${C_GREEN}############### Installing Icarus... ###############${C_N}"
     installIcarus
@@ -96,7 +101,7 @@ function installIcarus(){
     fi
     
     make -j $(nproc)
-    make install
+    sudo make install
 }
 
 function installVerilator(){
@@ -125,7 +130,7 @@ function installVerilator(){
     #    read opt
     #fi
 
-    make install
+    sudo make install
 }
 
 

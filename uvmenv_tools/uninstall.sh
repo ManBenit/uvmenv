@@ -5,7 +5,7 @@
 ############################################################################################################
 
 # Installation paths
-MAIN_DIR=/opt/UVMEnv
+MAIN_DIR=/home/$(whoami)/.local/UVMEnv
 REPOS_DIR=$MAIN_DIR/repos
 BASES_DIR=$MAIN_DIR/bases
 TOOLS_DIR=$MAIN_DIR/tools
@@ -25,41 +25,36 @@ C_N="\e[39m"
 
 function main(){
     uninstallTools
-    deleteRepositories
     uninstallPrerequisites
 
-    rm $COMMAND
+    rm -rf $MAIN_DIR
+    sudo rm $COMMAND
 }
 
 
 
 function uninstallPrerequisites(){
     pip3 uninstall cocotb pyuvm
-    apt autoremove -y
-}
-
-function deleteRepositories(){
-    rm -rf $REPOS_DIR/iverilog
-    rm -rf $REPOS_DIR/verilator
+    suddo apt autoremove -y
 }
 
 function uninstallTools(){
     echo -e "\n\n${C_YELLOW}############## Uninstalling jq... ##############${C_N}"
-    apt purge --remove -y jq
+    sudo apt purge --remove -y jq
 
     echo -e "\n\n${C_YELLOW}############## Uninstalling GTKWave... ##############${C_N}"
-    apt purge --remove -y gtkwave
+    sudo apt purge --remove -y gtkwave
 
     ## Uninstall icarus
     echo -e "\n\n${C_YELLOW}############## Uninstalling Icarus... ##############${C_N}"
     cd $REPOS_DIR/iverilog
-    make -j $(nproc) clean 
+    sudo make -j $(nproc) clean 
     #make distclean
 
     ## Uninstall verilator
     echo -e "\n\n${C_YELLOW}############## Uninstalling Verilator... ##############${C_N}"
     cd $REPOS_DIR/verilator
-    make -j $(nproc) clean
+    sudo make -j $(nproc) clean
     #make distclean
 }
 
