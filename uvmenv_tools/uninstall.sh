@@ -34,8 +34,8 @@ function main(){
 
 
 function uninstallPrerequisites(){
-    pip3 uninstall cocotb pyuvm
-    suddo apt autoremove -y
+    pip3 uninstall -y cocotb pyuvm
+    sudo apt autoremove -y
 }
 
 function uninstallTools(){

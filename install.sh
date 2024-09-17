@@ -10,6 +10,7 @@ REPOS_DIR=$MAIN_DIR/repos
 BASES_DIR=$MAIN_DIR/bases
 TOOLS_DIR=$MAIN_DIR/tools
 COMMAND=/usr/bin/uvmenv
+DOTLOCAL_BIN=$MAIN_DIR/bin
 
 
 ### Bash colors ####
@@ -31,13 +32,18 @@ function main(){
     cloneRepositories
     installTools
     createFrameworkEnv
+
+    if [ "echo $PATH | grep $DOTLOCAL_BIN" == "" ]; then
+        echo -e "Add the line:\nexport PATH=\$PATH:$DOTLOCAL_BIN"
+        echo -e "at final of your /home/$(whoami)/.bashrc"
+
+        echo -e "Then run:\nsource .bashrc"
+    fi
 }
 
 function createFrameworkEnv(){
     # Copy tools
-    cp uvmenv_tools/command.sh $TOOLS_DIR
-    cp uvmenv_tools/run.sh $TOOLS_DIR
-    cp uvmenv_tools/uninstall.sh $TOOLS_DIR
+    cp uvmenv_tools/* $TOOLS_DIR
 
     # Copy bases
     cp -r uvmenv_bases/* $BASES_DIR
