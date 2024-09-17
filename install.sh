@@ -27,10 +27,10 @@ C_N="\e[39m"
 function main(){
     sudo apt update && sudo apt upgrade -y
 
-    #createInstallingStructure
-    #installPrerequisites
-    #cloneRepositories
-    #installTools
+    createInstallingStructure
+    installPrerequisites
+    cloneRepositories
+    installTools
     createFrameworkEnv
 
     if [ "echo $PATH | grep $DOTLOCAL_BIN" == "" ]; then
