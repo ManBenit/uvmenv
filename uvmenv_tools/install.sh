@@ -30,12 +30,18 @@ function main(){
     installPrerequisites
     cloneRepositories
     installTools
-    createCommand
-
+    createFrameworkEnv
 }
 
-function createCommand(){
-    ln -s $TOOLS_DIR/command.sh $COMMAND
+function createFrameworkEnv(){
+    # Copy tools
+    cp -r uvmenv_tools/* $TOOLS_DIR
+
+    # Copy bases
+    cp -r uvmenv_bases/* $BASES_DIR
+
+    # Create command
+    sudo ln -s $TOOLS_DIR/command.sh $COMMAND
 }
 
 
