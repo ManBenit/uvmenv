@@ -29,6 +29,8 @@ function main(){
 
     rm -rf $MAIN_DIR
     sudo rm $COMMAND
+
+    cd ~/
 }
 
 
