@@ -46,10 +46,10 @@ function main(){
 
 function createFrameworkEnv(){
     # Copy tools
-    cp uvmenv_tools/* $TOOLS_DIR
+    cp ./uvmenv_tools/* $TOOLS_DIR
 
     # Copy bases
-    cp -r uvmenv_bases/* $BASES_DIR
+    cp -r ./uvmenv_bases/* $BASES_DIR
 
     # Create command
     sudo ln -s $TOOLS_DIR/command.sh $COMMAND
@@ -66,16 +66,16 @@ function createInstallingStructure(){
     mkdir $REPOS_DIR $BASES_DIR $TOOLS_DIR
 
     # Copy file bases
-    cp -r uvmenv_bases/* $BASES_DIR
+    cp -r ./uvmenv_bases/* $BASES_DIR
 
     # Copy tools
-    cp -r uvmenv_tools/* $TOOLS_DIR
+    cp -r ./uvmenv_tools/* $TOOLS_DIR
 }
 
 function installPrerequisites(){
     # Necesary libraries for tools
     echo -e "\n\n${C_GREEN}############### Verifying prerequisites... ###############${C_N}"
-    sudo apt install -y git tree help2man perl python3 python3-pip make autoconf g++ flex bison ccache
+    sudo apt install -y git tree help2man perl python3 python3-pip make autoconf g++ flex bison ccache gperf
     sudo apt install -y libgoogle-perftools-dev numactl perl-doc
     sudo apt install -y libfl2  # Ubuntu only (ignore if gives error)
     sudo apt install -y libfl-dev  # Ubuntu only (ignore if gives error)
@@ -83,6 +83,7 @@ function installPrerequisites(){
     pip3 install cocotb
     pip3 install pyuvm
 }
+
 
 function cloneRepositories(){
     git clone https://github.com/steveicarus/iverilog.git $REPOS_DIR/iverilog
