@@ -12,8 +12,8 @@
 
 #************** DIRECTORIES **************#
 # Main paths
-TOOLS_DIR=/home/$(whoami)/UVMEnv/tools
-BASES_DIR=/home/$(whoami)/UVMEnv/bases
+TOOLS_DIR=/home/$(whoami)/.UVMEnv/tools
+BASES_DIR=/home/$(whoami)/.UVMEnv/bases
 BASES_REPRESENT_DIR=$BASES_DIR/representative_files
 BASES_COMPONENT_DIR=$BASES_DIR/component_files
 BASES_COMMAND_DIR=$BASES_DIR/command_files
@@ -92,11 +92,6 @@ C_N="\e[39m"
 ########################################################################################
 function main(){
     case $1 in
-        --test)
-            echo $(getCurrentDir)
-            echo $(getCurrentDir "/home/manbenit/Github/Webos/")
-        ;;
-
         -n|--new)
             echo "Project name (NoSpaces):"
             read projectName

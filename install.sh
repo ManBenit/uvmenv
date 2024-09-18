@@ -4,13 +4,14 @@
 # Installer to Ubuntu based Linux distros.
 ############################################################################################################
 
+REPO_PATH=$(pwd)
 # Installation paths
-MAIN_DIR=/home/$(whoami)/UVMEnv
+MAIN_DIR=/home/$(whoami)/.UVMEnv
 REPOS_DIR=$MAIN_DIR/repos
 BASES_DIR=$MAIN_DIR/bases
 TOOLS_DIR=$MAIN_DIR/tools
 COMMAND=/usr/bin/uvmenv
-DOTLOCAL_BIN=$MAIN_DIR/bin
+DOTLOCAL_BIN=/home/$(whoami)/.local/bin
 
 
 ### Bash colors ####
@@ -27,17 +28,22 @@ C_N="\e[39m"
 function main(){
     sudo apt update && sudo apt upgrade -y
 
+    if [ -d $MAIN_DIR ]; then
+        echo -e "${C_YELLOW}UVMEnv is already installed${C_N}"
+        exit 0
+    fi
+
     createInstallingStructure
     installPrerequisites
     cloneRepositories
     installTools
     createFrameworkEnv
 
-    if [ "echo $PATH | grep $DOTLOCAL_BIN" == "" ]; then
-        echo -e "Add the line:\nexport PATH=\$PATH:$DOTLOCAL_BIN"
-        echo -e "at final of your /home/$(whoami)/.bashrc"
+    if [ "$(echo $PATH | grep $DOTLOCAL_BIN)" == "" ]; then
+        echo -e "Add the line:\n${C_GREEN}export PATH=\$PATH:$DOTLOCAL_BIN${C_N}"
+        echo -e "at the end of your ${C_WHITE}/home/$(whoami)/.bashrc${C_N}"
 
-        echo -e "Then run:\nsource .bashrc"
+        echo -e "\nThen run:\n${C_CYAN}source .bashrc${C_N}"
     fi
 }
 
@@ -45,6 +51,8 @@ function main(){
 
 
 function createFrameworkEnv(){
+    cd $REPO_PATH
+
     # Copy tools
     cp -r ./uvmenv_tools $TOOLS_DIR
 
@@ -57,13 +65,8 @@ function createFrameworkEnv(){
 
 
 function createInstallingStructure(){
-    if [ -d $MAIN_DIR ]; then
-        echo -e "${C_YELLOW}UVMEnv is already installed${C_N}"
-        exit 0
-    fi
-
     mkdir $MAIN_DIR
-    mkdir $REPOS_DIR $BASES_DIR $TOOLS_DIR
+    mkdir $REPOS_DIR
 }
 
 function installPrerequisites(){

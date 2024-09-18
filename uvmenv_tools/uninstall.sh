@@ -5,7 +5,7 @@
 ############################################################################################################
 
 # Installation paths
-MAIN_DIR=/home/$(whoami)/UVMEnv
+MAIN_DIR=/home/$(whoami)/.UVMEnv
 REPOS_DIR=$MAIN_DIR/repos
 BASES_DIR=$MAIN_DIR/bases
 TOOLS_DIR=$MAIN_DIR/tools
@@ -29,8 +29,6 @@ function main(){
 
     rm -rf $MAIN_DIR
     sudo rm $COMMAND
-
-    cd ~/
 }
 
 
