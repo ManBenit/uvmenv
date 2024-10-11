@@ -12,8 +12,10 @@
 
 #************** DIRECTORIES **************#
 # Main paths
-TOOLS_DIR=/home/$(whoami)/.UVMEnv/tools
-BASES_DIR=/home/$(whoami)/.UVMEnv/bases
+#TOOLS_DIR=/home/$(whoami)/.UVMEnv/tools
+#BASES_DIR=/home/$(whoami)/.UVMEnv/bases
+TOOLS_DIR=/home/$(whoami)/Github/uvmenv/uvmenv_tools/
+BASES_DIR=/home/$(whoami)/Github/uvmenv/uvmenv_bases/
 BASES_REPRESENT_DIR=$BASES_DIR/representative_files
 BASES_COMPONENT_DIR=$BASES_DIR/component_files
 BASES_COMMAND_DIR=$BASES_DIR/command_files
@@ -92,6 +94,7 @@ C_N="\e[39m"
 ########################################################################################
 function main(){
     case $1 in
+        ##### Framework #####
         -n|--new)
             echo "Project name (NoSpaces):"
             read projectName
@@ -111,7 +114,7 @@ function main(){
 
         --show-signals)
             ensureEnvironment
-            bndRemove="n"
+            bdnRefresh="n"
 
             if [ "$(find $DUT_HDL_DIR -type f \( -name "*.v" -o -name "*.sv" \) | sed -E 's/.*\/([^\/]+)\..*/\1/' | sort | uniq)" == "" ]; then
                 printWarning "HDL directory is empty"
@@ -121,13 +124,13 @@ function main(){
             shift
             if [ "$1" == "-r" ]; then
                 deleteSignalsCsv
-                bndRemove="r"
+                bdnRefresh="r"
                 #echo "refresh"
                 shift
             fi
 
             if [ "$1" == "" ]; then
-                showAllSignals $bndRemove
+                showAllSignals $bdnRefresh
             else
                 showSignals n $1
             fi
@@ -144,7 +147,23 @@ function main(){
             showModules
         ;;
 
+        -h|--help)
+            showHelp
+        ;;
 
+        run)
+            ensureEnvironment
+
+            if [ "$(find $DUT_HDL_DIR -type f \( -name "*.v" -o -name "*.sv" \) | sed -E 's/.*\/([^\/]+)\..*/\1/' | sort | uniq)" == "" ]; then
+                printWarning "HDL directory is empty"
+                exit 0
+            fi
+
+            $RUN_FILE
+        ;;
+
+
+        ##### Agents #####
         --new-agent)
             ensureEnvironment
             shift
@@ -163,6 +182,7 @@ function main(){
         ;;
 
 
+        ##### Sequence items #####
         --new-seqitem)
             ensureEnvironment
             shift
@@ -181,6 +201,7 @@ function main(){
         ;;
 
 
+        ##### Sequences #####
         --new-sequence)
             ensureEnvironment
             shift
@@ -199,42 +220,60 @@ function main(){
         ;;
 
 
+        ##### Scoreboards #####
+        --new-scoreboard)
+            ensureEnvironment
+            shift
+            createNewScoreboard $@
+        ;;
+
+        --del-scoreboard)
+            ensureEnvironment
+            shift
+            deleteScoreboard $@
+        ;;
+
+        --show-scoreboards)
+            ensureEnvironment
+            showScoreboards
+        ;;
+
+
+        ##### Reference models #####
         --new-refmodel)
             ensureEnvironment
             shift
             createNewRefModel $@
         ;;
 
-        --show-refmodel)
+        --show-refmodels)
             ensureEnvironment
             showRefModel
         ;;
 
+        --del-refmodel)
+            ensureEnvironment
+            shift
+            deleteRefModel $@
+        ;;
 
+
+        ##### BFMs #####
         --new-bfm)
             ensureEnvironment
             shift
             createNewBFMImplementation $@
         ;;
 
-        --show-bfm)
+        --show-bfms)
             ensureEnvironment
             showBfm
         ;;
 
-        -h|--help)
-            showHelp
-        ;;
-
-        run)
+        --del-bfm)
             ensureEnvironment
-
-            if [ "$(find $DUT_HDL_DIR -type f \( -name "*.v" -o -name "*.sv" \) | sed -E 's/.*\/([^\/]+)\..*/\1/' | sort | uniq)" == "" ]; then
-                printWarning "HDL directory is empty"
-                exit 0
-            fi
-
-            $RUN_FILE
+            shift
+            deleteBfm $@
         ;;
 
         *)
@@ -262,7 +301,7 @@ function printWarning(){
 # $1: Option.
 # $2: Description.
 function printOption(){
-    echo -e "     ${C_CYAN}$1${C_N}:\n\t$2"
+    echo -e "     ${C_CYAN}$1${C_N}\n\t$2"
 }
 
 
@@ -325,31 +364,44 @@ function getCurrentDir(){
 function showHelp(){
     echo -e "Usage: \t uvmenv ${C_CYAN}<OPTION>${C_N}"
     echo -e "\n  OPTION:"
+    printOption ""  "-> Framework"
     printOption "-n|--new"          "Creates a new UVMEnv project."
     printOption "-s|--search"       "Looks for a valid UVMEnv project into current directory."
     printOption "--show-signals"    "Show inputs/outputs of modules into HDLSrc directory.\n\tShows particular signals if module_file is set.\n\tRefresh signals if -r is put."
     printOption "--show-modules"    "Show list of modules into HDLSrc directory."
+    printOption "-h|--help"         "Shows ${C_GREEN}uvmenv${C_N} command help."
+    printOption "run"               "Starts verification process."
     
+    printOption "" "-> Agents"        
     printOption "--new-agent"       "Create an structure for an agent into Agents/agent_name."
     printOption "--del-agent"       "Delete an agent into Agents directory."
     printOption "--show-agents"     "Show agents into Agents directory."
     
+    printOption "" "-> Sequence items"
     printOption "--new-seqitem"     "Create an structure for a sequence item into SeqItm directory."
     printOption "--del-seqitem"     "Delete a sequence item into SeqItm directory."
     printOption "--show-seqitems"   "Show all sequence items into SeqItm directory."
 
+    printOption "" "-> Sequences"     
     printOption "--new-sequence"    "Create an structure for a sequence into Seqnce directory."
     printOption "--del-sequence"    "Delete a sequence into Seqnce directory."
     printOption "--show-sequences"  "Show all sequences into Seqnce directory."
 
+    printOption "" "-> Scoreboards"     
+    printOption "--new-scoreboard"    "Create an structure for a scoreboard into Scorbd directory."
+    printOption "--del-scoreboard"    "Delete a scoreboard into Scorbd directory."
+    printOption "--show-scoreboards"  "Show all scoreboards into Scorbd directory."
+
+    printOption "" "-> Reference models"
     printOption "--new-refmodel"    "Create an structure for a reference model into RefMdl/_impl directory."
+    printOption "--del-refmodel"    "Delete a reference model implementation into RefMdl/_impl directory."
     printOption "--show-refmodels"  "Show all reference models into RefMdl/_impl directory."
 
+    printOption "" "-> BFMs"          
     printOption "--new-bfm"         "Create an structure for a Bus Functional Model into Itface/_impl directory."
-    printOption "--show-bfm"        "Show all BFM interfaces into Itface/_impl directory."
+    printOption "--del-refmodel"    "Delete a BFM implementation into Itface/_impl directory."
+    printOption "--show-bfms"        "Show all BFM interfaces into Itface/_impl directory."
 
-    printOption "run"               "Starts verification process."
-    printOption "-h|--help"         "Shows ${C_GREEN}uvmenv${C_N} command help."
     echo ""
 }
 
@@ -413,9 +465,6 @@ function createNewEnv(){
 
     ### Write Environment
     cp $ENVIRONMENT_FILEBASE UVM_TB/Envmnt/Environment.py
-
-    ### Write Scoreboard
-    cp $SCOREBOARD_FILEBASE UVM_TB/Envmnt/Scorbd/Scoreboard.py
 
     ### Write interface for BFM
     cp $BFM_FILEBASE Itface/BFM.py 
@@ -768,7 +817,7 @@ function createNewSeqItem(){
 }
 
 function showSequeceItems(){
-    local seqitems_list=($(ls -F $SEQITEMS_DIR | grep / | awk '{ gsub(/\/$/, ""); print }' ))
+    local seqitems_list=($(ls -F $SEQITEMS_DIR | grep / | awk '{ gsub(/\/$/,""); print }' ))
 
     for sitm in "${seqitems_list[@]}"; do
         echo $sitm
@@ -804,7 +853,7 @@ function createNewSequence(){
         exit 0
     fi
 
-    # Verify if sequence item exists
+    # Verify if sequence exists
     if [ -f $SEQUENCES_DIR/$1.py ]; then
         printWarning "Sequence already exists"
         exit 0
@@ -840,6 +889,52 @@ function deleteSequence(){
 
 
 #############################################################
+##                 SCOREBOARDS HANDLING                    ##
+#############################################################
+# $1: Scoreboard class name (Recommended: PascalCase).
+function createNewScoreboard(){
+    if [ $# -lt 1 ]; then
+        printError "Missing parameters"
+        printInfo "Usage: uvmenv --new-scoreboard <ScoreboardName>"
+        exit 0
+    fi
+
+    # Verify if scoreboard exists
+    if [ -f $SCOREBOARD_DIR/$1.py ]; then
+        printWarning "Scoreboard already exists"
+        exit 0
+    fi
+    
+    sed -r "s|CLASS_NAME|$1|g" $SCOREBOARD_FILEBASE > $SCOREBOARD_DIR/$1.py  
+}
+
+function showScoreboards(){
+    local scbs_list=($(ls -F $SCOREBOARD_DIR | grep -v / ))
+
+    for scb in "${scbs_list[@]}"; do
+        echo $scb | cut -d'.' -f1
+    done
+}
+
+# $1: Scorteboard name 
+function deleteScoreboard(){
+    if [ $# -lt 1 ]; then
+        printError "Missing parameters"
+        printInfo "Usage: uvmenv --del-scoreboard <ScoreboardName>"
+        exit 0
+    fi
+
+    # Verify if scoreboard exists
+    if [ ! -f $SCOREBOARD_DIR/$1.py ]; then
+        printError "Scoreboard $1 does not exist"
+        exit 0
+    fi
+
+    rm -r $SCOREBOARD_DIR/$1.py
+}
+
+
+#############################################################
 ##                BFM IMPLEMENTATION HANDLING              ##
 #############################################################
 # $1: BFM class name with 'Impl' suffix (Recommended: PascalCaseImpl).
@@ -855,6 +950,30 @@ function createNewBFMImplementation(){
         printWarning "BFM implementation already exists"
         exit 0
     fi
+
+    # Verify that top module  exists (because connection with UVMEnv is by top module)
+    local top_file=($(find $DUT_HDL_DIR -name $(jq -r '.top_module' $CONFIG_FILE)*))
+    if [ "$top_file" == "" ]; then
+        printError "Top module $(jq -r '.top_module' $CONFIG_FILE) does not exist"
+        exit 0
+    fi
+
+    # Verify the signal list generation
+    if [ ! -f $DUT_HDL_DIR/.allSignals.csv ] || [ "$(grep $(jq -r '.top_module' $CONFIG_FILE) $DUT_HDL_DIR/.allSignals.csv)" == "" ]; then
+        printWarning "Please refresh your signals"
+        exit 0
+    fi
+    
+
+
+    for archivo in "${modules_dir[@]}"; do
+        nom=$(echo $archivo | cut -d'.' -f1)
+        if [ "$nom" == "$(jq -r '.top_module' $CONFIG_FILE)" ]; then
+            echo -e "${C_CYAN}$nom [Top]${C_N}"
+        else
+            echo "$nom"
+        fi
+    done
 
     # Request signals as information
     ### Currently, list of signals is done o the Top module
@@ -913,6 +1032,23 @@ function showBfm(){
     for bfm in "${bfmimpl_list[@]}"; do
         echo $bfm | cut -d'.' -f1
     done
+}
+
+# $1: BFM class name (which represents BFM impl)
+function deleteBfm(){
+    if [ $# -lt 1 ]; then
+        printError "Missing parameters"
+        printInfo "Usage: uvmenv --del-bfm <BfmImpl>"
+        exit 0
+    fi
+
+    # Verify if agent exists
+    if [ ! -f $BFMIMPL_DIR/$1.py ]; then
+        printError "BFM $1 does not exist"
+        exit 0
+    fi
+
+    rm $BFMIMPL_DIR/$1.py
 }
 
 
@@ -979,6 +1115,24 @@ function showRefModel(){
         echo $refm | cut -d'.' -f1
     done
 }
+
+# $1: Reference model class name (which represents refmodel impl)
+function deleteRefModel(){
+    if [ $# -lt 1 ]; then
+        printError "Missing parameters"
+        printInfo "Usage: uvmenv --del-refmodel <RefModelImpl>"
+        exit 0
+    fi
+
+    # Verify if agent exists
+    if [ ! -f $REFMODELIMPL_DIR/$1.py ]; then
+        printError "Reference model $1 does not exist"
+        exit 0
+    fi
+
+    rm $REFMODELIMPL_DIR/$1.py
+}
+
 
 
 

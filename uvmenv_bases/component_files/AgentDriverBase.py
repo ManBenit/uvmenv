@@ -17,11 +17,10 @@ class Driver(uvm_driver):
 
 		# Configure the BFM implementation that you want to use
 		implementation_class = config.uvm_components.itface.bfm_impl
-		module_name, class_name = implementation_class.rsplit(".", 1)
 
 		try:
-			module = importlib.import_module(module_name)
-			clazz = getattr(module, class_name)
+			module = importlib.import_module(implementation_class)
+			clazz = getattr(module, implementation_class)
 			self.bfm = clazz()
 		except Exception as e:
 			self.logger.critical(f"Failed to load BFM implementation: {e}")

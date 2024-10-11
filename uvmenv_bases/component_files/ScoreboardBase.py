@@ -18,25 +18,24 @@ Example:
 #from your_seqitem import Response as YourAlias
 
 
-class Scoreboard(uvm_scoreboard):
+class CLASS_NAME(uvm_scoreboard):
 	def __init__(self, name, parent):
 		super().__init__(name, parent)
 		self.tr = YourAlias("tr")
 
 	def build_phase(self):
 		super().build_phase()
-		self.import_bfm()
+		self.import_refmdl()
 		self.result_fifo = uvm_tlm_analysis_fifo("result_fifo", self)
 
-	def import_bfm(self):
+	def import_refmdl(self):
 		config = load_config('config.json')
 
 		implementation_class = config.uvm_components.refmdl.refmdl_impl
-		module_name, class_name = implementation_class.rsplit(".", 1)
 
 		try:
-			module = importlib.import_module(module_name)
-			clazz = getattr(module, class_name)
+			module = importlib.import_module(implementation_class)
+			clazz = getattr(module, implementation_class)
 			self.refmodel = clazz()
 		except Exception as e:
 			self.logger.critical(f"Failed to load RefModel implementation: {e}")

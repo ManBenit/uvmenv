@@ -4,7 +4,15 @@
 
 from pyuvm import uvm_env
 
-from Scoreboard import Scoreboard
+"""
+Import all Scoreboard classes you need.
+Use: 
+	uvmenv --show-scoreboards
+to show the available scoreboards on your project.
+Example:
+"""
+#from  Scoreboard import Scoreboard
+
 """
 Import all Agent classes from your agents, with an specific alias for each.
 Use: 
