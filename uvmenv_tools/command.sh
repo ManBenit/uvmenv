@@ -43,7 +43,14 @@ BFMIMPL_DIR=$BFM_DIR/_impl
 
 #************** FILES **************#
 CONFIG_FILE=$PROJECT_DIR/config.json
+UTILS_FILE=$PROJECT_DIR/utils.py
+PATHS_FILE=$PROJECT_DIR/paths.py
 RUN_FILE=$TOOLS_DIR/run.sh
+
+# Representative files
+ENVIRONMENT_FILE=$ENVIRONMENT_DIR/Environment.py
+TEST_FILE=$TBENCH_DIR/Test.py
+TOP_FILE_PREFIX=$PROJECT_DIR/Top_
 
 # *** BASES *** #
 # Command files
@@ -68,8 +75,9 @@ SEQUENCE_FILEBASE=$BASES_COMPONENT_DIR/SequenceBase.py
 PATHS_FILEBASE=$BASES_CONFIG_DIR/PathsFileBase.py
 UTIL_FILEBASE=$BASES_CONFIG_DIR/UtilsFileBase.py
 
-# Representative files
 BFM_FILEBASE=$BASES_REPRESENT_DIR/BFMBase.py
+
+# Representative files
 ENVIRONMENT_FILEBASE=$BASES_REPRESENT_DIR/EnvironmentBase.py
 TEST_FILEBASE=$BASES_REPRESENT_DIR/TestBase.py
 TOP_FILEBASE=$BASES_REPRESENT_DIR/TopBase.py
@@ -145,6 +153,36 @@ function main(){
             fi
 
             showModules
+        ;;
+
+        -e|--edit)
+            # Syntax: uvmenv -e|--edit agnt <nombre> [drv]
+            ensureEnvironment
+
+            # Read option for edit
+            shift
+            case $1 in
+                agnt) shift; editAgent $@ ;;
+                sitm) shift; editSequenceItem $@ ;;
+                seqc) shift; editSequence $@ ;;
+                scbd) shift; editScoreboard $@ ;;
+                rmod) shift; editRefModel $@ ;;
+                bfm) shift; editBfm $@ ;;
+                top) vi $TOP_FILE_PREFIX$(jq -r '.top_module' $CONFIG_FILE).py ;;
+                tst) vi $TEST_FILE ;;
+                env) vi $ENVIRONMENT_FILE ;;
+                conf) vi $CONFIG_FILE ;;
+                util) vi $UTILS_FILE ;;
+                path) vi $PATHS_FILE ;;
+                *)
+                    if [ "$1" == "" ]; then
+                        printWarning "Missing arguments: agnt|sitm|seqc|scbd|rmod|bfm|top|tst|env|conf|util|path"
+                        exit 0 
+                    else
+                        printError "Option not available for edition"
+                    fi
+                ;;
+            esac       
         ;;
 
         -h|--help)
@@ -243,18 +281,18 @@ function main(){
         --new-refmodel)
             ensureEnvironment
             shift
-            createNewRefModel $@
+            createNewRefModelImpl $@
         ;;
 
         --show-refmodels)
             ensureEnvironment
-            showRefModel
+            showRefModelImpl
         ;;
 
         --del-refmodel)
             ensureEnvironment
             shift
-            deleteRefModel $@
+            deleteRefModelImpl $@
         ;;
 
 
@@ -262,24 +300,27 @@ function main(){
         --new-bfm)
             ensureEnvironment
             shift
-            createNewBFMImplementation $@
+            createNewBFMImpl $@
         ;;
 
         --show-bfms)
             ensureEnvironment
-            showBfm
+            showBfmImpl
         ;;
 
         --del-bfm)
             ensureEnvironment
             shift
-            deleteBfm $@
+            deleteBfmImpl $@
         ;;
 
         *)
             printError "Option not available"
         ;;
     esac
+
+    # Break line for all options
+    echo ""
 }
 
 
@@ -503,6 +544,34 @@ function showModules(){
     done
 }
 
+######## Representative files ########
+function editTop(){
+    echo ""
+}
+
+function editTest(){
+    echo ""
+}
+
+function editEnvironment(){
+    echo ""
+}
+######################################
+
+
+function editConfiguration(){
+    echo ""
+}
+
+function editUtils(){
+    echo ""
+}
+
+function editPaths(){
+    echo ""
+}
+
+
 
 #############################################################
 ##                    SIGNALS HANDLING                     ##
@@ -650,6 +719,7 @@ function createNewAgent(){
     touch $AGENTS_DIR/$2/.a_$1
     cp $AGENT_FILEBASE $AGENTS_DIR/$2/__init__.py
 
+    #Create property file for agent
     echo -e "{\n\t\"module\":\"$3\"\n}" > $AGENTS_DIR/$2/.a_$1
 
     if [ $has_active_part ]; then
@@ -684,6 +754,7 @@ function createNewAgent(){
         cp $AGENT_COVCOL_FILEBASE $AGENTS_DIR/$2/CoverageCollector.py
     fi
 
+    # In case of node agent, rewrite the property file
     if [ $is_node_agnt ]; then
         echo -e "{\n\t\"origin_module\":\"$origin\",\n\t\"dest_module\":\"$destiny\"\n}" > $AGENTS_DIR/$2/.a_$1
     fi
@@ -730,6 +801,53 @@ function deleteAgent(){
     fi
 
     rm -r $AGENTS_DIR/$1
+}
+
+function editAgent(){
+    if [ $# -lt 1 ]; then
+        printError "Missing parameters"
+        printInfo "Usage: uvmenv -e|--edit agnt <agent_name> [drv|mon|cc]"
+        exit 0
+    fi
+
+    # Read name ($1)
+    if [ ! -d $AGENTS_DIR/$1 ]; then
+        printError "Agent $1 does not exist"
+        exit 0
+    fi
+
+    # Read agent component ($2)
+    if [ "$2" != "" ]; then
+        case $2 in 
+            drv) 
+                if [ -f $AGENTS_DIR/$1/.a_a ] || [ -f $AGENTS_DIR/$1/.a_s ] || [ -f $AGENTS_DIR/$1/.a_n ]; then
+                    vi $AGENTS_DIR/$1/Driver.py 
+                else
+                    printWarning "This agent does not have Driver"
+                fi    
+            ;;
+            mon)
+                if [ -f $AGENTS_DIR/$1/.a_p ] || [ -f $AGENTS_DIR/$1/.a_s ] || [ -f $AGENTS_DIR/$1/.a_n ]; then
+                    vi $AGENTS_DIR/$1/Monitor.py 
+                else
+                    printWarning "This agent does not have Monitor"
+                fi
+            ;;
+            cc) 
+                if [ -f $AGENTS_DIR/$1/.a_p ] || [ -f $AGENTS_DIR/$1/.a_s ] || [ -f $AGENTS_DIR/$1/.a_n ]; then
+                    vi $AGENTS_DIR/$1/CoverageCollector.py 
+                else
+                    printWarning "This agent does not have CoverageCollector"
+                fi
+            ;;
+            *) 
+                printError "Not an agent component option ($2)" 
+                printInfo "Usage: uvmenv -e|--edit agnt <agent_name> [drv|mon|cc]"
+            ;;
+        esac
+    else
+        vi $AGENTS_DIR/$1/__init__.py
+    fi
 }
 
 
@@ -841,6 +959,34 @@ function deleteSequenceItem(){
     rm -r $SEQITEMS_DIR/$1
 }
 
+function editSequenceItem(){
+    if [ $# -lt 1 ]; then
+        printError "Missing parameters"
+        printInfo "Usage: uvmenv -e|--edit sitm <seqitem_name> [req|res]"
+        exit 0
+    fi
+
+    # Read name ($1)
+    if [ ! -d $SEQITEMS_DIR/$1 ]; then
+        printError "Sequence item $1 does not exist"
+        exit 0
+    fi
+
+    # Read agent component ($2)
+    if [ "$2" != "" ]; then
+        case $2 in 
+            req) vi $SEQITEMS_DIR/$1/Request.py ;;
+            res) vi $SEQITEMS_DIR/$1/Response.py ;;
+            *)
+                printError "Not a seqitem component option ($2)" 
+                printInfo "Usage: uvmenv -e|--edit sitm <seqitem_name> [req|res]"
+            ;;
+        esac
+    else
+        vi $SEQITEMS_DIR/$1/__init__.py
+    fi
+}
+
 
 #############################################################
 ##                   SEQUENCES HANDLING                    ##
@@ -887,6 +1033,22 @@ function deleteSequence(){
     rm -r $SEQUENCES_DIR/$1.py
 }
 
+function editSequence(){
+    if [ $# -lt 1 ]; then
+        printError "Missing parameters"
+        printInfo "Usage: uvmenv -e|--edit seqc <SequenceName>"
+        exit 0
+    fi
+
+    # Read name ($1)
+    if [ ! -f $SEQUENCES_DIR/$1.py ]; then
+        printError "Sequence $1 does not exist"
+        exit 0
+    fi
+
+    vi $SEQUENCES_DIR/$1.py
+}
+
 
 #############################################################
 ##                 SCOREBOARDS HANDLING                    ##
@@ -931,6 +1093,22 @@ function deleteScoreboard(){
     fi
 
     rm -r $SCOREBOARD_DIR/$1.py
+}
+
+function editScoreboard(){
+    if [ $# -lt 1 ]; then
+        printError "Missing parameters"
+        printInfo "Usage: uvmenv -e|--edit scbd <ScoreboardName>"
+        exit 0
+    fi
+
+    # Read name ($1)
+    if [ ! -f $SCOREBOARD_DIR/$1.py ]; then
+        printError "Sequence $1 does not exist"
+        exit 0
+    fi
+
+    vi $SCOREBOARD_DIR/$1.py
 }
 
 
@@ -1026,7 +1204,7 @@ function createNewBFMImplementation(){
     rm $BFMIMPL_DIR/tmp2.py
 }
 
-function showBfm(){
+function showBfmImpl(){
     local bfmimpl_list=($(ls -F $BFMIMPL_DIR | grep -v / ))
 
     for bfm in "${bfmimpl_list[@]}"; do
@@ -1035,10 +1213,10 @@ function showBfm(){
 }
 
 # $1: BFM class name (which represents BFM impl)
-function deleteBfm(){
+function deleteBfmImpl(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
-        printInfo "Usage: uvmenv --del-bfm <BfmImpl>"
+        printInfo "Usage: uvmenv --del-bfm <BfmNameImpl>"
         exit 0
     fi
 
@@ -1051,15 +1229,31 @@ function deleteBfm(){
     rm $BFMIMPL_DIR/$1.py
 }
 
+function editBfm(){
+    if [ $# -lt 1 ]; then
+        printError "Missing parameters"
+        printInfo "Usage: uvmenv -e|--edit bfm <BfmNameImpl>"
+        exit 0
+    fi
+
+    # Read name ($1)
+    if [ ! -f $BFMIMPL_DIR/$1.py ]; then
+        printError "Impl for BFM $1 does not exist"
+        exit 0
+    fi
+
+    vi $BFMIMPL_DIR/$1.py
+}
+
 
 #############################################################
 ##                 REFERENCE MODEL HANDLING                ##
 #############################################################
 # $1: Reference model class name with 'Model' suffix (Recommended: PascalCaseModel).
-function createNewRefModel(){
+function createNewRefModelImpl(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
-        printInfo "Usage: uvmenv --new-refmodel <RefNameModel>"
+        printInfo "Usage: uvmenv --new-refmodel <RefModelImpl>"
         exit 0
     fi
 
@@ -1108,7 +1302,7 @@ function createNewRefModel(){
 
 }
 
-function showRefModel(){
+function showRefModelImpl(){
     local refmodelimpl_list=($(ls -F $REFMODELIMPL_DIR | grep -v / ))
 
     for refm in "${refmodelimpl_list[@]}"; do
@@ -1117,7 +1311,7 @@ function showRefModel(){
 }
 
 # $1: Reference model class name (which represents refmodel impl)
-function deleteRefModel(){
+function deleteRefModelImpl(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
         printInfo "Usage: uvmenv --del-refmodel <RefModelImpl>"
@@ -1131,6 +1325,22 @@ function deleteRefModel(){
     fi
 
     rm $REFMODELIMPL_DIR/$1.py
+}
+
+function editRefModel(){
+    if [ $# -lt 1 ]; then
+        printError "Missing parameters"
+        printInfo "Usage: uvmenv -e|--edit rmod <RefModelImpl>"
+        exit 0
+    fi
+
+    # Read name ($1)
+    if [ ! -f $REFMODELIMPL_DIR/$1.py ]; then
+        printError "Impl for reference model $1 does not exist"
+        exit 0
+    fi
+
+    vi $REFMODELIMPL_DIR/$1.py
 }
 
 
