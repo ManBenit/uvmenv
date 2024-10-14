@@ -166,8 +166,8 @@ function main(){
                 sitm) shift; editSequenceItem $@ ;;
                 seqc) shift; editSequence $@ ;;
                 scbd) shift; editScoreboard $@ ;;
-                rmod) shift; editRefModel $@ ;;
-                bfm) shift; editBfm $@ ;;
+                rmod) shift; editRefModelImpl $@ ;;
+                bfm) shift; editBfmImpl $@ ;;
                 top) vi $TOP_FILE_PREFIX$(jq -r '.top_module' $CONFIG_FILE).py ;;
                 tst) vi $TEST_FILE ;;
                 env) vi $ENVIRONMENT_FILE ;;
@@ -1116,7 +1116,7 @@ function editScoreboard(){
 ##                BFM IMPLEMENTATION HANDLING              ##
 #############################################################
 # $1: BFM class name with 'Impl' suffix (Recommended: PascalCaseImpl).
-function createNewBFMImplementation(){
+function createNewBFMImpl(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
         printInfo "Usage: uvmenv --new-bfm <BfmNameImpl>"
@@ -1229,7 +1229,7 @@ function deleteBfmImpl(){
     rm $BFMIMPL_DIR/$1.py
 }
 
-function editBfm(){
+function editBfmImpl(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
         printInfo "Usage: uvmenv -e|--edit bfm <BfmNameImpl>"
@@ -1327,7 +1327,7 @@ function deleteRefModelImpl(){
     rm $REFMODELIMPL_DIR/$1.py
 }
 
-function editRefModel(){
+function editRefModelImpl(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
         printInfo "Usage: uvmenv -e|--edit rmod <RefModelImpl>"

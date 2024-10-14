@@ -28,7 +28,12 @@ class Environment(uvm_env):
 		super().__init__(name, parent)
 
 	def build_phase(self):
-		self.scoreboard = Scoreboard("scoreboard", self)
+        """
+        Instanciate here your scoreboard modules
+        Example:
+        """
+		#self.scoreboard = Scoreboard("scoreboard", self)
+
 		"""
 		Instenciate here your agent modules.
 		Example:
