@@ -12,10 +12,8 @@
 
 #************** DIRECTORIES **************#
 # Main paths
-#TOOLS_DIR=/home/$(whoami)/.UVMEnv/tools
-#BASES_DIR=/home/$(whoami)/.UVMEnv/bases
-TOOLS_DIR=/home/$(whoami)/Github/uvmenv/uvmenv_tools/
-BASES_DIR=/home/$(whoami)/Github/uvmenv/uvmenv_bases/
+TOOLS_DIR=/home/$(whoami)/.UVMEnv/tools
+BASES_DIR=/home/$(whoami)/.UVMEnv/bases
 BASES_REPRESENT_DIR=$BASES_DIR/representative_files
 BASES_COMPONENT_DIR=$BASES_DIR/component_files
 BASES_COMMAND_DIR=$BASES_DIR/command_files
@@ -104,23 +102,35 @@ function main(){
     case $1 in
         ##### Framework #####
         -n|--new)
-            echo "Project name (NoSpaces):"
-            read projectName
+            #echo "Project name (NoSpaces):"
+            #read projectName
 
-            echo "Top level module (file name, not extension):"
-            read topModule
+            #echo "Top level module (file name, not extension):"
+            #read topModule
 
             #echo -e "Used HDL languaje:\n1)SystemVerilog\n2)Verilog"
             #read langOption
 
-            createNewEnv $projectName $topModule $2 #$langOption
+            #createNewEnv $projectName $topModule $2 #$langOption
+
+            if [ "$2" == "" ] || [ "$3" == "" ]; then
+                printError "Missing parameters"
+                printInfo "Usage: uvmenv -n|--new <project name> <top module name>"
+                exit 0
+            fi
+
+            # Send parameters:
+            # - $1: Project name.
+            # - $2: Top module name.
+            shift
+            createNewEnv $1 $2
         ;;
 
         -s|--search)
             searchProjects
         ;;
 
-        --show-signals)
+        -ss|--show-signals)
             ensureEnvironment
             bdnRefresh="n"
 
@@ -144,7 +154,7 @@ function main(){
             fi
         ;;
 
-        --show-modules)
+        -sm|--show-modules)
             ensureEnvironment
 
             if [ "$(find $DUT_HDL_DIR -type f \( -name "*.v" -o -name "*.sv" \) | sed -E 's/.*\/([^\/]+)\..*/\1/' | sort | uniq)" == "" ]; then
@@ -185,8 +195,24 @@ function main(){
             esac       
         ;;
 
+        -i|--init)
+            ensureEnvironment
+
+            if [ "$(find $DUT_HDL_DIR -type f \( -name "*.v" -o -name "*.sv" \) | sed -E 's/.*\/([^\/]+)\..*/\1/' | sort | uniq)" == "" ]; then
+                printWarning "HDL directory is empty"
+                exit 0
+            fi
+
+            createDefaultTemplates
+        ;;
+
+        -v|--view)
+            ensureEnvironment
+            tree -C | less -R
+        ;;
+
         -h|--help)
-            showHelp
+            showHelp | less -R
         ;;
 
         run)
@@ -315,7 +341,11 @@ function main(){
         ;;
 
         *)
-            printError "Option not available"
+            if [ "$1" == "" ]; then
+                printWarning "Specify an option; -h|--help for details"
+            else
+                printError "Option not available"
+            fi
         ;;
     esac
 
@@ -402,15 +432,31 @@ function getCurrentDir(){
 #######################################################################################################
 ################                     COMMANDS FUNCTIONS                               #################
 #######################################################################################################
+function createDefaultTemplates(){
+    # Order must be the next:
+    # BFM, reference model, sequence item, sequence, agent, scoreboard.
+
+    showAllSignals r
+    createNewBFMImpl DefaultBfmImpl
+    createNewRefModelImpl DefaultRefModelImpl
+    createNewSeqItem default_seqitem $(jq -r '.top_module' $CONFIG_FILE)
+    createNewSequence DefaultSequence
+    createNewAgent s default_agent $(jq -r '.top_module' $CONFIG_FILE)
+    createNewScoreboard DefaultScoreboard
+}
+
 function showHelp(){
     echo -e "Usage: \t uvmenv ${C_CYAN}<OPTION>${C_N}"
     echo -e "\n  OPTION:"
     printOption ""  "-> Framework"
     printOption "-n|--new"          "Creates a new UVMEnv project."
     printOption "-s|--search"       "Looks for a valid UVMEnv project into current directory."
-    printOption "--show-signals"    "Show inputs/outputs of modules into HDLSrc directory.\n\tShows particular signals if module_file is set.\n\tRefresh signals if -r is put."
-    printOption "--show-modules"    "Show list of modules into HDLSrc directory."
-    printOption "-h|--help"         "Shows ${C_GREEN}uvmenv${C_N} command help."
+    printOption "-ss|--show-signals"    "Show inputs/outputs of modules into HDLSrc directory.\n\tShows particular signals if module_file is set.\n\tRefresh signals if -r is put."
+    printOption "-sm|--show-modules"    "Show list of modules into HDLSrc directory."
+    printOption "-e|--edit"         "Edit files of project."
+    printOption "-i|--init"         "Create default templates for top module.\n\tBFM, reference model, sequence item, sequence, agent, scoreboard."
+    printOption "-v|--view"         "Shows project tree into system browser (less)."
+    printOption "-h|--help"         "Shows ${C_GREEN}uvmenv${C_N} command help into system browser (less)."
     printOption "run"               "Starts verification process."
     
     printOption "" "-> Agents"        
@@ -452,13 +498,8 @@ function showHelp(){
 #############################################################
 # $1: Project name.
 # $2: Project top module.
-#*** $3: Usar o no el workspace.
 function createNewEnv(){
     local config_content=""
-
-    if [ $3 ] && [ "$3" == "ws" ]; then
-        echo "**Use workspace"
-    fi
     
     # Create directories structure
     mkdir $PROJECT_DIR/$1

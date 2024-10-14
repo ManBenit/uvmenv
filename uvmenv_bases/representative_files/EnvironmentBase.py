@@ -28,10 +28,10 @@ class Environment(uvm_env):
 		super().__init__(name, parent)
 
 	def build_phase(self):
-        """
-        Instanciate here your scoreboard modules
-        Example:
-        """
+		"""
+		Instanciate here your scoreboard modules
+		Example:
+		"""
 		#self.scoreboard = Scoreboard("scoreboard", self)
 
 		"""
