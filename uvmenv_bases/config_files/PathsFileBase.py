@@ -15,6 +15,7 @@ sys.path.append(f'{PROJECT_PATH}/UVM_TB')
 sys.path.append(f'{PROJECT_PATH}/UVM_TB/SeqItm')
 sys.path.append(f'{PROJECT_PATH}/UVM_TB/Seqnce')
 sys.path.append(f'{PROJECT_PATH}/UVM_TB/Envmnt')
+sys.path.append(f'{PROJECT_PATH}/UVM_TB/Misces')
 
 sys.path.append(f'{PROJECT_PATH}/UVM_TB/Envmnt/Agents')
 sys.path.append(f'{PROJECT_PATH}/UVM_TB/Envmnt/Scorbd')

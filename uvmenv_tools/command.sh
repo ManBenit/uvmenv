@@ -1107,8 +1107,47 @@ function createNewScoreboard(){
         printWarning "Scoreboard already exists"
         exit 0
     fi
-    
-    sed -r "s|CLASS_NAME|$1|g" $SCOREBOARD_FILEBASE > $SCOREBOARD_DIR/$1.py  
+
+    # Verify the signal list generation
+    if [ ! -f $DUT_HDL_DIR/.allSignals.csv ] || [ "$(grep $(jq -r '.top_module' $CONFIG_FILE) $DUT_HDL_DIR/.allSignals.csv)" == "" ]; then
+        printWarning "Please refresh your signals"
+        exit 0
+    fi
+
+    # Request signals as information
+    ### Currently, list of signals is done o the Top module
+    local signals_list=($(showSignals i $(jq -r '.top_module' $CONFIG_FILE)))
+
+    # Prepare information variables
+    local parameters_of_maketest=""
+
+    local sig_type
+    local sig_len
+    local sig_name
+    ## Make structure for inputs to reference model
+    for i in ${signals_list[@]}; do
+        sig_type=$(echo $i | cut -d',' -f1)
+        sig_len=$(echo $i | cut -d',' -f2)
+        sig_name=$(echo $i | cut -d',' -f3)
+        if [ "$sig_type" == "INPUT" ]; then
+            parameters_of_maketest+="\\t\\t\\t$sig_name = tr_response.request.$sig_name.integer,\\n"
+        fi
+    done
+
+    # Post-processing for the last comma of response structure
+    # (Delete last comma)
+    parameters_of_maketest=${parameters_of_maketest::-3}
+    echo $parameters_of_maketest
+
+
+    # Generate ImplementationFile.py
+    ## Change class name
+    sed -r "s|CLASS_NAME|$1|g" $SCOREBOARD_FILEBASE > $SCOREBOARD_DIR/tmp1.py  
+
+
+    ## Change signals for result of reference model
+    sed -r "s|SIGNALS_REFM_RESULT|$parameters_of_maketest|g" $SCOREBOARD_DIR/tmp1.py > $SCOREBOARD_DIR/$1.py  
+    rm $SCOREBOARD_DIR/tmp1.py
 }
 
 function showScoreboards(){
@@ -1163,7 +1202,7 @@ function createNewBFMImpl(){
         printInfo "Usage: uvmenv --new-bfm <BfmNameImpl>"
         exit 0
     fi
-
+    
     # Verify if sequence item exists
     if [ -f $BFMIMPL_DIR/$1.py ]; then
         printWarning "BFM implementation already exists"
@@ -1183,16 +1222,6 @@ function createNewBFMImpl(){
         exit 0
     fi
     
-
-
-    for archivo in "${modules_dir[@]}"; do
-        nom=$(echo $archivo | cut -d'.' -f1)
-        if [ "$nom" == "$(jq -r '.top_module' $CONFIG_FILE)" ]; then
-            echo -e "${C_CYAN}$nom [Top]${C_N}"
-        else
-            echo "$nom"
-        fi
-    done
 
     # Request signals as information
     ### Currently, list of signals is done o the Top module

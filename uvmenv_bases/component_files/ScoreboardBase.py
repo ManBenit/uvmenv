@@ -49,13 +49,12 @@ class CLASS_NAME(uvm_scoreboard):
 		self.tr = t.copy()
 		
 		tr_response = self.tr.get_response()
-		"""Write here all inputs that you need to send to make test into reference model, for example:
+
+
+		"""Write here all inputs that you need to send to make test into reference model, for example:"""
 		refm_result = self.refmodel.makeTest(
-			signal_name = tr_response.request.signal_name.integer, 
-			signal_name = tr_response.request.signal_name.integer
+SIGNALS_REFM_RESULT
 		)
-		"""
-		refm_result = self.refmodel.makeTest()
 
 		if tr_response.response.YOUR_RESULT_SIGNAL.signed_integer == refm_result:
 			self.logger.info(f"[SCB] TEST PASSED")
