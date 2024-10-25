@@ -15,8 +15,8 @@ Use:
 	uvmenv --show-seqitems
 to show the available sequence items on your project.
 Example:
+from your_seqitem import Response as YourResponseAlias
 """
-#from your_seqitem import Response as YourAlias
 
 
 
@@ -46,8 +46,9 @@ class Monitor(uvm_monitor):
 		while True:
 			await Timer(1, units='ns')  # Simulate monitoring delay
 			
-			""" Use the class invoked with myseqitem module """
-			transaction = YourAlias("monitor_item")
+			""" Use the class invoked with your_seqitem module, for example:
+			transaction = YourResponseAlias("monitor_item")
+			"""
 
 			inputs, outputs = await self.bfm.get()
 			transaction.ins = inputs

@@ -10,8 +10,9 @@ Use:
 	uvmenv --show-scoreboards
 to show the available scoreboards on your project.
 Example:
+from  YourScoreboard import YourScoreboard
 """
-#from  Scoreboard import Scoreboard
+
 
 """
 Import all Agent classes from your agents, with an specific alias for each.
@@ -19,8 +20,8 @@ Use:
 	uvmenv --show-agents
 to show the available agents on your project.
 Example:
+from  your_agnt import Agent as YourAgentAlias
 """
-#from  your_agnt import Agent as YourAlias
 
 
 class Environment(uvm_env):
@@ -31,14 +32,14 @@ class Environment(uvm_env):
 		"""
 		Instanciate here your scoreboard modules
 		Example:
+		self.scoreboard = YourScoreboard("YourScoreboard", self)
 		"""
-		#self.scoreboard = Scoreboard("scoreboard", self)
 
 		"""
 		Instenciate here your agent modules.
 		Example:
+		self.agent = YourAgentAlias("your_agnt", self)
 		"""
-		#self.agent = YourAlias("agent", self)
 		
 		
 
@@ -46,11 +47,11 @@ class Environment(uvm_env):
 		super().connect_phase()
 		"""
 		Subscribe your scoreboard as listeners of your agent monitor:
+		self.agent.monitor.send.subscribers.append(self.scoreboard)
 		"""
-		#self.agent.monitor.send.subscribers.append(self.scoreboard)
 
 		"""
 		Connect your scoreboard result_export with all your monitors ports:
+		self.agent.monitor.send.connect(self.scoreboard.result_export)
 		"""
-		#self.agent.monitor.send.connect(self.scoreboard.result_export)
 

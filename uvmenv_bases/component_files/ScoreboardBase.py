@@ -14,14 +14,17 @@ Use:
 	uvmenv --show-seqitems
 to show the available sequence items on your project.
 Example:
+from your_seqitem import Response as YourResponseAlias
 """
-#from your_seqitem import Response as YourAlias
 
 
 class CLASS_NAME(uvm_scoreboard):
 	def __init__(self, name, parent):
 		super().__init__(name, parent)
-		self.tr = YourAlias("tr")
+		""" Instance your transaction, for example:
+		self.tr = YourResponseAlias("tr")
+		"""
+		self.tr=None
 
 	def build_phase(self):
 		super().build_phase()
@@ -51,7 +54,7 @@ class CLASS_NAME(uvm_scoreboard):
 		tr_response = self.tr.get_response()
 
 
-		"""Write here all inputs that you need to send to make test into reference model, for example:"""
+		# Here are all inputs that you need to send to make test into reference model:
 		refm_result = self.refmodel.makeTest(
 SIGNALS_REFM_RESULT
 		)

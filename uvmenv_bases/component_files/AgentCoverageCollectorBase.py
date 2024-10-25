@@ -10,14 +10,15 @@ Use:
 	uvmenv --show-seqitems
 to show the available sequence items on your project.
 Example:
+from your_seqitem import Response as YourResponseAlias
 """
-#from your_seqitem import Response as YourAlias
+
 
 
 class CoverageCollector(uvm_component):
 	def __init__(self, name, parent):
 		super().__init__(name, parent)
-		self.tr = YourAlias("tr")
+		self.tr = YourResponseAlias("tr")
 
 		# Define your own coverage sets
 		self.incov = set()

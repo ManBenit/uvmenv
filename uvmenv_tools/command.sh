@@ -178,6 +178,7 @@ function main(){
                 scbd) shift; editScoreboard $@ ;;
                 rmod) shift; editRefModelImpl $@ ;;
                 bfm) shift; editBfmImpl $@ ;;
+                misc) shift; editMiscelaneous $@ ;;
                 top) vi $TOP_FILE_PREFIX$(jq -r '.top_module' $CONFIG_FILE).py ;;
                 tst) vi $TEST_FILE ;;
                 env) vi $ENVIRONMENT_FILE ;;
@@ -340,6 +341,25 @@ function main(){
             deleteBfmImpl $@
         ;;
 
+
+        ##### Miscelaneous #####
+        --new-misc)
+            ensureEnvironment
+            shift
+            createNewMiscelaneous $@
+        ;;
+
+        --show-miscs)
+            ensureEnvironment
+            showMiscelaneous
+        ;;
+
+        --del-misc)
+            ensureEnvironment
+            shift
+            deleteMiscelaneous $@
+        ;;
+
         *)
             if [ "$1" == "" ]; then
                 printWarning "Specify an option; -h|--help for details"
@@ -488,6 +508,11 @@ function showHelp(){
     printOption "--new-bfm"         "Create an structure for a Bus Functional Model into Itface/_impl directory."
     printOption "--del-refmodel"    "Delete a BFM implementation into Itface/_impl directory."
     printOption "--show-bfms"        "Show all BFM interfaces into Itface/_impl directory."
+
+    printOption "" "-> Miscelaneous"          
+    printOption "--new-misc"         "Create a new miscelaneous file into Misces directory."
+    printOption "--del-misc"    "Delete a miscelaneous from Misces directory."
+    printOption "--show-miscs"        "Show all miscelaneous into Misces directory."
 
     echo ""
 }
@@ -1071,7 +1096,7 @@ function deleteSequence(){
         exit 0
     fi
 
-    rm -r $SEQUENCES_DIR/$1.py
+    rm $SEQUENCES_DIR/$1.py
 }
 
 function editSequence(){
@@ -1411,6 +1436,68 @@ function editRefModelImpl(){
     fi
 
     vi $REFMODELIMPL_DIR/$1.py
+}
+
+
+#############################################################
+##                  MISCELANEOUS HANDLING                  ##
+#############################################################
+# $1: Miscelaneous class name (Recommended: PascalCase).
+function createNewMiscelaneous(){
+    if [ $# -lt 1 ]; then
+        printError "Missing parameters"
+        printInfo "Usage: uvmenv --new-misc <MiscelaneousName>"
+        exit 0
+    fi
+
+    # Verify if miscelaneous exists
+    if [ -f $MISCELANEOUS_DIR/$1.py ]; then
+        printWarning "Miscelaneous already exists"
+        exit 0
+    fi
+
+    echo -e "# Miscelaneous file\n\n\n" > $MISCELANEOUS_DIR/$1.py  
+}
+
+function showMiscelaneous(){
+    local miscs_list=($(ls -F $MISCELANEOUS_DIR | grep -v / ))
+
+    for misc in "${miscs_list[@]}"; do
+        echo $misc | cut -d'.' -f1
+    done
+}
+
+# $1: Miscelaneous name 
+function deleteMiscelaneous(){
+    if [ $# -lt 1 ]; then
+        printError "Missing parameters"
+        printInfo "Usage: uvmenv --del-sequence <MiscelaneousName>"
+        exit 0
+    fi
+
+    # Verify if miscelaneous exists
+    if [ ! -f $MISCELANEOUS_DIR/$1.py ]; then
+        printError "Miscelaneous $1 does not exist"
+        exit 0
+    fi
+
+    rm $MISCELANEOUS_DIR/$1.py
+}
+
+function editMiscelaneous(){
+    if [ $# -lt 1 ]; then
+        printError "Missing parameters"
+        printInfo "Usage: uvmenv -e|--edit misc <MiscelaneousName>"
+        exit 0
+    fi
+
+    # Read name ($1)
+    if [ ! -f $MISCELANEOUS_DIR/$1.py ]; then
+        printError "Miscelaneous $1 does not exist"
+        exit 0
+    fi
+
+    vi $MISCELANEOUS_DIR/$1.py
 }
 
 
