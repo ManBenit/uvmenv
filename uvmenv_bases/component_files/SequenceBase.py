@@ -10,7 +10,7 @@ Use:
 	uvmenv --show-seqitems
 to show the available sequence items on your project.
 Example:
-from your_seqitem import Request as YourRequestAlias
+from your_seqitem import SequenceItem as YourSequenceItemAlias
 """
 
 # Set the number of items you want to send
@@ -19,20 +19,19 @@ NUM_OF_ITEMS = 1
 class CLASS_NAME(uvm_sequence):
 	def __init__(self, name="seqnce_CLASS_NAME"):
 		super().__init__(name)
+		""" Use the class invoked with your_seqitem module, for example:
+		self.tr = YourSequenceItemAlias()
+		"""
 	
 	async def body(self):
 		for _ in range(NUM_OF_ITEMS):
-			""" Use the class invoked with your_seqitem module, for example:
-			req = YourRequestAlias("req_CLASS_NAME")
-			"""
-
-			await self.start_item(req)
+			await self.start_item(self.tr)
 			""" Write the focused or random sequence of stimulus here, example:
-			req.randomize()
-			req.signal1		= 8
-			req.signal2		= 0
+			self.tr.randomize()
+			self.tr.signal1		= 8
+			self.tr.signal2		= 0
 			"""
-			await self.finish_item(req)
+			await self.finish_item(self.tr)
 
 
 
