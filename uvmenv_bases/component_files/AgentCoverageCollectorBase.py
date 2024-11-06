@@ -59,6 +59,6 @@ class CoverageCollector(uvm_component):
 
 
 				
-
+	
 	def write(self, t):
 		self.tr = t.copy()
