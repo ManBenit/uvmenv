@@ -32,10 +32,11 @@ class CLASS_NAME(uvm_scoreboard):
 		self.result_fifo = uvm_tlm_analysis_fifo("result_fifo", self)
 
 	def import_refmdl(self):
+		# Get an specific value from .json
 		config = load_config('config.json')
-
 		implementation_class = config.uvm_components.refmdl.refmdl_impl
 
+		# Convert value into Python implementation that you want to use
 		try:
 			module = importlib.import_module(implementation_class)
 			clazz = getattr(module, implementation_class)

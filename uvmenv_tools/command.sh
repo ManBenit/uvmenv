@@ -99,6 +99,8 @@ C_N="\e[39m"
 ################               MAIN MENU                               #################
 ########################################################################################
 function main(){
+    local combo7="agnt|sitm|seqc|scbd|rmod|bfm|misc"
+
     case $1 in
         ##### Framework #####
         -n|--new)
@@ -130,31 +132,11 @@ function main(){
             searchProjects
         ;;
 
-        -ss|--show-signals)
-            ensureEnvironment
-            bdnRefresh="n"
-
-            if [ "$(find $DUT_HDL_DIR -type f \( -name "*.v" -o -name "*.sv" \) | sed -E 's/.*\/([^\/]+)\..*/\1/' | sort | uniq)" == "" ]; then
-                printWarning "HDL directory is empty"
-                exit 0
-            fi
-
-            shift
-            if [ "$1" == "-r" ]; then
-                deleteSignalsCsv
-                bdnRefresh="r"
-                #echo "refresh"
-                shift
-            fi
-
-            if [ "$1" == "" ]; then
-                showAllSignals $bdnRefresh
-            else
-                showSignals n $1
-            fi
+        -h|--help)
+            showHelp # | less -R
         ;;
 
-        -sm|--show-modules)
+        -i|--init)
             ensureEnvironment
 
             if [ "$(find $DUT_HDL_DIR -type f \( -name "*.v" -o -name "*.sv" \) | sed -E 's/.*\/([^\/]+)\..*/\1/' | sort | uniq)" == "" ]; then
@@ -162,7 +144,100 @@ function main(){
                 exit 0
             fi
 
-            showModules
+            createDefaultTemplates
+        ;;
+
+        -v|--view)
+            ensureEnvironment
+            tree -C | less -R
+        ;;
+
+        run)
+            ensureEnvironment
+
+            if [ "$(find $DUT_HDL_DIR -type f \( -name "*.v" -o -name "*.sv" \) | sed -E 's/.*\/([^\/]+)\..*/\1/' | sort | uniq)" == "" ]; then
+                printWarning "HDL directory is empty"
+                exit 0
+            fi
+
+            $RUN_FILE
+        ;;
+
+
+        
+        ##### Component handling #####
+        -c|--create)
+            ensureEnvironment
+            shift
+            case $1 in
+                agnt) shift; createNewAgent $@ ;;
+                sitm) shift; createNewSeqItem $@ ;;
+                seqc) shift; createNewSequence $@ ;;
+                scbd) shift; createNewScoreboard $@ ;;
+                rmod) shift; createNewRefModelImpl $@ ;;
+                bfm) shift; createNewBFMImpl $@ ;;
+                misc) shift; createNewMiscelaneous $@ ;;
+                *)
+                    if [ "$1" == "" ]; then
+                        printWarning "Missing arguments: $combo7"
+                        exit 0 
+                    else
+                        printError "$1 not available for creation"
+                    fi
+                ;;
+            esac;
+        ;;
+
+        -l|--list)
+            ensureEnvironment
+            shift
+            case $1 in
+                agnt) showAgents ;;
+                sitm) showSequeceItems ;;
+                seqc) showSequences ;;
+                scbd) showScoreboards ;;
+                rmod) showRefModelImpl ;;
+                bfm) showBfmImpl ;;
+                misc) showMiscelaneous ;;
+                rtlm) 
+                    if [ "$(find $DUT_HDL_DIR -type f \( -name "*.v" -o -name "*.sv" \) | sed -E 's/.*\/([^\/]+)\..*/\1/' | sort | uniq)" == "" ]; then
+                        printWarning "HDL directory is empty"
+                        exit 0
+                    fi
+
+                    showModules
+                ;;
+                rtls)
+                    bdnRefresh="n"
+
+                    if [ "$(find $DUT_HDL_DIR -type f \( -name "*.v" -o -name "*.sv" \) | sed -E 's/.*\/([^\/]+)\..*/\1/' | sort | uniq)" == "" ]; then
+                        printWarning "HDL directory is empty"
+                        exit 0
+                    fi
+
+                    shift
+                    if [ "$1" == "-r" ]; then
+                        deleteSignalsCsv
+                        bdnRefresh="r"
+                        #echo "refresh"
+                        shift
+                    fi
+                    
+                    if [ "$1" == "" ]; then
+                        showAllSignals $bdnRefresh
+                    else
+                        showSignals n $1
+                    fi
+                ;;
+                *)
+                    if [ "$1" == "" ]; then
+                        printWarning "Missing arguments: $combo7|rtlm|rtls"
+                        exit 0 
+                    else
+                        printError "$1 not available for listing"
+                    fi
+                ;;
+            esac;
         ;;
 
         -e|--edit)
@@ -187,185 +262,35 @@ function main(){
                 path) vi $PATHS_FILE ;;
                 *)
                     if [ "$1" == "" ]; then
-                        printWarning "Missing arguments: agnt|sitm|seqc|scbd|rmod|bfm|top|tst|env|conf|util|path"
+                        printWarning "Missing arguments: $combo7|top|tst|env|conf|util|path"
                         exit 0 
                     else
-                        printError "Option not available for edition"
+                        printError "$1 not available for editing"
                     fi
                 ;;
             esac       
         ;;
-
-        -i|--init)
-            ensureEnvironment
-
-            if [ "$(find $DUT_HDL_DIR -type f \( -name "*.v" -o -name "*.sv" \) | sed -E 's/.*\/([^\/]+)\..*/\1/' | sort | uniq)" == "" ]; then
-                printWarning "HDL directory is empty"
-                exit 0
-            fi
-
-            createDefaultTemplates
-        ;;
-
-        -v|--view)
-            ensureEnvironment
-            tree -C | less -R
-        ;;
-
-        -h|--help)
-            showHelp | less -R
-        ;;
-
-        run)
-            ensureEnvironment
-
-            if [ "$(find $DUT_HDL_DIR -type f \( -name "*.v" -o -name "*.sv" \) | sed -E 's/.*\/([^\/]+)\..*/\1/' | sort | uniq)" == "" ]; then
-                printWarning "HDL directory is empty"
-                exit 0
-            fi
-
-            $RUN_FILE
-        ;;
-
-
-        ##### Agents #####
-        --new-agent)
+        
+        -d|--delete)
             ensureEnvironment
             shift
-            createNewAgent $@
-        ;;
-
-        --del-agent)
-            ensureEnvironment
-            shift
-            deleteAgent $@
-        ;;
-
-        --show-agents)
-            ensureEnvironment
-            showAgents
-        ;;
-
-
-        ##### Sequence items #####
-        --new-seqitem)
-            ensureEnvironment
-            shift
-            createNewSeqItem $@
-        ;;
-
-        --del-seqitem)
-            ensureEnvironment
-            shift
-            deleteSequenceItem $@
-        ;;
-
-        --show-seqitems)
-            ensureEnvironment
-            showSequeceItems
-        ;;
-
-
-        ##### Sequences #####
-        --new-sequence)
-            ensureEnvironment
-            shift
-            createNewSequence $@
-        ;;
-
-        --del-sequence)
-            ensureEnvironment
-            shift
-            deleteSequence $@
-        ;;
-
-        --show-sequences)
-            ensureEnvironment
-            showSequences
-        ;;
-
-
-        ##### Scoreboards #####
-        --new-scoreboard)
-            ensureEnvironment
-            shift
-            createNewScoreboard $@
-        ;;
-
-        --del-scoreboard)
-            ensureEnvironment
-            shift
-            deleteScoreboard $@
-        ;;
-
-        --show-scoreboards)
-            ensureEnvironment
-            showScoreboards
-        ;;
-
-
-        ##### Reference models #####
-        --new-refmodel)
-            ensureEnvironment
-            shift
-            createNewRefModelImpl $@
-        ;;
-
-        --show-refmodels)
-            ensureEnvironment
-            showRefModelImpl
-        ;;
-
-        --del-refmodel)
-            ensureEnvironment
-            shift
-            deleteRefModelImpl $@
-        ;;
-
-
-        ##### BFMs #####
-        --new-bfm)
-            ensureEnvironment
-            shift
-            createNewBFMImpl $@
-        ;;
-
-        --show-bfms)
-            ensureEnvironment
-            showBfmImpl
-        ;;
-
-        --del-bfm)
-            ensureEnvironment
-            shift
-            deleteBfmImpl $@
-        ;;
-
-
-        ##### Miscelaneous #####
-        --new-misc)
-            ensureEnvironment
-            shift
-            createNewMiscelaneous $@
-        ;;
-
-        --show-miscs)
-            ensureEnvironment
-            showMiscelaneous
-        ;;
-
-        --del-misc)
-            ensureEnvironment
-            shift
-            deleteMiscelaneous $@
-        ;;
-
-        *)
-            if [ "$1" == "" ]; then
-                printWarning "Specify an option; -h|--help for details"
-            else
-                printError "Option not available"
-            fi
+            case $1 in
+                agnt) shift; deleteAgent $@ ;;
+                sitm) shift; deleteSequenceItem $@ ;;
+                seqc) shift; deleteSequence $@ ;;
+                scbd) shift; deleteScoreboard $@ ;;
+                rmod) shift; deleteRefModelImpl $@ ;;
+                bfm) shift; deleteBfmImpl $@ ;;
+                misc) shift; deleteMiscelaneous $@ ;;
+                *)
+                    if [ "$1" == "" ]; then
+                        printWarning "Missing arguments: $combo7"
+                        exit 0 
+                    else
+                        printError "$1 not available for deletion"
+                    fi
+                ;;
+            esac;
         ;;
     esac
 
@@ -468,52 +393,20 @@ function createDefaultTemplates(){
 function showHelp(){
     echo -e "Usage: \t uvmenv ${C_CYAN}<OPTION>${C_N}"
     echo -e "\n  OPTION:"
-    printOption ""  "-> Framework"
+    printOption ""  "-> Framework managenment"
     printOption "-n|--new"          "Creates a new UVMEnv project."
     printOption "-s|--search"       "Looks for a valid UVMEnv project into current directory."
-    printOption "-ss|--show-signals"    "Show inputs/outputs of modules into HDLSrc directory.\n\tShows particular signals if module_file is set.\n\tRefresh signals if -r is put."
-    printOption "-sm|--show-modules"    "Show list of modules into HDLSrc directory."
-    printOption "-e|--edit"         "Edit files of project."
+    printOption "-h|--help"         "Shows ${C_GREEN}uvmenv${C_N} command help into system browser (less)."
     printOption "-i|--init"         "Create default templates for top module.\n\tBFM, reference model, sequence item, sequence, agent, scoreboard."
     printOption "-v|--view"         "Shows project tree into system browser (less)."
-    printOption "-h|--help"         "Shows ${C_GREEN}uvmenv${C_N} command help into system browser (less)."
     printOption "run"               "Starts verification process."
+
+    printOption "" "-> Component handling"        
+    printOption "-c|--create"       "Create a UVM component."
+    printOption "-l|--list"         "List UVM components and RTL modules and signals."
+    printOption "-e|--edit"         "Allow to edit each file of current UVMEnv project."
+    printOption "-d|--delete"       "Delete a UVM component"
     
-    printOption "" "-> Agents"        
-    printOption "--new-agent"       "Create an structure for an agent into Agents/agent_name."
-    printOption "--del-agent"       "Delete an agent into Agents directory."
-    printOption "--show-agents"     "Show agents into Agents directory."
-    
-    printOption "" "-> Sequence items"
-    printOption "--new-seqitem"     "Create an structure for a sequence item into SeqItm directory."
-    printOption "--del-seqitem"     "Delete a sequence item into SeqItm directory."
-    printOption "--show-seqitems"   "Show all sequence items into SeqItm directory."
-
-    printOption "" "-> Sequences"     
-    printOption "--new-sequence"    "Create an structure for a sequence into Seqnce directory."
-    printOption "--del-sequence"    "Delete a sequence into Seqnce directory."
-    printOption "--show-sequences"  "Show all sequences into Seqnce directory."
-
-    printOption "" "-> Scoreboards"     
-    printOption "--new-scoreboard"    "Create an structure for a scoreboard into Scorbd directory."
-    printOption "--del-scoreboard"    "Delete a scoreboard into Scorbd directory."
-    printOption "--show-scoreboards"  "Show all scoreboards into Scorbd directory."
-
-    printOption "" "-> Reference models"
-    printOption "--new-refmodel"    "Create an structure for a reference model into RefMdl/_impl directory."
-    printOption "--del-refmodel"    "Delete a reference model implementation into RefMdl/_impl directory."
-    printOption "--show-refmodels"  "Show all reference models into RefMdl/_impl directory."
-
-    printOption "" "-> BFMs"          
-    printOption "--new-bfm"         "Create an structure for a Bus Functional Model into Itface/_impl directory."
-    printOption "--del-refmodel"    "Delete a BFM implementation into Itface/_impl directory."
-    printOption "--show-bfms"        "Show all BFM interfaces into Itface/_impl directory."
-
-    printOption "" "-> Miscelaneous"          
-    printOption "--new-misc"         "Create a new miscelaneous file into Misces directory."
-    printOption "--del-misc"    "Delete a miscelaneous from Misces directory."
-    printOption "--show-miscs"        "Show all miscelaneous into Misces directory."
-
     echo ""
 }
 
@@ -737,7 +630,7 @@ function createNewAgent(){
 
     if [ $# -lt 3 ]; then
         printError "Missing parameters"
-        printInfo "Usage: uvmenv --new-agent <attr> <agent_name> <module_name>"
+        printInfo "Usage: uvmenv -c|--create agnt <attr> <agent_name> <module_name>"
         exit 0
     fi
 
@@ -856,7 +749,7 @@ function showAgents(){
 function deleteAgent(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
-        printInfo "Usage: uvmenv --del-agent <agent_name>"
+        printInfo "Usage: uvmenv -d|--delete <agent_name>"
         exit 0
     fi
 
@@ -925,7 +818,7 @@ function editAgent(){
 function createNewSeqItem(){
     if [ $# -lt 2 ]; then
         printError "Missing parameters"
-        printInfo "Usage: uvmenv --new-seqitem <seqitem_name> <module>"
+        printInfo "Usage: uvmenv -c|--create sitm <seqitem_name> <module>"
         exit 0
     fi
 
@@ -1012,7 +905,7 @@ function showSequeceItems(){
 function deleteSequenceItem(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
-        printInfo "Usage: uvmenv --del-seqitem <seqitem_name>"
+        printInfo "Usage: uvmenv -d|--delete sitm <seqitem_name>"
         exit 0
     fi
 
@@ -1061,7 +954,7 @@ function editSequenceItem(){
 function createNewSequence(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
-        printInfo "Usage: uvmenv --new-sequence <SequenceName>"
+        printInfo "Usage: uvmenv -c|--create seqc <SequenceName>"
         exit 0
     fi
 
@@ -1086,7 +979,7 @@ function showSequences(){
 function deleteSequence(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
-        printInfo "Usage: uvmenv --del-sequence <SequenceName>"
+        printInfo "Usage: uvmenv -d|--delete seqc <SequenceName>"
         exit 0
     fi
 
@@ -1123,7 +1016,7 @@ function editSequence(){
 function createNewScoreboard(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
-        printInfo "Usage: uvmenv --new-scoreboard <ScoreboardName>"
+        printInfo "Usage: uvmenv -c|--create scbd <ScoreboardName>"
         exit 0
     fi
 
@@ -1162,7 +1055,6 @@ function createNewScoreboard(){
     # Post-processing for the last comma of response structure
     # (Delete last comma)
     parameters_of_maketest=${parameters_of_maketest::-3}
-    echo $parameters_of_maketest
 
 
     # Generate ImplementationFile.py
@@ -1187,7 +1079,7 @@ function showScoreboards(){
 function deleteScoreboard(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
-        printInfo "Usage: uvmenv --del-scoreboard <ScoreboardName>"
+        printInfo "Usage: uvmenv -d|--delete scbd <ScoreboardName>"
         exit 0
     fi
 
@@ -1224,7 +1116,7 @@ function editScoreboard(){
 function createNewBFMImpl(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
-        printInfo "Usage: uvmenv --new-bfm <BfmNameImpl>"
+        printInfo "Usage: uvmenv -c|--create bfm <BfmNameImpl>"
         exit 0
     fi
     
@@ -1311,7 +1203,7 @@ function showBfmImpl(){
 function deleteBfmImpl(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
-        printInfo "Usage: uvmenv --del-bfm <BfmNameImpl>"
+        printInfo "Usage: uvmenv -d|--delete bfm <BfmNameImpl>"
         exit 0
     fi
 
@@ -1348,7 +1240,7 @@ function editBfmImpl(){
 function createNewRefModelImpl(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
-        printInfo "Usage: uvmenv --new-refmodel <RefModelImpl>"
+        printInfo "Usage: uvmenv -c|--create rmod <RefModelImpl>"
         exit 0
     fi
 
@@ -1409,7 +1301,7 @@ function showRefModelImpl(){
 function deleteRefModelImpl(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
-        printInfo "Usage: uvmenv --del-refmodel <RefModelImpl>"
+        printInfo "Usage: uvmenv -d|--delete rmod <RefModelImpl>"
         exit 0
     fi
 
@@ -1446,7 +1338,7 @@ function editRefModelImpl(){
 function createNewMiscelaneous(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
-        printInfo "Usage: uvmenv --new-misc <MiscelaneousName>"
+        printInfo "Usage: uvmenv -c|--create misc <MiscelaneousName>"
         exit 0
     fi
 
@@ -1471,7 +1363,7 @@ function showMiscelaneous(){
 function deleteMiscelaneous(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
-        printInfo "Usage: uvmenv --del-sequence <MiscelaneousName>"
+        printInfo "Usage: uvmenv -d|--delete misc <MiscelaneousName>"
         exit 0
     fi
 

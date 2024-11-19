@@ -25,11 +25,11 @@ class Monitor(uvm_monitor):
 		super().__init__(name, parent)
 
 	def import_bfm(self):
+		# Get an specific value from .json
 		config = load_config('config.json')
-
-		# Configure the BFM implementation that you want to use
 		implementation_class = config.uvm_components.itface.bfm_impl
 
+		# Convert value into Python implementation that you want to use
 		try:
 			module = importlib.import_module(implementation_class)
 			clazz = getattr(module, implementation_class)
