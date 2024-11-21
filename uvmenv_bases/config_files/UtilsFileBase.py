@@ -24,5 +24,10 @@ def extract_bits_from_integer(number, high, low):
 	return (extracted, bin(extracted))
 
 
-
-
+# Method to convert a dictionary into namespace data, for easier management into development.
+# return: SimpleNamespace object with dictionary data.
+def dict_to_namespace(d):
+	for key, value in d.items():
+		if isinstance(value, dict):
+			d[key] = dict_to_namespace(value)
+	return SimpleNamespace(**d)

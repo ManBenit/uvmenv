@@ -630,7 +630,7 @@ function createNewAgent(){
 
     if [ $# -lt 3 ]; then
         printError "Missing parameters"
-        printInfo "Usage: uvmenv -c|--create agnt <attr> <agent_name> <module_name>"
+        printInfo "Usage: uvmenv -c|--create agnt <attr> <agent_name> <module>"
         exit 0
     fi
 
@@ -640,7 +640,7 @@ function createNewAgent(){
         exit 0
     fi
 
-    # Verify if module_name exists
+    # Verify if module exists
     validateExistingHDLModule $3
 
     # Check attributes
@@ -749,7 +749,7 @@ function showAgents(){
 function deleteAgent(){
     if [ $# -lt 1 ]; then
         printError "Missing parameters"
-        printInfo "Usage: uvmenv -d|--delete <agent_name>"
+        printInfo "Usage: uvmenv -d|--delete agnt <agent_name>"
         exit 0
     fi
 
@@ -1256,6 +1256,7 @@ function createNewRefModelImpl(){
 
     # Prepare information variables
     local parameters=""
+    local returns=""
 
     local sig_type
     local sig_len
@@ -1272,11 +1273,14 @@ function createNewRefModelImpl(){
 
         if [ "$sig_type" == "INPUT" ]; then
             parameters+="$sig_name,"
+        elif [ "$sig_type" == "OUTPUT" ]; then
+            returns+="\\t\\t\\t'$sig_name': None,\\n"
         fi
     done
 
     # (Delete last comma)
     parameters=${parameters::-1}
+    returns=${returns::-3}
 
 
     # Generate ImplementationFile.py
@@ -1284,8 +1288,12 @@ function createNewRefModelImpl(){
     sed -r "s|CLASS_NAME|$1|g" $REFMODEL_IMPL_FILEBASE > $REFMODELIMPL_DIR/tmp1.py  
 
     ## Change set method (parameters and inits)
-    sed -r "s|PARAMETERS|$parameters|g" $REFMODELIMPL_DIR/tmp1.py > $REFMODELIMPL_DIR/$1.py 
+    sed -r "s|PARAMETERS|$parameters|g" $REFMODELIMPL_DIR/tmp1.py > $REFMODELIMPL_DIR/tmp2.py 
     rm $REFMODELIMPL_DIR/tmp1.py
+
+    ## Change set method (parameters and inits)
+    sed -r "s|RETURNS|$returns|g" $REFMODELIMPL_DIR/tmp2.py > $REFMODELIMPL_DIR/$1.py 
+    rm $REFMODELIMPL_DIR/tmp2.py
 
 }
 

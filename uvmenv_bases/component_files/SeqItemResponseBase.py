@@ -3,7 +3,7 @@
 ############################
 
 from pyuvm import uvm_sequence_item
-from types import SimpleNamespace
+from utils import dict_to_namespace
 import copy
 
 class Response(uvm_sequence_item):
@@ -22,15 +22,9 @@ THE_OUTPUTS
 			}
 		}
 
-	def dict_to_namespace(self, d):
-		for key, value in d.items():
-			if isinstance(value, dict):
-				d[key] = self.dict_to_namespace(value)
-		return SimpleNamespace(**d)
-
 	def get_response(self):
 		self.do()
-		return self.dict_to_namespace(self.item_dict)
+		return dict_to_namespace(self.item_dict)
 	
 	def copy(self):
 		return copy.deepcopy(self)

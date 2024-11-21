@@ -3,6 +3,7 @@
 ############################
 
 from RefModel import RefModel
+from utils import dict_to_namespace
 
 
 class CLASS_NAME(RefModel):
@@ -13,7 +14,9 @@ class CLASS_NAME(RefModel):
 		"""Write here your golden model handling""" 
 
 		# Finally return the result to compare 
-		return None 
+		return dict_to_namespace(
+RETURNS
+		)
 
 	def __str__(self):
 		return f'\t[{self.__class__.__name__}]: '+', '.join(f'{key}={value}' for key, value in self.params.items())

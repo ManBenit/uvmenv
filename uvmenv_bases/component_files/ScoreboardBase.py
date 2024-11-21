@@ -60,12 +60,12 @@ class CLASS_NAME(uvm_scoreboard):
 SIGNALS_REFM_RESULT
 		)
 
-		if tr_response.response.YOUR_RESULT_SIGNAL.signed_integer == refm_result:
+		if tr_response.response.YOUR_RESULT_SIGNAL.signed_integer == refm_result.YOUR_RESULT_SIGNAL:
 			self.logger.info(f"[SCB] TEST PASSED")
 		else:
 			self.logger.critical(
 				"[SCB] TEST FAILED -> DUT response ({}) != MODEL response ({})"
-				.format(tr_response.response.YOUR_RESULT_SIGNAL.signed_integer, refm_result)
+				.format(tr_response.response.YOUR_RESULT_SIGNAL.signed_integer, refm_result.YOUR_RESULT_SIGNAL)
 			)
 
 			"""If you want to stop running when an error happens, use these lines"""
