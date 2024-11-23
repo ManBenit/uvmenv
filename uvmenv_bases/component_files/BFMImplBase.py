@@ -17,7 +17,6 @@ class CLASS_NAME(BFM):
 	def __init__(self):
 		self.dut = cocotb.top
 		
-
 	async def set(self, *, PARAMETERS):
 INIT_VALUES
 		# Time for stimulus

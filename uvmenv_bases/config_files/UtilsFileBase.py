@@ -13,7 +13,7 @@ def load_config(filename):
 
 
 # Method to extract a certain range of bits from a certain integer data.
-# return: Tuple with extracted range with integer representation and binary representation.
+# return: Tuple with extracted range with integer and binary representation.
 def extract_bits_from_integer(number, high, low):
 	# Shift to right by 'low' positions
 	shifted = number >> low
@@ -24,7 +24,7 @@ def extract_bits_from_integer(number, high, low):
 	return (extracted, bin(extracted))
 
 
-# Method to convert a dictionary into namespace data, for easier management into development.
+# Method to convert a dictionary into namespace data, for easier management in dev.
 # return: SimpleNamespace object with dictionary data.
 def dict_to_namespace(d):
 	for key, value in d.items():

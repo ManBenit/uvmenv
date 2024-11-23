@@ -11,9 +11,10 @@ class CLASS_NAME(RefModel):
 		self.params = locals()
 		self.params.pop('self', None)
 
-		"""Write here your golden model handling""" 
+		"""Write here your model handling""" 
 
 		# Finally return the result to compare 
+		# (assign your correct values)
 		return dict_to_namespace(
 RETURNS
 		)
