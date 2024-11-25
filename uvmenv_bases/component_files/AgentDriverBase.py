@@ -9,31 +9,34 @@ from utils import load_config
 
 
 class Driver(uvm_driver):
-	def __init__(self, name, parent):
-		super().__init__(name, parent)
-	
-	def import_bfm(self):
-		# Get an specific value from .json
-		config = load_config('config.json')
-		implementation_class = config.uvm_components.itface.bfm_impl
+    def __init__(self, name, parent):
+        super().__init__(name, parent)
+    
+    def import_bfm(self):
+        # Get an specific value from .json
+        config = load_config('config.json')
+        implementation_class = config.uvm_components.itface.bfm_impl
 
-		# Convert value into Python implementation that you want to use
-		try:
-			module = importlib.import_module(implementation_class)
-			clazz = getattr(module, implementation_class)
-			self.bfm = clazz()
-		except Exception as e:
-			self.logger.critical(f"Failed to load BFM implementation: {e}")
-			return
+        # Convert value into Python implementation that you want to use
+        try:
+            module = importlib.import_module(implementation_class)
+            clazz = getattr(module, implementation_class)
+            self.bfm = clazz()
+        except Exception as e:
+            self.logger.critical(f"Failed to load BFM implementation: {e}")
+            return
 
-	def build_phase(self):
-		self.import_bfm()
+    def build_phase(self):
+        super().build_phase()
+        self.import_bfm()
 
-	async def run_phase(self):
-		while True:
-			op = await self.seq_item_port.get_next_item()
-			await self.bfm.set(
+    async def run_phase(self):
+        super().run_phase()
+        while True:
+            op = await self.seq_item_port.get_next_item()
+            self.logger.info(f'Sent to DUT: {op}')
+            await self.bfm.set(
 BFM_SET
-			)
+            )
 
-			self.seq_item_port.item_done()
+            self.seq_item_port.item_done()

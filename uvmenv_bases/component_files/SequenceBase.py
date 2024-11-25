@@ -7,7 +7,7 @@ from pyuvm import uvm_sequence
 """
 Import all request from a seqence item, with an specific alias for each.
 Use: 
-	uvmenv --show-seqitems
+    uvmenv --show-seqitems
 to show the available sequence items on your project.
 Example:
 from your_seqitem import Request as YourRequestAlias
@@ -17,22 +17,22 @@ from your_seqitem import Request as YourRequestAlias
 NUM_OF_ITEMS = 1
 
 class CLASS_NAME(uvm_sequence):
-	def __init__(self, name="seqnce_CLASS_NAME"):
-		super().__init__(name)
-	
-	async def body(self):
-		for _ in range(NUM_OF_ITEMS):
-			""" Use the class invoked with your_seqitem module, for example:
-			req = YourRequestAlias("req_CLASS_NAME")
-			"""
+    def __init__(self, name="seqnce_CLASS_NAME"):
+        super().__init__(name)
+    
+    async def body(self):
+        for _ in range(NUM_OF_ITEMS):
+            """ Use the class invoked with your_seqitem module, for example:
+            req = YourRequestAlias("req_CLASS_NAME")
+            """
 
-			await self.start_item(req)
-			""" Write the focused or random sequence of stimulus here, example:
-			req.randomize()
-			req.signal1		= 8
-			req.signal2		= 0
-			"""
-			await self.finish_item(req)
+            await self.start_item(req)
+            """ Write the focused or random sequence of stimulus here, example:
+            req.randomize()
+            req.signal1        = 8
+            req.signal2        = 0
+            """
+            await self.finish_item(req)
 
 
 

@@ -12,7 +12,7 @@ from Environment import Environment
 Import here all sequences that you consider necesary.
 All sequences are into Seqnce directory.
 Use: 
-	uvmenv --show-sequences
+    uvmenv --show-sequences
 to show the available sequences on your project.
 Import the Sequence from your Module.
 
@@ -23,59 +23,61 @@ from YourSequence import YourSequence
 
 
 class Test(uvm_test):
-	def build_phase(self):
-		self.env = Environment("env", self)
-		ConfigDB().set(None, "env.*", "dut", cocotb.top)
+    def build_phase(self):
+        super().build_phase()
+        self.env = Environment("env", self)
+        ConfigDB().set(None, "env.*", "dut", cocotb.top)
 
-		"""
-		Instance here all sequences you need:
-		
-		If you will use them INDIVIDUALLY, follow the next:
-		self.seq1 = YourSequence1("YourSequence1")
-		self.seq2 = YourSequence2("YourSequence2")
+        """
+        Instance here all sequences you need:
+        
+        If you will use them INDIVIDUALLY, follow the next:
+        self.seq1 = YourSequence1("YourSequence1")
+        self.seq2 = YourSequence2("YourSequence2")
 
-		If you will use VIRTUAL SEQUENCER, follow the next:
-		self.vseq1 = YourVirtualSequencer("YourVSeq1", self)
-		self.vseq2 = YourVirtualSequencer("YourVSeq2", self)
-		"""
+        If you will use VIRTUAL SEQUENCER, follow the next:
+        self.vseq1 = YourVirtualSequencer("YourVSeq1", self)
+        self.vseq2 = YourVirtualSequencer("YourVSeq2", self)
+        """
 
 
-	async def run_phase(self):
-		# Use the next line if you are verifying a sequential design:
-		#self.env.agent.driver.bfm.init()
+    async def run_phase(self):
+        super().run_phase()
+        # Use the next line if you are verifying a sequential design:
+        #self.env.agent.driver.bfm.init()
 
-		self.raise_objection()
-		#await self.env.agent.driver.bfm.reset()
-		
-		"""
-		Start here all sequences you need:
+        self.raise_objection()
+        #await self.env.agent.driver.bfm.reset()
+        
+        """
+        Start here all sequences you need:
 
-		If you are using them INDIVIDUALLY, follow the next:
+        If you are using them INDIVIDUALLY, follow the next:
         await self.seq1.start(self.env.agent.seqr)
         await self.seq2.start(self.env.agent.seqr)
-		
-		If you are using VIRTUAL SEQUENCER, follow the next:
+        
+        If you are using VIRTUAL SEQUENCER, follow the next:
         await self.vseq1.setMyTestVersion1(self.env)
         await self.vseq2.setMyTestVersion2(self.env)
-		"""
-		self.drop_objection()
+        """
+        self.drop_objection()
 
-		
+        
 
 """
 # Use this template for your virtual sequences
 class YourVirtualSequencer(uvm_sequencer):
-	def __init__(self, name, parent):
-		super().__init__(name, parent)
+    def __init__(self, name, parent):
+        super().__init__(name, parent)
 
-		# Instance here your sequences INDIVIDUALLY, example:
-		self.seq1 = YourSequence1("YourSequence1")
-		self.seq2 = YourSequence2("YourSequence2")
+        # Instance here your sequences INDIVIDUALLY, example:
+        self.seq1 = YourSequence1("YourSequence1")
+        self.seq2 = YourSequence2("YourSequence2")
 
-	# Define your different versions of virtual sequences as methods, example:
-	async def setMyTestVersion(self, env):
-		await self.seq1.start(env.agent.seqr)
-		await self.seq2.start(env.agent.seqr)
+    # Define your different versions of virtual sequences as methods, example:
+    async def setMyTestVersion(self, env):
+        await self.seq1.start(env.agent.seqr)
+        await self.seq2.start(env.agent.seqr)
 """
 
 

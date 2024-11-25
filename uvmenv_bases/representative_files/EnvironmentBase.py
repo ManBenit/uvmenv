@@ -7,7 +7,7 @@ from pyuvm import uvm_env
 """
 Import all Scoreboard classes you need.
 Use: 
-	uvmenv --show-scoreboards
+    uvmenv --show-scoreboards
 to show the available scoreboards on your project.
 Example:
 from  YourScoreboard import YourScoreboard
@@ -17,7 +17,7 @@ from  YourScoreboard import YourScoreboard
 """
 Import all Agent classes from your agents, with an specific alias for each.
 Use: 
-	uvmenv --show-agents
+    uvmenv --show-agents
 to show the available agents on your project.
 Example:
 from  your_agnt import Agent as YourAgentAlias
@@ -25,33 +25,34 @@ from  your_agnt import Agent as YourAgentAlias
 
 
 class Environment(uvm_env):
-	def __init__(self, name, parent):
-		super().__init__(name, parent)
+    def __init__(self, name, parent):
+        super().__init__(name, parent)
 
-	def build_phase(self):
-		"""
-		Instanciate here your scoreboard modules
-		Example:
-		self.scoreboard = YourScoreboard("YourScoreboard", self)
-		"""
+    def build_phase(self):
+        super.build_phase()
+        """
+        Instanciate here your scoreboard modules
+        Example:
+        self.scoreboard = YourScoreboard("YourScoreboard", self)
+        """
 
-		"""
-		Instenciate here your agent modules.
-		Example:
-		self.agent = YourAgentAlias("your_agnt", self)
-		"""
-		
-		
+        """
+        Instenciate here your agent modules.
+        Example:
+        self.agent = YourAgentAlias("your_agnt", self)
+        """
+        
+        
 
-	def connect_phase(self):
-		super().connect_phase()
-		"""
-		Subscribe your scoreboard as listeners of your agent monitor:
-		self.agent.monitor.send.subscribers.append(self.scoreboard)
-		"""
+    def connect_phase(self):
+        super().connect_phase()
+        """
+        Subscribe your scoreboard as listeners of your agent monitor:
+        self.agent.monitor.send.subscribers.append(self.scoreboard)
+        """
 
-		"""
-		Connect your scoreboard result_export with all your monitors ports:
-		self.agent.monitor.send.connect(self.scoreboard.result_export)
-		"""
+        """
+        Connect your scoreboard result_export with all your monitors ports:
+        self.agent.monitor.send.connect(self.scoreboard.result_export)
+        """
 

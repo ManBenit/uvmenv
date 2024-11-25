@@ -10,5 +10,5 @@ from Test import Test
 
 @cocotb.test()
 async def main_test(dut):
-	await uvm_root().run_test("Test")
+    await uvm_root().run_test("Test")
 
