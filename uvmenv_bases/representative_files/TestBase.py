@@ -19,6 +19,7 @@ Import the Sequence from your Module.
 Example:
 from YourSequence import YourSequence
 """
+from DefaultSequence import DefaultSequence
 
 
 
@@ -32,13 +33,14 @@ class Test(uvm_test):
         Instance here all sequences you need:
         
         If you will use them INDIVIDUALLY, follow the next:
-        self.seq1 = YourSequence1("YourSequence1")
-        self.seq2 = YourSequence2("YourSequence2")
+        self.seq1 = YourSequence1('YourSequence1')
+        self.seq2 = YourSequence2('YourSequence2')
 
         If you will use VIRTUAL SEQUENCER, follow the next:
-        self.vseq1 = YourVirtualSequencer("YourVSeq1", self)
-        self.vseq2 = YourVirtualSequencer("YourVSeq2", self)
+        self.vseq1 = YourVirtualSequencer('YourVSeq1', self)
+        self.vseq2 = YourVirtualSequencer('YourVSeq2', self)
         """
+        self.seq = DefaultSequence('DefaultSequence')
 
 
     async def run_phase(self):
@@ -60,6 +62,7 @@ class Test(uvm_test):
         await self.vseq1.setMyTestVersion1(self.env)
         await self.vseq2.setMyTestVersion2(self.env)
         """
+        await self.seq.start(self.env.agent.seqr)
         self.drop_objection()
 
         

@@ -23,7 +23,7 @@ class Driver(uvm_driver):
             clazz = getattr(module, implementation_class)
             self.bfm = clazz()
         except Exception as e:
-            self.logger.critical(f"Failed to load BFM implementation: {e}")
+            self.logger.critical(f'Failed to load BFM implementation: {e}')
             return
 
     def build_phase(self):
@@ -31,10 +31,15 @@ class Driver(uvm_driver):
         self.import_bfm()
 
     async def run_phase(self):
-        super().run_phase()
+        await super().run_phase()
         while True:
             op = await self.seq_item_port.get_next_item()
             self.logger.info(f'Sent to DUT: {op}')
+
+            self.get_parent().get_parent().refmodel.set_inputs(
+BFM_SET
+            )
+
             await self.bfm.set(
 BFM_SET
             )

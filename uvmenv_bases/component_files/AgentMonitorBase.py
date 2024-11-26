@@ -6,7 +6,6 @@
 import importlib
 from pyuvm import uvm_monitor, uvm_analysis_port
 from cocotb.triggers import Timer
-
 from utils import load_config
 
 """
@@ -17,7 +16,7 @@ to show the available sequence items on your project.
 Example:
 from your_seqitem import Response as YourResponseAlias
 """
-
+from default_seqitem import Response as DefaultSeqitem
 
 
 class Monitor(uvm_monitor):
@@ -35,22 +34,23 @@ class Monitor(uvm_monitor):
             clazz = getattr(module, implementation_class)
             self.bfm = clazz()
         except Exception as e:
-            self.logger.critical(f"Failed to load BFM implementation: {e}")
+            self.logger.critical(f'Failed to load BFM implementation: {e}')
             return
 
     def build_phase(self):
         super().build_phase()
         self.import_bfm()
-        self.send = uvm_analysis_port("send_monitor", self)
+        self.send = uvm_analysis_port('send_monitor', self)
 
     async def run_phase(self):
-        super().run_phase()
+        await super().run_phase()
         while True:
             await Timer(1, units='ns')  # Simulate monitoring delay
             
             """ Use the class invoked with your_seqitem module, for example:
             transaction = YourResponseAlias("monitor_item")
             """
+            transaction = DefaultSeqitem('monitor_item')
 
             inputs, outputs = await self.bfm.get()
             transaction.ins = inputs

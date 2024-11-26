@@ -14,7 +14,7 @@ class CLASS_NAME(RefModel):
     def set_inputs(self, *, PARAMETERS):
 PARAMS_ASSIGNS
 
-    def make_test_python(self): 
+    def do_with_python(self): 
         """Write here your model handling""" 
               
 
@@ -24,8 +24,11 @@ PARAMS_ASSIGNS
 RETURNS
         }
 
-    def make_test_verilator(self):
-        sim_init()
+    def do_with_verilator(self):
+        import ctypes
+        sim = ctypes.CDLL('./RTLMdl/obj_dir/libadder.so')
+
+        sim.init()
         sim.reset()
               
         """
@@ -35,7 +38,7 @@ RETURNS
         sim.eval()
         """
 
-        sim_finalize()
+        sim.finalize()
 
 
         # Finally return the result to compare 
@@ -44,14 +47,15 @@ RETURNS
 RETURNS
         }
 
+    def makeTest(self):
+        return self.do_with_python()
+
     def build_phase(self):
         super().build_phase()
-        self.send = uvm_analysis_port("send_refmodel", self)
+        self.send = uvm_analysis_port('send_refmodel', self)
           
     def extract_phase(self):
         super().extract_phase()
         transaction_ref = self.makeTest()
         self.send.write(transaction_ref)
 
-
- 

@@ -22,7 +22,7 @@ THE_OUTPUTS
             }
         }
 
-    def get_response(self):
+    def get_transaction(self):
         self.do()
         return dict_to_namespace(self.item_dict)
     
