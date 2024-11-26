@@ -2,7 +2,7 @@
 ###    COMPONENT FILE    ###
 ############################
 
-import sys
+
 import importlib
 from pyuvm import uvm_monitor, uvm_analysis_port
 from cocotb.triggers import Timer

@@ -2,7 +2,9 @@
 ###    REPRESENTATIVE FILE    ###
 #################################
 
+import importlib
 from pyuvm import uvm_env
+from utils import load_config
 
 """
 Import all Scoreboard classes you need.
@@ -28,8 +30,26 @@ class Environment(uvm_env):
     def __init__(self, name, parent):
         super().__init__(name, parent)
 
+    def import_refmdl(self):
+        # Get an specific value from .json
+        config = load_config('config.json')
+        implementation_class = config.uvm_components.refmdl.refmdl_impl
+
+        # Convert value into Python implementation that you want to use
+        try:
+            module = importlib.import_module(implementation_class)
+            clazz = getattr(module, implementation_class)
+            self.refmodel = clazz('reference_model', self)
+        except Exception as e:
+            self.logger.critical(f"Failed to load RefModel implementation: {e}")
+            return
+
     def build_phase(self):
-        super.build_phase()
+        super().build_phase()
+
+        """Uncomment the next line:"""
+        #self.import_refmdl()
+          
         """
         Instanciate here your scoreboard modules
         Example:
@@ -41,18 +61,19 @@ class Environment(uvm_env):
         Example:
         self.agent = YourAgentAlias("your_agnt", self)
         """
-        
-        
 
     def connect_phase(self):
         super().connect_phase()
+
         """
-        Subscribe your scoreboard as listeners of your agent monitor:
+        Subscribe your scoreboard as listeners of your agent monitors and reference model:
         self.agent.monitor.send.subscribers.append(self.scoreboard)
+        self.refmodel.send.subscribers.append(self.scoreboard)
         """
 
         """
-        Connect your scoreboard result_export with all your monitors ports:
-        self.agent.monitor.send.connect(self.scoreboard.result_export)
+        Connect your scoreboard result_export with all your monitors and reference model ports:
+        self.agent.monitor.send.connect(self.scoreboard.dut_result_export)
+        self.refmodel.send.connect(self.scoreboard.refmodel_result_export)
         """
 

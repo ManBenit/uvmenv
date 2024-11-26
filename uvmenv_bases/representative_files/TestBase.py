@@ -42,7 +42,7 @@ class Test(uvm_test):
 
 
     async def run_phase(self):
-        super().run_phase()
+        await super().run_phase()
         # Use the next line if you are verifying a sequential design:
         #self.env.agent.driver.bfm.init()
 

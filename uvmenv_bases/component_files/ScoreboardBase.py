@@ -2,10 +2,8 @@
 ###    COMPONENT FILE    ###
 ############################
 
-import importlib
+from pyuvm import uvm_scoreboard, uvm_tlm_analysis_fifo, uvm_get_port
 
-from pyuvm import uvm_scoreboard, uvm_tlm_analysis_fifo
-from utils import load_config
 
 
 """
@@ -28,65 +26,39 @@ class CLASS_NAME(uvm_scoreboard):
 
     def build_phase(self):
         super().build_phase()
-        self.import_refmdl()
         self.dut_result_fifo = uvm_tlm_analysis_fifo("dut_result_fifo", self)
+        self.refmodel_result_fifo = uvm_tlm_analysis_fifo("refmodel_result_fifo", self)
 
-    def import_refmdl(self):
-        # Get an specific value from .json
-        config = load_config('config.json')
-        implementation_class = config.uvm_components.refmdl.refmdl_impl
-
-        # Convert value into Python implementation that you want to use
-        try:
-            module = importlib.import_module(implementation_class)
-            clazz = getattr(module, implementation_class)
-            self.refmodel = clazz('reference_model', self)
-        except Exception as e:
-            self.logger.critical(f"Failed to load RefModel implementation: {e}")
-            return
+        self.dut_result_get_port = uvm_get_port("dut_result_get_port", self)
+        self.refmodel_result_get_port = uvm_get_port("refmodel_result_get_port", self)
         
     def connect_phase(self):
-        super().connect_phase()
-        self.result_export = self.dut_result_fifo.analysis_export
+        # To correct TLM connection
+        self.dut_result_get_port.connect(self.dut_result_fifo.get_export)
+        self.refmodel_result_get_port.connect(self.refmodel_result_fifo.get_export)
+
+        # To easy connecting since Environment
+        self.dut_result_export = self.dut_result_fifo.analysis_export
+        self.refmodel_result_export= self.refmodel_result_fifo.analysis_export
+
+    def check_phase(self):
+        super().check_phase()
+
+        while self.dut_result_get_port.can_get() and self.refmodel_result_get_port.can_get():
+            success, tr = self.dut_result_get_port.try_get()
+
+            if not success:
+                self.logger.critical('[SCB] Fail getting transaction info')
+            else:
+                self.logger.info('Analysing TLM on check_phase')
+
+        self.logger.info('Final general scoreboarding. If necessary')
     
-    
+
     def write(self, t):
         self.tr = t.copy()
         self.logger.info(f'Received from Monitor: {self.tr}')
         
-        tr_response = self.tr.get_response()
 
-
-        # Here are all inputs that you need to send to make test into reference model:
-        refm_result = self.refmodel.makeTest(
-SIGNALS_REFM_RESULT
-        )
-
-        """
-        You can use assertions (RECOMMENDED, failures will be showed and process will be aborted):
-        assert tr_response.response.sum.integer == refm_result.sum, 'DUT({}) != MODEL({})'.format(tr_response.response.YOUR_RESULT_SIGNAL.integer, refm_result.YOUR_RESULT_SIGNAL)
-
-
-        You can use conditionals (failures will be showed but process will finished always successfully):
-        if tr_response.response.YOUR_RESULT_SIGNAL.integer == refm_result.YOUR_RESULT_SIGNAL:
-            self.logger.info(f"TEST PASSED")
-        else:
-            self.logger.critical(
-                'TEST FAILED -> DUT response ({}) != MODEL response ({})'
-                .format(tr_response.response.YOUR_RESULT_SIGNAL.integer, refm_result.YOUR_RESULT_SIGNAL)
-            )
-
-
-            ## If you want to stop running when an error happens, use these lines:
-            from cocotb.result import TestFailure
-            raise TestFailure("Check log messages for error details")
-
-            ## If you want to finish test successfully only reporting errors, use these lines:
-            import cocotb
-            cocotb.regression_manager.failures+=1
-
-
-        NOTE: If you are uing signed signals, use signed_integer for your RESULT_SIGNAL if necessary.
-        """
         
             

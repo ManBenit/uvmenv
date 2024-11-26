@@ -81,8 +81,8 @@ TEST_FILEBASE=$BASES_REPRESENT_DIR/TestBase.py
 TOP_FILEBASE=$BASES_REPRESENT_DIR/TopBase.py
 
 
-
-
+# 4 spaces to make a tab
+TAB="    "
 ### Bash colors ####
 C_RED="\e[31m"
 C_BLUE="\e[34m"
@@ -698,7 +698,7 @@ function createNewAgent(){
             sig_len=$(echo $i | cut -d',' -f2)
             sig_name=$(echo $i | cut -d',' -f3)
             if [ "$sig_type" == "INPUT" ]; then
-                inputs+="\\t\\t\\t\\t$sig_name = op.$sig_name,\\n"
+                inputs+="${TAB}${TAB}${TAB}${TAB}$sig_name = op.$sig_name,\\n"
             fi
         done
 
@@ -854,14 +854,14 @@ function createNewSeqItem(){
         sig_name=$(echo $i | cut -d',' -f3)
 
         if [ "$sig_type" == "INPUT" ]; then
-            res_input_lines+="\\t\\t\\t\\t'$sig_name': self.ins['$sig_name'],\\n"
-            res_input_lines_str+="\\t\\t\\t\\t'$sig_name': self.ins['$sig_name'].integer,\\n"
-            req_input_lines+="\\t\\tself.$sig_name = 0\\n"
-            req_rand_input_lines+="\\t\\tself.$sig_name = random.randint(0, $(echo '2^'$sig_len' - 1' | bc))\\n"
-            req_input_lines_str+="\\t\\t\\t'$sig_name': self.$sig_name,\\n"
+            res_input_lines+="${TAB}${TAB}${TAB}${TAB}'$sig_name': self.ins['$sig_name'],\\n"
+            res_input_lines_str+="${TAB}${TAB}${TAB}${TAB}'$sig_name': self.ins['$sig_name'].integer,\\n"
+            req_input_lines+="${TAB}${TAB}self.$sig_name = 0\\n"
+            req_rand_input_lines+="${TAB}${TAB}self.$sig_name = random.randint(0, $(echo '2^'$sig_len' - 1' | bc))\\n"
+            req_input_lines_str+="${TAB}${TAB}${TAB}'$sig_name': self.$sig_name,\\n"
         elif [ "$sig_type" == "OUTPUT" ]; then
-            res_output_lines+="\\t\\t\\t\\t'$sig_name': self.outs['$sig_name'],\\n"
-            res_output_lines_str+="\\t\\t\\t\\t'$sig_name': self.outs['$sig_name'].integer,\\n"
+            res_output_lines+="${TAB}${TAB}${TAB}${TAB}'$sig_name': self.outs['$sig_name'],\\n"
+            res_output_lines_str+="${TAB}${TAB}${TAB}${TAB}'$sig_name': self.outs['$sig_name'].integer,\\n"
         fi
     done
 
@@ -1036,35 +1036,9 @@ function createNewScoreboard(){
     ### Currently, list of signals is done o the Top module
     local signals_list=($(showSignals i $(jq -r '.top_module' $CONFIG_FILE)))
 
-    # Prepare information variables
-    local parameters_of_maketest=""
-
-    local sig_type
-    local sig_len
-    local sig_name
-    ## Make structure for inputs to reference model
-    for i in ${signals_list[@]}; do
-        sig_type=$(echo $i | cut -d',' -f1)
-        sig_len=$(echo $i | cut -d',' -f2)
-        sig_name=$(echo $i | cut -d',' -f3)
-        if [ "$sig_type" == "INPUT" ]; then
-            parameters_of_maketest+="\\t\\t\\t$sig_name = tr_response.request.$sig_name.integer,\\n"
-        fi
-    done
-
-    # Post-processing for the last comma of response structure
-    # (Delete last comma)
-    parameters_of_maketest=${parameters_of_maketest::-3}
-
-
     # Generate ImplementationFile.py
     ## Change class name
-    sed -r "s|CLASS_NAME|$1|g" $SCOREBOARD_FILEBASE > $SCOREBOARD_DIR/tmp1.py  
-
-
-    ## Change signals for result of reference model
-    sed -r "s|SIGNALS_REFM_RESULT|$parameters_of_maketest|g" $SCOREBOARD_DIR/tmp1.py > $SCOREBOARD_DIR/$1.py  
-    rm $SCOREBOARD_DIR/tmp1.py
+    sed -r "s|CLASS_NAME|$1|g" $SCOREBOARD_FILEBASE > $SCOREBOARD_DIR/$1.py  
 }
 
 function showScoreboards(){
@@ -1160,10 +1134,10 @@ function createNewBFMImpl(){
         sig_name=$(echo $i | cut -d',' -f3)
         if [ "$sig_type" == "INPUT" ]; then
             parameters_of_set+="$sig_name,"
-            init_values_on_set+="\\t\\tself.dut.$sig_name.value = $sig_name\\n"
-            inputs_of_get+="\\t\\t\\t'$sig_name': self.dut.$sig_name.value,\\n"
+            init_values_on_set+="${TAB}${TAB}self.dut.$sig_name.value = $sig_name\\n"
+            inputs_of_get+="${TAB}${TAB}${TAB}'$sig_name': self.dut.$sig_name.value,\\n"
         elif [ "$sig_type" == "OUTPUT" ]; then
-            outputs_of_get+="\\t\\t\\t'$sig_name': self.dut.$sig_name.value,\\n"
+            outputs_of_get+="${TAB}${TAB}${TAB}'$sig_name': self.dut.$sig_name.value,\\n"
         fi
     done
 
@@ -1234,7 +1208,7 @@ function editBfmImpl(){
 
 
 #############################################################
-##                 REFERENCE MODEL HANDLING                ##
+##          REFERENCE MODEL IMPLEMENTATION HANDLING        ##
 #############################################################
 # $1: Reference model class name with 'Model' suffix (Recommended: PascalCaseModel).
 function createNewRefModelImpl(){
@@ -1257,11 +1231,8 @@ function createNewRefModelImpl(){
     # Prepare information variables
     local parameters=""
     local returns=""
+    local assigns=""
 
-    local sig_type
-    local sig_len
-    local sig_name
-    ## Make response and request structure before writing files
     local sig_type
     local sig_len
     local sig_name
@@ -1273,27 +1244,32 @@ function createNewRefModelImpl(){
 
         if [ "$sig_type" == "INPUT" ]; then
             parameters+="$sig_name,"
+            assigns+="${TAB}${TAB}self.$sig_name = $sig_name\\n"
         elif [ "$sig_type" == "OUTPUT" ]; then
-            returns+="\\t\\t\\t'$sig_name': None,\\n"
+            returns+="${TAB}${TAB}${TAB}'$sig_name': None,\\n"
         fi
     done
 
     # (Delete last comma)
     parameters=${parameters::-1}
     returns=${returns::-3}
-
+    assigns=${assigns::-2}
 
     # Generate ImplementationFile.py
     ## Change class name
     sed -r "s|CLASS_NAME|$1|g" $REFMODEL_IMPL_FILEBASE > $REFMODELIMPL_DIR/tmp1.py  
 
-    ## Change set method (parameters and inits)
+    ## Change set_inputs method (parameters)
     sed -r "s|PARAMETERS|$parameters|g" $REFMODELIMPL_DIR/tmp1.py > $REFMODELIMPL_DIR/tmp2.py 
     rm $REFMODELIMPL_DIR/tmp1.py
 
-    ## Change set method (parameters and inits)
-    sed -r "s|RETURNS|$returns|g" $REFMODELIMPL_DIR/tmp2.py > $REFMODELIMPL_DIR/$1.py 
+    ## Change set_inputs method (inits)
+    sed -r "s|PARAMS_ASSIGNS|$assigns|g" $REFMODELIMPL_DIR/tmp2.py > $REFMODELIMPL_DIR/tmp3.py 
     rm $REFMODELIMPL_DIR/tmp2.py
+
+    ## Change set test make_test method (for Python and Verilator)
+    sed -r "s|RETURNS|$returns|g" $REFMODELIMPL_DIR/tmp3.py > $REFMODELIMPL_DIR/$1.py 
+    rm $REFMODELIMPL_DIR/tmp3.py
 
 }
 

@@ -3,36 +3,7 @@
 ############################
 
 from RefModel import RefModel
-from utils import dict_to_namespace
-
-
-class CLASS_NAME(RefModel):
-    def makeTest(self, *, PARAMETERS): 
-        self.params = locals()
-        self.params.pop('self', None)
-
-        """Write here your model handling""" 
-
-        # Finally return the result to compare 
-        # (assign your correct values)
-        return dict_to_namespace({
-RETURNS
-        })
-
-    def __str__(self):
-        return f'\t[{self.__class__.__name__}]: '+', '.join(f'{key}={value}' for key, value in self.params.items())
-
-
-
-
-
-
-############################
-###    COMPONENT FILE    ###
-############################
-
-from RefModel import RefModel
-from utils import dict_to_namespace
+from pyuvm import uvm_analysis_port
 
 
 class CLASS_NAME(RefModel):
@@ -40,21 +11,47 @@ class CLASS_NAME(RefModel):
         super().__init__(name, parent, abstract_param)
 
 
-    def makeTest(self, *, PARAMETERS): 
-        self.params = locals()
-        self.params.pop('self', None)
+    def set_inputs(self, *, PARAMETERS):
+PARAMS_ASSIGNS
 
-
+    def make_test_python(self): 
         """Write here your model handling""" 
+              
+
+        # Finally return the result to compare 
+        # (assign your correct values)
+        return {
+RETURNS
+        }
+
+    def make_test_verilator(self):
+        sim_init()
+        sim.reset()
+              
+        """
+        Write here your model handling, for example:
+        sim.set_a()
+        sim.set_b()
+        sim.eval()
+        """
+
+        sim_finalize()
 
 
         # Finally return the result to compare 
         # (assign your correct values)
-        return dict_to_namespace({
+        return {
 RETURNS
-        })
+        }
 
-    def __str__(self):
-        return f'\t[{self.__class__.__name__}]: '+', '.join(f'{key}={value}' for key, value in self.params.items())
+    def build_phase(self):
+        super().build_phase()
+        self.send = uvm_analysis_port("send_refmodel", self)
+          
+    def extract_phase(self):
+        super().extract_phase()
+        transaction_ref = self.makeTest()
+        self.send.write(transaction_ref)
 
 
+ 

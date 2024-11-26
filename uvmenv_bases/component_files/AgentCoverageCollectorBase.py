@@ -41,24 +41,20 @@ class CoverageCollector(uvm_component):
             success, tr = self.result_get_port.try_get()
 
             if not success:
-                self.logger.critical('[CovCol] Fail getting transaction info')
+                self.logger.critical('Fail getting transaction info')
             else:
+                self.logger.info('Analysing TLM on check_phase')
                 inputs = tr.get_response().request
                 outputs = tr.get_response().response
 
-                """
-                Write here inputs and outputs handling.
-
-                This part handles signals for each time that is
-                possible to get transactions from port.
-                """
+                """Write here inputs and outputs handling"""
         
-        """
-        Write here results processing after getting all signals.
-        """
+        """ Write here results processing after getting all signals """
+        self.logger.info('Final general coverage')
 
-
-                
     
     def write(self, t):
         self.tr = t.copy()
+        self.logger.info(f'Received from Monitor in WRITE: {self.tr}')
+
+
