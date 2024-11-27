@@ -52,7 +52,7 @@ class CLASS_NAME(uvm_scoreboard):
             if not success:
                 self.logger.critical('Fail getting transaction info')
             else:
-                self.logger.info('Analysing TLM on check_phase')
+                self.logger.info('Analyzing TLM on check_phase')
 
         self.logger.info('Final general scoreboarding')
 
