@@ -45,7 +45,8 @@ class Monitor(uvm_monitor):
     async def run_phase(self):
         await super().run_phase()
         while True:
-            await Timer(1, units='ns')  # Simulate monitoring delay
+            # Time for waiting Monitor response from DUT
+            await Timer(1, units='ns')  
             
             """ Use the class invoked with your_seqitem module, for example:
             transaction = YourResponseAlias("monitor_item")

@@ -41,8 +41,8 @@ def count_lines(filepath):
 def append_unique_to_file(filepath, text):
     with open(filepath, 'r+') as file:
         content = file.read()
-        if text not in content:
-            file.write('\n' + text)
+        if '//vcd_dump' not in content or text=='endmodule\n':
+            file.write(text)
         #    print("Texto único agregado exitosamente.")
         #else:
         #    print("El texto ya está presente en el archivo.")
@@ -52,6 +52,7 @@ def append_unique_to_file(filepath, text):
 if __name__=='__main__':
     topfile = str(sys.argv[1])
     topmodule = topfile.split('.')[0]
+    topmodule = topmodule.split('/')[-1]
     level = int(sys.argv[2])
     option = int(sys.argv[3])
     
@@ -64,16 +65,17 @@ if __name__=='__main__':
 
     # Write new lines    
     elif option == 2:
-        new_string=f'#vcd_dump\ninitial begin $dumpfile("dut_signals.vcd");$dumpvars({level}, {topmodule}); end\nendmodule\n\n'
+        new_string=f'//vcd_dump\ninitial begin $dumpfile("dut_signals.vcd");$dumpvars({level}, {topmodule}); end\n'
         append_unique_to_file(topfile, new_string)
+        append_unique_to_file(topfile, 'endmodule\n')
 
     # Delete new lines and write only "endmodule""
     elif option == 3:
-        init_line = get_index_of_line(topfile, '#vcd_dump')
+        init_line = get_index_of_line(topfile, '//vcd_dump')
         end_line = count_lines(topfile)
 
         remove_lines(topfile, init_line, end_line)
-        append_unique_to_file(topfile, '\nendmodule\n\n')    
+        append_unique_to_file(topfile, 'endmodule\n')    
     
 
 

@@ -21,7 +21,7 @@ class CLASS_NAME(BFM):
         
     async def set(self, *, PARAMETERS):
 INIT_VALUES
-        # Time for stimulus
+        # Time for waiting Driver request to DUT
         await Timer(1, units='ns')
 
     async def get(self):

@@ -2,8 +2,8 @@
 ###    COMPONENT FILE    ###
 ############################
 
-from pyuvm import uvm_scoreboard, uvm_tlm_analysis_fifo, uvm_get_port
-
+from pyuvm import uvm_scoreboard, uvm_tlm_analysis_fifo, uvm_get_port, uvm_sequence_item
+from utils import dict_to_namespace
 
 
 """
@@ -20,11 +20,6 @@ from default_seqitem import Response as DefaultSeqitem
 class CLASS_NAME(uvm_scoreboard):
     def __init__(self, name, parent):
         super().__init__(name, parent)
-        """ 
-        Instance your transaction, for example:
-        self.tr = YourResponseAlias('tr')
-        """
-        self.tr=DefaultSeqitem('tr')
 
     def build_phase(self):
         super().build_phase()
@@ -47,12 +42,44 @@ class CLASS_NAME(uvm_scoreboard):
         super().check_phase()
 
         while self.dut_result_get_port.can_get() and self.refmodel_result_get_port.can_get():
-            success, tr = self.dut_result_get_port.try_get()
+            success_dut, tr_dut = self.dut_result_get_port.try_get()
+            success_rmod, tr_rmod = self.refmodel_result_get_port.try_get()
 
-            if not success:
-                self.logger.critical('Fail getting transaction info')
+            if not success_dut or not success_rmod:
+                self.logger.critical(f'Fail getting transaction info: (dut:{success_dut},rmod:{success_rmod})')
             else:
                 self.logger.info('Analyzing TLM on check_phase')
+                # They return a binary representation, compatible with integer comparison.
+                request_dut = tr_dut.get_transaction().request
+                response_dut = tr_dut.get_transaction().response
+
+                # It returns integer representation
+                # [Reference model has not request]
+                response_rmod = dict_to_namespace(tr_rmod)
+
+
+                # Specular validation for possible negative values
+                if(response_dut.ex_data_o.signed_integer < 0):
+                    response_dut.ex_data_o=response_dut.ex_data_o.signed_integer
+
+
+                """
+                # This is an scorboarding proposal:
+
+                ## Save conditions
+                condition_1 = response_dut.result_signal_1 == response_rmod.result_signal_1
+                condition_N = response_dut.result_signal_2 == response_rmod.result_signal_2
+
+                # Make assertions
+                assert condition_1, f'TEST ERROR result_signal_1 dut({response_dut.result_signal_1.integer}), rmod({response_rmod.result_signal_1})'
+                assert condition_N, f'TEST ERROR result_signal_N dut({response_dut.ex_data_o.result_signal_N}), rmod({response_rmod.result_signal_N})'
+
+                # Save on report file if necessary (watch util.py for help)
+                if condition_1:
+                    report.write(f'[TEST PASSED] {tr_dut}', self, pyuvm.INFO)
+                else:
+                    report.write(f'[TEST FAILED] {tr_dut}', self, pyuvm.ERROR)
+                """                
 
         self.logger.info('Final general scoreboarding')
 
@@ -60,11 +87,15 @@ class CLASS_NAME(uvm_scoreboard):
     def report_phase(self):
         super().report_phase()
 
-        """Finally you can generate your coverage report here"""
+        """Finally you can generate your report here"""
     
 
     def write(self, t):
-        self.tr = t.copy()
+        if(isinstance(t, uvm_sequence_item)):
+            self.tr = t.copy()
+        else:
+            self.tr = dict_to_namespace(t)
+
         self.logger.info(f'Received from Monitor: {self.tr}')
 
         """

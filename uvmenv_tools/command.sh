@@ -12,8 +12,10 @@
 
 #************** DIRECTORIES **************#
 # Main paths
-TOOLS_DIR=/home/$(whoami)/.UVMEnv/tools
-BASES_DIR=/home/$(whoami)/.UVMEnv/bases
+#TOOLS_DIR=/home/$(whoami)/.UVMEnv/tools
+#BASES_DIR=/home/$(whoami)/.UVMEnv/bases
+TOOLS_DIR=/home/manbenit/Github/uvmenv/uvmenv_tools
+BASES_DIR=/home/manbenit/Github/uvmenv/uvmenv_bases
 BASES_REPRESENT_DIR=$BASES_DIR/representative_files
 BASES_COMPONENT_DIR=$BASES_DIR/component_files
 BASES_COMMAND_DIR=$BASES_DIR/command_files
@@ -54,6 +56,7 @@ TOP_FILE_PREFIX=$PROJECT_DIR/Top_
 # Command files
 PORT_GETTER_FILEBASE=$BASES_COMMAND_DIR/getPortsBase.py
 SIGNAL_GETTER_FILEBASE=$BASES_COMMAND_DIR/getSignalsBase.py
+VCD_WRHELPER_FILEBASE=$BASES_COMMAND_DIR/writeVcdPart.py
 
 # Component files
 AGENT_FILEBASE=$BASES_COMPONENT_DIR/AgentBase.py
@@ -160,7 +163,30 @@ function main(){
                 exit 0
             fi
 
+            local level_vcd=1
+            if [ "$2" != "" ];then
+                level_vcd=$2
+            fi
+
+            cd $DUT_HDL_DIR
+            #local top_file=$(find $DUT_HDL_DIR -type f \( -name "*.v" -o -name "*.sv" \) | grep $(jq -r '.top_module' $CONFIG_FILE) | sed -E 's:.*/([^/]+):\1:' | uniq)
+            local top_file=$(find $DUT_HDL_DIR -type f \( -name "*.v" -o -name "*.sv" \) | grep $(jq -r '.top_module' $CONFIG_FILE) | uniq)
+            
+            cp $VCD_WRHELPER_FILEBASE vcdWriter.py
+            python3 vcdWriter.py $top_file $level_vcd 1
+            python3 vcdWriter.py $top_file $level_vcd 2
+            cd $PROJECT_DIR
+
             $RUN_FILE
+
+            cd $DUT_HDL_DIR
+            python3 vcdWriter.py $top_file $level_vcd 3
+            cd $PROJECT_DIR
+        ;;
+
+        wave)
+            ensureEnvironment
+            gtkwave $PROJECT_DIR/dut_signals.vcd &> /dev/null &
         ;;
 
 
@@ -400,6 +426,7 @@ function showHelp(){
     printOption "-i|--init"         "Create default templates for top module.\n\tBFM, reference model, sequence item, sequence, agent, scoreboard."
     printOption "-v|--view"         "Shows project tree into system browser (less)."
     printOption "run"               "Starts verification process."
+    printOption "wave"              "Shows wve form using GTKWave."
 
     printOption "" "-> Component handling"        
     printOption "-c|--create"       "Create a UVM component."
@@ -438,6 +465,7 @@ function createNewEnv(){
     config_content+="\t\"name\": \"$1\",\n"
     config_content+="\t\"simtool\": \"verilator\",\n"
     config_content+="\t\"top_module\": \"$2\",\n"
+    #config_content+="\t\"top_extension\""
     config_content+="\t\"uvm_components\": {\n"
     config_content+="\t\t\"itface\":{\n"
     config_content+="\t\t\t\"bfm_impl\":\"DefaultBfmImpl\"\n"

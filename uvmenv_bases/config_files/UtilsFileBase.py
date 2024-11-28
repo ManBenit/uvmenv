@@ -11,7 +11,7 @@ from types import SimpleNamespace
 # Class encapsulating the reporting mechanism.
 # It is singleton to avoid duplicated information on report file
 class UVMEnvReport(metaclass=pyuvm.Singleton):
-    # Define global reporting level.
+    # Define minimum global reporting level.
     ## Acording to UVM: It will be reported all levels equal os greater than generalReportLevel.
     generalReportLevel = logging.DEBUG
 
@@ -46,6 +46,8 @@ class UVMEnvReport(metaclass=pyuvm.Singleton):
         # Add new handler to logger
         self.logger.addHandler(file_handler)
 
+        self._add_custom_loglevels()
+
     
     # The only method available to call since UVM components.
     # @param [message]: Message to be showed at console and report file.
@@ -66,12 +68,10 @@ class UVMEnvReport(metaclass=pyuvm.Singleton):
     import pyuvm
     from utils import report
 
-    ## You are be able to define your own report levels 
+    ## You are able to define your own logging levels 
     ## (remember the values specified at python logger module)
     ## (remember only uvm_component classes have logger by themselves)
-    ## so add the import and use it like this:
-    from pyuvm import logging
-    logging.addLevelName(26, 'MYLEVEL') # This is a level in range of INFO level
+    ## so add them using _add_custom_loglevels method.
 
     ## Since you can create your levels, you can print them like classical levels:
     self.logger.log(pyuvm.INFO, 'An info message')
@@ -85,6 +85,16 @@ class UVMEnvReport(metaclass=pyuvm.Singleton):
     report.write('This is report message', self, 26)
     report.write('This is report message', self, pyuvm.WARNING)
     """
+
+    def _add_custom_loglevels(self):
+        from pyuvm import logging
+        """
+        Add your own logging levels here, example
+        logging.addLevelName(26, 'MYLEVEL') # This is a level in range of INFO level
+        """
+
+
+
 
 # Singleton instance of reporting mechanism, ready for using.
 report = UVMEnvReport()

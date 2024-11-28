@@ -30,7 +30,8 @@ function main(){
     for file in $(ls ${modules_list[@]}); do
         files+="$file "
     done
-
+    
+    rm -f $PROJECT_DIR/uvmenv_report.log
     writeMakefile "$files"
 
     make
