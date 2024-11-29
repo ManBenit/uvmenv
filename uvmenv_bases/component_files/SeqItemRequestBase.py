@@ -10,8 +10,10 @@ class Request(uvm_sequence_item):
         super().__init__(name)
 ATTRIB_SIGNALS
 
+
     def randomize(self):
 RANDOM_SIGNALS
+
 
     def __str__(self):
         item_dict = {

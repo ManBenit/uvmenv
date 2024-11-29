@@ -29,7 +29,7 @@ class UVMEnvReport(metaclass=pyuvm.Singleton):
                 del (self._instances[del_self])
 
 
-    def __init__(self, log_file="uvmenv_report.log"):
+    def __init__(self, log_file="OSimon/uvmenv_report.log"):
         # Logger configuration
         self.logger = logging.getLogger("UVMEnvReport")
         self.logger.setLevel(self.generalReportLevel)

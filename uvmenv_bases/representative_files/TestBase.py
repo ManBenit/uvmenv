@@ -42,7 +42,6 @@ class Test(uvm_test):
         """
         self.seq = DefaultSequence('DefaultSequence')
 
-
     async def run_phase(self):
         await super().run_phase()
         # Use the next line if you are verifying a sequential design:

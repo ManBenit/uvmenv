@@ -32,24 +32,11 @@ class Environment(uvm_env):
     def __init__(self, name, parent):
         super().__init__(name, parent)
 
-    def import_refmdl(self):
-        # Get an specific value from .json
-        config = load_config('config.json')
-        implementation_class = config.uvm_components.refmdl.refmdl_impl
-
-        # Convert value into Python implementation that you want to use
-        try:
-            module = importlib.import_module(implementation_class)
-            clazz = getattr(module, implementation_class)
-            self.refmodel = clazz('reference_model', self)
-        except Exception as e:
-            self.logger.critical(f'Failed to load RefModel implementation: {e}')
-            return
-
+    
     def build_phase(self):
         super().build_phase()
 
-        self.import_refmdl()
+        self._import_refmdl()
           
         """
         Instanciate here your scoreboard modules
@@ -83,4 +70,20 @@ class Environment(uvm_env):
         """
         self.agent.monitor.send.connect(self.scoreboard.dut_result_export)
         self.refmodel.send.connect(self.scoreboard.refmodel_result_export)
+
+    
+    def _import_refmdl(self):
+        # Get an specific value from .json
+        config = load_config('config.json')
+        implementation_class = config.uvm_components.refmdl.refmdl_impl
+
+        # Convert value into Python implementation that you want to use
+        try:
+            module = importlib.import_module(implementation_class)
+            clazz = getattr(module, implementation_class)
+            self.refmodel = clazz('reference_model', self)
+        except Exception as e:
+            self.logger.critical(f'Failed to load RefModel implementation: {e}')
+            return
+
 

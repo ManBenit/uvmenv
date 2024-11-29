@@ -12,7 +12,16 @@ class Response(uvm_sequence_item):
         self.ins = None
         self.outs = None
     
-    def do(self):
+
+    def get_transaction(self):
+        self._do()
+        return dict_to_namespace(self.item_dict)
+    
+    def copy(self):
+        return copy.deepcopy(self)
+    
+
+    def _do(self):
         self.item_dict = {
             'request': {
 THE_INPUTS
@@ -22,13 +31,6 @@ THE_OUTPUTS
             }
         }
 
-    def get_transaction(self):
-        self.do()
-        return dict_to_namespace(self.item_dict)
-    
-    def copy(self):
-        return copy.deepcopy(self)
-    
     def __str__(self):
         item_dict_int = {
             'request': {

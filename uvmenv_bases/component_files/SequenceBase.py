@@ -21,6 +21,7 @@ class CLASS_NAME(uvm_sequence):
     def __init__(self, name):
         super().__init__(name)
     
+    
     async def body(self):
         for _ in range(NUM_OF_ITEMS):
             """ Use the class invoked with your_seqitem module, for example:

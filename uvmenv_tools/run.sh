@@ -8,6 +8,7 @@
 PROJECT_DIR=$(pwd)
 CONFIG_FILE=$PROJECT_DIR/config.json
 DIR_HDL=$PROJECT_DIR/HDLSrc
+OUTSIM_DIR=$PROJECT_DIR/OSimon
 
 ### Bash colors ####
 C_RED="\e[31m"
@@ -31,7 +32,7 @@ function main(){
         files+="$file "
     done
     
-    rm -f $PROJECT_DIR/uvmenv_report.log
+    rm -f $OUTSIM_DIR/uvmenv_report.log
     writeMakefile "$files"
 
     make

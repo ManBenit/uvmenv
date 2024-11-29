@@ -11,12 +11,21 @@ class CLASS_NAME(RefModel):
         super().__init__(name, parent, abstract_param)
 
 
+    def build_phase(self):
+        super().build_phase()
+        self.send = uvm_analysis_port('send_refmodel', self)
+
+
+    def makeTest(self):
+        return self._do_with_python()
+    
     def set_inputs(self, *, PARAMETERS):
 PARAMS_ASSIGNS
 
-        self.send.write(self.do_with_python())
+        self.send.write(self._do_with_python())
 
-    def do_with_python(self): 
+
+    def _do_with_python(self): 
         """Write here your model handling""" 
               
 
@@ -26,7 +35,7 @@ PARAMS_ASSIGNS
 RETURNS
         }
 
-    def do_with_verilator(self):
+    def _do_with_verilator(self):
         import ctypes
         sim = ctypes.CDLL('./RTLRef/some_rtl_model/obj_dir/libmodel.so')
 
@@ -49,12 +58,9 @@ RETURNS
 RETURNS
         }
 
-    def makeTest(self):
-        return self.do_with_python()
+    
 
-    def build_phase(self):
-        super().build_phase()
-        self.send = uvm_analysis_port('send_refmodel', self)
+    
           
           
 

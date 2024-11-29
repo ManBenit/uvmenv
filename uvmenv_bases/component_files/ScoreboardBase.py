@@ -21,6 +21,7 @@ class CLASS_NAME(uvm_scoreboard):
     def __init__(self, name, parent):
         super().__init__(name, parent)
 
+
     def build_phase(self):
         super().build_phase()
         self.dut_result_fifo = uvm_tlm_analysis_fifo('dut_result_fifo', self)
@@ -83,12 +84,11 @@ class CLASS_NAME(uvm_scoreboard):
 
         self.logger.info('Final general scoreboarding')
 
-
     def report_phase(self):
         super().report_phase()
 
-        """Finally you can generate your report here"""
-    
+        """You can generate report actions here"""
+
 
     def write(self, t):
         if(isinstance(t, uvm_sequence_item)):

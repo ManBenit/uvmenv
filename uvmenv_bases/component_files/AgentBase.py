@@ -11,6 +11,7 @@ class Agent(uvm_agent):
     def __init__(self, name, parent):
         super().__init__(name, parent)
 
+
     def build_phase(self):
         super().build_phase()
         self.driver = Driver("driver", self)

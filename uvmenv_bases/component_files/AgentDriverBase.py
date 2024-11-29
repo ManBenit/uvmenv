@@ -12,23 +12,10 @@ class Driver(uvm_driver):
     def __init__(self, name, parent):
         super().__init__(name, parent)
     
-    def import_bfm(self):
-        # Get an specific value from .json
-        config = load_config('config.json')
-        implementation_class = config.uvm_components.itface.bfm_impl
-
-        # Convert value into Python implementation that you want to use
-        try:
-            module = importlib.import_module(implementation_class)
-            clazz = getattr(module, implementation_class)
-            self.bfm = clazz()
-        except Exception as e:
-            self.logger.critical(f'Failed to load BFM implementation: {e}')
-            return
 
     def build_phase(self):
         super().build_phase()
-        self.import_bfm()
+        self._import_bfm()
 
     async def run_phase(self):
         await super().run_phase()
@@ -45,3 +32,20 @@ BFM_SET
             )
 
             self.seq_item_port.item_done()
+
+            
+    def _import_bfm(self):
+        # Get an specific value from .json
+        config = load_config('config.json')
+        implementation_class = config.uvm_components.itface.bfm_impl
+
+        # Convert value into Python implementation that you want to use
+        try:
+            module = importlib.import_module(implementation_class)
+            clazz = getattr(module, implementation_class)
+            self.bfm = clazz()
+        except Exception as e:
+            self.logger.critical(f'Failed to load BFM implementation: {e}')
+            return
+
+    

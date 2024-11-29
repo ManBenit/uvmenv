@@ -181,12 +181,20 @@ function main(){
 
             cd $DUT_HDL_DIR
             python3 vcdWriter.py $top_file $level_vcd 3
+            rm -f vcdWriter.py
             cd $PROJECT_DIR
+
+            mv dut_signals.vcd $OUTSIM_DIR
         ;;
 
         wave)
             ensureEnvironment
-            gtkwave $PROJECT_DIR/dut_signals.vcd &> /dev/null &
+            gtkwave $OUTSIM_DIR/dut_signals.vcd &> /dev/null &
+        ;;
+
+        report)
+            ensureEnvironment
+            less $OUTSIM_DIR/uvmenv_report.log
         ;;
 
 
@@ -426,7 +434,8 @@ function showHelp(){
     printOption "-i|--init"         "Create default templates for top module.\n\tBFM, reference model, sequence item, sequence, agent, scoreboard."
     printOption "-v|--view"         "Shows project tree into system browser (less)."
     printOption "run"               "Starts verification process."
-    printOption "wave"              "Shows wve form using GTKWave."
+    printOption "wave"              "Shows wave form using GTKWave."
+    printOption "report"            "Shows the report file content."
 
     printOption "" "-> Component handling"        
     printOption "-c|--create"       "Create a UVM component."
