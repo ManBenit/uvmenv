@@ -59,9 +59,11 @@ class CLASS_NAME(uvm_scoreboard):
                 response_rmod = dict_to_namespace(tr_rmod)
 
 
+                """
                 # Specular validation for possible negative values
-                if(response_dut.ex_data_o.signed_integer < 0):
-                    response_dut.ex_data_o=response_dut.ex_data_o.signed_integer
+                if(response_dut.POSSIBLE_NEGATIVE_SIGNAL.signed_integer < 0):
+                    response_dut.POSSIBLE_NEGATIVE_SIGNAL=response_dut.POSSIBLE_NEGATIVE_SIGNAL.signed_integer
+                """
 
 
                 """
