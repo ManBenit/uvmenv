@@ -22,7 +22,7 @@ class CLASS_NAME(BFM):
         
     async def set(self, *, PARAMETERS):
 INIT_VALUES
-        # Time for waiting Driver request to DUT
+        # Time for waiting Driver successfully request to DUT
         await Timer(1, units='ns')
 
     async def get(self):
@@ -36,18 +36,24 @@ GET_OUTS
         
         return (ins, outs)
 
-    def init(self):
-        # Use this method for init clock and other control signals
+    async def init(self):
+        # Use this method for init design when design is sequential
+        ## It defines how long is clock period (greater or equal with 'ns')
         """
         self.clock = Clock(self.dut.YOUR_CLOCK_SIGNAL, 1, units='ns')  
         cocotb.start_soon(self.clock.start()) 
         """
 
+        # Make the initial reset
+        await self.reset()
+
+
+
     async def reset(self):
         # Use this method for reset DUT
         """
         self.dut.YOUR_RESET_SIGNAL.value = 1
-        await ClockCycles(self.dut.YOUR_CLOCK_SIGNAL, X)  # Where X: number of clock cycles for waiting.
+        await ClockCycles(self.dut.YOUR_CLOCK_SIGNAL, 2)
         self.dut.YOUR_RESET_SIGNAL.value = 0
         """
 

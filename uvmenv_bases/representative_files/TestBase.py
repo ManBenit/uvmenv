@@ -44,11 +44,10 @@ class Test(uvm_test):
 
     async def run_phase(self):
         await super().run_phase()
-        # Use the next line if you are verifying a sequential design:
-        #self.env.agent.driver.bfm.init()
 
         self.raise_objection()
-        #await self.env.agent.driver.bfm.reset()
+        # Uncomment the next line if you are verifying a sequential design:
+        #await self.env.agent.driver.bfm.init()
         
         """
         Start here all sequences you need:

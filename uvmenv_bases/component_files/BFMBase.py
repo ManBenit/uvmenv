@@ -4,10 +4,17 @@
 
 import importlib
 import pyuvm
-from abc import ABC, abstractmethod
+from abc import ABC, ABCMeta, abstractmethod
+
+class SingletonMeta(ABCMeta, type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super().__call__(*args, **kwargs)
+        return cls._instances[cls]
 
 
-class BFM(ABC): #metaclass=pyuvm.Singleton
+class BFM(ABC, metaclass=SingletonMeta):
     # Auto -> send the parameters signals to DUT.
     @abstractmethod    
     def set(self):

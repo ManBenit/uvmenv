@@ -472,7 +472,7 @@ function createNewEnv(){
     config_content+="{\n"
     config_content+="\t\"id\": \"$(echo "uvm:$1:env" | base64)\",\n"
     config_content+="\t\"name\": \"$1\",\n"
-    config_content+="\t\"simtool\": \"verilator\",\n"
+    config_content+="\t\"simtool\": \"icarus\",\n"
     config_content+="\t\"top_module\": \"$2\",\n"
     #config_content+="\t\"top_extension\""
     config_content+="\t\"uvm_components\": {\n"
