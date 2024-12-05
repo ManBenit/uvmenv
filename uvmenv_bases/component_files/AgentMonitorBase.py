@@ -5,7 +5,7 @@
 
 import importlib
 from pyuvm import uvm_monitor, uvm_analysis_port
-from cocotb.triggers import Timer
+from cocotb.triggers import Timer, RisingEdge, FallingEdge
 from utils import load_config
 
 """
@@ -32,13 +32,18 @@ class Monitor(uvm_monitor):
     async def run_phase(self):
         await super().run_phase()
         while True:
-            # Time for waiting Monitor response from DUT
-            await Timer(1, units='ns')  
-            
             """ Use the class invoked with your_seqitem module, for example:
             transaction = YourResponseAlias("monitor_item")
             """
             transaction = DefaultSeqitem('monitor_item')
+
+            # Time for waiting Monitor response from DUT 
+            ## The next line when design is combinatorial (must be ONE more than SYNC_CLOCK_CYCLES on BFMImpl)
+            ###await Timer(1, units='ns')
+            ## The next line when design is sequential and it's necessary to read on falling edge (when change is on rising edge)
+            ###await FallingEdge(self.dut.clk_i)
+            ## The next line when design is sequential and it's necessary to read on rising edge (when change is on falling edge)
+            ###await RisingEdge(self.bfm.dut.clk_i)
 
             inputs, outputs = await self.bfm.get()
             transaction.ins = inputs

@@ -23,11 +23,11 @@ class Driver(uvm_driver):
             op = await self.seq_item_port.get_next_item()
             self.logger.info(f'Sent to DUT: {op}')
 
-            self.get_parent().get_parent().refmodel.set_inputs(
+            await self.bfm.set(
 BFM_SET
             )
-
-            await self.bfm.set(
+            
+            self.get_parent().get_parent().refmodel.set_inputs(
 BFM_SET
             )
 

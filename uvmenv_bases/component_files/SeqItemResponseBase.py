@@ -32,13 +32,23 @@ THE_OUTPUTS
         }
 
     def __str__(self):
-        item_dict_int = {
-            'request': {
+        try:
+            item_dict_int = {
+                'request': {
 THE_STR_INPUTS
-            },
-            'response':{
+                },
+                'response':{
 THE_STR_OUTPUTS
+                }
             }
-        }
+        except ValueError:
+            item_dict_int = {
+                'request': {
+THE_STR_NOINT_INPUTS
+                },
+                'response':{
+THE_STR_NOINT_OUTPUTS
+                }
+            }
         return f'Transaction response -> {item_dict_int}'
     

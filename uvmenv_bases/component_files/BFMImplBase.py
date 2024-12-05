@@ -3,14 +3,11 @@
 ############################
 
 import cocotb
-
-# Use only Timer if your design is combinational.
-from cocotb.triggers import Timer
-"""
-# Add Clock and ClockCycles if your design is sequencial:
-from cocotb.triggers import Timer, RisingEdge, ClockCycles
+from cocotb.triggers import Timer, RisingEdge, FallingEdge
 from cocotb.clock import Clock
-"""
+
+
+SYNC_CLOCK_CYCLES = 1
 
 from BFM import BFM
 
@@ -21,9 +18,16 @@ class CLASS_NAME(BFM):
         
         
     async def set(self, *, PARAMETERS):
+        # If DUT is sequential, comment the next two lines which refers to clock and reset signal
+        # (the reason is they are being handled by cocotb triggers with init and reset method) 
 INIT_VALUES
-        # Time for waiting Driver successfully request to DUT
-        await Timer(1, units='ns')
+        # Time for waiting Driver request to DUT
+        ## The next line when design is combinatorial
+        ###await Timer(SYNC_CLOCK_CYCLES, units='ns')
+        ## The next line when design is sequential (when you are monitoring on FallingEdge)
+        ###await RisingEdge(self.dut.clk_i)
+        ## The next line when design is sequential (when you are monitoring on RisingEdge)
+        ###await FallingEdge(self.bfm.dut.clk_i)
 
     async def get(self):
         ins = {
@@ -37,10 +41,10 @@ GET_OUTS
         return (ins, outs)
 
     async def init(self):
-        # Use this method for init design when design is sequential
+        # Use this method for init DUT when it's sequential
         ## It defines how long is clock period (greater or equal with 'ns')
         """
-        self.clock = Clock(self.dut.YOUR_CLOCK_SIGNAL, 1, units='ns')  
+        self.clock = Clock(self.dut.YOUR_CLOCK_SIGNAL, SYNC_CLOCK_CYCLES, units='ns')  
         cocotb.start_soon(self.clock.start()) 
         """
 
@@ -50,10 +54,10 @@ GET_OUTS
 
 
     async def reset(self):
-        # Use this method for reset DUT
+        # Use this method for reset DUT when it's sequential
         """
-        self.dut.YOUR_RESET_SIGNAL.value = 1
-        await ClockCycles(self.dut.YOUR_CLOCK_SIGNAL, 2)
         self.dut.YOUR_RESET_SIGNAL.value = 0
+        await RisingEdge(self.dut.clk_i)
+        self.dut.YOUR_RESET_SIGNAL.value = 1
         """
 

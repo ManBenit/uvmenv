@@ -3,7 +3,7 @@
 ############################
 
 from pyuvm import uvm_scoreboard, uvm_tlm_analysis_fifo, uvm_get_port, uvm_sequence_item
-from utils import dict_to_namespace
+from utils import dict_to_namespace, report
 
 
 """

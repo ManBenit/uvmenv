@@ -2,8 +2,6 @@
 ###    REPRESENTATIVE FILE    ###
 #################################
 
-import importlib
-import pyuvm
 from abc import ABC, ABCMeta, abstractmethod
 
 class SingletonMeta(ABCMeta, type):

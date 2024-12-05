@@ -877,6 +877,8 @@ function createNewSeqItem(){
     local res_output_lines=""
     local res_input_lines_str=""
     local res_output_lines_str=""
+    local res_input_lines_str_nointeger=""
+    local res_output_lines_str_nointeger=""
     local req_input_lines=""
     local req_rand_input_lines=""
     local req_input_lines_str=""
@@ -892,13 +894,15 @@ function createNewSeqItem(){
 
         if [ "$sig_type" == "INPUT" ]; then
             res_input_lines+="${TAB}${TAB}${TAB}${TAB}'$sig_name': self.ins['$sig_name'],\\n"
-            res_input_lines_str+="${TAB}${TAB}${TAB}${TAB}'$sig_name': self.ins['$sig_name'].integer,\\n"
+            res_input_lines_str+="${TAB}${TAB}${TAB}${TAB}${TAB}'$sig_name': self.ins['$sig_name'].integer,\\n"
+            res_input_lines_str_nointeger+="${TAB}${TAB}${TAB}${TAB}${TAB}'$sig_name': self.ins['$sig_name'],\\n"
             req_input_lines+="${TAB}${TAB}self.$sig_name = 0\\n"
             req_rand_input_lines+="${TAB}${TAB}self.$sig_name = random.randint(0, $(echo '2^'$sig_len' - 1' | bc))\\n"
             req_input_lines_str+="${TAB}${TAB}${TAB}'$sig_name': self.$sig_name,\\n"
         elif [ "$sig_type" == "OUTPUT" ]; then
             res_output_lines+="${TAB}${TAB}${TAB}${TAB}'$sig_name': self.outs['$sig_name'],\\n"
-            res_output_lines_str+="${TAB}${TAB}${TAB}${TAB}'$sig_name': self.outs['$sig_name'].integer,\\n"
+            res_output_lines_str+="${TAB}${TAB}${TAB}${TAB}${TAB}'$sig_name': self.outs['$sig_name'].integer,\\n"
+            res_output_lines_str_nointeger+="${TAB}${TAB}${TAB}${TAB}${TAB}'$sig_name': self.outs['$sig_name'],\\n"
         fi
     done
 
@@ -908,7 +912,9 @@ function createNewSeqItem(){
     res_input_lines=${res_input_lines::-3}
     res_output_lines=${res_output_lines::-3}
     res_input_lines_str=${res_input_lines_str::-3}
+    res_input_lines_str_nointeger=${res_input_lines_str_nointeger::-3}
     res_output_lines_str=${res_output_lines_str::-3}
+    res_output_lines_str_nointeger=${res_output_lines_str_nointeger::-3}
 
 
     # Generate module initializer
@@ -925,8 +931,10 @@ function createNewSeqItem(){
     #cp $BASES_DIR/SeqItemResponseBase.py $AGENTS_DIR/$1/Response.py
     sed -r "s|THE_INPUTS|$res_input_lines|g" $SEQITEM_RESPONSE_FILEBASE > $SEQITEMS_DIR/$1/tmpRes1.py
     sed -r "s|THE_OUTPUTS|$res_output_lines|g" $SEQITEMS_DIR/$1/tmpRes1.py > $SEQITEMS_DIR/$1/tmpRes2.py #$SEQITEMS_DIR/$1/Response.py
-    sed -r "s|THE_STR_INPUTS|$res_input_lines_str|g" $SEQITEMS_DIR/$1/tmpRes2.py > $SEQITEMS_DIR/$1/tmpRes3.py
-    sed -r "s|THE_STR_OUTPUTS|$res_output_lines_str|g" $SEQITEMS_DIR/$1/tmpRes3.py > $SEQITEMS_DIR/$1/Response.py
+    sed -r "s|THE_STR_NOINT_INPUTS|$res_input_lines_str_nointeger|g" $SEQITEMS_DIR/$1/tmpRes2.py > $SEQITEMS_DIR/$1/tmpRes3.py
+    sed -r "s|THE_STR_INPUTS|$res_input_lines_str|g" $SEQITEMS_DIR/$1/tmpRes3.py > $SEQITEMS_DIR/$1/tmpRes4.py
+    sed -r "s|THE_STR_NOINT_OUTPUTS|$res_output_lines_str_nointeger|g" $SEQITEMS_DIR/$1/tmpRes4.py > $SEQITEMS_DIR/$1/tmpRes5.py
+    sed -r "s|THE_STR_OUTPUTS|$res_output_lines_str|g" $SEQITEMS_DIR/$1/tmpRes5.py > $SEQITEMS_DIR/$1/Response.py
     rm $SEQITEMS_DIR/$1/tmpRes*.py
 }
 

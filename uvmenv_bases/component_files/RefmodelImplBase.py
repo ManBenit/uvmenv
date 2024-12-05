@@ -20,6 +20,8 @@ class CLASS_NAME(RefModel):
         return self._do_with_python()
     
     def set_inputs(self, *, PARAMETERS):
+        # If DUT is sequential, comment the next two lines which refers to clock and reset signal
+        # (the reason is they are being handled by each model implementation)
 PARAMS_ASSIGNS
 
         self.send.write(self._do_with_python())
