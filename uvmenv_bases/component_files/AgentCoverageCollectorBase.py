@@ -36,10 +36,10 @@ class CoverageCollector(uvm_component):
         self.result_get_port.connect(self.dut_result_fifo.get_export)
         self.result_export = self.dut_result_fifo.analysis_export
 
-    def report_phase(self):
-        super().report_phase()
+    def check_phase(self):
+        super().check_phase()
 
-        """You can generate report actions here"""
+        """You can check actions here"""
 
     
     def write(self, t):
