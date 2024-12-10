@@ -1,5 +1,8 @@
-import sys
+##########################
+###    COMMAND FILE    ###
+##########################
 
+import sys
 
 
 def remove_lines(filepath, start, end):
@@ -50,11 +53,12 @@ def append_unique_to_file(filepath, text):
 
 
 if __name__=='__main__':
-    topfile = str(sys.argv[1])
-    topmodule = topfile.split('.')[0]
+    topfile = sys.argv[1]
+    topmodule = topfile.split('.')[-2]
     topmodule = topmodule.split('/')[-1]
     level = int(sys.argv[2])
     option = int(sys.argv[3])
+
     
     # Delete last line (endmodule)
     if option == 1:
@@ -69,7 +73,7 @@ if __name__=='__main__':
         append_unique_to_file(topfile, new_string)
         append_unique_to_file(topfile, 'endmodule\n')
 
-    # Delete new lines and write only "endmodule""
+    # Delete new lines and write only "endmodule"
     elif option == 3:
         init_line = get_index_of_line(topfile, '//vcd_dump')
         end_line = count_lines(topfile)

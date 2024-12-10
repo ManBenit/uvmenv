@@ -7,7 +7,7 @@ from cocotb.triggers import Timer, RisingEdge, FallingEdge
 from cocotb.clock import Clock
 
 
-SYNC_CLOCK_CYCLES = 1
+CLOCK_CYCLES = 1
 
 from BFM import BFM
 
@@ -23,7 +23,7 @@ class CLASS_NAME(BFM):
 INIT_VALUES
         # Time for waiting Driver request to DUT
         ## The next line when design is combinatorial
-        ###await Timer(SYNC_CLOCK_CYCLES, units='ns')
+        await Timer(CLOCK_CYCLES, units='ns')
         ## The next line when design is sequential (when you are monitoring on FallingEdge)
         ###await RisingEdge(self.dut.clk_i)
         ## The next line when design is sequential (when you are monitoring on RisingEdge)
@@ -44,7 +44,7 @@ GET_OUTS
         # Use this method for init DUT when it's sequential
         ## It defines how long is clock period (greater or equal with 'ns')
         """
-        self.clock = Clock(self.dut.YOUR_CLOCK_SIGNAL, SYNC_CLOCK_CYCLES, units='ns')  
+        self.clock = Clock(self.dut.YOUR_CLOCK_SIGNAL, CLOCK_CYCLES, units='ns')  
         cocotb.start_soon(self.clock.start()) 
         """
 

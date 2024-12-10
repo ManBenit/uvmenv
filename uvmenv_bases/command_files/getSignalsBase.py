@@ -127,17 +127,20 @@ def get_signals_from_compilation(file, csvwritemode):
 
 
 if __name__ == '__main__':
-    # Ask again ('cause first ask is on sh) in order to select the function
+    # Ask again ('cause first ask is on .sh) in order to select the function
+    option = str(sys.argv[1])
+    v_file = str(sys.argv[2])
     
     # Refresh option
-    if sys.argv[1] == 'r':
-        get_signals_from_compilation(sys.argv[2], sys.argv[3])
+    if option == 'r':
+        write_option = str(sys.argv[3])
+        get_signals_from_compilation(v_file, write_option)
     # Intern usage option
-    elif sys.argv[1] == 'i':
-        get_signals_from_csv(file=sys.argv[2], pretty_info=False)
+    elif option == 'i':
+        get_signals_from_csv(file=v_file, pretty_info=False)
     # Default: print option
     else:
-        get_signals_from_csv(file=sys.argv[2])
+        get_signals_from_csv(file=v_file)
 
     
 

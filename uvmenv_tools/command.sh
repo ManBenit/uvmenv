@@ -168,7 +168,7 @@ function main(){
 
             cd $DUT_HDL_DIR
             #local top_file=$(find $DUT_HDL_DIR -type f \( -name "*.v" -o -name "*.sv" \) | grep $(jq -r '.top_module' $CONFIG_FILE) | sed -E 's:.*/([^/]+):\1:' | uniq)
-            local top_file=$(find $DUT_HDL_DIR -type f \( -name "*.v" -o -name "*.sv" \) | grep $(jq -r '.top_module' $CONFIG_FILE) | uniq)
+            local top_file=$(find ./ -type f \( -name "*.v" -o -name "*.sv" \) | grep $(jq -r '.top_module' $CONFIG_FILE) | uniq)
             
             cp $VCD_WRHELPER_FILEBASE vcdWriter.py
             python3 vcdWriter.py $top_file $level_vcd 1

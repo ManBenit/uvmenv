@@ -1,6 +1,6 @@
-#################################
-###    REPRESENTATIVE FILE    ###
-#################################
+############################
+###    COMPONENT FILE    ###
+############################
 
 from abc import ABC, ABCMeta, abstractmethod
 

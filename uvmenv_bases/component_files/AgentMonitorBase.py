@@ -18,6 +18,7 @@ from your_seqitem import Response as YourResponseAlias
 """
 from default_seqitem import Response as DefaultSeqitem
 
+CLOCK_CYCLES = 1
 
 class Monitor(uvm_monitor):
     def __init__(self, name, parent):
@@ -39,7 +40,7 @@ class Monitor(uvm_monitor):
 
             # Time for waiting Monitor response from DUT 
             ## The next line when design is combinatorial (must be ONE more than SYNC_CLOCK_CYCLES on BFMImpl)
-            ###await Timer(1, units='ns')
+            await Timer(CLOCK_CYCLES, units='ns')
             ## The next line when design is sequential and it's necessary to read on falling edge (when change is on rising edge)
             ###await FallingEdge(self.dut.clk_i)
             ## The next line when design is sequential and it's necessary to read on rising edge (when change is on falling edge)
