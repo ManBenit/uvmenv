@@ -12,10 +12,8 @@
 
 #************** DIRECTORIES **************#
 # Main paths
-#TOOLS_DIR=/home/$(whoami)/.UVMEnv/tools
-#BASES_DIR=/home/$(whoami)/.UVMEnv/bases
-TOOLS_DIR=/home/manbenit/Github/uvmenv/uvmenv_tools
-BASES_DIR=/home/manbenit/Github/uvmenv/uvmenv_bases
+TOOLS_DIR=/home/$(whoami)/.UVMEnv/tools
+BASES_DIR=/home/$(whoami)/.UVMEnv/bases
 BASES_REPRESENT_DIR=$BASES_DIR/representative_files
 BASES_COMPONENT_DIR=$BASES_DIR/component_files
 BASES_COMMAND_DIR=$BASES_DIR/command_files
