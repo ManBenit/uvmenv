@@ -44,7 +44,7 @@ class CoverageCollector(uvm_component):
     
     def write(self, t):
         self.tr = t.copy()
-        self.logger.info(f'Received from Monitor in WRITE: {self.tr}')
+        self.logger.info(f'Received from Monitor in WRITE')
 
         """
         Analyze here each transaction with DUT. Recommended to use assertions.

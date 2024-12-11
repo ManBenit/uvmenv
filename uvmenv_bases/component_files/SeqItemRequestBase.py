@@ -3,6 +3,7 @@
 ############################
 
 import random
+import json
 from pyuvm import uvm_sequence_item
 
 class Request(uvm_sequence_item):
@@ -19,6 +20,6 @@ RANDOM_SIGNALS
         item_dict = {
 ATTRIB_STR_SIGNALS
         }
-        return f'Transaction request -> {item_dict}'
+        return f'Transaction request -> {json.dumps(item_dict)}'
         
     

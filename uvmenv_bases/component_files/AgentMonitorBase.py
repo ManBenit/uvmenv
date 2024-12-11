@@ -4,9 +4,10 @@
 
 
 import importlib
+import pyuvm
 from pyuvm import uvm_monitor, uvm_analysis_port
 from cocotb.triggers import Timer, RisingEdge, FallingEdge
-from utils import load_config
+from utils import load_config, report
 
 """
 Import all sequece item responses from SeqItm directory, with an specific alias for each.
@@ -50,7 +51,8 @@ class Monitor(uvm_monitor):
             transaction.ins = inputs
             transaction.outs = outputs
 
-            self.logger.info(f'Received from DUT: {transaction}')
+            report.write(message=f'{transaction}', component=self, level=pyuvm.INFO)
+            self.logger.info(f'Received from DUT')
 
             self.send.write(transaction)
 

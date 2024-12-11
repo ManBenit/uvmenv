@@ -98,7 +98,7 @@ class CLASS_NAME(uvm_scoreboard):
         else:
             self.tr = dict_to_namespace(t)
 
-        self.logger.info(f'Received from Monitor: {self.tr}')
+        self.logger.info(f'Received from Monitor in WRITE')
 
         """
         Analyze here each transaction with DUT if necessary. Recommended to use assertions.

@@ -21,7 +21,7 @@ class Driver(uvm_driver):
         await super().run_phase()
         while True:
             op = await self.seq_item_port.get_next_item()
-            self.logger.info(f'Sent to DUT: {op}')
+            self.logger.info(f'Sent to DUT')
 
             await self.bfm.set(
 BFM_SET

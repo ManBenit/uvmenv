@@ -5,6 +5,7 @@
 from pyuvm import uvm_sequence_item
 from utils import dict_to_namespace
 import copy
+import json
 
 class Response(uvm_sequence_item):
     def __init__(self, name):
@@ -41,6 +42,7 @@ THE_STR_INPUTS
 THE_STR_OUTPUTS
                 }
             }
+            return f'Transaction response -> {json.dumps(item_dict_int)}'
         except ValueError:
             item_dict_int = {
                 'request': {
@@ -50,5 +52,5 @@ THE_STR_NOINT_INPUTS
 THE_STR_NOINT_OUTPUTS
                 }
             }
-        return f'Transaction response -> {item_dict_int}'
+            return f'Transaction response (some \'x\' or \'z\') -> {json.dumps(item_dict_int)}'
     
