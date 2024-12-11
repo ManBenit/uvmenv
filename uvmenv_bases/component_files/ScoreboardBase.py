@@ -3,7 +3,8 @@
 ############################
 
 from pyuvm import uvm_scoreboard, uvm_tlm_analysis_fifo, uvm_get_port, uvm_sequence_item
-from utils import dict_to_namespace, report
+from utils import dict_to_namespace
+from UVMEnvReport import report
 
 
 """
@@ -77,7 +78,7 @@ class CLASS_NAME(uvm_scoreboard):
                 assert condition_1, f'TEST ERROR result_signal_1 dut({response_dut.result_signal_1.integer}), rmod({response_rmod.result_signal_1})'
                 assert condition_N, f'TEST ERROR result_signal_N dut({response_dut.ex_data_o.result_signal_N}), rmod({response_rmod.result_signal_N})'
 
-                # Save on report file if necessary (watch util.py for help)
+                # Save on report file if necessary (watch Misces/UVMEnvReport.py for help)
                 if condition_1:
                     report.write(f'[TEST PASSED] {tr_dut}', self, pyuvm.INFO)
                 else:

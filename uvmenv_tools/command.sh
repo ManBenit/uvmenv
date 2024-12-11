@@ -12,8 +12,10 @@
 
 #************** DIRECTORIES **************#
 # Main paths
-TOOLS_DIR=/home/$(whoami)/.UVMEnv/tools
-BASES_DIR=/home/$(whoami)/.UVMEnv/bases
+#TOOLS_DIR=/home/$(whoami)/.UVMEnv/tools
+#BASES_DIR=/home/$(whoami)/.UVMEnv/bases
+TOOLS_DIR=/home/manbenit/Github/uvmenv/uvmenv_tools
+BASES_DIR=/home/manbenit/Github/uvmenv/uvmenv_bases
 BASES_REPRESENT_DIR=$BASES_DIR/representative_files
 BASES_COMPONENT_DIR=$BASES_DIR/component_files
 BASES_COMMAND_DIR=$BASES_DIR/command_files
@@ -74,6 +76,7 @@ SEQUENCE_FILEBASE=$BASES_COMPONENT_DIR/SequenceBase.py
 # Config files
 PATHS_FILEBASE=$BASES_CONFIG_DIR/PathsFileBase.py
 UTIL_FILEBASE=$BASES_CONFIG_DIR/UtilsFileBase.py
+REPORT_FILEBASE=$BASES_CONFIG_DIR/UVMEnvReportBase.py
 
 
 # Representative files
@@ -504,8 +507,11 @@ function createNewEnv(){
     ### Write interface for BFM
     cp $BFM_FILEBASE Itface/BFM.py 
 
-    ##### Write interface for Reference model
+    ### Write interface for Reference model
     cp $REFMODEL_FILEBASE UVM_TB/Envmnt/RefMdl/RefModel.py
+
+    ### Write report mechanism
+    cp $REPORT_FILEBASE UVM_TB/Misces/UVMEnvReport.py
 
     cd $PROJECT_DIR
 }

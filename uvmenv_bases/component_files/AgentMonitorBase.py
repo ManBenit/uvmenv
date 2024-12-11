@@ -7,7 +7,8 @@ import importlib
 import pyuvm
 from pyuvm import uvm_monitor, uvm_analysis_port
 from cocotb.triggers import Timer, RisingEdge, FallingEdge
-from utils import load_config, report
+from utils import load_config
+from UVMEnvReport import report
 
 """
 Import all sequece item responses from SeqItm directory, with an specific alias for each.
