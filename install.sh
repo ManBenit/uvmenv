@@ -26,27 +26,52 @@ C_N="\e[39m"
 
 
 function main(){
+    # Firstly, get the update option
+    local is_update
+    if [ "$1" == "update" ];then
+        is_update=1
+    fi
+
+
     sudo apt update && sudo apt upgrade -y
 
-    if [ -d $MAIN_DIR ]; then
+    if [ -d $MAIN_DIR ] && [ ! $is_update ]; then
         echo -e "${C_YELLOW}UVMEnv is already installed${C_N}"
         exit 0
     fi
 
-    createInstallingStructure
-    installPrerequisites
-    cloneRepositories
-    installTools
-    createFrameworkEnv
 
-    if [ "$(echo $PATH | grep $DOTLOCAL_BIN)" == "" ]; then
-        echo -e "Add the line:\n${C_GREEN}export PATH=\$PATH:$DOTLOCAL_BIN${C_N}"
-        echo -e "at the end of your ${C_WHITE}/home/$(whoami)/.bashrc${C_N}"
+    if [ $is_update ]; then
+        pip3 install --upgrade cocotb
+        pip3 install --upgrade pyuvm
+        rm -rf $MAIN_DIR
 
-        echo -e "\nThen run:\n${C_CYAN}source .bashrc${C_N}"
+        mkdir $MAIN_DIR
+        mkdir $REPOS_DIR
+
+        installIcarus
+        installVerilator
+        createFrameworkEnv
+    else 
+        createMainStructure
+        installPrerequisites
+        installTools
+        createFrameworkEnv
     fi
 }
 
+
+
+function printError(){
+    echo -e "${C_RED}$1${C_N}"
+}
+
+function printInfo(){
+    echo -e "${C_GREEN}$1${C_N}"
+}
+
+function printWarning(){
+    echo -e "${C_YELLOW}$1${C_N}"
 
 
 
@@ -60,18 +85,23 @@ function createFrameworkEnv(){
     cp -r ./uvmenv_bases $BASES_DIR
 
     # Create command
-    sudo ln -s $TOOLS_DIR/command.sh $COMMAND
+    if [ ! -L $COMMAND ]; then
+        sudo ln -s $TOOLS_DIR/command.sh $COMMAND
+    fi
 }
 
 
-function createInstallingStructure(){
+function createMainStructure(){
     mkdir $MAIN_DIR
     mkdir $REPOS_DIR
+
+    git clone https://github.com/steveicarus/iverilog.git $REPOS_DIR/iverilog
+    git clone https://github.com/verilator/verilator.git $REPOS_DIR/verilator
 }
 
 function installPrerequisites(){
     # Necesary libraries for tools
-    echo -e "\n\n${C_GREEN}############### Verifying prerequisites... ###############${C_N}"
+    printInfo "############### Verifying prerequisites... ###############"
     sudo apt install -y git tree help2man perl python3 python3-pip make autoconf g++ flex bison ccache gperf
     sudo apt install -y libgoogle-perftools-dev numactl perl-doc
     sudo apt install -y libfl2  # Ubuntu only (ignore if gives error)
@@ -82,23 +112,22 @@ function installPrerequisites(){
 }
 
 
-function cloneRepositories(){
-    git clone https://github.com/steveicarus/iverilog.git $REPOS_DIR/iverilog
-    git clone https://github.com/verilator/verilator.git $REPOS_DIR/verilator
-}
-
 function installTools(){
-    echo -e "\n\n${C_GREEN}############### Installing jq... ###############${C_N}"
+    printInfo "############### Installing jq... ###############"
     sudo apt install -y jq
 
-    echo -e "\n\n${C_GREEN}############### Installing GTKWave... ###############${C_N}"
+    printInfo "############### Installing GTKWave... ###############"
     sudo apt install -y gtkwave
 
-    echo -e "\n\n${C_GREEN}############### Installing Icarus... ###############${C_N}"
-    installIcarus
+    printInfo "############### Installing Icarus... ###############"
+    if [ "$(which iverilog)" == "" ]; then
+        installIcarus
+    fi
 
-    echo -e "\n\n${C_GREEN}############### Installing Verilator... ###############${C_N}"
-    installVerilator
+    printInfo "############### Installing Verilator... ###############"
+    if [ "$(which verilator)" == "" ]; then
+        installVerilator
+    fi
 }
 
 
