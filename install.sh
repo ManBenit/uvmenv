@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ############################################################################################################
-# Installer to Ubuntu based Linux distros.
+# Installer to Debian based Linux distros.
 ############################################################################################################
 
 REPO_PATH=$(pwd)
@@ -11,7 +11,6 @@ REPOS_DIR=$MAIN_DIR/repos
 BASES_DIR=$MAIN_DIR/bases
 TOOLS_DIR=$MAIN_DIR/tools
 COMMAND=/usr/bin/uvmenv
-DOTLOCAL_BIN=/home/$(whoami)/.local/bin
 
 
 ### Bash colors ####
@@ -24,33 +23,34 @@ C_WHITE="\e[37m"
 C_N="\e[39m"
 ####################
 
+IS_UPDATE=0
 
 function main(){
-    # Firstly, get the update option
-    local is_update
+    # Firstly, get the "update" option
     if [ "$1" == "update" ];then
-        is_update=1
+        IS_UPDATE=1
+    fi
+
+    if [ -d $MAIN_DIR ] && [[ $IS_UPDATE -eq 0 ]]; then
+        printWarning "UVMEnv is already installed"
+        exit 0
+    fi
+
+    if [ ! -d $MAIN_DIR ] && [[ $IS_UPDATE -eq 1 ]]; then
+        printError "UVMEnv is not installed for updating it"
+        exit 0
     fi
 
 
     sudo apt update && sudo apt upgrade -y
 
-    if [ -d $MAIN_DIR ] && [ ! $is_update ]; then
-        echo -e "${C_YELLOW}UVMEnv is already installed${C_N}"
-        exit 0
-    fi
-
-
-    if [ $is_update ]; then
+    if [[ $IS_UPDATE -eq 1 ]]; then
         pip3 install --upgrade cocotb
         pip3 install --upgrade pyuvm
-        rm -rf $MAIN_DIR
+        rm -rf $BASES_DIR
+        rm -rf $TOOLS_DIR
 
-        mkdir $MAIN_DIR
-        mkdir $REPOS_DIR
-
-        installIcarus
-        installVerilator
+        installTools
         createFrameworkEnv
     else 
         createMainStructure
@@ -72,7 +72,7 @@ function printInfo(){
 
 function printWarning(){
     echo -e "${C_YELLOW}$1${C_N}"
-
+}
 
 
 function createFrameworkEnv(){
@@ -111,8 +111,8 @@ function installPrerequisites(){
     pip3 install pyuvm
 }
 
-
 function installTools(){
+    echo $1
     printInfo "############### Installing jq... ###############"
     sudo apt install -y jq
 
@@ -120,19 +120,25 @@ function installTools(){
     sudo apt install -y gtkwave
 
     printInfo "############### Installing Icarus... ###############"
-    if [ "$(which iverilog)" == "" ]; then
+    if [ "$(which iverilog)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
         installIcarus
     fi
 
     printInfo "############### Installing Verilator... ###############"
-    if [ "$(which verilator)" == "" ]; then
+    if [ "$(which verilator)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
         installVerilator
     fi
 }
 
-
+# $1: Flag IS_UPDATE. It will be 0 or 1.
 function installIcarus(){
     cd $REPOS_DIR/iverilog
+
+    if [[ $IS_UPDATE -eq 1 ]]; then
+        sudo make -j $(nproc) clean
+    fi
+
+    git pull
 
     chmod 775 autoconf.sh
     ./autoconf.sh
@@ -148,8 +154,15 @@ function installIcarus(){
     sudo make install
 }
 
+# $1: Flag IS_UPDATE. It will be set or unset.
 function installVerilator(){
     cd $REPOS_DIR/verilator
+
+    if [[ $IS_UPDATE -eq 1 ]]; then
+        sudo make -j $(nproc) clean
+    fi
+
+    git pull         # Make sure git repository is up-to-date
 
     local shell=$(ps -p $$ | grep -E 'ksh|bash|zsh|tcsh|sh|csh' | awk '{print $4}')
     if [ "$shell" == "bash" ]; then
@@ -157,8 +170,6 @@ function installVerilator(){
     else
         unsetenv VERILATOR_ROOT
     fi
-    
-    git pull         # Make sure git repository is up-to-date
 
     # Get the last version registered on repository
     local last_version=$(git tag | tail -1)

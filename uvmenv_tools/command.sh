@@ -896,14 +896,14 @@ function createNewSeqItem(){
 
         if [ "$sig_type" == "INPUT" ]; then
             res_input_lines+="${TAB}${TAB}${TAB}${TAB}'$sig_name': self.ins['$sig_name'],\\n"
-            res_input_lines_str+="${TAB}${TAB}${TAB}${TAB}${TAB}'$sig_name': self.ins['$sig_name'].integer,\\n"
+            res_input_lines_str+="${TAB}${TAB}${TAB}${TAB}${TAB}'$sig_name': hex(self.ins['$sig_name'].integer),\\n"
             res_input_lines_str_nointeger+="${TAB}${TAB}${TAB}${TAB}${TAB}'$sig_name': self.ins['$sig_name'],\\n"
             req_input_lines+="${TAB}${TAB}self.$sig_name = 0\\n"
             req_rand_input_lines+="${TAB}${TAB}self.$sig_name = random.randint(0, $(echo '2^'$sig_len' - 1' | bc))\\n"
             req_input_lines_str+="${TAB}${TAB}${TAB}'$sig_name': self.$sig_name,\\n"
         elif [ "$sig_type" == "OUTPUT" ]; then
             res_output_lines+="${TAB}${TAB}${TAB}${TAB}'$sig_name': self.outs['$sig_name'],\\n"
-            res_output_lines_str+="${TAB}${TAB}${TAB}${TAB}${TAB}'$sig_name': self.outs['$sig_name'].integer,\\n"
+            res_output_lines_str+="${TAB}${TAB}${TAB}${TAB}${TAB}'$sig_name': hex(self.outs['$sig_name'].integer),\\n"
             res_output_lines_str_nointeger+="${TAB}${TAB}${TAB}${TAB}${TAB}'$sig_name': self.outs['$sig_name'],\\n"
         fi
     done

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ############################################################################################################
-# Installer to Ubuntu based Linux distros.
+# Uninstaller to Debian based Linux distros.
 ############################################################################################################
 
 # Installation paths
@@ -22,40 +22,63 @@ C_WHITE="\e[37m"
 C_N="\e[39m"
 ####################
 
+REMOVE_ALL=0
 
 function main(){
-    uninstallTools
-    uninstallPrerequisites
+    if [ "$1" == "all" ];then
+        REMOVE_ALL=1
+    fi
+
+    if [[ $REMOVE_ALL -eq 1 ]]; then
+        uninstallTools
+        uninstallPrerequisites
+    fi
 
     rm -rf $MAIN_DIR
     sudo rm $COMMAND
 }
 
+function printError(){
+    echo -e "${C_RED}$1${C_N}"
+}
+
+function printInfo(){
+    echo -e "${C_GREEN}$1${C_N}"
+}
+
+function printWarning(){
+    echo -e "${C_YELLOW}$1${C_N}"
+}
 
 
 function uninstallPrerequisites(){
-    pip3 uninstall -y cocotb pyuvm
+    pip3 uninstall -y cocotb 
+    pip3 uninstall -y pyuvm
     sudo apt autoremove -y
 }
 
 function uninstallTools(){
-    echo -e "\n\n${C_YELLOW}############## Uninstalling jq... ##############${C_N}"
+    printInfo "############## Uninstalling jq... ##############"
     sudo apt purge --remove -y jq
 
-    echo -e "\n\n${C_YELLOW}############## Uninstalling GTKWave... ##############${C_N}"
+    printInfo "############## Uninstalling GTKWave... ##############"
     sudo apt purge --remove -y gtkwave
 
     ## Uninstall icarus
-    echo -e "\n\n${C_YELLOW}############## Uninstalling Icarus... ##############${C_N}"
+    printInfo "############## Uninstalling Icarus... ##############"
     cd $REPOS_DIR/iverilog
     sudo make -j $(nproc) clean 
     #make distclean
 
     ## Uninstall verilator
-    echo -e "\n\n${C_YELLOW}############## Uninstalling Verilator... ##############${C_N}"
+    printInfo "############## Uninstalling Verilator... ##############"
     cd $REPOS_DIR/verilator
     sudo make -j $(nproc) clean
     #make distclean
+
+    sudo rm -rf /usr/local/bin/verilator*
+    sudo rm -rf /usr/local/bin/iverilog*
+    sudo rm -rf /usr/local/bin/vvp
 }
 
 
