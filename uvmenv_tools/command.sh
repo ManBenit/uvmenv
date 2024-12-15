@@ -469,19 +469,19 @@ function createNewEnv(){
 
     # Create config file
     config_content+="{\n"
-    config_content+="\t\"id\": \"$(echo "uvm:$1:env" | base64)\",\n"
-    config_content+="\t\"name\": \"$1\",\n"
-    config_content+="\t\"simtool\": \"icarus\",\n"
-    config_content+="\t\"top_module\": \"$2\",\n"
-    #config_content+="\t\"top_extension\""
-    config_content+="\t\"uvm_components\": {\n"
-    config_content+="\t\t\"itface\":{\n"
-    config_content+="\t\t\t\"bfm_impl\":\"DefaultBfmImpl\"\n"
-    config_content+="\t\t},\n"
-    config_content+="\t\t\"refmdl\":{\n"
-    config_content+="\t\t\t\"refmdl_impl\":\"DefaultRefModelImpl\"\n"
-    config_content+="\t\t}\n"
-    config_content+="\t}\n"
+    config_content+="${TAB}\"id\": \"$(echo "uvm:$1:env" | base64)\",\n"
+    config_content+="${TAB}\"name\": \"$1\",\n"
+    config_content+="${TAB}\"simtool\": \"icarus\",\n"
+    config_content+="${TAB}\"top_module\": \"$2\",\n"
+    #config_content+="${TAB}\"top_extension\""
+    config_content+="${TAB}\"uvm_components\": {\n"
+    config_content+="${TAB}${TAB}\"itface\":{\n"
+    config_content+="${TAB}${TAB}${TAB}\"bfm_impl\":\"DefaultBfmImpl\"\n"
+    config_content+="${TAB}${TAB}},\n"
+    config_content+="${TAB}${TAB}\"refmdl\":{\n"
+    config_content+="${TAB}${TAB}${TAB}\"refmdl_impl\":\"DefaultRefModelImpl\"\n"
+    config_content+="${TAB}${TAB}}\n"
+    config_content+="${TAB}}\n"
     config_content+="}\n"
     echo -e $config_content > config.json
 
@@ -718,7 +718,7 @@ function createNewAgent(){
     cp $AGENT_FILEBASE $AGENTS_DIR/$2/__init__.py
 
     #Create property file for agent
-    echo -e "{\n\t\"module\":\"$3\"\n}" > $AGENTS_DIR/$2/.a_$1
+    echo -e "{\n${TAB}\"module\":\"$3\"\n}" > $AGENTS_DIR/$2/.a_$1
 
     if [ $has_active_part ]; then
         # Request signals as information
@@ -754,7 +754,7 @@ function createNewAgent(){
 
     # In case of node agent, rewrite the property file
     if [ $is_node_agnt ]; then
-        echo -e "{\n\t\"origin_module\":\"$origin\",\n\t\"dest_module\":\"$destiny\"\n}" > $AGENTS_DIR/$2/.a_$1
+        echo -e "{\n${TAB}\"origin_module\":\"$origin\",\n${TAB}\"dest_module\":\"$destiny\"\n}" > $AGENTS_DIR/$2/.a_$1
     fi
 }
 

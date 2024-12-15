@@ -7,17 +7,6 @@ from utils import dict_to_namespace
 from UVMEnvReport import report
 
 
-"""
-Import all sequece item responses from SeqItm directory, with an specific alias for each.
-Use: 
-    uvmenv --show-seqitems
-to show the available sequence items on your project.
-Example:
-from your_seqitem import Response as YourResponseAlias
-"""
-from default_seqitem import Response as DefaultSeqitem
-
-
 class CLASS_NAME(uvm_scoreboard):
     def __init__(self, name, parent):
         super().__init__(name, parent)
@@ -72,15 +61,15 @@ class CLASS_NAME(uvm_scoreboard):
 
                 ## Save conditions
                 condition_1 = response_dut.result_signal_1 == response_rmod.result_signal_1
-                condition_N = response_dut.result_signal_2 == response_rmod.result_signal_2
+                condition_N = response_dut.result_signal_N == response_rmod.result_signal_N
 
                 # Make assertions
-                assert condition_1, f'TEST ERROR result_signal_1 dut({response_dut.result_signal_1.integer}), rmod({response_rmod.result_signal_1})'
-                assert condition_N, f'TEST ERROR result_signal_N dut({response_dut.ex_data_o.result_signal_N}), rmod({response_rmod.result_signal_N})'
+                assert condition_1, f'TEST FAILED result_signal_1 dut({hex(response_dut.result_signal_1)}), rmod({hex(response_rmod.result_signal_1)})'
+                assert condition_N, f'TEST FAILED result_signal_N dut({hex(response_dut.result_signal_N)}), rmod({hex(response_rmod.result_signal_N)})'
 
                 # Save on report file if necessary (watch Misces/UVMEnvReport.py for help)
                 if condition_1:
-                    report.write(f'[TEST PASSED] {tr_dut}', self, pyuvm.INFO)
+                    report.write(f'[TEST FAILED] {tr_dut}', self, pyuvm.INFO)
                 else:
                     report.write(f'[TEST FAILED] {tr_dut}', self, pyuvm.ERROR)
                 """                

@@ -52,5 +52,5 @@ THE_STR_NOINT_INPUTS
 THE_STR_NOINT_OUTPUTS
                 }
             }
-            return f'Transaction response (some \'x\' or \'z\') -> {json.dumps(item_dict_int)}'
+            return f'Transaction response (some \'x\' or \'z\') -> {item_dict_int}'
     

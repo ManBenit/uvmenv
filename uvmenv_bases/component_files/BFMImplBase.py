@@ -24,10 +24,8 @@ INIT_VALUES
         # Time for waiting Driver request to DUT
         ## The next line when design is combinatorial
         await Timer(CLOCK_CYCLES, units='ns')
-        ## The next line when design is sequential (when you are monitoring on FallingEdge)
-        ###await RisingEdge(self.dut.clk_i)
-        ## The next line when design is sequential (when you are monitoring on RisingEdge)
-        ###await FallingEdge(self.bfm.dut.clk_i)
+        ## The next line when design is sequential (or FallingEdge if you need)
+        ###await RisingEdge(self.dut.YOUR_CLOCK_SIGNAL)
 
     async def get(self):
         ins = {
@@ -56,8 +54,8 @@ GET_OUTS
     async def reset(self):
         # Use this method for reset DUT when it's sequential
         """
-        self.dut.YOUR_RESET_SIGNAL.value = 0
-        await RisingEdge(self.dut.clk_i)
         self.dut.YOUR_RESET_SIGNAL.value = 1
+        await RisingEdge(self.dut.YOUR_CLOCK_SIGNAL)
+        self.dut.YOUR_RESET_SIGNAL.value = 0
         """
 
