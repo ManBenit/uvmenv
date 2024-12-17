@@ -9,7 +9,6 @@ Open source framework based on Python for RTL verification using Universal Verif
 
 *2024*
 
-## Dependencies
 
 ## Install
 Run: ```./install.sh [update]```
