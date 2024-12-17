@@ -18,7 +18,7 @@ to show the available sequence items on your project.
 Example:
 from your_seqitem import Response as YourResponseAlias
 """
-from default_seqitem import Response as DefaultSeqitem
+from default_seqitem import Response as DefaultSeqitemResponse
 
 CLOCK_CYCLES = 1
 
@@ -35,18 +35,17 @@ class Monitor(uvm_monitor):
     async def run_phase(self):
         await super().run_phase()
         while True:
-            """ Use the class invoked with your_seqitem module, for example:
+            """ Use the class invoked with your_seqitem module to encapsulate the transaction, for example:
             transaction = YourResponseAlias("monitor_item")
             """
-            transaction = DefaultSeqitem('monitor_item')
+            transaction = DefaultSeqitemResponse('monitor_item')
 
             # Time for waiting Monitor response from DUT 
-            ## The next line when design is combinatorial (must be ONE more than SYNC_CLOCK_CYCLES on BFMImpl)
+            ## The next line when DUT is combinatorial (must be the same with CLOCK_CYCLES on BFMImpl)
             await Timer(CLOCK_CYCLES, units='ns')
-            ## The next line when design is sequential and it's necessary to read on falling edge (when change is on rising edge)
-            ###await FallingEdge(self.dut.clk_i)
-            ## The next line when design is sequential and it's necessary to read on rising edge (when change is on falling edge)
-            ###await RisingEdge(self.bfm.dut.clk_i)
+            ## The next line when DUT is sequential (It must match with event on BFMImpl)
+            ## (you can use also FallingEdge)
+            ###await RisingEdge(self.bfm.dut.YOUR_CLOCK_SIGNAL)
 
             inputs, outputs = await self.bfm.get()
             transaction.ins = inputs

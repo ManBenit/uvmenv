@@ -46,7 +46,7 @@ class Test(uvm_test):
         await super().run_phase()
 
         self.raise_objection()
-        # Uncomment the next line if you are verifying a sequential design:
+        # Uncomment the next line if you are verifying a sequential DUT:
         #await self.env.agent.driver.bfm.init()
         
         """

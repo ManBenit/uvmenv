@@ -12,7 +12,7 @@ to show the available sequence items on your project.
 Example:
 from your_seqitem import Request as YourRequestAlias
 """
-from default_seqitem import Request as DefaultRequest
+from default_seqitem import Request as DefaultSeqitemRequest
 
 # Set the number of items you want to send
 NUM_OF_ITEMS = 1
@@ -27,7 +27,7 @@ class CLASS_NAME(uvm_sequence):
             """ Use the class invoked with your_seqitem module, for example:
             req = YourRequestAlias("req_CLASS_NAME")
             """
-            req = DefaultRequest("req_CLASS_NAME")
+            req = DefaultSeqitemRequest("req_CLASS_NAME")
 
             await self.start_item(req)
             """ Write the focused or random sequence of stimulus here, example:

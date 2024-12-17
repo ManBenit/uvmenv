@@ -590,7 +590,7 @@ function showAllSignals(){
     if [ "$1" == "r" ]; then
         rm -f $DUT_HDL_DIR/.allSignals.csv
         
-        # Make the auxiliar directory and copy files of design
+        # Make the auxiliar directory and copy files of DUT
         mkdir $aux_hdl_dir
         for m in "${modules_list[@]}"; do 
             cp $m $aux_hdl_dir

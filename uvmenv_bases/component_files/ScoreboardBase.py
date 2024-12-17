@@ -2,14 +2,26 @@
 ###    COMPONENT FILE    ###
 ############################
 
+from queue import Queue
 from pyuvm import uvm_scoreboard, uvm_tlm_analysis_fifo, uvm_get_port, uvm_sequence_item
 from utils import dict_to_namespace
 from UVMEnvReport import report
+from cocotb.binary import BinaryValue
+
+# You can define the maximum size for auxiliar queues.
+# (thery are used only when verifying secuential designs)
+NUM_SEQUENCES=10
 
 
 class CLASS_NAME(uvm_scoreboard):
     def __init__(self, name, parent):
         super().__init__(name, parent)
+        # Auxiliar queues when DUT is sequential
+        self.reqdut_queue = Queue(maxsize=NUM_SEQUENCES)
+        self.resdut_queue = Queue(maxsize=NUM_SEQUENCES)
+        self.resrmod_queue = Queue(maxsize=NUM_SEQUENCES)
+        # Define this attribute as False if DUT is sequential and True if it's combinatorial
+        self.enable_scoreboarding = False
 
 
     def build_phase(self):
@@ -47,34 +59,77 @@ class CLASS_NAME(uvm_scoreboard):
                 # It returns integer representation
                 # [Reference model has not request]
                 response_rmod = dict_to_namespace(tr_rmod)
+                self.resrmod_queue.put(response_rmod)
 
-
+                # Unlock the next block if DUT is sequential
                 """
-                # Specular validation for possible negative values
-                if(response_dut.POSSIBLE_NEGATIVE_SIGNAL.signed_integer < 0):
-                    response_dut.POSSIBLE_NEGATIVE_SIGNAL=response_dut.POSSIBLE_NEGATIVE_SIGNAL.signed_integer
-                """
-
-
-                """
-                # This is an scorboarding proposal:
-
-                ## Save conditions
-                condition_1 = response_dut.result_signal_1 == response_rmod.result_signal_1
-                condition_N = response_dut.result_signal_N == response_rmod.result_signal_N
-
-                # Make assertions
-                assert condition_1, f'TEST FAILED result_signal_1 dut({hex(response_dut.result_signal_1)}), rmod({hex(response_rmod.result_signal_1)})'
-                assert condition_N, f'TEST FAILED result_signal_N dut({hex(response_dut.result_signal_N)}), rmod({hex(response_rmod.result_signal_N)})'
-
-                # Save on report file if necessary (watch Misces/UVMEnvReport.py for help)
-                if condition_1:
-                    report.write(f'[TEST FAILED] {tr_dut}', self, pyuvm.INFO)
-                else:
-                    report.write(f'[TEST FAILED] {tr_dut}', self, pyuvm.ERROR)
+                if request_dut.YOUR_RESET_SIGNAL == 0 and self.enable_scoreboarding == False:
+                    self.enable_scoreboarding = True
+                    self.resdut_queue.get()
                 """                
 
+                if self.enable_scoreboarding:  
+                    try:
+                        # Unlock the next two lines (writing of aux queues) when DUT is sequential.
+                        ##response_rmod = self.resrmod_queue.get()
+                        ##response_dut = self.resdut_queue.get()
+
+                        """
+                        # Specular validation for possible negative values
+                        if(response_dut.POSSIBLE_NEGATIVE_SIGNAL.signed_integer < 0):
+                            response_dut.POSSIBLE_NEGATIVE_SIGNAL=response_dut.POSSIBLE_NEGATIVE_SIGNAL.signed_integer
+                        """
+
+                        """
+                        # This is an scorboarding proposal:
+
+                        ## Save conditions
+                        condition_1 = response_dut.result_signal_1 == response_rmod.result_signal_1
+                        condition_N = response_dut.result_signal_N == response_rmod.result_signal_N
+
+                        # Make assertions
+                        assert condition_1, f'TEST FAILED result_signal_1 dut({hex(response_dut.result_signal_1)}), rmod({hex(response_rmod.result_signal_1)})'
+                        assert condition_N, f'TEST FAILED result_signal_N dut({hex(response_dut.result_signal_N)}), rmod({hex(response_rmod.result_signal_N)})'
+
+                        # Save on report file if necessary (watch Misces/UVMEnvReport.py for help)
+                        if condition_1:
+                            report.write(f'[TEST FAILED] {tr_dut}', self, pyuvm.INFO)
+                        else:
+                            report.write(f'[TEST FAILED] {tr_dut}', self, pyuvm.ERROR)
+                        """                
+                    except ValueError as ex:
+                        self.logger.error(f'{ex}')
+                        pass
+
         self.logger.info('Final general scoreboarding')
+
+        # Uncomment this block when DUT is sequential
+        """
+        # Get the last result (after last cycle) to be able to compare with reference model.
+        # This process is made checking the aux queues.
+        # (for now, is repeated code)
+        while not self.resdut_queue.empty() and not self.resrmod_queue.empty():
+            response_rmod = self.resrmod_queue.get()
+            response_dut = self.resdut_queue.get()
+
+            # Specular validation for possible negative values
+            if(response_dut.POSSIBLE_NEGATIVE_SIGNAL.signed_integer < 0):
+                response_dut.POSSIBLE_NEGATIVE_SIGNAL=response_dut.POSSIBLE_NEGATIVE_SIGNAL.signed_integer
+            
+            ## Save conditions
+            condition_1 = response_dut.result_signal_1 == response_rmod.result_signal_1
+            condition_N = response_dut.result_signal_N == response_rmod.result_signal_N
+
+            # Make assertions
+            assert condition_1, f'TEST FAILED result_signal_1 dut({hex(response_dut.result_signal_1)}), rmod({hex(response_rmod.result_signal_1)})'
+            assert condition_N, f'TEST FAILED result_signal_N dut({hex(response_dut.result_signal_N)}), rmod({hex(response_rmod.result_signal_N)})'
+
+            # Save on report file if necessary (watch Misces/UVMEnvReport.py for help)
+            if condition_1:
+                report.write(f'[TEST FAILED] {tr_dut}', self, pyuvm.INFO)
+            else:
+                report.write(f'[TEST FAILED] {tr_dut}', self, pyuvm.ERROR)
+        """        
 
     def report_phase(self):
         super().report_phase()
@@ -85,6 +140,10 @@ class CLASS_NAME(uvm_scoreboard):
     def write(self, t):
         if(isinstance(t, uvm_sequence_item)):
             self.tr = t.copy()
+            # Uncomment the next two lines if DUT is sequential
+            ##if self.tr.get_transaction().request.YOUR_RESET_SIGNAL == 0:
+            ##    self.resdut_queue.put(self.tr.get_transaction().response)
+
         else:
             self.tr = dict_to_namespace(t)
 

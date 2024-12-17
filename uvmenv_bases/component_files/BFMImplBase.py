@@ -18,13 +18,13 @@ class CLASS_NAME(BFM):
         
         
     async def set(self, *, PARAMETERS):
-        # If DUT is sequential, comment the next two lines which refers to clock and reset signal
+        # If DUT is sequential, comment the two lines which refers to clock and reset signal.
         # (the reason is they are being handled by cocotb triggers with init and reset method) 
 INIT_VALUES
         # Time for waiting Driver request to DUT
-        ## The next line when design is combinatorial
+        ## The next line when DUT is combinatorial (must be the same with CLOCK_CYCLES on Monitor)
         await Timer(CLOCK_CYCLES, units='ns')
-        ## The next line when design is sequential (or FallingEdge if you need)
+        ## The next line when DUT is sequential (It must match with event on Monitor)
         ###await RisingEdge(self.dut.YOUR_CLOCK_SIGNAL)
 
     async def get(self):

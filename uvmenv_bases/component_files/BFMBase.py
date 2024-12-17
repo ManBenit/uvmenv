@@ -23,12 +23,12 @@ class BFM(ABC, metaclass=SingletonMeta):
     def get(self):
         pass
 
-    # Use init, generelly, to start clock when design is sequencial.
+    # Use init, generelly, to start clock when DUT is sequencial.
     @abstractmethod
     def init(self):
         pass
 
-    # Use reset, generelly, to restart DUT when design is sequencial.
+    # Use reset, generelly, to restart DUT when DUT is sequencial.
     @abstractmethod
     def reset(self):
         pass
