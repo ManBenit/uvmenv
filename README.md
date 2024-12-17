@@ -35,37 +35,59 @@ If you use the ```all``` option, then every dependencies, tools and simulators.
 When you create a new project (uvmenv --new), you should see the next directory hierarchy:
 
 UVMEnvProject/
+
 ├── config.json
+
 ├── HDLSrc/
+
 ├── Itface/
+
 │   ├── BFM.py
+
 │   └── _impl/
+
 ├── OSimon/
+
 ├── paths.py
+
 ├── Top_adder.py
+
 ├── utils.py
+
 └── UVM_TB/
+
     ├── Envmnt/
+
     │   ├── Agents/
+
     │   ├── Environment.py
+
     │   ├── RefMdl/
+
     │   │   ├── _impl/
+
     │   │   └── RefModel.py
+
     │   └── Scorbd/
+
     ├── Misces/
+
     │   └── UVMEnvReport.py
+
     ├── SeqItm/
+
     ├── Seqnce/
+
     └── Test.py
 
 They match with the main UVM hierarchy, based and implemented on screaming architecture:
 
-![Main UVMEnv hierarchy](docs/mainHierarchy.png)
+![Main UVMEnv hierarchy](docs/img/mainHierarchy.png)
 
 
 Inside Environment, UVMEnv uses the next TLM communication:
 
-![Environment TLM communication](docs/tlmEnvComm.png)
+![Environment TLM communication](docs/img/tlmEnvComm.png)
 
 
 
