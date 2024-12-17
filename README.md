@@ -32,7 +32,7 @@ If you use the ```all``` option, then every dependencies, tools and simulators.
 When you create a new project (uvmenv --new), you should see the next directory hierarchy:
 <p align="center">
   <img src="docs/img/directoryTree.png" alt="Directory tree" width="200"/>
-  <img src="docs/img/mainDirectories.png" alt="Main directories" width="500"/>
+  <img src="docs/img/mainDirectories.png" alt="Main directories" width="700"/>
 </p>
 
 They match with the main UVM hierarchy, based and implemented on screaming architecture:
