@@ -30,11 +30,13 @@ If you use the ```all``` option, then every dependencies, tools and simulators.
 
 # Projects
 When you create a new project (uvmenv --new), you should see the next directory hierarchy:
-![Directory tree](docs/img/directoryTree.png)
+<p align="center">
+  <img src="docs/img/directoryTree.png.png" alt="Directory tree" width="300"/>
+  <img src="docs/img/mainDirectories.png.png" alt="Main directories" width="300"/>
+</p>
 
 They match with the main UVM hierarchy, based and implemented on screaming architecture:
 ![Main UVMEnv hierarchy](docs/img/mainHierarchy.png)
-
 
 Inside Environment, UVMEnv uses the next TLM communication:
 ![Environment TLM communication](docs/img/tlmEnvComm.png)
