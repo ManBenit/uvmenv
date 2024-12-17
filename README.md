@@ -38,7 +38,7 @@ If you use the ```all``` option, then every dependencies, tools and simulators.
 
 
 # Projects
-When you create a new project (uvmenv --new), you should see the next directory hierarchy:
+When you create a new project (```uvmenv --new```), you should see the next directory hierarchy:
 <p align="center">
   <img src="docs/img/directoryTree.png" alt="Directory tree" width="200"/>
   <img src="docs/img/mainDirectories.png" alt="Main directories" width="600"/>
@@ -49,6 +49,9 @@ They match with the main UVM hierarchy, based and implemented on screaming archi
 
 Inside Environment, UVMEnv uses the next TLM communication:
 ![Environment TLM communication](docs/img/tlmEnvComm.png)
+
+To be able for understading instances of ```UVMEnv```, this is the class diagram:
+![Class diagram](docs/img/classDiagram.png)
 
 
 
