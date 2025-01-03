@@ -1,13 +1,23 @@
 # UVMEnv
 *Universal Verification Metodology Environments*
 
-Open source framework based on Python for RTL verification using Universal Verification Metodology (UVM).
+Open source framework based on Python and Universal Verification Metodology (UVM),
+to generate RTL digital designs verification environments.
 
 **Instituto Politécnico Nacional (IPN).**
 
 **Centro de Investigación en Computación (CIC).**
 
-*2024*
+*2024 - 2025*
+
+
+## Requeriments
+
+- Linux Debian based distribution.
+
+- Python 3.10.X.
+  
+  ```Note:``` If you have a later Python version, you will need to create a virtual environmentbefore run the installer.
 
 
 ## Install
@@ -35,9 +45,34 @@ of elements (dependencies, simulators, etc.)
 
 If you use the ```all``` option, then every dependencies, tools and simulators.
 
+## User interface
+- Framework management.
+- Components handling.
+- [View more](https://github.com/ManBenit/uvmenv/tree/main/docs/usr_itface.md)
+
+## Generic testbench
+- Create project.
+- Save DUT.
+- Init project.
+- Run verification.
+- [View more](https://github.com/ManBenit/uvmenv/tree/main/docs/generic_tb.md)
+
+## Files and directories classification
+- Base created files.
+- Full created files.
+- Partially created files.
+- Implementation directory
+- Multiple files directory.
+- [View more](https://github.com/ManBenit/uvmenv/tree/main/docs/classification.md)
+
+## Naming conventions
+- For directory components.
+- For implemented components.
+- For component files.
+- [View more](https://github.com/ManBenit/uvmenv/tree/main/docs/name_conventions.md)
 
 
-# Projects
+## Projects
 When you create a new project (```uvmenv --new```), you should see the next directory hierarchy:
 <p align="center">
   <img src="docs/img/directoryTree.png" alt="Directory tree" width="200"/>
