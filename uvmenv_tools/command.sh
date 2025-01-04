@@ -12,8 +12,10 @@
 
 #************** DIRECTORIES **************#
 # Main paths
-TOOLS_DIR=/home/$(whoami)/.UVMEnv/tools
-BASES_DIR=/home/$(whoami)/.UVMEnv/bases
+#TOOLS_DIR=/home/$(whoami)/.UVMEnv/tools
+#BASES_DIR=/home/$(whoami)/.UVMEnv/bases
+TOOLS_DIR=/home/manbenit/Github/uvmenv/uvmenv_tools
+BASES_DIR=/home/manbenit/Github/uvmenv/uvmenv_bases
 BASES_REPRESENT_DIR=$BASES_DIR/representative_files
 BASES_COMPONENT_DIR=$BASES_DIR/component_files
 BASES_COMMAND_DIR=$BASES_DIR/command_files
@@ -168,8 +170,8 @@ function main(){
             fi
 
             cd $DUT_HDL_DIR
-            #local top_file=$(find $DUT_HDL_DIR -type f \( -name "*.v" -o -name "*.sv" \) | grep $(jq -r '.top_module' $CONFIG_FILE) | sed -E 's:.*/([^/]+):\1:' | uniq)
-            local top_file=$(find ./ -type f \( -name "*.v" -o -name "*.sv" \) | grep $(jq -r '.top_module' $CONFIG_FILE) | uniq)
+            #local top_file=$(find $DUT_HDL_DIR -type f \( -name "*.v" -o -name "*.sv" \) | grep $(jq -r '.dut_design.top_module' $CONFIG_FILE) | sed -E 's:.*/([^/]+):\1:' | uniq)
+            local top_file=$(find ./ -type f \( -name "*.v" -o -name "*.sv" \) | grep $(jq -r '.dut_design.top_module' $CONFIG_FILE) | uniq)
             
             cp $VCD_WRHELPER_FILEBASE vcdWriter.py
             python3 vcdWriter.py $top_file $level_vcd 1
@@ -287,7 +289,7 @@ function main(){
                 rmod) shift; editRefModelImpl $@ ;;
                 bfm) shift; editBfmImpl $@ ;;
                 misc) shift; editMiscelaneous $@ ;;
-                top) vi $TOP_FILE_PREFIX$(jq -r '.top_module' $CONFIG_FILE).py ;;
+                top) vi $TOP_FILE_PREFIX$(jq -r '.dut_design.top_module' $CONFIG_FILE).py ;;
                 tst) vi $TEST_FILE ;;
                 env) vi $ENVIRONMENT_FILE ;;
                 conf) vi $CONFIG_FILE ;;
@@ -417,9 +419,9 @@ function createDefaultTemplates(){
     showAllSignals r
     createNewBFMImpl DefaultBfmImpl
     createNewRefModelImpl DefaultRefModelImpl
-    createNewSeqItem default_seqitem $(jq -r '.top_module' $CONFIG_FILE)
+    createNewSeqItem default_seqitem $(jq -r '.dut_design.top_module' $CONFIG_FILE)
     createNewSequence DefaultSequence
-    createNewAgent s default_agent $(jq -r '.top_module' $CONFIG_FILE)
+    createNewAgent s default_agent $(jq -r '.dut_design.top_module' $CONFIG_FILE)
     createNewScoreboard DefaultScoreboard
 }
 
@@ -467,18 +469,21 @@ function createNewEnv(){
     mkdir UVM_TB/Envmnt/RefMdl UVM_TB/Envmnt/RefMdl/_impl # $REFMODEL_DIR $REFMODELIMPL_DIR
     mkdir UVM_TB/Envmnt/Agents UVM_TB/Envmnt/Scorbd # $AGENTS_DIR $SCOREBOARD_DIR
 
-    # Create config file
+    # Create config file (config.json)
     config_content+="{\n"
     config_content+="${TAB}\"id\": \"$(echo "uvm:$1:env" | base64)\",\n"
     config_content+="${TAB}\"name\": \"$1\",\n"
     config_content+="${TAB}\"simtool\": \"icarus\",\n"
-    config_content+="${TAB}\"top_module\": \"$2\",\n"
-    #config_content+="${TAB}\"top_extension\""
+    config_content+="${TAB}\"dut_design\": {\n"
+    config_content+="${TAB}${TAB}\"type\": \"combinatorial\",\n"
+    config_content+="${TAB}${TAB}\"top_module\": \"$2\",\n"
+    config_content+="${TAB}${TAB}\"sync_clock_cycles\": \"1\"\n"
+    config_content+="${TAB}},\n"
     config_content+="${TAB}\"uvm_components\": {\n"
-    config_content+="${TAB}${TAB}\"itface\":{\n"
+    config_content+="${TAB}${TAB}\"itface\": {\n"
     config_content+="${TAB}${TAB}${TAB}\"bfm_impl\":\"DefaultBfmImpl\"\n"
     config_content+="${TAB}${TAB}},\n"
-    config_content+="${TAB}${TAB}\"refmdl\":{\n"
+    config_content+="${TAB}${TAB}\"refmdl\": {\n"
     config_content+="${TAB}${TAB}${TAB}\"refmdl_impl\":\"DefaultRefModelImpl\"\n"
     config_content+="${TAB}${TAB}}\n"
     config_content+="${TAB}}\n"
@@ -534,7 +539,7 @@ function showModules(){
 
     for archivo in "${modules_dir[@]}"; do
         nom=$(echo $archivo | cut -d'.' -f1)
-        if [ "$nom" == "$(jq -r '.top_module' $CONFIG_FILE)" ]; then
+        if [ "$nom" == "$(jq -r '.dut_design.top_module' $CONFIG_FILE)" ]; then
             echo -e "${C_CYAN}$nom [Top]${C_N}"
         else
             echo "$nom"
@@ -1074,14 +1079,14 @@ function createNewScoreboard(){
     fi
 
     # Verify the signal list generation
-    if [ ! -f $DUT_HDL_DIR/.allSignals.csv ] || [ "$(grep $(jq -r '.top_module' $CONFIG_FILE) $DUT_HDL_DIR/.allSignals.csv)" == "" ]; then
+    if [ ! -f $DUT_HDL_DIR/.allSignals.csv ] || [ "$(grep $(jq -r '.dut_design.top_module' $CONFIG_FILE) $DUT_HDL_DIR/.allSignals.csv)" == "" ]; then
         printWarning "Please refresh your signals"
         exit 0
     fi
 
     # Request signals as information
     ### Currently, list of signals is done o the Top module
-    local signals_list=($(showSignals i $(jq -r '.top_module' $CONFIG_FILE)))
+    local signals_list=($(showSignals i $(jq -r '.dut_design.top_module' $CONFIG_FILE)))
 
     # Generate ImplementationFile.py
     ## Change class name
@@ -1148,14 +1153,14 @@ function createNewBFMImpl(){
     fi
 
     # Verify that top module  exists (because connection with UVMEnv is by top module)
-    local top_file=($(find $DUT_HDL_DIR -name $(jq -r '.top_module' $CONFIG_FILE)*))
+    local top_file=($(find $DUT_HDL_DIR -name $(jq -r '.dut_design.top_module' $CONFIG_FILE)*))
     if [ "$top_file" == "" ]; then
-        printError "Top module $(jq -r '.top_module' $CONFIG_FILE) does not exist"
+        printError "Top module $(jq -r '.dut_design.top_module' $CONFIG_FILE) does not exist"
         exit 0
     fi
 
     # Verify the signal list generation
-    if [ ! -f $DUT_HDL_DIR/.allSignals.csv ] || [ "$(grep $(jq -r '.top_module' $CONFIG_FILE) $DUT_HDL_DIR/.allSignals.csv)" == "" ]; then
+    if [ ! -f $DUT_HDL_DIR/.allSignals.csv ] || [ "$(grep $(jq -r '.dut_design.top_module' $CONFIG_FILE) $DUT_HDL_DIR/.allSignals.csv)" == "" ]; then
         printWarning "Please refresh your signals"
         exit 0
     fi
@@ -1163,7 +1168,7 @@ function createNewBFMImpl(){
 
     # Request signals as information
     ### Currently, list of signals is done o the Top module
-    local signals_list=($(showSignals i $(jq -r '.top_module' $CONFIG_FILE)))
+    local signals_list=($(showSignals i $(jq -r '.dut_design.top_module' $CONFIG_FILE)))
 
     # Prepare information variables
     local parameters_of_set=""
@@ -1273,7 +1278,7 @@ function createNewRefModelImpl(){
 
     # Request signals as information
     ### Currently, list of signals is done o the Top module
-    local signals_list=($(showSignals i $(jq -r '.top_module' $CONFIG_FILE)))
+    local signals_list=($(showSignals i $(jq -r '.dut_design.top_module' $CONFIG_FILE)))
 
     # Prepare information variables
     local parameters=""

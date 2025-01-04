@@ -68,8 +68,8 @@ function writeMakefile(){
     echo -e "\n" >> Makefile
     echo "VERILOG_SOURCES = $1" >> Makefile
     echo -e "\n" >> Makefile
-    echo "MODULE = Top_$(jq -r '.top_module' $CONFIG_FILE)" >> Makefile
-    echo "TOPLEVEL = $(jq -r '.top_module' $CONFIG_FILE)" >> Makefile
+    echo "MODULE = Top_$(jq -r '.dut_design.top_module' $CONFIG_FILE)" >> Makefile
+    echo "TOPLEVEL = $(jq -r '.dut_design.top_module' $CONFIG_FILE)" >> Makefile
     echo "TOPLEVEL_LANG ?= verilog" >> Makefile
     echo "#COCOTB_HDL_TIMEOUT = 1ns" >> Makefile
     echo "#COCOTB_HDL_TIMEPRECISION = 1ns" >> Makefile
