@@ -2,15 +2,19 @@
 ###    COMPONENT FILE    ###
 ############################
 
+import pyuvm
 from queue import Queue
 from pyuvm import uvm_scoreboard, uvm_tlm_analysis_fifo, uvm_get_port, uvm_sequence_item
-from utils import dict_to_namespace
+from utils import dict_to_namespace, load_config
 from UVMEnvReport import report
 from cocotb.binary import BinaryValue
 
-# You can define the maximum size for auxiliar queues.
+# You can define the maximum size for auxiliar queues (ensure is more than total of sequences).
 # (thery are used only when verifying secuential designs)
 NUM_SEQUENCES=10
+
+CONFIG = load_config('config.json')
+SEQUENTIAL_DUT = True if CONFIG.dut_design.type == 'sequential' else False
 
 
 class CLASS_NAME(uvm_scoreboard):
@@ -59,7 +63,9 @@ class CLASS_NAME(uvm_scoreboard):
                 # It returns integer representation
                 # [Reference model has not request]
                 response_rmod = dict_to_namespace(tr_rmod)
-                self.resrmod_queue.put(response_rmod)
+                
+                # Unblock the next line if DUT is sequential
+                ###self.resrmod_queue.put(response_rmod)
 
                 # Unlock the next block if DUT is sequential
                 """
@@ -93,10 +99,10 @@ class CLASS_NAME(uvm_scoreboard):
 
                         # Save on report file if necessary (watch Misces/UVMEnvReport.py for help)
                         if condition_1:
-                            report.write(f'[TEST FAILED] {tr_dut}', self, pyuvm.INFO)
+                            report.write(message=f'[TEST PASSED] {tr_dut}', component=self, level=pyuvm.INFO)
                         else:
-                            report.write(f'[TEST FAILED] {tr_dut}', self, pyuvm.ERROR)
-                        """                
+                            report.write(message=f'[TEST FAILED] {tr_dut}', component=self, level=pyuvm.ERROR)
+                        """
                     except ValueError as ex:
                         self.logger.error(f'{ex}')
                         pass
@@ -113,8 +119,8 @@ class CLASS_NAME(uvm_scoreboard):
             response_dut = self.resdut_queue.get()
 
             # Specular validation for possible negative values
-            if(response_dut.POSSIBLE_NEGATIVE_SIGNAL.signed_integer < 0):
-                response_dut.POSSIBLE_NEGATIVE_SIGNAL=response_dut.POSSIBLE_NEGATIVE_SIGNAL.signed_integer
+            #if(response_dut.POSSIBLE_NEGATIVE_SIGNAL.signed_integer < 0):
+            #    response_dut.POSSIBLE_NEGATIVE_SIGNAL=response_dut.POSSIBLE_NEGATIVE_SIGNAL.signed_integer
             
             ## Save conditions
             condition_1 = response_dut.result_signal_1 == response_rmod.result_signal_1
@@ -126,10 +132,10 @@ class CLASS_NAME(uvm_scoreboard):
 
             # Save on report file if necessary (watch Misces/UVMEnvReport.py for help)
             if condition_1:
-                report.write(f'[TEST FAILED] {tr_dut}', self, pyuvm.INFO)
+                report.write(message=f'[TEST PASSED] {tr_dut}', component=self, level=pyuvm.INFO)
             else:
-                report.write(f'[TEST FAILED] {tr_dut}', self, pyuvm.ERROR)
-        """        
+                report.write(message=f'[TEST FAILED] {tr_dut}', component=self, level=pyuvm.ERROR)
+        """
 
     def report_phase(self):
         super().report_phase()

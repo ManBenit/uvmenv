@@ -20,7 +20,9 @@ from your_seqitem import Response as YourResponseAlias
 """
 from default_seqitem import Response as DefaultSeqitemResponse
 
-CLOCK_CYCLES = 1
+CONFIG = load_config('config.json')
+SEQUENTIAL_DUT = True if CONFIG.dut_design.type == 'sequential' else False
+CLOCK_CYCLES = int(CONFIG.dut_design.sync_clock_cycles)
 
 class Monitor(uvm_monitor):
     def __init__(self, name, parent):
@@ -41,9 +43,9 @@ class Monitor(uvm_monitor):
             transaction = DefaultSeqitemResponse('monitor_item')
 
             # Time for waiting Monitor response from DUT 
-            ## The next line when DUT is combinatorial (must be the same with CLOCK_CYCLES on BFMImpl)
+            ## The next await line when DUT is combinatorial (watch config.json)
             await Timer(CLOCK_CYCLES, units='ns')
-            ## The next line when DUT is sequential (It must match with event on BFMImpl)
+            ## The next await line when DUT is sequential (It must match with event on BFMImpl)
             ## (you can use also FallingEdge)
             ###await RisingEdge(self.bfm.dut.YOUR_CLOCK_SIGNAL)
 

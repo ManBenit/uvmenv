@@ -4,6 +4,7 @@
 
 import cocotb
 from pyuvm import uvm_test, ConfigDB
+from cocotb.triggers import Timer 
 # Also import uvm_sequencer from pyuvm if you will use virtual sequencer
 
 
@@ -61,6 +62,12 @@ class Test(uvm_test):
         await self.vseq2.setMyTestVersion2(self.env)
         """
         await self.seq.start(self.env.agent.seqr)
+
+        # 2 extra explicit cycles are required when DUT is sequential:
+        # One to wait for the als output and other to read it correctly.
+        # So, unblock the next line when DUT is sequential.
+        ###await Timer(2, units='ns') 
+
         self.drop_objection()
 
         

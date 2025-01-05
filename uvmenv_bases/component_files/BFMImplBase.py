@@ -5,9 +5,12 @@
 import cocotb
 from cocotb.triggers import Timer, RisingEdge, FallingEdge
 from cocotb.clock import Clock
+from utils import load_config
 
 
-CLOCK_CYCLES = 1
+CONFIG = load_config('config.json')
+SEQUENTIAL_DUT = True if CONFIG.dut_design.type == 'sequential' else False
+CLOCK_CYCLES = int(CONFIG.dut_design.sync_clock_cycles)
 
 from BFM import BFM
 
@@ -22,9 +25,9 @@ class CLASS_NAME(BFM):
         # (the reason is they are being handled by cocotb triggers with init and reset method) 
 INIT_VALUES
         # Time for waiting Driver request to DUT
-        ## The next line when DUT is combinatorial (must be the same with CLOCK_CYCLES on Monitor)
+        ## The next await line when DUT is combinatorial (watch config.json)
         await Timer(CLOCK_CYCLES, units='ns')
-        ## The next line when DUT is sequential (It must match with event on Monitor)
+        ## The next await line when DUT is sequential (It must match with event on Monitor)
         ###await RisingEdge(self.dut.YOUR_CLOCK_SIGNAL)
 
     async def get(self):
