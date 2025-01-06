@@ -24,8 +24,7 @@ class CLASS_NAME(uvm_scoreboard):
         self.reqdut_queue = Queue(maxsize=NUM_SEQUENCES)
         self.resdut_queue = Queue(maxsize=NUM_SEQUENCES)
         self.resrmod_queue = Queue(maxsize=NUM_SEQUENCES)
-        # Define this attribute as False if DUT is sequential and True if it's combinatorial
-        self.enable_scoreboarding = False
+        self.enable_scoreboarding = False if CONFIG.dut_design.type == 'sequential' else True
 
 
     def build_phase(self):

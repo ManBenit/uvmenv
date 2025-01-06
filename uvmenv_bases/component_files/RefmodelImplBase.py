@@ -2,6 +2,7 @@
 ###    COMPONENT FILE    ###
 ############################
 
+import ctypes # Used if you define a _do_with_verilator()
 from RefModel import RefModel
 from pyuvm import uvm_analysis_port
 
@@ -9,6 +10,9 @@ from pyuvm import uvm_analysis_port
 class CLASS_NAME(RefModel):
     def __init__(self, name, parent, abstract_param='default'):
         super().__init__(name, parent, abstract_param)
+        # Uncomment the next two lines if you will use a verilated reference model
+        ###self.sim = ctypes.CDLL('../RTLRef/SOME_RTL_MODEL_DIRECTORY/libmodel.so')
+        ###self.sim.init()
 
 
     def build_phase(self):
@@ -26,7 +30,7 @@ PARAMS_ASSIGNS
 
 
     def _do_with_python(self): 
-        """Write here your model handling""" 
+        """Write here your Python model handling""" 
               
 
         # Finally return the result to compare 
@@ -36,21 +40,14 @@ RETURNS
         }
 
     def _do_with_verilator(self):
-        import ctypes
-        sim = ctypes.CDLL('./RTLRef/some_rtl_model/obj_dir/libmodel.so')
-
-        sim.init()
-        sim.reset()
-              
+        """Write here your Verilated model handling"""
+        
         """
-        Write here your model handling, for example:
-        sim.set_a()
-        sim.set_b()
-        sim.eval()
+        For example:
+        self.sim.set_a(self.a)
+        self.sim.set_b(self.b)
+        sum = self.sim.get_sum()
         """
-
-        sim.finalize()
-
 
         # Finally return the result to compare 
         # (assign your correct values)
