@@ -48,28 +48,29 @@ If you use the ```all``` option, then every dependencies, tools and simulators.
 ## User interface
 - Framework management.
 - Components handling.
-- [View more](https://github.com/ManBenit/uvmenv/blob/repo_doc/docs/usr_itface.md)
+- [View more](https://github.com/ManBenit/uvmenv/blob/main/docs/usr_itface.md)
 
 ## Generic testbench
 - Create project.
 - Save DUT.
 - Init project.
 - Run verification.
-- [View more](https://github.com/ManBenit/uvmenv/blob/repo_doc/docs/generic_tb.md)
+- [View more](https://github.com/ManBenit/uvmenv/blob/main/docs/generic_tb.md)
 
 ## Files and directories classification
+- Implementation directory
+- Multiple files directory.
+- [View more](https://github.com/ManBenit/uvmenv/blob/main/docs/classification_dirs.md)
 - Base created files.
 - Full created files.
 - Partially created files.
-- Implementation directory
-- Multiple files directory.
-- [View more](https://github.com/ManBenit/uvmenv/blob/repo_doc/docs/classification.md)
+- [View more](https://github.com/ManBenit/uvmenv/blob/main/docs/classification_files.md)
 
 ## Naming conventions
 - For directory components.
 - For implemented components.
 - For component files.
-- [View more](https://github.com/ManBenit/uvmenv/blob/repo_doc/docs/name_conventions.md)
+- [View more](https://github.com/ManBenit/uvmenv/blob/main/docs/name_conventions.md)
 
 
 ## Projects
