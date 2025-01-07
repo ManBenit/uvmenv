@@ -1,0 +1,19 @@
+{
+ "id": "dXZtOmZpZm9fZ2VuZXJpY2E6ZW52Cg==",
+ "name": "fifo_generica",
+ "simtool": "icarus",
+ "dut_design": {
+ "type": "sequential",
+ "top_module": "fifo_gen",
+ "sync_clock_cycles": "1"
+ },
+ "uvm_components": {
+ "itface":{
+ "bfm_impl":"DefaultBfmImpl"
+ },
+ "refmdl":{
+ "refmdl_impl":"DefaultRefModelImpl"
+ }
+ }
+}
+

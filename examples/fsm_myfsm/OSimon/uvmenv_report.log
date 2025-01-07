@@ -1,0 +1,20 @@
+2025-01-07 00:20:06,731 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response (some 'x' or 'z') -> {'request': {'i_clk': 1, 'i_rst_n': 0, 'i_x': z}, 'response': {'o_y': x, 'o_state': xx}}
+2025-01-07 00:20:06,732 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x0"}, "response": {"o_y": "0x0", "o_state": "0x0"}}
+2025-01-07 00:20:06,733 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x1"}, "response": {"o_y": "0x0", "o_state": "0x0"}}
+2025-01-07 00:20:06,734 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x1"}, "response": {"o_y": "0x0", "o_state": "0x1"}}
+2025-01-07 00:20:06,735 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x1"}, "response": {"o_y": "0x0", "o_state": "0x2"}}
+2025-01-07 00:20:06,736 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x0"}, "response": {"o_y": "0x0", "o_state": "0x3"}}
+2025-01-07 00:20:06,736 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x1"}, "response": {"o_y": "0x0", "o_state": "0x0"}}
+2025-01-07 00:20:06,737 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x1"}, "response": {"o_y": "0x0", "o_state": "0x1"}}
+2025-01-07 00:20:06,738 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x0"}, "response": {"o_y": "0x0", "o_state": "0x2"}}
+2025-01-07 00:20:06,738 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x1"}, "response": {"o_y": "0x0", "o_state": "0x0"}}
+2025-01-07 00:20:06,739 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x1"}, "response": {"o_y": "0x0", "o_state": "0x1"}}
+2025-01-07 00:20:06,740 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x1"}, "response": {"o_y": "0x0", "o_state": "0x2"}}
+2025-01-07 00:20:06,740 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x1"}, "response": {"o_y": "0x0", "o_state": "0x3"}}
+2025-01-07 00:20:06,741 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x1"}, "response": {"o_y": "0x1", "o_state": "0x0"}}
+2025-01-07 00:20:06,741 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x0"}, "response": {"o_y": "0x0", "o_state": "0x1"}}
+2025-01-07 00:20:06,742 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x1"}, "response": {"o_y": "0x0", "o_state": "0x0"}}
+2025-01-07 00:20:06,743 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x1"}, "response": {"o_y": "0x0", "o_state": "0x1"}}
+2025-01-07 00:20:06,744 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x1"}, "response": {"o_y": "0x0", "o_state": "0x2"}}
+2025-01-07 00:20:06,745 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x0"}, "response": {"o_y": "0x0", "o_state": "0x3"}}
+2025-01-07 00:20:06,745 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"i_clk": "0x1", "i_rst_n": "0x1", "i_x": "0x0"}, "response": {"o_y": "0x0", "o_state": "0x0"}}

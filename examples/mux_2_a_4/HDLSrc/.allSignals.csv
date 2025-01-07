@@ -1,0 +1,7 @@
+module,signal,lenght,type
+MUX,i_a,4,INPUT
+MUX,i_b,4,INPUT
+MUX,i_c,4,INPUT
+MUX,i_d,4,INPUT
+MUX,i_sel,2,INPUT
+MUX,o_y,4,OUTPUT

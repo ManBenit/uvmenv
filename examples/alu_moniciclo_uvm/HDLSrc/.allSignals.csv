@@ -1,0 +1,11 @@
+module,signal,lenght,type
+ALU,ex_aluop_i,4,INPUT
+ALU,ex_zerof_o,1,OUTPUT
+ALU,ex_datars1_i,32,INPUT
+ALU,ex_datars2_i,32,INPUT
+ALU,ex_data_o,32,OUTPUT
+Sumador,cin,1,INPUT
+Sumador,cout,1,OUTPUT
+Sumador,opea,32,INPUT
+Sumador,opeb,32,INPUT
+Sumador,sal,32,OUTPUT

@@ -1,0 +1,19 @@
+{
+ "id": "dXZtOmthcmF0c3ViYTplbnYK",
+ "name": "karatsuba",
+ "simtool": "icarus",
+ "dut_design": {
+ "type": "combinatorial",
+ "top_module": "KaratsubaN",
+ "sync_clock_cycles": "1"
+ },
+ "uvm_components": {
+ "itface":{
+ "bfm_impl":"DefaultBfmImpl"
+ },
+ "refmdl":{
+ "refmdl_impl":"DefaultRefModelImpl"
+ }
+ }
+}
+

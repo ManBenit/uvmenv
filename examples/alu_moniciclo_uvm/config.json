@@ -1,0 +1,19 @@
+{
+ "id": "dXZtOmFsdV9tb25pY2ljbG9fdXZtOmVudgo=",
+ "name": "alu_moniciclo_uvm",
+ "simtool": "icarus",
+ "dut_design": {
+ "type": "combinatorial",
+ "top_module": "ALU",
+ "sync_clock_cycles": "1"
+ },
+ "uvm_components": {
+ "itface":{
+ "bfm_impl":"DefaultBfmImpl"
+ },
+ "refmdl":{
+ "refmdl_impl":"DefaultRefModelImpl"
+ }
+ }
+}
+

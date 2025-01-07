@@ -1,0 +1,19 @@
+{
+ "id": "dXZtOm11eF8yX2FfNDplbnYK",
+ "name": "mux_2_a_4",
+ "simtool": "icarus",
+ "dut_design": {
+ "type": "combinatorial",
+ "top_module": "MUX",
+ "sync_clock_cycles": "1"
+ },
+ "uvm_components": {
+ "itface":{
+ "bfm_impl":"DefaultBfmImpl"
+ },
+ "refmdl":{
+ "refmdl_impl":"DefaultRefModelImpl"
+ }
+ }
+}
+

@@ -1,0 +1,19 @@
+{
+    "id": "dXZtOnNpbXBsZV9jbG9jazplbnYK",
+    "name": "simple_clock",
+    "simtool": "icarus",
+    "dut_design": {
+        "type": "sequential",
+        "top_module": "clock",
+        "sync_clock_cycles": "1"
+    },
+    "uvm_components": {
+        "itface":{
+            "bfm_impl":"DefaultBfmImpl"
+        },
+        "refmdl":{
+            "refmdl_impl":"DefaultRefModelImpl"
+        }
+    }
+}
+

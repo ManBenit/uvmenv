@@ -1,0 +1,6 @@
+module,signal,lenght,type
+MyFSM,i_clk,1,INPUT
+MyFSM,i_rst_n,1,INPUT
+MyFSM,i_x,1,INPUT
+MyFSM,o_y,1,OUTPUT
+MyFSM,o_state,2,OUTPUT

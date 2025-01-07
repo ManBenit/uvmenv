@@ -1,0 +1,14 @@
+module,signal,lenght,type
+fifo_gen,clk_i,1,INPUT
+fifo_gen,rst_ni,1,INPUT
+fifo_gen,rd_i,1,INPUT
+fifo_gen,wr_i,1,INPUT
+fifo_gen,command_i,8,INPUT
+fifo_gen,command_o,8,OUTPUT
+fifo_gen,den,1,OUTPUT
+fifo_gen,empty,1,OUTPUT
+fifo_gen,full,1,OUTPUT
+fifo_gen,data_i,64,INPUT
+fifo_gen,address_i,64,INPUT
+fifo_gen,data_o,64,OUTPUT
+fifo_gen,address_o,64,OUTPUT

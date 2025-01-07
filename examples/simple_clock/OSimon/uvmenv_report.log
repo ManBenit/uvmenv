@@ -1,0 +1,22 @@
+2025-01-06 15:02:10,716 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response (some 'x' or 'z') -> {'request': {'clk': 1, 'reset': 1}, 'response': {'count': xxxxxxxx}}
+2025-01-06 15:02:10,717 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x0"}}
+2025-01-06 15:02:10,718 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x1"}}
+2025-01-06 15:02:10,718 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x2"}}
+2025-01-06 15:02:10,719 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x3"}}
+2025-01-06 15:02:10,720 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x4"}}
+2025-01-06 15:02:10,720 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x5"}}
+2025-01-06 15:02:10,721 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x6"}}
+2025-01-06 15:02:10,722 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x7"}}
+2025-01-06 15:02:10,722 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x8"}}
+2025-01-06 15:02:10,723 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x9"}}
+2025-01-06 15:02:10,724 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0xa"}}
+2025-01-06 15:02:10,724 | INFO | [uvm_test_top.env.DefaultScoreboard] | [TEST PASSED] Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x0"}}
+2025-01-06 15:02:10,724 | INFO | [uvm_test_top.env.DefaultScoreboard] | [TEST PASSED] Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x1"}}
+2025-01-06 15:02:10,724 | INFO | [uvm_test_top.env.DefaultScoreboard] | [TEST PASSED] Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x2"}}
+2025-01-06 15:02:10,725 | INFO | [uvm_test_top.env.DefaultScoreboard] | [TEST PASSED] Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x3"}}
+2025-01-06 15:02:10,725 | INFO | [uvm_test_top.env.DefaultScoreboard] | [TEST PASSED] Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x4"}}
+2025-01-06 15:02:10,725 | INFO | [uvm_test_top.env.DefaultScoreboard] | [TEST PASSED] Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x5"}}
+2025-01-06 15:02:10,725 | INFO | [uvm_test_top.env.DefaultScoreboard] | [TEST PASSED] Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x6"}}
+2025-01-06 15:02:10,725 | INFO | [uvm_test_top.env.DefaultScoreboard] | [TEST PASSED] Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x7"}}
+2025-01-06 15:02:10,725 | INFO | [uvm_test_top.env.DefaultScoreboard] | [TEST PASSED] Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x8"}}
+2025-01-06 15:02:10,725 | INFO | [uvm_test_top.env.DefaultScoreboard] | [TEST PASSED] Transaction response -> {"request": {"clk": "0x1", "reset": "0x0"}, "response": {"count": "0x8"}}

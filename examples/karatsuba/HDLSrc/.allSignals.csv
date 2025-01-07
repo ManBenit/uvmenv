@@ -1,0 +1,4 @@
+module,signal,lenght,type
+KaratsubaN,num1_i,32,INPUT
+KaratsubaN,num2_i,32,INPUT
+KaratsubaN,resul_o,64,OUTPUT

@@ -1,0 +1,4 @@
+2025-01-06 14:47:18,698 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"alu_op": "0x8", "a": "0x46", "b": "0x43"}, "response": {"zero": "0x1", "result": "0x0"}}
+2025-01-06 14:47:18,698 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"alu_op": "0x5", "a": "0x45", "b": "0x37"}, "response": {"zero": "0x0", "result": "0x22800000"}}
+2025-01-06 14:47:18,699 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"alu_op": "0x7", "a": "0x47", "b": "0x9"}, "response": {"zero": "0x1", "result": "0x0"}}
+2025-01-06 14:47:18,700 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"alu_op": "0x2", "a": "0x5a", "b": "0x11"}, "response": {"zero": "0x0", "result": "0x10"}}

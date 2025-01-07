@@ -1,0 +1,6 @@
+2025-01-05 22:26:12,085 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"num1_i": "0xaf1715b7", "num2_i": "0xd3e79608"}, "response": {"resul_o": "0x90ee6b576c92e7b8"}}
+2025-01-05 22:26:12,085 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"num1_i": "0x4d5b7df5", "num2_i": "0x6b4071d5"}, "response": {"resul_o": "0x2068b6eaa3f8f1d9"}}
+2025-01-05 22:26:12,086 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"num1_i": "0x4d8bee5d", "num2_i": "0xfee0b518"}, "response": {"resul_o": "0x4d34e7cc0c0619b8"}}
+2025-01-05 22:26:12,087 | INFO | [uvm_test_top.env.DefaultScoreboard] | [TEST PASSED] Transaction response -> {"request": {"num1_i": "0xaf1715b7", "num2_i": "0xd3e79608"}, "response": {"resul_o": "0x90ee6b576c92e7b8"}}
+2025-01-05 22:26:12,087 | INFO | [uvm_test_top.env.DefaultScoreboard] | [TEST PASSED] Transaction response -> {"request": {"num1_i": "0x4d5b7df5", "num2_i": "0x6b4071d5"}, "response": {"resul_o": "0x2068b6eaa3f8f1d9"}}
+2025-01-05 22:26:12,087 | INFO | [uvm_test_top.env.DefaultScoreboard] | [TEST PASSED] Transaction response -> {"request": {"num1_i": "0x4d8bee5d", "num2_i": "0xfee0b518"}, "response": {"resul_o": "0x4d34e7cc0c0619b8"}}

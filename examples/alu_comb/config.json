@@ -1,0 +1,19 @@
+{
+ "id": "dXZtOmFsdV9jb21iOmVudgo=",
+ "name": "alu_comb",
+ "simtool": "icarus",
+ "dut_design": {
+ "type": "combinatorial",
+ "top_module": "alu",
+ "sync_clock_cycles": "1"
+ },
+ "uvm_components": {
+ "itface":{
+ "bfm_impl":"DefaultBfmImpl"
+ },
+ "refmdl":{
+ "refmdl_impl":"DefaultRefModelImpl"
+ }
+ }
+}
+
