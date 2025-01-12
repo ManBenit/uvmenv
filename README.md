@@ -4,11 +4,20 @@
 Open source framework based on Python and Universal Verification Metodology (UVM),
 to generate RTL digital designs verification environments.
 
-**Instituto Politécnico Nacional (IPN).**
+[**Instituto Politécnico Nacional (IPN).**](https://www.ipn.mx/)
 
-**Centro de Investigación en Computación (CIC).**
+[**Centro de Investigación en Computación (CIC).**](https://www.cic.ipn.mx/)
 
 *2024 - 2025*
+
+## Description
+`UVMEnv` is intended for easy UVM environments creation, using a screaming architecture and  working by projects with a general 
+hierarchy based on [UVM standard 1.2](https://accellera.org/images/downloads/standards/uvm/uvm_users_guide_1.2.pdf), 
+making directly understandable the `UVMEnv` project structure (files and directories) with the hierarchy, supported
+by the command [user interface](https://github.com/ManBenit/uvmenv/blob/main/docs/usr_itface.md).
+
+In other words: seeing the `UVMEnv` main hierarchy, get exactly which part of project structure is necessary to edit and
+which is its hierarchy level.
 
 
 ## Requeriments
@@ -17,7 +26,70 @@ to generate RTL digital designs verification environments.
 
 - Python 3.10.X.
   
-  ```Note:``` If you have a later Python version, you will need to create a virtual environmentbefore run the installer.
+  ```Note:``` **If you have a later Python version**, you will need to create a **virtual environment** before running the installer.
+
+
+## `UVMEnv` structure
+
+### Main hierarchy and architecture
+`UVMEnv` implements the hierarchy suggested by the standard, adding a coverage collector
+into each agent, with the goal of increase the functional and code coverage, 
+making more maintainable the coverage of test.
+
+Also, hierarchy has the benefits of OOP in order to have different versions of 
+BFM and reference model into the same project.
+
+The hierarchy is directly related with the framework screaming architecture 
+(view **directories** and **files** classification for usage details).
+
+[View more](#) 
+
+<p align="center">
+  <img src="docs/img/mainHierarchy.png" 
+    alt="Main UVMEnv hierarchy" 
+    style="max-width: 70%;" 
+  />
+  <img src="docs/img/directoryTree.png" 
+    alt="Main directories" 
+    style="max-width: 20%;"
+  />
+</p>
+
+### Directories scheme
+Each component of hierarchy is interpreted as a directory (except `Misces` and `Osimon`)
+and the next diagram can help to identify them.
+
+[View more](#) 
+
+<p align="center">
+  <img src="docs/img/mainDirectories.png" 
+    alt="Directory tree"
+    style="max-width: 70%;" 
+  />
+</p>
+
+
+Inside Environment, `UVMEnv` uses the next TLM communication:
+<p align="center">
+  <img src="docs/img/tlmEnvComm.png" 
+    alt="Environment TLM communication"
+    style="max-width: 70%;" 
+  />
+</p>
+
+## OOP structure
+The framework is developed with a OOP design, the main class structure is also directly related and visible 
+comparing with main hierarchy.
+
+[View more](#) 
+
+<p align="center">
+  <img src="docs/img/classDiagram.png" 
+    alt="Class diagram"
+    style="max-width: 70%;" 
+  />
+</p>
+
 
 
 ## Install
@@ -73,21 +145,6 @@ If you use the ```all``` option, then every dependencies, tools and simulators.
 - [View more](https://github.com/ManBenit/uvmenv/blob/main/docs/name_conventions.md)
 
 
-## Projects
-When you create a new project (```uvmenv --new```), you should see the next directory hierarchy:
-<p align="center">
-  <img src="docs/img/directoryTree.png" alt="Directory tree" width="200"/>
-  <img src="docs/img/mainDirectories.png" alt="Main directories" width="600"/>
-</p>
-
-They match with the main UVM hierarchy, based and implemented on screaming architecture:
-![Main UVMEnv hierarchy](docs/img/mainHierarchy.png)
-
-Inside Environment, UVMEnv uses the next TLM communication:
-![Environment TLM communication](docs/img/tlmEnvComm.png)
-
-To be able for understading instances of ```UVMEnv```, this is the class diagram:
-![Class diagram](docs/img/classDiagram.png)
 
 
 
