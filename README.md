@@ -47,11 +47,11 @@ The hierarchy is directly related with the framework screaming architecture
 <p align="center">
   <img src="docs/img/mainHierarchy.png" 
     alt="Main UVMEnv hierarchy" 
-    style="max-width: 70%;" 
+    width="70%" 
   />
   <img src="docs/img/directoryTree.png" 
     alt="Main directories" 
-    style="max-width: 20%;"
+    width="20%" 
   />
 </p>
 
@@ -64,7 +64,7 @@ and the next diagram can help to identify them.
 <p align="center">
   <img src="docs/img/mainDirectories.png" 
     alt="Directory tree"
-    style="max-width: 70%;" 
+    width="70%" 
   />
 </p>
 
@@ -73,7 +73,7 @@ Inside Environment, `UVMEnv` uses the next TLM communication:
 <p align="center">
   <img src="docs/img/tlmEnvComm.png" 
     alt="Environment TLM communication"
-    style="max-width: 70%;" 
+    width="70%" 
   />
 </p>
 
@@ -86,7 +86,7 @@ comparing with main hierarchy.
 <p align="center">
   <img src="docs/img/classDiagram.png" 
     alt="Class diagram"
-    style="max-width: 70%;" 
+    width="70%" 
   />
 </p>
 
