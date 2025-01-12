@@ -1,16 +1,20 @@
 # UVMEnv
+
 *Universal Verification Metodology Environments*
 
 Open source framework based on Python and Universal Verification Metodology (UVM),
-to generate RTL digital designs verification environments.
+to generate RTL digital designs verification environments. 
 
 [**Instituto Politécnico Nacional (IPN).**](https://www.ipn.mx/)
 
 [**Centro de Investigación en Computación (CIC).**](https://www.cic.ipn.mx/)
 
-*2024 - 2025*
+<p align="center">
+  <img src="uvmenv_logo.png" alt="uvmenv_logo" width="30%">
+  <br/>
+  2024 - 2025
+</p>
 
-## Description
 `UVMEnv` is intended for easy UVM environments creation, using a screaming architecture and  working by projects with a general 
 hierarchy based on [UVM standard 1.2](https://accellera.org/images/downloads/standards/uvm/uvm_users_guide_1.2.pdf), 
 making directly understandable the `UVMEnv` project structure (files and directories) with the hierarchy, supported
