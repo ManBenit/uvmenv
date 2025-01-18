@@ -4,7 +4,6 @@
 
 from pyuvm import uvm_component, uvm_tlm_analysis_fifo, uvm_get_port
 
-
 class CoverageCollector(uvm_component):
     def __init__(self, name, parent):
         super().__init__(name, parent)
