@@ -17,5 +17,5 @@ CONFIG = load_config('config.json')
 async def main_test(dut):
     print( Fore.BLUE+pyfiglet.figlet_format('UVMEnv')+Fore.RESET )
     print( Fore.YELLOW+pyfiglet.figlet_format(CONFIG.dut_design.top_module)+Fore.RESET )
-    await uvm_root().run_test("Test")
+    await uvm_root().run_test('Test')
 

@@ -1,0 +1,10 @@
+2025-02-25 10:39:49,461 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"alu_op": "0xc", "a": "0x8", "b": "0xb"}, "response": {"zero": "0x1", "result": "0x0"}}
+2025-02-25 10:39:49,462 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"alu_op": "0x2", "a": "0x0", "b": "0xd"}, "response": {"zero": "0x1", "result": "0x0"}}
+2025-02-25 10:39:49,463 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"alu_op": "0x2", "a": "0x9", "b": "0xe"}, "response": {"zero": "0x0", "result": "0x8"}}
+2025-02-25 10:39:49,463 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"alu_op": "0x0", "a": "0x14", "b": "0xf"}, "response": {"zero": "0x0", "result": "0x23"}}
+2025-02-25 10:39:49,464 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"alu_op": "0x8", "a": "0xe", "b": "0x2"}, "response": {"zero": "0x1", "result": "0x0"}}
+2025-02-25 10:39:49,465 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"alu_op": "0x7", "a": "0x13", "b": "0x9"}, "response": {"zero": "0x1", "result": "0x0"}}
+2025-02-25 10:39:49,465 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"alu_op": "0x9", "a": "0x6", "b": "0xd"}, "response": {"zero": "0x1", "result": "0x0"}}
+2025-02-25 10:39:49,466 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"alu_op": "0x9", "a": "0x9", "b": "0x0"}, "response": {"zero": "0x1", "result": "0x0"}}
+2025-02-25 10:39:49,466 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"alu_op": "0xe", "a": "0xe", "b": "0x7"}, "response": {"zero": "0x1", "result": "0x0"}}
+2025-02-25 10:39:49,467 | INFO | [uvm_test_top.env.DefaultAgent.monitor] | Transaction response -> {"request": {"alu_op": "0xf", "a": "0xa", "b": "0xc"}, "response": {"zero": "0x1", "result": "0x0"}}

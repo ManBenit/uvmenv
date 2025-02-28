@@ -14,11 +14,11 @@ class Agent(uvm_agent):
 
     def build_phase(self):
         super().build_phase()
-        self.driver = Driver("driver", self)
-        self.monitor = Monitor("monitor", self)
-        self.seqr = uvm_sequencer("seqr", self)
-        ConfigDB().set(None, "*", "SEQR", self.seqr)
-        self.coverage = CoverageCollector("coverage", self)
+        self.driver = Driver('driver', self)
+        self.monitor = Monitor('monitor', self)
+        self.seqr = uvm_sequencer('seqr', self)
+        ConfigDB().set(None, '*', 'SEQR', self.seqr)
+        self.coverage = CoverageCollector('coverage', self)
 
     def connect_phase(self):
         super().connect_phase()

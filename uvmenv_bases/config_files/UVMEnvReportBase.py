@@ -23,9 +23,9 @@ class UVMEnvReport(metaclass=pyuvm.Singleton):
                 del (self._instances[del_self])
 
 
-    def __init__(self, log_file="OSimon/uvmenv_report.log"):
+    def __init__(self, log_file='OSimon/uvmenv_report.log'):
         # Logger configuration
-        self.logger = logging.getLogger("UVMEnvReport")
+        self.logger = logging.getLogger('UVMEnvReport')
         self.logger.setLevel(self.generalReportLevel)
 
         # File handler creation
@@ -49,7 +49,7 @@ class UVMEnvReport(metaclass=pyuvm.Singleton):
     # @param [level]: Must be an integer, is got from pyuvm library or custom defined.
     def write(self, message, component, level):
         if not isinstance(level, int):
-            raise TypeError("UVMEnv reporting: level must be an integer")
+            raise TypeError('UVMEnv reporting: level must be an integer')
         
         # Método para escribir en el archivo de log
         self.logger.log(level, f'[{component}] | {message}')

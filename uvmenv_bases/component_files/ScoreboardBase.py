@@ -10,7 +10,7 @@ from UVMEnvReport import report
 from cocotb.binary import BinaryValue
 
 # You can define the maximum size for auxiliar queues (ensure is more than total of sequences).
-# (thery are used only when verifying secuential designs)
+# (thery are used only when verifying sequential designs)
 NUM_SEQUENCES=10
 
 CONFIG = load_config('config.json')

@@ -1,0 +1,86 @@
+$date
+	Tue Feb 25 10:39:49 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module alu $end
+$var wire 32 ! a [31:0] $end
+$var wire 4 " alu_op [3:0] $end
+$var wire 32 # b [31:0] $end
+$var wire 1 $ zero $end
+$var parameter 4 % ALU_ADD $end
+$var parameter 4 & ALU_AND $end
+$var parameter 4 ' ALU_OR $end
+$var parameter 4 ( ALU_SLL $end
+$var parameter 4 ) ALU_SLT $end
+$var parameter 4 * ALU_SRA $end
+$var parameter 4 + ALU_SRL $end
+$var parameter 4 , ALU_SUB $end
+$var parameter 4 - ALU_XOR $end
+$var reg 32 . result [31:0] $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+b100 -
+b1 ,
+b110 +
+b111 *
+b1000 )
+b101 (
+b11 '
+b10 &
+b0 %
+$end
+#0
+$dumpvars
+b0 .
+1$
+b1011 #
+b1100 "
+b1000 !
+$end
+#1000
+b1101 #
+b0 !
+b10 "
+#2000
+0$
+b1000 .
+b1110 #
+b1001 !
+#3000
+b100011 .
+b1111 #
+b10100 !
+b0 "
+#4000
+1$
+b0 .
+b10 #
+b1110 !
+b1000 "
+#5000
+b1001 #
+b10011 !
+b111 "
+#6000
+b1101 #
+b110 !
+b1001 "
+#7000
+b0 #
+b1001 !
+#8000
+b111 #
+b1110 !
+b1110 "
+#9000
+b1100 #
+b1010 !
+b1111 "
+#10001

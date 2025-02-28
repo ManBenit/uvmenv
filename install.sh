@@ -50,6 +50,7 @@ function main(){
         rm -rf $BASES_DIR
         rm -rf $TOOLS_DIR
 
+        installPrerequisites
         installTools
         createFrameworkEnv
     else 

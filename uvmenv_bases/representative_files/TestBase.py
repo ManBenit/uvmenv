@@ -27,8 +27,8 @@ from DefaultSequence import DefaultSequence
 class Test(uvm_test):
     def build_phase(self):
         super().build_phase()
-        self.env = Environment("env", self)
-        ConfigDB().set(None, "env.*", "dut", cocotb.top)
+        self.env = Environment('env', self)
+        ConfigDB().set(None, 'env.*', 'dut', cocotb.top)
 
         """
         Instance here all sequences you need:
@@ -63,7 +63,7 @@ class Test(uvm_test):
         """
         await self.seq.start(self.env.agent.seqr)
 
-        # 2 extra explicit cycles are required when DUT is sequential:
+        # At the end of objection, you need 2 extra explicit cycles are required when DUT is sequential:
         # One to wait for the als output and other to read it correctly.
         # So, unblock the next line when DUT is sequential.
         ###await Timer(2, units='ns') 
@@ -79,8 +79,8 @@ class YourVirtualSequencer(uvm_sequencer):
         super().__init__(name, parent)
 
         # Instance here your sequences INDIVIDUALLY, example:
-        self.seq1 = YourSequence1("YourSequence1")
-        self.seq2 = YourSequence2("YourSequence2")
+        self.seq1 = YourSequence1('YourSequence1')
+        self.seq2 = YourSequence2('YourSequence2')
 
     # Define your different versions of virtual sequences as methods, example:
     async def setMyTestVersion(self, env):

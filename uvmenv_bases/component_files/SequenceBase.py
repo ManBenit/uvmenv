@@ -25,9 +25,9 @@ class CLASS_NAME(uvm_sequence):
     async def body(self):
         for _ in range(NUM_OF_ITEMS):
             """ Use the class invoked with your_seqitem module, for example:
-            req = YourRequestAlias("req_CLASS_NAME")
+            req = YourRequestAlias('req_CLASS_NAME')
             """
-            req = DefaultSeqitemRequest("req_CLASS_NAME")
+            req = DefaultSeqitemRequest('req_CLASS_NAME')
 
             await self.start_item(req)
             """ Write the focused or random sequence of stimulus here, example:

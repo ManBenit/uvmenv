@@ -4,6 +4,7 @@
 
 import paths
 import cocotb
+import pyuvm
 from pyuvm import uvm_root
 
 from Test import Test

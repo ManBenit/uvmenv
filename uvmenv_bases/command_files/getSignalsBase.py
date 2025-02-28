@@ -80,7 +80,7 @@ def get_signals_from_compilation(file, csvwritemode):
         if '// PORTS' in line:
             save_line = True
 
-        # Signals IN nad OUT are between PORTS and CELLS lines into .h file.
+        # Signals IN and OUT are between PORTS and CELLS lines into .h file.
         if save_line and '//' not in line:
             added_line = line.replace('\t', ' ').replace('\s+', ' ').strip()
             if added_line != '':
@@ -94,7 +94,6 @@ def get_signals_from_compilation(file, csvwritemode):
     # Process dignals names and lengths
     for signal in signals:
         csv_row=[]
-        plural='s'
 
         if 'VL_IN' in signal:
             signal_type = 'INPUT'
@@ -108,9 +107,6 @@ def get_signals_from_compilation(file, csvwritemode):
         signal_name = parts[0][parts[0].find('&')+1:]
         signal_lenght = int(parts[1]) + 1
 
-        if signal_lenght == 1:
-            plural=' '
-
         # Order in csv_row must be strict, because of .csv organization
         csv_row.append(module_name)
         csv_row.append(signal_name)
@@ -118,7 +114,6 @@ def get_signals_from_compilation(file, csvwritemode):
         csv_row.append(signal_type)
 
         csv_rows.append(csv_row)
-        #print(f'{signal_type}, {signal_lenght} bit{plural}: {signal_name}')
 
     wfile.close()
 
