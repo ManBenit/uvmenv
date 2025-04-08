@@ -2,27 +2,32 @@
 
 In general, file creation is performed through the user interface and
 is based on preassembled code templates. As a result, even if only an empty environment
-is generated, it will run correctly.
+is generated, it will run correctly (See the [generic testbench](https://github.com/ManBenit/uvmenv/blob/main/docs/generic_tb.md)).
 
 This implementation approach leverages the repetitive and pattern-based nature of
-software for UVM, as it follows a standard.
-The operation method involves placing keywords in the templates, following the screaming_snake_case convention,
+software for UVM because it follows a standard.
+The operation method involves placing keywords in the templates, following the `screaming_snake_case` convention,
 which will be replaced through the user interface.
+
+Each file into `UVMEnv` can be classifien in different ways, according different characteristics:
 
 ### By functionality
 This classification refers to the role of files when executing and managing
-a verification environment.
+a verification environment from their handling through the user interface
+to their use as execution aids or UVM components abstracted as
+[main structure](https://github.com/ManBenit/uvmenv/blob/main/docs/main_structure.md) ilustrates.
 
 #### Base files
-- **Commands**
-They are part of the user interface, serving as a complement of functionality.
-They are named following the camel_case convention.
-    - `getSignalsBase.py`: Uses Verilator to compile the DUT and, with the help of the generated C++ code, retrieves the corresponding signals.
-    - `writeVcdPart.py`: It is an auxiliary tool for writing, at the end of the top module code, the code fragment required for writing waveforms.
+It's the fundamental characteristic of `UVMEnv` to create verification environments (creating and managing projects and UVM components). 
 
-- **Components**
-- **Configurations**
-- **Representative**
+This code can be rewritten with DUT signals got from Verilator when it contains `KEY_WORDS` or have coding instructions (on comments) for creating each environment component. 
+
+- [Commands](https://github.com/ManBenit/uvmenv/blob/main/docs/classification_files_func_base_commands.md).
+- [Components](https://github.com/ManBenit/uvmenv/blob/main/docs/classification_files_func_base_components.md).
+- [Configurations](https://github.com/ManBenit/uvmenv/blob/main/docs/classification_files_func_base_configurations.md).
+- [Representatives](https://github.com/ManBenit/uvmenv/blob/main/docs/classification_files_func_base_representatives.md).
+
+
 
 #### Tool files
 - `command.sh`
