@@ -11,11 +11,11 @@ The hierarchy is directly related with the framework screaming architecture
 
 
 <p align="center">
-  <img src="img/mainHierarchy.png" 
+  <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/mainHierarchy.png" 
     alt="Main UVMEnv hierarchy" 
     width="70%" 
   />
-  <img src="img/directoryTree.png" 
+  <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/directoryTree.png" 
     alt="Main directories" 
     width="20%" 
   />
@@ -26,7 +26,7 @@ Each component of hierarchy is interpreted as a directory (except `Misces` and `
 and the next diagram can help to identify them. 
 
 <p align="center">
-  <img src="img/mainDirectories.png" 
+  <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/mainDirectories.png" 
     alt="Directory tree"
     width="70%" 
   />
@@ -35,7 +35,7 @@ and the next diagram can help to identify them.
 
 ## TLM communication
 <p align="center">
-  <img src="img/tlmEnvComm.png" 
+  <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/tlmEnvComm.png" 
     alt="Environment TLM communication"
     width="70%" 
   />

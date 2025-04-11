@@ -1,10 +1,10 @@
 ### Configurations base files
 <p align="center">
-  <img src="img/mainHierarchy.png" 
+  <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/mainHierarchy.png" 
     alt="Main UVMEnv hierarchy" 
     width="70%" 
   />
-  <img src="img/directoryTree.png" 
+  <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/directoryTree.png" 
     alt="Main directories" 
     width="20%" 
   />

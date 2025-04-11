@@ -42,7 +42,7 @@ Aditionally, you can see the generated waveform, with ```uvmenv wave```, and the
 [Command details here](https://github.com/ManBenit/uvmenv/blob/main/docs/usr_itface.md)
 
 <p align="center">
-  <img src="img/uvmConsoleV2.png" 
+  <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/uvmConsoleV2.png" 
     alt="Execution immediatly after creation"
     width="70%" 
   />

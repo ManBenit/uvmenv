@@ -1,10 +1,10 @@
 ### Representative base files
 <p align="center">
-  <img src="img/mainHierarchy.png" 
+  <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/mainHierarchy.png" 
     alt="Main UVMEnv hierarchy" 
     width="70%" 
   />
-  <img src="img/directoryTree.png" 
+  <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/directoryTree.png" 
     alt="Main directories" 
     width="20%" 
   />
@@ -26,7 +26,7 @@ These files clearly contain the connections made between the 3 general levels of
 - `EnvironmentBase.py`: Will become `Environment.py` and contains the instances of scoreboards and agents. It will be stored in the representation directory `Envmnt`.
 
 <p align="center">
-    <img src="img/uml_files/clases_env.png" 
+    <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/uml_files/clases_env.png" 
         alt="Class diagram of environment"
         width="20%" 
     />
@@ -35,7 +35,7 @@ These files clearly contain the connections made between the 3 general levels of
 - `TestBase.py`: Will become `Test.py` and contains the instances of the environment and sequences. It will be stored in the representation directory `UVM_TB`.
 
 <p align="center">
-    <img src="img/uml_files/clases_test.png" 
+    <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/uml_files/clases_test.png" 
         alt="Class diagram of test"
         width="20%" 
     />
@@ -44,7 +44,7 @@ These files clearly contain the connections made between the 3 general levels of
 - `TopBase.py`: Will become `Top_ProjectName`, where `ProjectName` is assigned by the user when creating the project and this file makes the instance of `test`. It will be stored at the root (`UvmenvProject`).
 
 <p align="center">
-    <img src="img/uml_files/clases_top.png" 
+    <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/uml_files/clases_top.png" 
         alt="Class diagram of top"
         width="20%" 
     />

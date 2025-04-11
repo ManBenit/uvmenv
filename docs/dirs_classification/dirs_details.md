@@ -1,10 +1,10 @@
 ## Directories details
 <p align="center">
-  <img src="img/mainDirectories.png" 
+  <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/https://github.com/ManBenit/uvmenv/blob/main/docs/img/mainDirectories.png" 
     alt="Main UVMEnv hierarchy" 
     width="70%" 
   />
-  <img src="img/directoryTree.png" 
+  <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/https://github.com/ManBenit/uvmenv/blob/main/docs/img/directoryTree.png" 
     alt="Main directories and files" 
     width="20%" 
   />
