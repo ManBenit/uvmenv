@@ -17,7 +17,7 @@
 
 
 Represent directly the UVM hierarchy level of the 
-[main structure](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/main_structure.md)
+[main structure](https://github.com/ManBenit/uvmenv/blob/main/docs/main_structure.md)
 and abstracted main directories, except for the one of the `dut`.
 
 These files clearly contain the connections made between the 3 general levels of UVM within the entire generated environment.

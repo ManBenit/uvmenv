@@ -11,7 +11,7 @@
 </p>
 
 The directory and file hierarchy is a direct representation of the proposed structure shown in image, hierarchically corresponding to some visible element in it (except for `Misces` and `OSimon`).
-[Here the directories details](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/dirs_classification/dirs_details.md).
+[Here the directories details](https://github.com/ManBenit/uvmenv/blob/main/docs/dirs_classification/dirs_details.md).
 
 ### Abstract
 
