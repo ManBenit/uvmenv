@@ -1,6 +1,17 @@
 ### Representative base files
+<p align="center">
+  <img src="img/mainHierarchy.png" 
+    alt="Main UVMEnv hierarchy" 
+    width="70%" 
+  />
+  <img src="img/directoryTree.png" 
+    alt="Main directories" 
+    width="20%" 
+  />
+</p>
 
-| Directorio en repositorio        | Directorio de instalación          |
+
+| Repository directory             | Installation directory             |
 |----------------------------------|------------------------------------|
 | `uvmenv_bases/representative_files`     | `~/.UVMEnv/bases/representative_files`    |
 

@@ -1,7 +1,17 @@
 ### Components base files
+<p align="center">
+  <img src="img/mainHierarchy.png" 
+    alt="Main UVMEnv hierarchy" 
+    width="70%" 
+  />
+  <img src="img/directoryTree.png" 
+    alt="Main directories" 
+    width="20%" 
+  />
+</p>
 
 
-| Directorio en repositorio        | Directorio de instalación          |
+| Repository directory             | Installation directory             |
 |----------------------------------|------------------------------------|
 | `uvmenv_bases/component_files`     | `~/.UVMEnv/bases/component_files`|
 
@@ -9,7 +19,7 @@
 Here are found all file templates which define each UVM component.
 
 #### Agents
-All agents components are stored on `Agents` directory, into a directory named by user when this component will be created.
+All agents components are stored on `Agents` directory, into a directory named with **Snake case** by user when this component will be created.
 
 - `AgentBase.py`: Will become the `__init__.py` of the generated agent; in other words, it is the file that defines the agent as a Python module. It contains the instances of the coverage collector, driver, monitor, and sequencer.
 
@@ -60,7 +70,7 @@ It will be stored in the `Itface` directory.
 
 
 #### Sequence item
-All sequence items are stored on `SeqItm` directory, into a directory named by user when this component will be created.
+All sequence items are stored on `SeqItm` directory, into a directory named with **Snake case** by user when this component will be created.
 
 - `SeqItemBase.py`: Will become the `__init__.py` of the generated sequence item; in other words, it is the file that defines the sequence item. It contains the calls to request and response of `DUT`, respectively.
 

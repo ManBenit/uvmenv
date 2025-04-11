@@ -1,9 +1,22 @@
 ## Directories classification
+<p align="center">
+  <img src="img/mainDirectories.png" 
+    alt="Main UVMEnv hierarchy" 
+    width="70%" 
+  />
+  <img src="img/directoryTree.png" 
+    alt="Main directories and files" 
+    width="20%" 
+  />
+</p>
+
+The directory and file hierarchy is a direct representation of the proposed structure shown in image, hierarchically corresponding to some visible element in it (except for `Misces` and `OSimon`).
+[Here the directories details](https://github.com/ManBenit/uvmenv/blob/main/docs/classification_dirs_details.md).
 
 ### Implementation
 They host a unique copy of the component (an OOP interface) and contain a `_impl` subdirectory that stores
 the different forms the component can take (its various implementations).
-In other words, **the component is polymorphic**.
+In other words, **the UVM component is polymorphic**.
 
 When coding the environment, it is necessary to create only the instance of the unique component.
 The choice of its implementation is then made in the configuration file.
@@ -18,7 +31,7 @@ and scalability for incorporating new tools, even if they are external to `UVMEn
 They host components composed of more than one source file. Each component is represented
 by a subdirectory, named following the `snake_case` convention,
 where a `__init__.py` file is located to define the component as a \gls{python} module.
-In other words, **the component is a directory**.
+In other words, **the UVM component is a directory**.
 
 When coding the environment, it is necessary to use selective import of the component (through its assigned name) and associate it with an alias
 to avoid redundancies when running the project. This is because the subdirectory has a distinct name,
@@ -34,7 +47,7 @@ making them easier to manage.
 ### Multiple files
 They host different copies of components that can
 simultaneously exist within the environment but are not composed of multiple source files.
-In other words, **the component is a file**.
+In other words, **the UVM component is a file**.
 
 When coding the environment, it is necessary to use selective import for the component and then
 create instances using its class name.

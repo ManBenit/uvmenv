@@ -3,6 +3,17 @@ The framework is developed with a OOP design, the main class structure is also d
 comparing with main hierarchy.
 
 <p align="center">
+  <img src="img/mainHierarchy.png" 
+    alt="Main UVMEnv hierarchy" 
+    width="70%" 
+  />
+  <img src="img/directoryTree.png" 
+    alt="Main directories" 
+    width="20%" 
+  />
+</p>
+
+<p align="center">
   <img src="img/classDiagram.png" 
     alt="Class diagram"
     width="70%" 

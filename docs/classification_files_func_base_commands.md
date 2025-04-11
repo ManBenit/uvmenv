@@ -1,6 +1,6 @@
 ### Command base files
 
-| Directorio en repositorio        | Directorio de instalación          |
+| Repository directory             | Installation directory             |
 |----------------------------------|------------------------------------|
 | `uvmenv_bases/command_files`     | `~/.UVMEnv/bases/command_files`    |
 
