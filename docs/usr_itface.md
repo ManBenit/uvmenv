@@ -10,7 +10,7 @@ After the installation, you will have available the
 ### ```OPTION``` values
 
 #### Framework management
-``` bash
+```bash
 -n|--new
     Creates a new UVMEnv project.
 -s|--search
@@ -31,7 +31,7 @@ report
 ```
 
 #### Components handling
-``` bash
+```bash
 -c|--create
     Create a UVM component.
 -l|--list

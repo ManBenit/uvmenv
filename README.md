@@ -38,8 +38,8 @@ which is its hierarchy level.
 - [Installation.](https://github.com/ManBenit/uvmenv/blob/main/docs/installation.md)
 - [User interface.](https://github.com/ManBenit/uvmenv/blob/main/docs/usr_itface.md)
 - [Generic testbench.](https://github.com/ManBenit/uvmenv/blob/main/docs/generic_tb.md)
-- [Files classification.](https://github.com/ManBenit/uvmenv/blob/main/docs/classification_files.md)
-- [Directories classification.](https://github.com/ManBenit/uvmenv/blob/main/docs/classification_dirs.md)
+- [Files classification.](https://github.com/ManBenit/uvmenv/blob/main/docs/files_classification.md)
+- [Directories classification.](https://github.com/ManBenit/uvmenv/blob/main/docs/dirs_classification.md)
 - [Naming conventions.](https://github.com/ManBenit/uvmenv/blob/main/docs/name_conventions.md)
 
 
