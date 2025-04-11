@@ -17,7 +17,7 @@
 - Each of these directories, including the `_impl` directories, are created only when starting a new `UVMEnv` project.
 
 - The component directories are created using the user interface and are governed by the rules described 
-[here](https://github.com/ManBenit/uvmenv/blob/main/docs/classification_files_func_base_components.md).
+[here](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/classification_files_func_base_components.md).
 
 
 ### `UvmenvProject`
@@ -34,16 +34,16 @@ The root of the project created with `UVMEnv`; the actual name of this directory
 
 ### `UVM_TB`
 **Universal Verification Methodology Testbench** directory. Represents the **Test** level in the 
-[main structure](https://github.com/ManBenit/uvmenv/blob/main/docs/main_structure.md) 
+[main structure](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/main_structure.md) 
 and contains the necessary UVM components to verify the DUT.
 
 ### `Envmnt`
 **Environment** directory. Represents the homonymous level in the 
-[main structure](https://github.com/ManBenit/uvmenv/blob/main/docs/main_structure.md).
+[main structure](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/main_structure.md).
 
 ### `Agents`
 **Agents** directory. Contains the agents necessary for verification. Each agent is represented by a subdirectory where the monitor, sequencer, and coverage collector are stored. This is detailed in the 
-[files section](https://github.com/ManBenit/uvmenv/blob/main/docs/classification_files.md).
+[files section](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/classification_files.md).
 
 ### `RefMdl`
 **Reference model** directory. Contains the interface (object-oriented programming concept) of the reference model that will be used to compare results.
@@ -53,12 +53,12 @@ and contains the necessary UVM components to verify the DUT.
 
 ### `Misces`
 **Miscellaneous** directory. This directory contains **extra** definitions and functionalities not defined by the environment and its standard but that provide helpful features, such as auxiliary classes, object encapsulation (new data types), instance renaming, etc. It is not included in the 
-[main structure](https://github.com/ManBenit/uvmenv/blob/main/docs/main_structure.md), 
+[main structure](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/main_structure.md), 
 but it is used logically.
 
 ### `SeqItm`
 **Sequence item** directory. Contains the sequence items necessary for verification, each one is represented by a subdirectory where request and response are stored. This is detailed in the 
-[files section](https://github.com/ManBenit/uvmenv/blob/main/docs/classification_files.md).
+[files section](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/classification_files.md).
 
 ### `Seqnce`
 **Sequence** directory. Contains the different sequences that may be used in the project.

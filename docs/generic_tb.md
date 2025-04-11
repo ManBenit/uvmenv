@@ -39,7 +39,7 @@ Aditionally, you can see the generated waveform, with ```uvmenv wave```, and the
 5. Agent.
 6. Scoreboard.
 
-[Command details here](https://github.com/ManBenit/uvmenv/blob/main/docs/usr_itface.md)
+[Command details here](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/usr_itface.md)
 
 <p align="center">
   <img src="img/uvmConsoleV2.png" 

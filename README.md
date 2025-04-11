@@ -18,7 +18,7 @@ to generate RTL digital designs verification environments.
 `UVMEnv` is intended for easy UVM environments creation, using a screaming architecture and  working by projects with a general 
 hierarchy based on [UVM standard 1.2](https://accellera.org/images/downloads/standards/uvm/uvm_users_guide_1.2.pdf), 
 making directly understandable the `UVMEnv` project structure (files and directories) with the hierarchy, supported
-by the command [user interface](https://github.com/ManBenit/uvmenv/blob/main/docs/usr_itface.md).
+by the command [user interface](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/usr_itface.md).
 
 In other words: seeing the `UVMEnv` main hierarchy, get exactly which part of project structure is necessary to edit and
 which is its hierarchy level.
@@ -33,13 +33,13 @@ which is its hierarchy level.
   ```Note:``` **If you have a later Python version**, you will need to create a **virtual environment** before running the installer.
 
 ## Sections
-- [`UVMEnv` main structure.](https://github.com/ManBenit/uvmenv/blob/main/docs/main_structure.md)
-- [`UVMEnv` OOP description.](https://github.com/ManBenit/uvmenv/blob/main/docs/oop_description.md)
-- [Installation.](https://github.com/ManBenit/uvmenv/blob/main/docs/installation.md)
-- [User interface.](https://github.com/ManBenit/uvmenv/blob/main/docs/usr_itface.md)
-- [Generic testbench.](https://github.com/ManBenit/uvmenv/blob/main/docs/generic_tb.md)
-- [Files classification.](https://github.com/ManBenit/uvmenv/blob/main/docs/files_classification.md)
-- [Directories classification.](https://github.com/ManBenit/uvmenv/blob/main/docs/dirs_classification.md)
-- [Naming conventions.](https://github.com/ManBenit/uvmenv/blob/main/docs/name_conventions.md)
+- [`UVMEnv` main structure.](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/main_structure.md)
+- [`UVMEnv` OOP description.](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/oop_description.md)
+- [Installation.](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/installation.md)
+- [User interface.](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/usr_itface.md)
+- [Generic testbench.](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/generic_tb.md)
+- [Files classification.](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/files_classification.md)
+- [Directories classification.](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/dirs_classification.md)
+- [Naming conventions.](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/name_conventions.md)
 
 

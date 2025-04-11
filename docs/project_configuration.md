@@ -45,12 +45,12 @@ In particular case of driver, monitor and environment there is an extra block wh
 ### Configuration file
 It does not have a base file; instead, it is generated at the moment the verification environment 
 is created using the `-n|--new` option from the 
-[user interface](https://github.com/ManBenit/uvmenv/blob/main/docs/usr_itface.md).
+[user interface](https://github.com/ManBenit/uvmenv/blob/HEAD/docs/usr_itface.md).
 
 The generated file is `config.json`, located in the `UvmenvProject` directory.
 
 Here is an example of 
-[MUX example project](https://github.com/ManBenit/uvmenv/tree/main/examples/mux_2_a_4)
+[MUX example project](https://github.com/ManBenit/uvmenv/tree/HEAD/examples/mux_2_a_4)
 ```json
 {
     "id": "dXZtOk11eFRlc3Q6ZW52Cg==",
