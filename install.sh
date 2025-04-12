@@ -45,6 +45,9 @@ function main(){
     sudo apt update && sudo apt upgrade -y
 
     if [[ $IS_UPDATE -eq 1 ]]; then
+        # Update UVMEnv repository
+        git pull
+        # Update main simulation tools
         pip3 install --upgrade cocotb
         pip3 install --upgrade pyuvm
         rm -rf $BASES_DIR

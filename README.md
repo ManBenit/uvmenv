@@ -24,7 +24,7 @@ In other words: seeing the `UVMEnv` main hierarchy, get exactly which part of pr
 which is its hierarchy level.
 
 
-## Requeriments
+## Requirements
 
 - Linux Debian based distribution.
 
@@ -33,13 +33,13 @@ which is its hierarchy level.
   ```Note:``` **If you have a later Python version**, you will need to create a **virtual environment** before running the installer.
 
 ## Sections
-- [`UVMEnv` main structure.](https://github.com/ManBenit/uvmenv/blob/main/docs/main_structure.md)
-- [`UVMEnv` OOP description.](https://github.com/ManBenit/uvmenv/blob/main/docs/oop_description.md)
-- [Installation.](https://github.com/ManBenit/uvmenv/blob/main/docs/installation.md)
-- [User interface.](https://github.com/ManBenit/uvmenv/blob/main/docs/usr_itface.md)
-- [Generic testbench.](https://github.com/ManBenit/uvmenv/blob/main/docs/generic_tb.md)
-- [Files classification.](https://github.com/ManBenit/uvmenv/blob/main/docs/files_classification.md)
-- [Directories classification.](https://github.com/ManBenit/uvmenv/blob/main/docs/dirs_classification.md)
-- [Naming conventions.](https://github.com/ManBenit/uvmenv/blob/main/docs/name_conventions.md)
+- [`UVMEnv` main structure](https://github.com/ManBenit/uvmenv/blob/main/docs/main_structure.md).
+- [`UVMEnv` OOP description](https://github.com/ManBenit/uvmenv/blob/main/docs/oop_description.md).
+- [Install/Uninstall](https://github.com/ManBenit/uvmenv/blob/main/docs/installation.md).
+- [User interface](https://github.com/ManBenit/uvmenv/blob/main/docs/usr_itface.md).
+- [Generic testbench](https://github.com/ManBenit/uvmenv/blob/main/docs/generic_tb.md).
+- [Files classification](https://github.com/ManBenit/uvmenv/blob/main/docs/files_classification.md).
+- [Directories classification](https://github.com/ManBenit/uvmenv/blob/main/docs/dirs_classification.md).
+- [Naming conventions](https://github.com/ManBenit/uvmenv/blob/main/docs/name_conventions.md).
 
 

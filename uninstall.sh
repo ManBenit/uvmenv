@@ -54,6 +54,8 @@ function printWarning(){
 function uninstallPrerequisites(){
     pip3 uninstall -y cocotb 
     pip3 uninstall -y pyuvm
+    pip3 uninstall -y colorama
+    pip3 uninstall -y pyfiglet
     sudo apt autoremove -y
 }
 
