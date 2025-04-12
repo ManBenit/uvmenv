@@ -80,9 +80,9 @@ This code can be rewritten with DUT signals got from Verilator when it contains 
 #### Tool files
 Contain the necessary functionality for the user interface. They are copied directly into the installation directory.
 
-| Directorio en repositorio        | Directorio de instalación          |
+| Repository directory             | Installation directory             |
 |----------------------------------|------------------------------------|
-| `uvmenv_bases/config_files`     | `~/.UVMEnv/bases/config_files`|
+| `uvmenv_tools`                   | `~/.UVMEnv/tools`                  |
 
 
 - `command.sh`: This is the command user interface that allows to interact and  properly use `UVMEnv`.
