@@ -47,4 +47,6 @@ Aditionally, you can see the generated waveform, with `uvmenv wave`, and the gen
   />
 </p>
 
+Combinatorial and sequential
+
 
