@@ -46,7 +46,6 @@ function main(){
 
     if [[ $IS_UPDATE -eq 1 ]]; then
         # Update UVMEnv repository
-        git restore .
         git pull
         # Update main simulation tools
         pip3 install --upgrade cocotb
