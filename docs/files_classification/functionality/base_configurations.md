@@ -44,7 +44,7 @@ They are `auxiliary scripts` at working of `framework`, providing extra (non-mis
 
 - `UtilsFileBase.py`: Will become `utils.py`, which contains functionality **external** to the environment and its standard, used to facilitate specific operations within a verification environment. This file helps to avoid repetitive code in the environment and aims to create a customizable and reusable library. It will be stored in the root directory of the project (`UvmenvProject`).
 
-    ```
+    ```python
     import json
     from types import SimpleNamespace
 

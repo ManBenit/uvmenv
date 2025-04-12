@@ -42,12 +42,12 @@ Test it typing `uvmenv --help`.
 
 
 ## Uninstalling
-Run: `./uninstall.sh [all]`.
+Run: **`./uninstall.sh [all]`**.
 
 The uninstallation file has the `all` option, which will delete , this option
 will remove `UVMEnv` main dependencies from your system, this is:
 - Run `./uninstall.sh` if you want to remove **only `UVMEnv`**.
-- Run `./uninstall.sh all` if you want to remove **`UVMEnv` ans its dependencies** .
+- Run `./uninstall.sh all` if you want to remove **`UVMEnv` and its dependencies** .
 
 
 

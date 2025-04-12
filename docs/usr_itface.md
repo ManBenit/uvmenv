@@ -4,10 +4,10 @@
 This framework has not a GUI but a command based user interface is provided to handle framework and projects.
 
 After the installation, you will have available the 
-```uvmenv``` command, which always worck with an ```OPTION``` 
-(watch this with ```uvmenv --help```).
+`uvmenv` command, which always worck with an `OPTION`
+(watch this with `uvmenv --help`).
 
-### ```OPTION``` values
+### `OPTION` values
 
 #### Framework management
 ```bash
@@ -43,10 +43,10 @@ report
 ```
 
 #### Available selection for components handling 
-- ```--create``` -> ```agnt|sitm|seqc|scbd|rmod|bfm|misc```
-- ```--list``` -> ```agnt|sitm|seqc|scbd|rmod|bfm|misc|rtlm|rtls```
-- ```--edit``` -> ```agnt|sitm|seqc|scbd|rmod|bfm|misc|top|tst|env|conf|util|path```
-- ```--delete``` -> ```agnt|sitm|seqc|scbd|rmod|bfm|misc```
+- `--create` -> `agnt|sitm|seqc|scbd|rmod|bfm|misc`
+- `--list` -> `agnt|sitm|seqc|scbd|rmod|bfm|misc|rtlm|rtls`
+- `--edit` -> `agnt|sitm|seqc|scbd|rmod|bfm|misc|top|tst|env|conf|util|path`
+- `--delete` -> `agnt|sitm|seqc|scbd|rmod|bfm|misc`
 
 
 ##### Handling selection requeriments:
@@ -70,12 +70,12 @@ report
 | `rtls`    | RTL signals              |            -            |            |
 
 
-##### Agent ```attribute``` parameter
-The ```UVMEnv``` agents can be created with a passive, active or standard definition 
+##### Agent `attribute` parameter
+The `UVMEnv` agents can be created with a passive, active or standard definition 
 (as part of framework future research, will be available a _node agent_, with works between one module output and next module input):
-- ```s``` (standard): With monitor, driver and coverage collector.
-- ```a``` (active): With driver.
-- ```p``` (passive) With monitor and coverage collector.
-- ```n``` (node): On research. 
+- `s` (standard): With monitor, driver and coverage collector.
+- `a` (active): With driver.
+- `p` (passive) With monitor and coverage collector.
+- `n` (node): On research. 
 
 

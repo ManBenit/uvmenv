@@ -30,7 +30,7 @@ which is its hierarchy level.
 
 - Python 3.10.X.
   
-  ```Note:``` **If you have a later Python version**, you will need to create a **virtual environment** before running the installer.
+  **NOTE:** **If you have a later Python version**, you will need to create a **virtual environment** before running the installer.
 
 ## Sections
 - [`UVMEnv` main structure](https://github.com/ManBenit/uvmenv/blob/main/docs/main_structure.md).
