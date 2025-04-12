@@ -112,6 +112,7 @@ function installPrerequisites(){
     sudo apt install -y libfl-dev  # Ubuntu only (ignore if gives error)
     sudo apt install -y zlib1g zlib1g-dev #zlibc  # Ubuntu only (ignore if gives error)
     pip3 install cocotb
+    pip3 install cocotb-coverage
     pip3 install pyuvm
     pip3 install pyfiglet
     pip3 install colorama

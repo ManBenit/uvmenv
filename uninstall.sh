@@ -52,6 +52,7 @@ function printWarning(){
 
 
 function uninstallPrerequisites(){
+    pip3 uninstall -y cocotb-coverage
     pip3 uninstall -y cocotb 
     pip3 uninstall -y pyuvm
     pip3 uninstall -y colorama
