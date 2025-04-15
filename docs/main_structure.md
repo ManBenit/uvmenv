@@ -41,3 +41,17 @@ and the next diagram can help to identify them.
   />
 </p>
 
+## Main work
+<p align="center">
+  <img src="img/uml_files/flux_sequence/BloqVerifUVMEnv_Vert.png" 
+    alt="Environment TLM communication"
+    width="75%" 
+  />
+</p>
+
+- [Here the main structure diagrams of `UVMEnv`](https://github.com/ManBenit/uvmenv/blob/main/docs/opp_description/XXXX.md).
+- [Here the extra working diagrams](https://github.com/ManBenit/uvmenv/blob/main/docs/opp_description/XXXX.md).
+
+
+
+
