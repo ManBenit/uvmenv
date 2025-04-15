@@ -1,0 +1,1 @@
+## Cocotb general communication with DUT

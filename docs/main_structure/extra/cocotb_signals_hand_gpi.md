@@ -1,4 +1,4 @@
-## Signals handling using GPI
+## Cocotb signals handling using GPI
 
 
 GPI modules are essential for connecting the simulation with Python because they allow the code to interact with the simulator by reading and writing signals in the HDL design, as well as handling simulator events.

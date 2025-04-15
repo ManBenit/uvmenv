@@ -38,7 +38,7 @@ All agents components are stored on `Agents` directory, into a directory named w
 
 
 #### Bus Functional Model (BFM)
-- `BFMBase.py`: Will become `BFM.py`; it is the unique copy of the BFM that will be invoked in the environment.
+- `BFMBase.py`: Will become `BFM.py`; it is the unique copy of the BFM (singleton) that will be invoked in the environment.
 It will be stored in the `Itface` directory.
 
 - `BFMImplBase.py`: Will become a user-defined implementation of the BFM, for example `MyBfmImpl.py`, that is, one of the forms that BFM can take. 
@@ -55,7 +55,7 @@ It will be stored in the `Itface` directory.
 
 
 #### Reference model
-- `RefmodelBase.py`: Will become `RefModel.py`; it is the unique copy of the reference model that will be invoked into the environment. It will be stored in the `RefMdl` directory.
+- `RefmodelBase.py`: Will become `RefModel.py`; it is the unique copy of the reference model (singleton) that will be invoked into the environment. It will be stored in the `RefMdl` directory.
 
 - `RefmodelImplBase.py`: Will become a user-defined implementation of the reference model, for example `MyRefmdlImpl.py`,  
   that is, one of the forms the reference model can take.  

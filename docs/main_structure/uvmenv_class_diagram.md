@@ -19,3 +19,6 @@ comparing with main hierarchy.
     width="70%" 
   />
 </p>
+
+Each class showed in this section is described 
+[here](https://github.com/ManBenit/uvmenv/tree/main/docs/files_classification/functionality).

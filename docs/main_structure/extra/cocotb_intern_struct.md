@@ -1,0 +1,1 @@
+## Cocotb intern main struct

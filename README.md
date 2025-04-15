@@ -34,10 +34,10 @@ which is its hierarchy level.
 
 ## Sections
 - [`UVMEnv` main structure](https://github.com/ManBenit/uvmenv/blob/main/docs/main_structure.md).
-- [`UVMEnv` OOP description](https://github.com/ManBenit/uvmenv/blob/main/docs/oop_description.md).
 - [Install/Uninstall](https://github.com/ManBenit/uvmenv/blob/main/docs/installation.md).
 - [User interface](https://github.com/ManBenit/uvmenv/blob/main/docs/usr_itface.md).
 - [Generic testbench](https://github.com/ManBenit/uvmenv/blob/main/docs/generic_tb.md).
+- [Project configuration](https://github.com/ManBenit/uvmenv/blob/main/docs/project_configuration.md).
 - [Files classification](https://github.com/ManBenit/uvmenv/blob/main/docs/files_classification.md).
 - [Directories classification](https://github.com/ManBenit/uvmenv/blob/main/docs/dirs_classification.md).
 - [Naming conventions](https://github.com/ManBenit/uvmenv/blob/main/docs/name_conventions.md).
