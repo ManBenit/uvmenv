@@ -34,6 +34,10 @@ In other words: seeing the `UVMEnv` main hierarchy, get exactly which part of pr
 which is its hierarchy level.
 
 
+<a href="https://github.com/ManBenit/uvmenv">UVMEnv: Framework de código abierto, basado en Python y UVM, para generar ambientes de verificación de circuitos digitales</a> © 2024 by <a href="https://www.linkedin.com/in/manbenit/">Manuel Emilio Benítez Morales</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nd.svg" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+
+
+
 ## Requirements
 
 - Linux Debian based distribution.
