@@ -15,6 +15,16 @@ to generate RTL digital designs verification environments.
   2024 - 2025
 </p>
 
+```
+This repository contains academic content, you can find it into `docs` directory.
+Master thesis title: "UVMEnv: Framework de código abierto, basado en Python y UVM, para generar ambientes de verificación de circuitos digitales"
+
+- Source code is licenced under Apache 2.0 (LICENSE).
+- Academic content (thesis and documentation/images into `docs` directory) is licensed under Creative Commons Attribution-NoDerivatives 4.0 International [CC BY-ND 4.0] (LICENSE-CC.md).
+
+Attribution is required in both of cases.
+```
+
 `UVMEnv` is intended for easy UVM environments creation, using a screaming architecture and  working by projects with a general 
 hierarchy based on [UVM standard 1.2](https://accellera.org/images/downloads/standards/uvm/uvm_users_guide_1.2.pdf), 
 making directly understandable the `UVMEnv` project structure (files and directories) with the hierarchy, supported
