@@ -10,7 +10,7 @@ to generate RTL digital designs verification environments.
 [**Centro de Investigación en Computación (CIC).**](https://www.cic.ipn.mx/)
 
 <p align="center">
-  <img src="uvmenv_logo.png" alt="uvmenv_logo" width="30%">
+  <img src="docs/img/uvmenv_logo.png" alt="uvmenv_logo" width="30%">
   <br/>
   2024 - 2025
 </p>
