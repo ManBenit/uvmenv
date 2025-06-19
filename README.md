@@ -20,15 +20,17 @@ This repository contains academic content, you can find it into `docs` directory
 Master thesis title: "UVMEnv: Framework de código abierto, basado en Python y UVM, para generar ambientes de verificación de circuitos digitales"
 
 - Source code is licenced under Apache 2.0 (LICENSE).
-- Academic content (thesis and documentation/images into `docs` directory) is licensed under Creative Commons Attribution-NoDerivatives 4.0 International [CC BY-ND 4.0] (LICENSE-CC.md).
+- Academic content (thesis and documentation/images into `docs` directory) is licensed under Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International [CC BY-NC-ND 4.0] (LICENSE-CC.md).
 
 Attribution is required in both of cases.
 
 ```
-<a href="https://github.com/ManBenit/uvmenv/">UVMEnv: Framework de código abierto, basado en Python y UVM, para generar ambientes de verificación de circuitos digitales</a> © 2024 by <a href="https://www.linkedin.com/in/manbenit/">Manuel Emilio Benítez Morales</a> is licensed under <a href="https://creativecommons.org/licenses/by-nd/4.0/">CC BY-ND 4.0</a>
-<img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" style="height: 1em; vertical-align: text-bottom; margin-left: .2em;">
-<img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" style="height: 1em; vertical-align: text-bottom; margin-left: .2em;">
-<img src="https://mirrors.creativecommons.org/presskit/icons/nd.svg" style="height: 1em; vertical-align: text-bottom; margin-left: .2em;">
+<a href="https://github.com/ManBenit/uvmenv/">UVMEnv: Framework de código abierto, basado en Python y UVM, para generar ambientes de verificación de circuitos digitales</a> © 2024 por <a href="https://www.linkedin.com/in/manbenit/">Manuel Emilio Benítez Morales</a> está licenciado bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International</a>
+<img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" width="20" height="20">
+<img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" width="20" height="20">
+<img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" width="20" height="20">
+<img src="https://mirrors.creativecommons.org/presskit/icons/nd.svg" width="20" height="20">
+
 -----
 
 `UVMEnv` is intended for easy UVM environments creation, using a screaming architecture and  working by projects with a general 
