@@ -12,8 +12,10 @@
 
 #************** DIRECTORIES **************#
 # Main paths
-TOOLS_DIR=/home/$(whoami)/.UVMEnv/tools
-BASES_DIR=/home/$(whoami)/.UVMEnv/bases
+HOME_DIR=/home/$(whoami)
+VENV_DIR=$HOME_DIR/.UVMEnv_virtualenv
+TOOLS_DIR=$HOME_DIR/.UVMEnv/tools
+BASES_DIR=$HOME_DIR/.UVMEnv/bases
 BASES_REPRESENT_DIR=$BASES_DIR/representative_files
 BASES_COMPONENT_DIR=$BASES_DIR/component_files
 BASES_COMMAND_DIR=$BASES_DIR/command_files
@@ -95,6 +97,9 @@ C_WHITE="\e[37m"
 C_N="\e[39m"
 ####################
 
+# Python version handling variables
+PY_VERSION=""
+IS_PY10_OR_MINOR=0
 
 
 ########################################################################################
