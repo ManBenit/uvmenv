@@ -56,7 +56,7 @@ function main(){
     # INSTALLING PROCESS
     installSystemRequirements
 
-    # Get the installed Python version and create virtual environment if version is <= 3.10
+    # Get the installed Python version and activate virtual environment if version is > 3.10
     getPythonVersion
     if [ $IS_PY10_OR_MINOR -eq 0 ]; then
         activatePythonVenv
@@ -171,22 +171,22 @@ function createMainStructure(){
 }
 
 function installSimulators(){
-    echo $1
-    printInfo "############### Installing jq... ###############"
-    sudo apt install -y jq
+    # printInfo "############### Installing jq... ###############"
+    # sudo apt install -y jq
 
-    printInfo "############### Installing GTKWave... ###############"
-    sudo apt install -y gtkwave
+    # printInfo "############### Installing GTKWave... ###############"
+    # sudo apt install -y gtkwave
 
-    printInfo "############### Installing Icarus... ###############"
-    if [ "$(which iverilog)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
-        installIcarus
-    fi
+    
+    # if [ "$(which iverilog)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
+    #     printInfo "############### Installing Icarus... ###############"
+    #     installIcarus
+    # fi
 
-    printInfo "############### Installing Verilator... ###############"
-    if [ "$(which verilator)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
-        installVerilator
-    fi
+    # if [ "$(which verilator)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
+    #     printInfo "############### Installing Verilator... ###############"
+    #     installVerilator
+    # fi
 }
 
 

@@ -108,6 +108,12 @@ IS_PY10_OR_MINOR=0
 function main(){
     local combo7="agnt|sitm|seqc|scbd|rmod|bfm|misc"
 
+    # Get the installed Python version and activate virtual environment if version is > 3.10
+    getPythonVersion
+    if [ $IS_PY10_OR_MINOR -eq 0 ]; then
+        activatePythonVenv
+    fi
+
     case $1 in
         ##### Framework #####
         -n|--new)
@@ -140,7 +146,7 @@ function main(){
         ;;
 
         -h|--help|"")
-            showHelp # | less -R
+            showHelp
         ;;
 
         -i|--init)
@@ -177,14 +183,14 @@ function main(){
             local top_file=$(find ./ -type f \( -name "*.v" -o -name "*.sv" \) | grep $(jq -r '.dut_design.top_module' $CONFIG_FILE) | uniq)
             
             cp $VCD_WRHELPER_FILEBASE vcdWriter.py
-            python3 vcdWriter.py $top_file $level_vcd 1
-            python3 vcdWriter.py $top_file $level_vcd 2
+            python$PY_VERSION vcdWriter.py $top_file $level_vcd 1
+            python$PY_VERSION vcdWriter.py $top_file $level_vcd 2
             cd $PROJECT_DIR
 
             $RUN_FILE
 
             cd $DUT_HDL_DIR
-            python3 vcdWriter.py $top_file $level_vcd 3
+            python$PY_VERSION vcdWriter.py $top_file $level_vcd 3
             rm -f vcdWriter.py
             cd $PROJECT_DIR
 
@@ -411,6 +417,23 @@ function getCurrentDir(){
     echo $(pwd)
 }
 
+function getPythonVersion(){
+    local pyv_major=$(python3 --version | awk '{print $2}' | cut -d'.' -f1)
+    local pyv_minor=$(python3 --version | awk '{print $2}' | cut -d'.' -f2)
+    PY_VERSION=$pyv_major.$pyv_minor
+
+    if [ "$pyv_major" -gt 3 ] || { [ "$pyv_major" -eq 3 ] && [ "$pyv_minor" -gt 10 ]; }; then
+        IS_PY10_OR_MINOR=0
+    else
+        IS_PY10_OR_MINOR=1
+    fi
+}
+
+function activatePythonVenv(){
+    python$PY_VERSION -m venv $VENV_DIR
+    source $VENV_DIR/bin/activate
+}
+
 
 #######################################################################################################
 ################                     COMMANDS FUNCTIONS                               #################
@@ -617,7 +640,7 @@ function showAllSignals(){
             else
                 write_option="w"
             fi
-            python3 signals.py $1 obj_dir/V$(echo $archivo | cut -d'.' -f1).h $write_option
+            python$PY_VERSION signals.py $1 obj_dir/V$(echo $archivo | cut -d'.' -f1).h $write_option
             count=$((i+1))
         done
 
@@ -638,7 +661,7 @@ function showAllSignals(){
 
     for archivo in "${modules_dir[@]}"; do
         printInfo "\tSignals of $(echo $archivo | cut -d'.' -f1)"
-        python3 signals.py n V$(echo $archivo | cut -d'.' -f1)
+        python$PY_VERSION signals.py n V$(echo $archivo | cut -d'.' -f1)
         printInfo ""
     done
  
@@ -656,7 +679,7 @@ function showSignals(){
         cp $SIGNAL_GETTER_FILEBASE signals.py
     fi
 
-    python3 signals.py $1 V$(echo $2 | cut -d'.' -f1)
+    python$PY_VERSION signals.py $1 V$(echo $2 | cut -d'.' -f1)
     printInfo ""
 
     rm signals.py
