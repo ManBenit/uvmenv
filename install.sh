@@ -171,22 +171,22 @@ function createMainStructure(){
 }
 
 function installSimulators(){
-    # printInfo "############### Installing jq... ###############"
-    # sudo apt install -y jq
+    printInfo "############### Installing jq... ###############"
+    sudo apt install -y jq
 
-    # printInfo "############### Installing GTKWave... ###############"
-    # sudo apt install -y gtkwave
+    printInfo "############### Installing GTKWave... ###############"
+    sudo apt install -y gtkwave
 
     
-    # if [ "$(which iverilog)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
-    #     printInfo "############### Installing Icarus... ###############"
-    #     installIcarus
-    # fi
+    if [ "$(which iverilog)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
+        printInfo "############### Installing Icarus... ###############"
+        installIcarus
+    fi
 
-    # if [ "$(which verilator)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
-    #     printInfo "############### Installing Verilator... ###############"
-    #     installVerilator
-    # fi
+    if [ "$(which verilator)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
+        printInfo "############### Installing Verilator... ###############"
+        installVerilator
+    fi
 }
 
 
