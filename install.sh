@@ -66,8 +66,7 @@ function main(){
    
     # Create UVMEnv main structure if is installation and remove bases/tools from structure is is update
     if [[ $IS_UPDATE -eq 1 ]]; then
-        # Update UVMEnv repository
-        git pull origin main
+        updateUVMEnvRepository
         rm -rf $BASES_DIR
         rm -rf $TOOLS_DIR
     else 
@@ -145,6 +144,28 @@ function installPythonDependencies(){
     python$PY_VERSION -m pip install $upgrade pyuvm
     python$PY_VERSION -m pip install $upgrade pyfiglet
     python$PY_VERSION -m pip install $upgrade colorama
+}
+
+function updateUVMEnvRepository(){
+    local script_name="install.sh"
+    local remote_branch="origin/main"
+
+    # Get local hash if installer
+    local local_hash=$(git hash-object "$script_name")
+
+    # Get remote hash of installer
+    local remote_hash=$(git show "$remote_branch:$script_name" 2>/dev/null | git hash-object --stdin)
+
+    # Compare both of them
+    if [[ "$local_hash" != "$remote_hash" ]]; then
+        printWarning "Installer has changes from remote, please run:"
+        printInfo "git pull origin main"
+        printWarning "and try again the update."
+        exit 1
+    fi
+
+    # If installer has no changes, make pull normally
+    git pull origin main
 }
 
 function createFrameworkEnv(){
