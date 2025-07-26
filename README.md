@@ -46,9 +46,7 @@ which is its hierarchy level.
 
 - Linux Debian based distribution.
 
-- Python 3.10.X.
-  
-  **NOTE:** **If you have a later Python version**, you will need to create a **virtual environment** before running the installer.
+- Python 3.10 or later.
 
 ## Sections
 - [`UVMEnv` main structure](https://github.com/ManBenit/uvmenv/blob/main/docs/main_structure.md).
