@@ -134,7 +134,7 @@ function main(){
             searchProjects
         ;;
 
-        -h|--help)
+        -h|--help|"")
             showHelp # | less -R
         ;;
 
