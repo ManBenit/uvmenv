@@ -2,7 +2,7 @@
 ###############################################
 # Command which will be used to handle UVMEnv #
 ###############################################
-echo "TEST STAGE (DEVELOPING)"
+
 
 
 
@@ -12,12 +12,10 @@ echo "TEST STAGE (DEVELOPING)"
 
 #************** DIRECTORIES **************#
 # Main paths
-HOME_DIR=/home/$(whoami)/Github/uvmenv
+HOME_DIR=/home/$(whoami)
 VENV_DIR=$HOME_DIR/.UVMEnv_virtualenv
-#TOOLS_DIR=$HOME_DIR/.UVMEnv/tools
-#BASES_DIR=$HOME_DIR/.UVMEnv/bases
-TOOLS_DIR=$HOME_DIR/uvmenv_tools
-BASES_DIR=$HOME_DIR/uvmenv_bases
+TOOLS_DIR=$HOME_DIR/.UVMEnv/tools
+BASES_DIR=$HOME_DIR/.UVMEnv/bases
 BASES_REPRESENT_DIR=$BASES_DIR/representative_files
 BASES_COMPONENT_DIR=$BASES_DIR/component_files
 BASES_COMMAND_DIR=$BASES_DIR/command_files
@@ -1461,5 +1459,4 @@ function editMiscelaneous(){
 
 
 main "$@"; exit
-
 
