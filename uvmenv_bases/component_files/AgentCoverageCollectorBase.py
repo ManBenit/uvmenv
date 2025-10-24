@@ -3,14 +3,32 @@
 ############################
 
 from pyuvm import uvm_component, uvm_tlm_analysis_fifo, uvm_get_port
+from cocotb_coverage.coverage import CoverPoint, CoverCross, coverage_db
+
+from utils import dict_to_namespace
+from default_seqitem import Response as DefaultSeqitemResponse
 
 class CoverageCollector(uvm_component):
     def __init__(self, name, parent):
         super().__init__(name, parent)
+        self.num_transactions = 0
 
-        # Define your own coverage sets
-        self.incov = set()
-        self.outcov = set()
+    # Usage of coverage decorators
+    """Write as many CoverPoints and CoverCross as you need"""
+    # Unlock this block !
+    """@CoverPoint('SOME NAME 1',
+                xf=lambda tr: tr.SIGNAL_NAME,
+                bins=[
+                    BINS_VALUES_HERE
+                ])
+    @CoverPoint('SOME NAME 2',
+                xf=lambda tr: tr.SIGNAL_NAME,
+                bins=[
+                    BINS_VALUES_HERE
+                ])
+    @CoverCross('SOME_NAME', items=['SOME NAME 1', 'SOME NAME 2'])
+    def _sample_coverage(self, tr: DefaultSeqitemResponse):
+        pass"""
 
 
     def build_phase(self):
@@ -28,14 +46,26 @@ class CoverageCollector(uvm_component):
 
         """You can check actions here"""
 
+    def report_phase(self):
+        coverage_db.export_to_xml(filename='OSimon/coverage_report.xml')
+
     
     def write(self, t):
         self.tr = t.copy()
         self.logger.info(f'Received from Monitor in WRITE')
 
-        """
-        Analyze here each transaction with DUT. Recommended to use assertions.
-        assert <condition>, 'Error message'
-        """
+        # Unlock this block !
+        """transaction = dict_to_namespace({
+            # Write here the signals involved in the transaction with the next specified format:
+            # Resquest
+            'SIGNAL_NAME': t.ins['SIGNAL_NAME'],
+            # Response
+            'SIGNAL_NAME': t.ins['SIGNAL_NAME']
+        })
+
+        self.num_transactions += 1
+        self._sample_coverage(transaction)"""
+
+
 
 
