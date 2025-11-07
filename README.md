@@ -5,6 +5,8 @@
 Open source framework based on Python and Universal Verification Metodology (UVM),
 to generate RTL digital designs verification environments. 
 
+**Currently developing version 2.0**
+
 [**Instituto Politécnico Nacional (IPN).**](https://www.ipn.mx/)
 
 [**Centro de Investigación en Computación (CIC).**](https://www.cic.ipn.mx/)
