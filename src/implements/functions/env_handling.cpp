@@ -2,7 +2,7 @@
 //                 ENVIRONMENT HANDLING                    //
 // ******************************************************* //
 
-#include "headers/env_handling.h"
+#include "../../headers/functions/env_handling.h"
 
 void createNewEnv(string projectName, string topModule){    
     // Create directories structure

@@ -1,4 +1,4 @@
-#include "headers/VerilatorHandler.h"
+#include "../headers/VerilatorHandler.h"
 
 // ****************** Verilator Handler ****************** //
 void VerilatorHandler::compileForAPI(vector<string> srcFiles, string topModule) {

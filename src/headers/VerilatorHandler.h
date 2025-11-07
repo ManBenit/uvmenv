@@ -5,8 +5,8 @@
 #include <filesystem>
 #include <cstdlib>
 #include <vector>
-#include "utils.h"
-#include "constants.h"
+#include "functions/utils.h"
+#include "functions/constants.h"
 using namespace std;
 
 class VerilatorHandler {

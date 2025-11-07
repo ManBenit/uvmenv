@@ -1,6 +1,6 @@
-#include "headers/utils.h"
-#include "headers/constants.h"
-#include "headers/env_handling.h"
+#include "headers/functions/utils.h"
+#include "headers/functions/constants.h"
+#include "headers/functions/env_handling.h"
 #include "headers/uvm_components/Agent.h"
 #include "headers/VerilatorHandler.h"
 #include <iostream>
@@ -77,6 +77,9 @@ int main (int argc, char *argv[]) {
         // Agent agent;
         // agent.display();
         // cout << agent.to_string() << endl;
+        vector<string> srcFiles = getFileNamesInDirectory("/home/manbenit/Github/cv");
+        for(auto f : srcFiles)
+            cout << f << endl;
     }
 
     ///// Component handling /////
