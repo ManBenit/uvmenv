@@ -58,4 +58,8 @@ which is its hierarchy level.
 - [Directories classification](https://github.com/ManBenit/uvmenv/blob/main/docs/dirs_classification.md).
 - [Naming conventions](https://github.com/ManBenit/uvmenv/blob/main/docs/name_conventions.md).
 
+## More excercices
+- [Verilog to `UVMEnv`](https://github.com/ManBenit/v2uvmenv).
+
+
 
