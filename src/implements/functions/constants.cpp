@@ -1,4 +1,3 @@
-#include <filesystem>
 #include "../../headers/functions/constants.h"
 
 bool IS_PY10_OR_MINOR = true;

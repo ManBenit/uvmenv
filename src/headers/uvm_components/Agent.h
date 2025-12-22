@@ -10,7 +10,7 @@ class Agent {
 private:
     int monitor;
     int driver;
-    int coverageCollector;
+    //int coverageCollector;
     //int sequencer; // Implicit on Python implementation
     int type;
 
