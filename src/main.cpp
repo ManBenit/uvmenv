@@ -13,6 +13,7 @@ using namespace std;
 
 
 int main (int argc, char *argv[]) {
+    cout << C_GREEN << "UVMEnv 2.0 - TESTING/DEVELOPING" << C_N << endl;
     activatePythonVenv();
 
     if(argc < 2) {
@@ -27,7 +28,7 @@ int main (int argc, char *argv[]) {
         // argv[2]: Project name.
         // argv[3]: Top module name.
 
-        if(argv[2] == NULL || argv[3] == NULL){
+        if(argv[2] == nullptr || argv[3] == nullptr){
             printError("Missing parameters");
             printInfo("Usage: uvmenv -n|--new <project name> <top module name>");
             exit(0);
@@ -50,7 +51,7 @@ int main (int argc, char *argv[]) {
             exit(1);
         }
 
-        system("tree -C | less -R");
+        execCmdSimple("tree -C | less -R");
     }
     else if(option == "run") {
         
@@ -61,7 +62,7 @@ int main (int argc, char *argv[]) {
             exit(1);
         }
 
-        system("gtkwave $OUTSIM_DIR/dut_signals.vcd &> /dev/null &");
+        execCmdSimple("gtkwave $OUTSIM_DIR/dut_signals.vcd &> /dev/null &");
     }
     else if(option == "report") {
         if(!isUVMEnvProject()){
@@ -69,7 +70,7 @@ int main (int argc, char *argv[]) {
             exit(1);
         }
 
-        system("less $OUTSIM_DIR/uvmenv_report.log");
+        execCmdSimple("less $OUTSIM_DIR/uvmenv_report.log");
     }
     else if(option == "test") {
         //cout << getBasesRepresentDir() << endl;

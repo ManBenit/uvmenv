@@ -38,26 +38,27 @@ vector<string> splitString(const string& input, char delimiter) {
     return tokens;
 }
 
-void runCommandSimple(const string& sysCommand) {
-    FILE* pipe = popen(sysCommand.c_str(), "w");
+void execCmdSimple(const string& cmd) {
+    FILE* pipe = popen(cmd.c_str(), "w");
     if (!pipe) {
-        printError("Failed to run: " + sysCommand);
-        exit(5);
+        throw runtime_error("[CMD simple] popen() failed");
     }
     pclose(pipe);
 }
 
-string runCommandReturn(const string& sysCommand){
-    FILE* pipe = popen(sysCommand.c_str(), "r");
+string execCmdReturn(const string& cmd){
+    array<char, 128> buffer{};
+    string result;
+
+    FILE* pipe = popen(cmd.c_str(), "r");
     if (!pipe) {
-        printError("Failed to run: " + sysCommand);
-        exit(5);
+        throw runtime_error("[CMD return] popen() failed");
     }
-    char buffer[128];
-    string result = "";
-    while (fgets(buffer, sizeof buffer, pipe) != NULL) {
-        result += buffer;
+    
+    while (fgets(buffer.data(), buffer.size(), pipe) != nullptr) {
+        result += buffer.data();
     }
+
     pclose(pipe);
 
     //cout << result << endl;
@@ -117,14 +118,14 @@ void showHelp() {
 // ****************** Python version ****************** //
 string getPythonVersion(){
     string python_version_cmd = "python3 --version | awk '{print $2}' | cut -d'.' -f1,2";
-    return runCommandReturn(python_version_cmd);
+    return execCmdReturn(python_version_cmd);
 }
 
 void activatePythonVenv(){
     float version = stof(getPythonVersion());
     if(version >= 3.10){
         string activate_cmd = "bash -c 'source " + getVenvDir() + "/bin/activate'";
-        runCommandSimple(activate_cmd);
+        execCmdSimple(activate_cmd);
     }
 }
 
