@@ -29,6 +29,7 @@ string execCmdReturn(const string& cmd);
 
 // ****************** FRAMEWORK UTIL FUNCTIONS ****************** //
 bool isUVMEnvProject();
+string getScript(const string& name);
 
 // ********************* COMMANDS FUNCTIONS ********************* //
 void showHelp();

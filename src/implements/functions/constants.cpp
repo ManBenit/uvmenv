@@ -30,7 +30,7 @@ string getUser(){
 //************** DIRECTORIES **************//
 // Main paths
 string getHomeDir(){
-    return "/home/" + getUser() + "/Github/uvmenv";
+    return "/home/" + getUser() + "/Github/uvmenv/src";
 }
 
 string getVenvDir(){
@@ -59,6 +59,29 @@ string getBasesConfigDir(){
 }
 string getProjectDir(){
     return filesystem::current_path().string();
+}
+
+// Change home dir to install dir or something like that
+string getScriptsPath(){
+    #if defined(_WIN32)
+        return getHomeDir() + "\\scripts\\batch";
+    #elif defined(__APPLE__) || defined(__MACH__) || defined(__linux__) || defined(__unix__)   || defined(__posix__)
+        return getHomeDir() + "/scripts/bash";
+    #else
+        std::cout << "Unknown OS" << std::endl;
+        return 3;
+    #endif
+}
+
+string getScriptsExtension(){
+    #if defined(_WIN32)
+        return ".bat";
+    #elif defined(__APPLE__) || defined(__MACH__) || defined(__linux__) || defined(__unix__)   || defined(__posix__)
+        return ".sh";
+    #else
+        std::cout << "Unknown OS" << std::endl;
+        return 3;
+    #endif
 }
 
 // UVMEnv paths for writing base of representative files of UVM structure

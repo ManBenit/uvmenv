@@ -51,7 +51,7 @@ int main (int argc, char *argv[]) {
             exit(1);
         }
 
-        execCmdSimple("tree -C | less -R");
+        execCmdSimple(getScript("sys_commands") + "viewTreeProject");
     }
     else if(option == "run") {
         
@@ -62,7 +62,7 @@ int main (int argc, char *argv[]) {
             exit(1);
         }
 
-        execCmdSimple("gtkwave $OUTSIM_DIR/dut_signals.vcd &> /dev/null &");
+        execCmdSimple(getScriptsPath() + "/sys_commands.sh runGTKWave");
     }
     else if(option == "report") {
         if(!isUVMEnvProject()){
@@ -70,7 +70,7 @@ int main (int argc, char *argv[]) {
             exit(1);
         }
 
-        execCmdSimple("less $OUTSIM_DIR/uvmenv_report.log");
+        execCmdSimple(getScriptsPath() + "/sys_commands.sh viewReport");
     }
     else if(option == "test") {
         //cout << getBasesRepresentDir() << endl;
@@ -78,9 +78,13 @@ int main (int argc, char *argv[]) {
         // Agent agent;
         // agent.display();
         // cout << agent.to_string() << endl;
-        vector<string> srcFiles = getFileNamesInDirectory("/home/manbenit/Github/cv");
-        for(auto f : srcFiles)
-            cout << f << endl;
+
+        // vector<string> srcFiles = getFileNamesInDirectory("/home/manbenit/Github/cv");
+        // for(auto f : srcFiles)
+        //     cout << f << endl;
+
+        cout << execCmdReturn(getScriptsPath() + "/python_control.sh getPythonVersion") << endl;
+
     }
 
     ///// Component handling /////

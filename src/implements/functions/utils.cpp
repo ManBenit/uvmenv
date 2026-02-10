@@ -87,6 +87,10 @@ bool isUVMEnvProject(){
     return true;
 } 
 
+string getScript(const string& name){
+    return getScriptsPath() + "/" + name + getScriptsExtension() + " ";
+}
+
 ////////////////////////////////////////////////////////////////////
 
 // ********************* COMMANDS FUNCTIONS ********************* //

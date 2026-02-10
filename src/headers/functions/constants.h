@@ -33,6 +33,8 @@ string getBasesComponentDir();
 string getBasesCommandDir();
 string getBasesConfigDir();
 string getProjectDir();
+string getScriptsPath();
+string getScriptsExtension();
 
 // UVMEnv directories
 string getDUTHdlDir();
