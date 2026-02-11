@@ -12,7 +12,7 @@ to generate RTL digital designs verification environments.
 <p align="center">
   <img src="docs/img/uvmenv_logo.png" alt="uvmenv_logo" width="30%">
   <br/>
-  2024 - 2025
+  2024 - 2026
 </p>
 
 ```
