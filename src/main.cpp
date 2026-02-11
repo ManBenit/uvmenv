@@ -24,7 +24,7 @@ int main (int argc, char *argv[]) {
     string option = argv[1];
     
     ///// Framework handling /////
-    if(option == "--new" || option == "-n") {
+    if(option == "new") {
         // argv[2]: Project name.
         // argv[3]: Top module name.
 
@@ -36,42 +36,64 @@ int main (int argc, char *argv[]) {
 
         createNewEnv(argv[2], argv[3]);
     } 
-    else if(option == "--search" || option == "-s") {
+    else if(option == "search") {
         searchProjects();
     } 
-    else if(option == "--help" || option == "-h") {
+    else if(option == "help") {
         showHelp();
     }
-    else if(option == "--init" || option == "-i") {
+
+    ///// Project handling /////
+    else if(option == "project"){
+        if(!isUVMEnvProject()){
+            printError("You need using a valid project to run this option.");
+            return 1;
+        }
+        
+        if(argv[2] == "view"){
+            execCmdSimple(getScript("sys_commands")+"viewTreeProject");
+        }
+        else if(argv[2] == "init"){
+
+        }
+        else if(argv[2] == "report"){
+            execCmdSimple(getScript("sys_commands")+"viewReport");
+        }
+        else if(argv[2] == "wave"){
+            execCmdSimple(getScript("sys_commands")+"runGTKWave");
+        }
+        else {
+            printError("Unknown project option: " + string(argv[2]));
+            return 2;
+        }
+    }
+    
+    ///// Component handling /////
+    else if(option == "component"){
+        if(!isUVMEnvProject()){
+            printError("You need using a valid project to run this option.");
+            return 1;
+        }
+        
+        if(argv[2] == "create"){
+            
+        }
+        else if(argv[2] == "delete"){
+
+        }
+        else if(argv[2] == "edit"){
+            
+        }
+        else if(argv[2] == "list"){
+            
+        }
+        else {
+            printError("Unknown project option: " + string(argv[2]));
+            return 2;
+        }
         
     }
-    else if(option == "--view" || option == "-v") {
-        if(!isUVMEnvProject()){
-            printError("You need using a valid project to run this option.");
-            exit(1);
-        }
 
-        execCmdSimple(getScript("sys_commands") + "viewTreeProject");
-    }
-    else if(option == "run") {
-        
-    }
-    else if(option == "wave") {
-        if(!isUVMEnvProject()){
-            printError("You need using a valid project to run this option.");
-            exit(1);
-        }
-
-        execCmdSimple(getScriptsPath() + "/sys_commands.sh runGTKWave");
-    }
-    else if(option == "report") {
-        if(!isUVMEnvProject()){
-            printError("You need using a valid project to run this option.");
-            exit(1);
-        }
-
-        execCmdSimple(getScriptsPath() + "/sys_commands.sh viewReport");
-    }
     else if(option == "test") {
         //cout << getBasesRepresentDir() << endl;
         //cout << getPythonVersion() << endl;
@@ -87,19 +109,6 @@ int main (int argc, char *argv[]) {
 
     }
 
-    ///// Component handling /////
-    else if(option == "--create" || option == "-c") {
-        
-    }
-    else if(option == "--list" || option == "-l") {
-        
-    }
-    else if(option == "--edit" || option == "-e") {
-        
-    }
-    else if(option == "--delete" || option == "-d") {
-        
-    }
     else {
         printError("Unknown option: " + option);
         return 2;
