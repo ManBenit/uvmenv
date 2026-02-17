@@ -24,47 +24,54 @@ using namespace std;
     const string OS_NAME = "Windows";
     const string USER_VAR = getenv("USERNAME");
     const string PATH_SEP = "\\";
-    const string SCRIPTS_DIR = "\\scripts\\batch";
+    const string SCRIPTS_DIR = "\\uvmenv_scripts\\batch";
     const string SCRIPTS_EXT = ".bat";
+    const string HOME_DIR = "C:\\Users\\" + USER_VAR;
 #elif defined(__APPLE__) || defined(__MACH__)
     const string OS_NAME = "MacOS";
     const string USER_VAR = getenv("USER");
     const string PATH_SEP = "/";
-    const string SCRIPTS_DIR = "/scripts/bash";
+    const string SCRIPTS_DIR = "/uvmenv_scripts/bash";
     const string SCRIPTS_EXT = ".sh";
+    const string HOME_DIR = "/home/" + USER_VAR;
 #elif defined(__linux__)
     const string OS_NAME = "Linux";
     const string USER_VAR = getenv("USER");
     const string PATH_SEP = "/";
-    const string SCRIPTS_DIR = "/scripts/bash";
+    const string SCRIPTS_DIR = "/uvmenv_scripts/bash";
     const string SCRIPTS_EXT = ".sh";
+    //const string HOME_DIR = "/home/" + USER_VAR;
 #elif defined(__unix__)
     const string OS_NAME = "Unix";
     const string USER_VAR = getenv("USER");
     const string PATH_SEP = "/";
-    const string SCRIPTS_DIR = "/scripts/bash";
+    const string SCRIPTS_DIR = "/uvmenv_scripts/bash";
     const string SCRIPTS_EXT = ".sh";
+    const string HOME_DIR = "/home/" + USER_VAR;
 #elif defined(__posix__)
     const string OS_NAME = "Posix";
     const string USER_VAR = getenv("USER");
     const string PATH_SEP = "/";
-    const string SCRIPTS_DIR = "/scripts/bash";
+    const string SCRIPTS_DIR = "/uvmenv_scripts/bash";
     const string SCRIPTS_EXT = ".sh";
+    const string HOME_DIR = "/home/" + USER_VAR;
 #else
     const string OS_NAME = "Unknown";
 #endif
 
 //************** DIRECTORIES **************//
-const string HOME_DIR = "/home/" + USER_VAR + PATH_SEP + "Github" + PATH_SEP + "uvmenv" + PATH_SEP + "src"; // Default: home user linux or C/users/name windows
-const string VENV_DIR = "/home/" + USER_VAR + "/.UVMEnv_virtualenv"; // Default: home user linux or C/users/name windows
+const string HOME_DIR                  = "/home/" + USER_VAR + "/Github/uvmenv/install"; // Delete after dev
+const string INSTALL_DIR               = HOME_DIR; // Modify to HOME_DIR + PATH_SEP + ".UVMEnv";
+const string VENV_DIR                  = "/home/" + USER_VAR + "/.UVMEnv_virtualenv";// Modify to HOME_DIR + PATH_SEP + ".UVMEnv_virtualenv";
 
 // Repository
-const string TOOLS_DIR                 = HOME_DIR + PATH_SEP + "uvmenv_tools";
-const string BASES_DIR                 = HOME_DIR + PATH_SEP + "uvmenv_bases";
+const string TOOLS_DIR                 = INSTALL_DIR + PATH_SEP + "uvmenv_tools"; // Modify to INSTALL_DIR + PATH_SEP + "tools"
+const string BASES_DIR                 = INSTALL_DIR + PATH_SEP + "uvmenv_bases"; // Modify to INSTALL_DIR + PATH_SEP + "bases"
 const string BASES_REPRESENT_DIR       = BASES_DIR + PATH_SEP + "representative_files";
 const string BASES_COMPONENT_DIR       = BASES_DIR + PATH_SEP + "component_files";
 const string BASES_COMMAND_DIR         = BASES_DIR + PATH_SEP + "command_files";
 const string BASES_CONFIG_DIR          = BASES_DIR + PATH_SEP + "config_files";  
+
 
 const string PROJECT_DIR               = filesystem::current_path().string();
 

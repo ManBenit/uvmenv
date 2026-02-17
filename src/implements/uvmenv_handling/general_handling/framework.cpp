@@ -46,7 +46,7 @@ bool isUVMEnvProject(){
 } 
 
 string getScript(const string& name){
-    return SCRIPTS_DIR + "/" + name + SCRIPTS_EXT + " ";
+    return INSTALL_DIR + SCRIPTS_DIR + PATH_SEP + name + SCRIPTS_EXT + " ";
 }
 
 

@@ -56,7 +56,7 @@ int main (int argc, char *argv[]) {
         }
 
         
-        if(argv[2] == "view"){
+        if(string(argv[2]) == "view"){
             execCmdSimple(getScript("sys_commands")+"viewTreeProject");
         }
         else if(argv[2] == "init"){
@@ -104,7 +104,7 @@ int main (int argc, char *argv[]) {
             
         }
         else {
-            printError("Unknown project option: " + string(argv[2]));
+            printError("Unknown component option: " + string(argv[2]));
             return 2;
         }
         
@@ -121,7 +121,15 @@ int main (int argc, char *argv[]) {
         // for(auto f : srcFiles)
         //     cout << f << endl;
 
-        cout << SCRIPTS_DIR + "/python_control.sh getPythonVersion" << endl;
+        cout << TOOLS_DIR << endl;
+        cout << BASES_DIR << endl;
+        cout << BASES_REPRESENT_DIR << endl;
+        cout << BASES_COMPONENT_DIR << endl;
+        cout << BASES_COMMAND_DIR << endl;
+        cout << BASES_CONFIG_DIR << endl;
+        cout << HOME_DIR << endl;
+        cout << INSTALL_DIR << endl;
+        cout << VENV_DIR << endl;
 
     }
 
