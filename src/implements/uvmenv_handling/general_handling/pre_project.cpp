@@ -6,8 +6,8 @@
 
 void createNewEnv(string projectName, string topModule){    
     // Create directories structure
-    filesystem::create_directory(getProjectDir() + "/" + projectName);
-    filesystem::current_path(getProjectDir() + "/" + projectName);
+    filesystem::create_directory(PROJECT_DIR + "/" + projectName);
+    filesystem::current_path(PROJECT_DIR + "/" + projectName);
 
     // Create UVMenv structure directories
     filesystem::create_directory("HDLSrc"); // DUT_HDL_DIR
@@ -46,30 +46,30 @@ void createNewEnv(string projectName, string topModule){
 
     // Create UVMenv structure files - Make each manager of UVM level
     ////// Write script of utils
-    filesystem::copy(getUtilsFilebase(), "utils.py");
+    filesystem::copy(UTIL_FILEBASE, "utils.py");
 
     ////// Write script of paths
-    filesystem::copy(getPathsFilebase(), "paths.py");
+    filesystem::copy(PATHS_FILEBASE, "paths.py");
 
     ////// Write Top
-    filesystem::copy(getTopFilebase(), "Top_"+topModule+".py");
+    filesystem::copy(TOP_FILEBASE, "Top_"+topModule+".py");
 
     ////// Write Test
-    filesystem::copy(getTestFilebase(), "UVM_TB/Test.py");
+    filesystem::copy(TEST_FILEBASE, "UVM_TB/Test.py");
 
     ////// Write Environment
-    filesystem::copy(getEnvironmentFilebase(), "UVM_TB/Envmnt/Environment.py");
+    filesystem::copy(ENVIRONMENT_FILEBASE, "UVM_TB/Envmnt/Environment.py");
 
     ////// Write interface for BFM
-    filesystem::copy(getBfmFilebase(), "Itface/BFM.py");
+    filesystem::copy(BFM_FILEBASE, "Itface/BFM.py");
 
     ////// Write interface for Reference model
-    filesystem::copy(getRefmodelFilebase(), "UVM_TB/Envmnt/RefMdl/RefModel.py");
+    filesystem::copy(REFMODEL_FILEBASE, "UVM_TB/Envmnt/RefMdl/RefModel.py");
 
     ////// Write report mechanism
-    filesystem::copy(getReportFilebase(), "UVM_TB/Misces/UVMEnvReport.py");
+    filesystem::copy(REPORT_FILEBASE, "UVM_TB/Misces/UVMEnvReport.py");
 
-    filesystem::current_path(getProjectDir());
+    filesystem::current_path(PROJECT_DIR);
 }
 
 void searchProjects(){
@@ -77,11 +77,11 @@ void searchProjects(){
     if(isUVMEnvProject())
         printInfo("You are currently into a UVMEnv project");
     else
-        for (const auto& entry : filesystem::directory_iterator(getProjectDir())) {
+        for (const auto& entry : filesystem::directory_iterator(PROJECT_DIR)) {
             if (filesystem::is_directory(entry.status())) {
                 filesystem::current_path(entry.path());
                 if(isUVMEnvProject()) projects.push_back(entry.path().filename());
-                filesystem::current_path(getProjectDir());
+                filesystem::current_path(PROJECT_DIR);
             } 
         }
 

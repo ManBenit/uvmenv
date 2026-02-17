@@ -2,6 +2,7 @@
 #define CONSTANTS_H
 
 #include <string>
+#include <cstdlib>
 #include <filesystem>
 using namespace std;
 
@@ -18,82 +19,117 @@ using namespace std;
 
 #define TAB "    "  // 4 spaces to make a tab into Python generated files
 
-
-//************** USER **************//
-string getUser();
+//************** OPERATIVE SYSTEM **************//
+#if defined(_WIN32) || defined(_WIN64)
+    const string OS_NAME = "Windows";
+    const string USER_VAR = getenv("USERNAME");
+    const string PATH_SEP = "\\";
+    const string SCRIPTS_DIR = "\\scripts\\batch";
+    const string SCRIPTS_EXT = ".bat";
+#elif defined(__APPLE__) || defined(__MACH__)
+    const string OS_NAME = "MacOS";
+    const string USER_VAR = getenv("USER");
+    const string PATH_SEP = "/";
+    const string SCRIPTS_DIR = "/scripts/bash";
+    const string SCRIPTS_EXT = ".sh";
+#elif defined(__linux__)
+    const string OS_NAME = "Linux";
+    const string USER_VAR = getenv("USER");
+    const string PATH_SEP = "/";
+    const string SCRIPTS_DIR = "/scripts/bash";
+    const string SCRIPTS_EXT = ".sh";
+#elif defined(__unix__)
+    const string OS_NAME = "Unix";
+    const string USER_VAR = getenv("USER");
+    const string PATH_SEP = "/";
+    const string SCRIPTS_DIR = "/scripts/bash";
+    const string SCRIPTS_EXT = ".sh";
+#elif defined(__posix__)
+    const string OS_NAME = "Posix";
+    const string USER_VAR = getenv("USER");
+    const string PATH_SEP = "/";
+    const string SCRIPTS_DIR = "/scripts/bash";
+    const string SCRIPTS_EXT = ".sh";
+#else
+    const string OS_NAME = "Unknown";
+#endif
 
 //************** DIRECTORIES **************//
-// Main paths
-string getHomeDir();
-string getVenvDir();
-string getToolsDir();
-string getBasesDir();
-string getBasesRepresentDir();
-string getBasesComponentDir();
-string getBasesCommandDir();
-string getBasesConfigDir();
-string getProjectDir();
-string getScriptsPath();
-string getScriptsExtension();
+const string HOME_DIR = "/home/" + USER_VAR + PATH_SEP + "Github" + PATH_SEP + "uvmenv" + PATH_SEP + "src"; // Default: home user linux or C/users/name windows
+const string VENV_DIR = "/home/" + USER_VAR + "/.UVMEnv_virtualenv"; // Default: home user linux or C/users/name windows
 
-// UVMEnv directories
-string getDUTHdlDir();
-string getTbenchDir();
-string getOutsimDir();
-string getEnvironmentDir();
-string getBfmDir();
+// Repository
+const string TOOLS_DIR                 = HOME_DIR + PATH_SEP + "uvmenv_tools";
+const string BASES_DIR                 = HOME_DIR + PATH_SEP + "uvmenv_bases";
+const string BASES_REPRESENT_DIR       = BASES_DIR + PATH_SEP + "representative_files";
+const string BASES_COMPONENT_DIR       = BASES_DIR + PATH_SEP + "component_files";
+const string BASES_COMMAND_DIR         = BASES_DIR + PATH_SEP + "command_files";
+const string BASES_CONFIG_DIR          = BASES_DIR + PATH_SEP + "config_files";  
 
-// UVM subdirectories
-string getScoreboardDir();
-string getRefmodelDir();
-string getAgentsDir();
-string getMiscelanousDir();
-string getSequencesDir();
-string getSeqitemsDir();
-string getRefmodelImplDir();
-string getBfmImplDir();
+const string PROJECT_DIR               = filesystem::current_path().string();
 
-//************** FILES **************//
-string getConfigFile();
-string getUtilsFile();
-string getPathsFile();
-string getRunFile();
+
+// UVMEnv paths for writing base of representative files of UVM structure
+// (Used when full verification construction will be done and when build the project)
+const string DUT_HDL_DIR               = PROJECT_DIR + PATH_SEP + "HDLSrc";
+const string TBENCH_DIR                = PROJECT_DIR + PATH_SEP + "UVM_TB";
+const string OUTSIM_DIR                = PROJECT_DIR + PATH_SEP + "OSimon";
+const string ENVIRONMENT_DIR           = TBENCH_DIR + PATH_SEP + "Envmnt";
+const string BFM_DIR                   = PROJECT_DIR + PATH_SEP + "Itface";
+
+// UVM paths
+const string SCOREBOARD_DIR            = ENVIRONMENT_DIR + PATH_SEP + "Scorbd";
+const string REFMODEL_DIR              = ENVIRONMENT_DIR + PATH_SEP + "RefMdl";
+const string AGENTS_DIR                = ENVIRONMENT_DIR + PATH_SEP + "Agents";
+const string MISCELANEOUS_DIR          = TBENCH_DIR + PATH_SEP + "Misces";
+const string SEQUENCES_DIR             = TBENCH_DIR + PATH_SEP + "Seqnce";
+const string SEQITEMS_DIR              = TBENCH_DIR + PATH_SEP + "SeqItm";
+const string REFMODELIMPL_DIR          = REFMODEL_DIR + PATH_SEP + "_impl";
+const string BFMIMPL_DIR               = BFM_DIR + PATH_SEP + "_impl";
+
+
+//************** FILES ************** //
+const string CONFIG_FILE               = PROJECT_DIR + PATH_SEP + "config.json";
+const string UTILS_FILE                = PROJECT_DIR + PATH_SEP + "utils.py";
+const string PATHS_FILE                = PROJECT_DIR + PATH_SEP + "paths.py";
+const string RUN_FILE                  = TOOLS_DIR + PATH_SEP + "run.sh";
+
 
 // Representative files
-string getEnvironmentFile();
-string getTestFile();
-string getTopFilePrefix();
+const string ENVIRONMENT_FILE          = ENVIRONMENT_DIR + PATH_SEP + "Environment.py";
+const string TEST_FILE                 = TBENCH_DIR + PATH_SEP + "Test.py";
+const string TOP_FILE_PREFIX           = PROJECT_DIR + PATH_SEP + "Top_";
 
-//************** BASES **************//
+// *** BASES *** //
 // Command files
-string getPortGetterFilebase();
-string getSignalGetterFilebase();
-string getVcdWrhelperFilebase();
+const string PORT_GETTER_FILEBASE      = BASES_COMMAND_DIR + PATH_SEP + " getPortsBase.py";
+const string SIGNAL_GETTER_FILEBASE    = BASES_COMMAND_DIR + PATH_SEP + "getSignalsBase.py";
+const string VCD_WRHELPER_FILEBASE     = BASES_COMMAND_DIR + PATH_SEP + "writeVcdPart.py";
 
 // Component files
-string getAgentFilebase();
-string getAgentCovcolFilebase();
-string getAgentDriverFilebase();
-string getAgentMonitorFilebase();
-string getBfmFilebase();
-string getBfmImplFilebase();
-string getRefmodelFilebase();
-string getRefmodelImplFilebase();
-string getScoreboardFilebase();
-string getSeqitemFilebase();
-string getSeqitemRequestFilebase();
-string getSeqitemResponseFilebase();
-string getSequenceFilebase();
+const string AGENT_FILEBASE            = BASES_COMPONENT_DIR + PATH_SEP + "AgentBase.py";
+const string AGENT_COVCOL_FILEBASE     = BASES_COMPONENT_DIR + PATH_SEP + "AgentCoverageCollectorBase.py";
+const string AGENT_DRIVER_FILEBASE     = BASES_COMPONENT_DIR + PATH_SEP + "AgentDriverBase.py";
+const string AGENT_MONITOR_FILEBASE    = BASES_COMPONENT_DIR + PATH_SEP + "AgentMonitorBase.py";
+const string BFM_FILEBASE              = BASES_COMPONENT_DIR + PATH_SEP + "BFMBase.py";
+const string BFM_IMPL_FILEBASE         = BASES_COMPONENT_DIR + PATH_SEP + "BFMImplBase.py";
+const string REFMODEL_FILEBASE         = BASES_COMPONENT_DIR + PATH_SEP + "RefmodelBase.py";
+const string REFMODEL_IMPL_FILEBASE    = BASES_COMPONENT_DIR + PATH_SEP + "RefmodelImplBase.py";
+const string SCOREBOARD_FILEBASE       = BASES_COMPONENT_DIR + PATH_SEP + "ScoreboardBase.py";
+const string SEQITEM_FILEBASE          = BASES_COMPONENT_DIR + PATH_SEP + "SeqItemBase.py";
+const string SEQITEM_REQUEST_FILEBASE  = BASES_COMPONENT_DIR + PATH_SEP + "SeqItemRequestBase.py";
+const string SEQITEM_RESPONSE_FILEBASE = BASES_COMPONENT_DIR + PATH_SEP + "SeqItemResponseBase.py";
+const string SEQUENCE_FILEBASE         = BASES_COMPONENT_DIR + PATH_SEP + "SequenceBase.py";
 
 // Config files
-string getPathsFilebase();
-string getUtilsFilebase();
-string getReportFilebase();
+const string PATHS_FILEBASE            = BASES_CONFIG_DIR + PATH_SEP + "PathsFileBase.py";
+const string UTIL_FILEBASE             = BASES_CONFIG_DIR + PATH_SEP + "UtilsFileBase.py";
+const string REPORT_FILEBASE           = BASES_CONFIG_DIR + PATH_SEP + "UVMEnvReportBase.py";
 
 // Representative files
-string getEnvironmentFilebase();
-string getTestFilebase();
-string getTopFilebase();
+const string ENVIRONMENT_FILEBASE      = BASES_REPRESENT_DIR + PATH_SEP + "EnvironmentBase.py";
+const string TEST_FILEBASE             = BASES_REPRESENT_DIR + PATH_SEP + "TestBase.py";
+const string TOP_FILEBASE              = BASES_REPRESENT_DIR + PATH_SEP + "TopBase.py";
 
 #endif // CONSTANTS_H
 

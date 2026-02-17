@@ -29,7 +29,7 @@ string execCmdReturn(const string& cmd){
 }
 
 bool isUVMEnvProject(){
-    vector<string> pdirParts = splitString( getProjectDir(), '/' );
+    vector<string> pdirParts = splitString( PROJECT_DIR, '/' );
     string projectIdExpected = "uvm:" + pdirParts[pdirParts.size()-1] + ":env";
     string configFileName = "config.json";
 
@@ -46,7 +46,7 @@ bool isUVMEnvProject(){
 } 
 
 string getScript(const string& name){
-    return getScriptsPath() + "/" + name + getScriptsExtension() + " ";
+    return SCRIPTS_DIR + "/" + name + SCRIPTS_EXT + " ";
 }
 
 
@@ -58,7 +58,7 @@ string getPythonVersion(){
 void activatePythonVenv(){
     float version = stof(getPythonVersion());
     if(version >= 3.10){
-        string activate_cmd = "bash -c 'source " + getVenvDir() + "/bin/activate'";
+        string activate_cmd = "bash -c 'source " + VENV_DIR + "/bin/activate'";
         execCmdSimple(activate_cmd);
     }
 }

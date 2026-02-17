@@ -1,5 +1,4 @@
 #include "headers/functions/utils.h"
-#include "headers/functions/constants.h"
 #include "headers/uvmenv_handling/general_handling/pre_project.h"
 #include "headers/uvmenv_handling/general_handling/framework.h"
 #include "headers/uvm_components/Agent.h"
@@ -61,7 +60,7 @@ int main (int argc, char *argv[]) {
             execCmdSimple(getScript("sys_commands")+"viewTreeProject");
         }
         else if(argv[2] == "init"){
-            
+
         }
         else if(argv[2] == "report"){
             execCmdSimple(getScript("sys_commands")+"viewReport");
@@ -122,7 +121,7 @@ int main (int argc, char *argv[]) {
         // for(auto f : srcFiles)
         //     cout << f << endl;
 
-        cout << execCmdReturn(getScriptsPath() + "/python_control.sh getPythonVersion") << endl;
+        cout << SCRIPTS_DIR + "/python_control.sh getPythonVersion" << endl;
 
     }
 

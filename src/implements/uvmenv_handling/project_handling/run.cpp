@@ -7,11 +7,11 @@ void run(){
     writeMakefile();
 
     // Run make
-    string make_cmd = "make -C " + getOutsimDir();
+    string make_cmd = "make -C " + OUTSIM_DIR;
     execCmdSimple(make_cmd);
 
     // Execute simulation
-    string sim_cmd = getOutsimDir() + "/simv";
+    string sim_cmd = OUTSIM_DIR + "/simv";
     execCmdSimple(sim_cmd);
 
     printInfo("UVMEnv verification run completed.");
@@ -21,6 +21,6 @@ void writeMakefile(){
     string makefile_content =
         "TEST content\n";
 
-    writeFile(getProjectDir() + "/Makefile", makefile_content);
+    writeFile(PROJECT_DIR + "/Makefile", makefile_content);
 }
 

@@ -2,7 +2,7 @@
 
 // ****************** Verilator Handler ****************** //
 void VerilatorHandler::compileForAPI(vector<string> srcFiles, string topModule) {
-    string outDir = getOutsimDir() + "/verilator_build";
+    string outDir = OUTSIM_DIR + "/verilator_build";
     string cmd = "";
 
     cmd += "verilator --cc -Mdir "+outDir+" -Wno-WIDTHEXPAND -Wno-fatal";
@@ -14,7 +14,7 @@ void VerilatorHandler::compileForAPI(vector<string> srcFiles, string topModule) 
 }
 
 void VerilatorHandler::compileWithoutExe(vector<string> srcFiles, string topModule) {
-    string outDir = getOutsimDir() + "/verilator_build";
+    string outDir = OUTSIM_DIR + "/verilator_build";
     string cmd = "";
 
     cmd += "verilator --cc -Mdir "+outDir+" -Wno-WIDTHEXPAND -Wno-fatal";
