@@ -24,10 +24,8 @@ int main (int argc, char *argv[]) {
 
     string option = argv[1];
     
-    ///// Framework handling /////
+    ///// FRAMEWORK HANDLING /////
     if(option == "new") {
-        // argv[2]: Project name.
-        // argv[3]: Top module name.
 
         if(argv[2] == nullptr || argv[3] == nullptr){
             printError("Missing parameters");
@@ -35,6 +33,8 @@ int main (int argc, char *argv[]) {
             exit(0);
         }
 
+        // argv[2]: Project name.
+        // argv[3]: Top module name.
         createNewEnv(argv[2], argv[3]);
     } 
     else if(option == "search") {
@@ -44,18 +44,24 @@ int main (int argc, char *argv[]) {
         showHelp();
     }
 
-    ///// Project handling /////
+    ///// PROJECT HANDLING /////
     else if(option == "project"){
         if(!isUVMEnvProject()){
             printError("You need using a valid project to run this option.");
             return 1;
         }
+
+        if(argv[2] == nullptr){
+            printError("Missing project option");
+            return 4;
+        }
+
         
         if(argv[2] == "view"){
             execCmdSimple(getScript("sys_commands")+"viewTreeProject");
         }
         else if(argv[2] == "init"){
-
+            
         }
         else if(argv[2] == "report"){
             execCmdSimple(getScript("sys_commands")+"viewReport");
@@ -69,11 +75,16 @@ int main (int argc, char *argv[]) {
         }
     }
     
-    ///// Component handling /////
+    ///// COMPONENT HANDLING /////
     else if(option == "component"){
         if(!isUVMEnvProject()){
             printError("You need using a valid project to run this option.");
             return 1;
+        }
+
+        if(argv[2] == nullptr){
+            printError("Missing component option");
+            return 4;
         }
 
         if(argv[3] == nullptr){
