@@ -1,6 +1,7 @@
 #include "headers/functions/utils.h"
 #include "headers/functions/constants.h"
-#include "headers/functions/env_handling.h"
+#include "headers/uvmenv_handling/general_handling/pre_project.h"
+#include "headers/uvmenv_handling/general_handling/framework.h"
 #include "headers/uvm_components/Agent.h"
 #include "headers/VerilatorHandler.h"
 #include <iostream>
@@ -73,6 +74,11 @@ int main (int argc, char *argv[]) {
         if(!isUVMEnvProject()){
             printError("You need using a valid project to run this option.");
             return 1;
+        }
+
+        if(argv[3] == nullptr){
+            printError("Missing component reference");
+            return 4;
         }
         
         if(argv[2] == "create"){

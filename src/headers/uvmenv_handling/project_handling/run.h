@@ -1,8 +1,9 @@
 #ifndef RUN_H
 #define RUN_H
 
-#include "utils.h"
-#include "constants.h"
+#include "../../functions/constants.h"
+#include "../../functions/utils.h"
+#include "../general_handling/framework.h"
 #include <string>
 using namespace std;
 

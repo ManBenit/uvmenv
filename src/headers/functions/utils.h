@@ -24,20 +24,8 @@ void printWarning(string message);
 void printOption(string option, string message);
 int countCharOcurrences(char c, string str);
 vector<string> splitString(const string& input, char delimiter);
-void execCmdSimple(const string& cmd);
-string execCmdReturn(const string& cmd);
 
-// ****************** FRAMEWORK UTIL FUNCTIONS ****************** //
-bool isUVMEnvProject();
-string getScript(const string& name);
 
-// ********************* COMMANDS FUNCTIONS ********************* //
-void showHelp();
-
-// ****************** Python version ****************** //
-string getPythonVersion();
-void activatePythonVenv();
-vector<string> getFileNamesInDirectory(const string directoryPath);
 // ****************** Base 64 ****************** //
 string base64_encode(const string &in);
 string base64_decode(const string &in);
