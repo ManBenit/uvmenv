@@ -1,7 +1,7 @@
 #ifndef SEQUENCE_ITEM_H
 #define SEQUENCE_ITEM_H
 
-#include "Factory.h"
+#include "../Factory.h"
 using namespace std;
 
 class SequenceItem : public UVMObject {

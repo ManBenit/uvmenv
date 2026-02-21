@@ -1,3 +1,8 @@
+#pragma once
+
+#ifndef FACTORY_H
+#define FACTORY_H
+
 #include <string>
 #include <vector>
 #include <iostream>
@@ -24,5 +29,7 @@ public:
     virtual void printInfo() = 0;
 };
 
+
+#endif // FACTORY_H
 
 

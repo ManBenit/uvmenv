@@ -1,7 +1,7 @@
 #ifndef BFM_IMPL_H
 #define BFM_IMPL_H
 
-#include "Factory.h"
+#include "../Factory.h"
 using namespace std;
 
 
