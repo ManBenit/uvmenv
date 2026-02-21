@@ -1,7 +1,7 @@
 #ifndef SCOREBOARD_H
 #define SCOREBOARD_H
 
-#include "Factory.h"
+#include "../Factory.h"
 using namespace std;
 
 class Scoreboard : public UVMComponent {

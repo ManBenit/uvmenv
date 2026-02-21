@@ -1,8 +1,7 @@
 #include "headers/functions/utils.h"
 #include "headers/uvmenv_handling/general_handling/pre_project.h"
 #include "headers/uvmenv_handling/general_handling/framework.h"
-#include "headers/uvm_components/Agent.h"
-#include "headers/VerilatorHandler.h"
+#include "headers/uvmenv_preudo/components/Agent.h"
 #include <iostream>
 #include <cstdlib>
 #include <filesystem>

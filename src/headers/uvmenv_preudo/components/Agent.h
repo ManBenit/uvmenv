@@ -1,7 +1,7 @@
 #ifndef AGENT_H
 #define AGENT_H
 
-#include "Factory.h"
+#include "../Factory.h"
 #include "Driver.h"
 #include "Monitor.h"
 #include "Coverage.h"
