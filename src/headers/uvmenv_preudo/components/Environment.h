@@ -1,7 +1,6 @@
 #ifndef ENVIRONMENT_H
 #define ENVIRONMENT_H
 
-#include "../Factory.h"
 #include "Agent.h"
 #include "Scoreboard.h"
 using namespace std;

@@ -1,7 +1,6 @@
 #ifndef TEST_H
 #define TEST_H
 
-#include "../Factory.h"
 #include "Environment.h"
 using namespace std;
 
