@@ -144,135 +144,83 @@ int main (int argc, char *argv[]) {
 
 
 void uvm_test(){
-    //------------------------------------------------------
-    // TOP 1
-    //------------------------------------------------------
-
     UVMComponent* top = &Top::instance();
 
-    UVMComponent* test1 =
-        Factory::instance().createComponent("Test","Test_A",top);
+
+    //------------------------------------------------------
+    // TEST 1
+    //------------------------------------------------------
+    UVMComponent* test1 = Factory::instance().createComponent("Test","Test_A",top);
 
     // Environments
-    UVMComponent* env1 =
-        Factory::instance().createComponent("Environment","Env_A1",test1);
-
-    UVMComponent* env2 =
-        Factory::instance().createComponent("Environment","Env_A2",test1);
+    UVMComponent* env1 = Factory::instance().createComponent("Environment","Env_A1",test1);
+    UVMComponent* env2 = Factory::instance().createComponent("Environment","Env_A2",test1);
 
 
     // ---- ENV A1 ----
+    UVMComponent* agtA1 = Factory::instance().createComponent("Agent","Agent_A1",env1);
 
-    UVMComponent* agtA1 =
-        Factory::instance().createComponent("Agent","Agent_A1",env1);
+    UVMComponent* drvA1 = Factory::instance().createComponent("Driver","Driver_A1",agtA1);
+    UVMComponent* monA1 = Factory::instance().createComponent("Monitor","Monitor_A1",agtA1);
+    UVMComponent* covA1 = Factory::instance().createComponent("Coverage","Coverage_A1",agtA1);
 
-    UVMComponent* drvA1 =
-        Factory::instance().createComponent("Driver","Driver_A1",agtA1);
-
-    UVMComponent* monA1 =
-        Factory::instance().createComponent("Monitor","Monitor_A1",agtA1);
-
-    UVMComponent* covA1 =
-        Factory::instance().createComponent("Coverage","Coverage_A1",agtA1);
-
-    UVMComponent* scbA1 =
-        Factory::instance().createComponent("Scoreboard","Scoreboard_A1",env1);
+    UVMComponent* scbA1 = Factory::instance().createComponent("Scoreboard","Scoreboard_A1",env1);
 
 
     // ---- ENV A2 ----
+    UVMComponent* agtA2 = Factory::instance().createComponent("Agent","Agent_A2",env2);
 
-    UVMComponent* agtA2 =
-        Factory::instance().createComponent("Agent","Agent_A2",env2);
+    UVMComponent* drvA2 = Factory::instance().createComponent("Driver","Driver_A2",agtA2);
+    UVMComponent* monA2 = Factory::instance().createComponent("Monitor","Monitor_A2",agtA2);
+    UVMComponent* covA2 = Factory::instance().createComponent("Coverage","Coverage_A2",agtA2);
 
-    UVMComponent* drvA2 =
-        Factory::instance().createComponent("Driver","Driver_A2",agtA2);
-
-    UVMComponent* monA2 =
-        Factory::instance().createComponent("Monitor","Monitor_A2",agtA2);
-
-    UVMComponent* covA2 =
-        Factory::instance().createComponent("Coverage","Coverage_A2",agtA2);
-
-    UVMComponent* scbA2 =
-        Factory::instance().createComponent("Scoreboard","Scoreboard_A2",env2);
+    UVMComponent* scbA2 = Factory::instance().createComponent("Scoreboard","Scoreboard_A2",env2);
 
 
 
     //------------------------------------------------------
-    // TOP 2
+    // TEST 2
     //------------------------------------------------------
-
-    UVMComponent* test2 =
-        Factory::instance().createComponent("Test","Test_B",top);
-
+    UVMComponent* test2 = Factory::instance().createComponent("Test","Test_B",top);
 
     // Environments
-
-    UVMComponent* env3 =
-        Factory::instance().createComponent("Environment","Env_B1",test2);
-
-    UVMComponent* env4 =
-        Factory::instance().createComponent("Environment","Env_B2",test2);
-
+    UVMComponent* env3 = Factory::instance().createComponent("Environment","Env_B1",test2);
+    UVMComponent* env4 = Factory::instance().createComponent("Environment","Env_B2",test2);
 
     // ---- ENV B1 ----
+    UVMComponent* agtB1 = Factory::instance().createComponent("Agent","Agent_B1",env3);
 
-    UVMComponent* agtB1 =
-        Factory::instance().createComponent("Agent","Agent_B1",env3);
+    UVMComponent* drvB1 = Factory::instance().createComponent("Driver","Driver_B1",agtB1);
+    UVMComponent* monB1 = Factory::instance().createComponent("Monitor","Monitor_B1",agtB1);
+    UVMComponent* covB1 = Factory::instance().createComponent("Coverage","Coverage_B1",agtB1);
 
-    UVMComponent* drvB1 =
-        Factory::instance().createComponent("Driver","Driver_B1",agtB1);
-
-    UVMComponent* monB1 =
-        Factory::instance().createComponent("Monitor","Monitor_B1",agtB1);
-
-    UVMComponent* covB1 =
-        Factory::instance().createComponent("Coverage","Coverage_B1",agtB1);
-
-    UVMComponent* scbB1 =
-        Factory::instance().createComponent("Scoreboard","Scoreboard_B1",env3);
+    UVMComponent* scbB1 = Factory::instance().createComponent("Scoreboard","Scoreboard_B1",env3);
 
 
     // ---- ENV B2 ----
+    UVMComponent* agtB2 = Factory::instance().createComponent("Agent","Agent_B2",env4);
 
-    UVMComponent* agtB2 =
-        Factory::instance().createComponent("Agent","Agent_B2",env4);
+    UVMComponent* drvB2 = Factory::instance().createComponent("Driver","Driver_B2",agtB2);
+    UVMComponent* monB2 = Factory::instance().createComponent("Monitor","Monitor_B2",agtB2);
+    UVMComponent* covB2 = Factory::instance().createComponent("Coverage","Coverage_B2",agtB2);
 
-    UVMComponent* drvB2 =
-        Factory::instance().createComponent("Driver","Driver_B2",agtB2);
-
-    UVMComponent* monB2 =
-        Factory::instance().createComponent("Monitor","Monitor_B2",agtB2);
-
-    UVMComponent* covB2 =
-        Factory::instance().createComponent("Coverage","Coverage_B2",agtB2);
-
-    UVMComponent* scbB2 =
-        Factory::instance().createComponent("Scoreboard","Scoreboard_B2",env4);
+    UVMComponent* scbB2 = Factory::instance().createComponent("Scoreboard","Scoreboard_B2",env4);
 
 
 
     //------------------------------------------------------
-    // OBJECTS (NO jerarquía UVMComponent)
+    // OBJECTS
     //------------------------------------------------------
-
-    UVMObject* seqA =
-        Factory::instance().createObject("Sequence","Seq_A");
-
-    UVMObject* seqItemA =
-        Factory::instance().createObject("SequenceItem","SeqItem_A");
-
-    UVMObject* bfmA =
-        Factory::instance().createObject("BFMImpl","BFM_A");
-
-    UVMObject* refA =
-        Factory::instance().createObject("RefModelImpl","RefModel_A");
+    UVMObject* seqA = Factory::instance().createObject("Sequence","Seq_A");
+    UVMObject* seqItemA = Factory::instance().createObject("SequenceItem","SeqItem_A");
+    UVMObject* bfmA = Factory::instance().createObject("BFMImpl","BFM_A");
+    UVMObject* refA = Factory::instance().createObject("RefModelImpl","RefModel_A");
 
 
 
     /********************************************************
      *
-     * COPY BASEFILE (PRIMERO TODO)
+     * COPY BASEFILE
      *
      ********************************************************/
 
