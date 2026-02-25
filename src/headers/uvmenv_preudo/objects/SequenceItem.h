@@ -1,14 +1,19 @@
 #ifndef SEQUENCE_ITEM_H
 #define SEQUENCE_ITEM_H
 
-#include "../Factory.h"
+#include "../FactoryRegister.h"
+#include "../UVMObject.h"
 using namespace std;
 
 class SequenceItem : public UVMObject {
 public:
-    void printInfo() override {
-        cout << "[SequenceItem] " << name << endl;
-    }
+    virtual ~SequenceItem() = default;
+    void printInfo() override;
+    void copyBasefile() override;
+
+private:
+    // auto registration
+    static ObjectRegister<SequenceItem> reg;
 };
 
 #endif // SEQUENCE_ITEM_H

@@ -2,6 +2,8 @@
 #define TEST_H
 
 #include "Environment.h"
+#include "../FactoryRegister.h"
+#include "../UVMComponent.h"
 using namespace std;
 
 
@@ -10,12 +12,17 @@ private:
     vector<Environment*> environments;
 
 public:
-    void printInfo() override {
-        cout << "[Test] " << name << ", Parent: " << parent << endl;
-    }
+    virtual ~Test() = default;
+    void addEnvironment(Environment* e);
+    vector<Environment*> getEnvironments();
 
-    void addEnvironment(Environment* e) { environments.push_back(e); }
-    vector<Environment*> getEnvironments() { return environments; }
+
+    void printInfo() override;
+    void copyBasefile() override;
+
+private:
+    // auto registration
+    static ComponentRegister<Test> reg;
 };
 
 

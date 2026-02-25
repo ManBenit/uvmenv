@@ -3,6 +3,8 @@
 
 #include "Agent.h"
 #include "Scoreboard.h"
+#include "../FactoryRegister.h"
+#include "../UVMComponent.h"
 using namespace std;
 
 class Environment : public UVMComponent {
@@ -11,14 +13,19 @@ private:
     Scoreboard *scoreboard;
 
 public:
-    void printInfo() override {
-        cout << "[Environment] " << name << ", Parent: " << parent << endl;
-    }
+    virtual ~Environment() = default;
+    void addAgent(Agent* a);
+    void setScoreboard(Scoreboard* s);
+    vector<Agent*> getAgents();
+    Scoreboard* getScoreboard();
 
-    void addAgent(Agent* a) { agents.push_back(a); }
-    void setScoreboard(Scoreboard* s) { scoreboard = s; }
-    vector<Agent*> getAgents() { return agents; }
-    Scoreboard* getScoreboard() { return scoreboard; }
+
+    void printInfo() override;
+    void copyBasefile() override;
+
+private:
+    // auto registration
+    static ComponentRegister<Environment> reg;
 };
 
 

@@ -76,11 +76,19 @@ const string BASES_CONFIG_DIR          = BASES_DIR + PATH_SEP + "config_files";
 const string PROJECT_DIR               = filesystem::current_path().string();
 
 
+
+
+
+
+
+
+
 // UVMEnv paths for writing base of representative files of UVM structure
 // (Used when full verification construction will be done and when build the project)
 const string DUT_HDL_DIR               = PROJECT_DIR + PATH_SEP + "HDLSrc";
 const string TBENCH_DIR                = PROJECT_DIR + PATH_SEP + "UVM_TB";
 const string OUTSIM_DIR                = PROJECT_DIR + PATH_SEP + "OSimon";
+
 const string ENVIRONMENT_DIR           = TBENCH_DIR + PATH_SEP + "Envmnt";
 const string BFM_DIR                   = PROJECT_DIR + PATH_SEP + "Itface";
 

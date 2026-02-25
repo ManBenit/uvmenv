@@ -1,15 +1,20 @@
 #ifndef BFM_IMPL_H
 #define BFM_IMPL_H
 
-#include "../Factory.h"
+#include "../FactoryRegister.h"
+#include "../UVMObject.h"
 using namespace std;
 
 
 class BFMImpl : public UVMObject {
 public:
-    void printInfo() override {
-        cout << "[BFMImpl] " << name << endl;
-    }
+    virtual ~BFMImpl() = default;
+    void printInfo() override;
+    void copyBasefile() override;
+
+private:
+    // auto registration
+    static ObjectRegister<BFMImpl> reg;
 };
 
 

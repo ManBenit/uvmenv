@@ -1,15 +1,20 @@
 #ifndef MONITOR_H
 #define MONITOR_H
 
-#include "../Factory.h"
+#include "../FactoryRegister.h"
+#include "../UVMComponent.h"
 using namespace std;
 
 
 class Monitor : public UVMComponent {
 public:
-    void printInfo() override {
-        cout << "[Monitor] " << name << ", Parent: " << parent << endl;
-    }
+    virtual ~Monitor() = default;
+    void printInfo() override;
+    void copyBasefile() override;
+
+private:
+    // auto registration
+    static ComponentRegister<Monitor> reg;
 };
 
 #endif // MONITOR_H

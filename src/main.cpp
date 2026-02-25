@@ -1,7 +1,7 @@
 #include "headers/functions/utils.h"
 #include "headers/uvmenv_handling/general_handling/pre_project.h"
 #include "headers/uvmenv_handling/general_handling/framework.h"
-#include "headers/uvmenv_preudo/components/Agent.h"
+#include "headers/uvmenv_preudo/components/Scoreboard.h"
 #include <iostream>
 #include <cstdlib>
 #include <filesystem>
@@ -110,26 +110,10 @@ int main (int argc, char *argv[]) {
     }
 
     else if(option == "test") {
-        //cout << getBasesRepresentDir() << endl;
-        //cout << getPythonVersion() << endl;
-        // Agent agent;
-        // agent.display();
-        // cout << agent.to_string() << endl;
-
-        // vector<string> srcFiles = getFileNamesInDirectory("/home/manbenit/Github/cv");
-        // for(auto f : srcFiles)
-        //     cout << f << endl;
-
-        cout << TOOLS_DIR << endl;
-        cout << BASES_DIR << endl;
-        cout << BASES_REPRESENT_DIR << endl;
-        cout << BASES_COMPONENT_DIR << endl;
-        cout << BASES_COMMAND_DIR << endl;
-        cout << BASES_CONFIG_DIR << endl;
-        cout << HOME_DIR << endl;
-        cout << INSTALL_DIR << endl;
-        cout << VENV_DIR << endl;
-
+        Scoreboard scb;
+        scb.setName("def_scb");
+        scb.setParent("el_parent");
+        scb.printInfo();
     }
 
     else {

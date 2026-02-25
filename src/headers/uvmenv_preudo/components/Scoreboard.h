@@ -1,14 +1,21 @@
 #ifndef SCOREBOARD_H
 #define SCOREBOARD_H
 
-#include "../Factory.h"
+#include "../UVMComponent.h"
+#include "../FactoryRegister.h"
 using namespace std;
 
 class Scoreboard : public UVMComponent {
+
 public:
-    void printInfo() override {
-        cout << "[Scoreboard] " << name << ", Parent: " << parent << endl;
-    }
+    virtual ~Scoreboard() = default;
+    void printInfo() override;
+    void copyBasefile() override;
+
+private:
+    // auto registration
+    static ComponentRegister<Scoreboard> reg;
+
 };
 
 #endif // SCOREBOARD_H

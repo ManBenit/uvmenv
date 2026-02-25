@@ -4,6 +4,8 @@
 #include "Driver.h"
 #include "Monitor.h"
 #include "Coverage.h"
+#include "../UVMComponent.h"
+#include "../FactoryRegister.h"
 using namespace std;
 
 class Agent : public UVMComponent {
@@ -13,16 +15,22 @@ private:
     Coverage *coverage;
 
 public:
-    void printInfo() override {
-        cout << "[Agent] " << name << ", Parent: " << parent << endl;
-    }
+    virtual ~Agent() = default;
 
-    void setDriver(Driver* d) { driver = d; }
-    void setMonitor(Monitor* m) { monitor = m; }
-    void setCoverage(Coverage* c) { coverage = c; }
-    Driver* getDriver() { return driver; }
-    Monitor* getMonitor() { return monitor; }
-    Coverage* getCoverage() { return coverage; }
+    void setDriver(Driver* d);
+    void setMonitor(Monitor* m);
+    void setCoverage(Coverage* c);
+    Driver* getDriver();
+    Monitor* getMonitor();
+    Coverage* getCoverage();
+
+
+    void printInfo() override;
+    void copyBasefile() override;
+    
+private:
+    // auto registration
+    static ComponentRegister<Agent> reg;
 };
 
 
