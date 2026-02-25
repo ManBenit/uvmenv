@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <iomanip>
 
 class UVMObject {
 
@@ -20,7 +21,11 @@ public:
     virtual ~UVMObject() = default;
 
     void printInfo(){
-        std::cout << "[" << typeName << "] ->\t" << name << std::endl;
+        std::cout << std::left 
+            << "[" << std::setw(15) << typeName << "]"    // Column 1: Type
+            << " ===>  "                                  // Fixed separator
+            << std::setw(25) << name                      // Column 2: Name
+            << std::endl;
     }
     void copyBasefile(){
         std::cout << "Copiar archivo base de [object] " << basefilePath << " a " << uvmenvProjectDir << std::endl;

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <iomanip>
 
 class UVMComponent {
 
@@ -22,7 +23,12 @@ public:
     virtual ~UVMComponent() = default;
 
     void printInfo(){
-        std::cout << "[" << typeName << "] ->\t" << name << "; Parent: " << (parent != nullptr ? parent->name : "N/A") << std::endl;
+        std::cout << std::left 
+            << "[" << std::setw(15) << typeName << "]"    // Column 1: Type
+            << " ===>  "                                  // Fixed separator
+            << std::setw(25) << name                      // Column 2: Name
+            << (parent != nullptr ? parent->name : "N/A") // Column 3: Parent
+            << std::endl;
     }
     void copyBasefile(){
         std::cout << "Copiar archivo base de [component] " << basefilePath << " a " << uvmenvProjectDir << std::endl;
@@ -31,4 +37,6 @@ public:
 
 
 #endif // UVM_COMPONENT_H
+
+
 
