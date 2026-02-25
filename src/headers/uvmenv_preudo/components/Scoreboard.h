@@ -8,6 +8,7 @@ using namespace std;
 class Scoreboard : public UVMComponent {
 
 public:
+    Scoreboard(const string& name, const string& parent);
     virtual ~Scoreboard() = default;
     void printInfo() override;
     void copyBasefile() override;

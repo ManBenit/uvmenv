@@ -8,8 +8,8 @@ using namespace std;
 class UVMComponent {
 
 protected:
-    const string uvmenvProjectDir;
-    const string basefilePath;
+    string uvmenvProjectDir;
+    string basefilePath;
     string parent;
     string name;
 

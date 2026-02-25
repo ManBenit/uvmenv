@@ -110,10 +110,9 @@ int main (int argc, char *argv[]) {
     }
 
     else if(option == "test") {
-        Scoreboard scb;
-        scb.setName("def_scb");
-        scb.setParent("el_parent");
-        scb.printInfo();
+        UVMComponent* my_tst = Factory::instance().createComponent("Test", "sdfsdf", "Top");
+        UVMComponent* my_scb = Factory::instance().createComponent("Scoreboard", "nnnn", "sdfsdf");
+        my_scb->printInfo();
     }
 
     else {

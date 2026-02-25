@@ -13,8 +13,9 @@ using namespace std;
 class Factory {
 
 public:
-    using ComponentCreator = function<UVMComponent*()>;
-    using ObjectCreator = function<UVMObject*()>;
+    // Factory templates (creator types)
+    using ComponentCreator = function<UVMComponent*(const string&, const string&)>;
+    using ObjectCreator = function<UVMObject*(const string&)>;
 
     // Singleton
     static Factory& instance();
@@ -25,8 +26,8 @@ public:
     void registerObject(const string& name, ObjectCreator creator);
     
     // Creation
-    UVMComponent* createComponent(const string& name);
-    UVMObject* createObject(const string& name);
+    UVMComponent* createComponent(const string& typeName, const string& instanceName, const string& parent);
+    UVMObject* createObject(const string& typeName, const string& instanceName);
 
 private:
     unordered_map<string, ComponentCreator> components;

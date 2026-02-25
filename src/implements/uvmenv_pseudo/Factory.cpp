@@ -13,11 +13,25 @@ void Factory::registerObject(const string& name, ObjectCreator creator){
     objects[name] = creator;
 }
 
-UVMComponent* Factory::createComponent(const string& name){
-    return components.at(name)();
+UVMComponent* Factory::createComponent(const string& typeName, const string& instanceName, const string& parent){
+    auto it = components.find(typeName);
+
+    if(it == components.end()){
+        throw runtime_error("Factory ERROR: Component not registered -> " + typeName);
+    }
+
+    // "second" returns the value of pair (name, lambda)
+    return it->second(instanceName,parent);
 }
 
-UVMObject* Factory::createObject(const string& name){
-    return objects.at(name)();
+UVMObject* Factory::createObject(const string& typeName, const string& instanceName){
+    auto it = objects.find(typeName);
+
+    if(it == objects.end()){
+        throw runtime_error("Factory ERROR: Object not registered -> " + typeName);
+    }
+
+    // "second" returns the value of pair (name, lambda)
+    return it->second(instanceName);
 }
 

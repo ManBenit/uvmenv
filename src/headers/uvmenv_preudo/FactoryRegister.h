@@ -12,10 +12,11 @@ template<typename T>
 class ComponentRegister {
 
 public:
-    ComponentRegister(const string& name){
+    ComponentRegister(const string& typeName){
         Factory::instance().registerComponent(
-            name, [](){
-                return new T();
+            typeName, 
+            [](const string& name, string& parent){
+                return new T(name, parent);
             }
         );
     }
@@ -31,10 +32,11 @@ template<typename T>
 class ObjectRegister {
 
 public:
-    ObjectRegister(const string& name){
+    ObjectRegister(const string& typeName){
         Factory::instance().registerObject(
-            name, [](){
-                return new T();
+            typeName, 
+            [](const string& name){
+                return new T(name);
             }
         );
     }
