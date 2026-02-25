@@ -2,6 +2,7 @@
 #include "headers/uvmenv_handling/general_handling/pre_project.h"
 #include "headers/uvmenv_handling/general_handling/framework.h"
 #include "headers/uvmenv_preudo/components/Scoreboard.h"
+#include "headers/uvmenv_preudo/components/Top.h"
 #include <iostream>
 #include <cstdlib>
 #include <filesystem>
@@ -110,8 +111,14 @@ int main (int argc, char *argv[]) {
     }
 
     else if(option == "test") {
-        UVMComponent* my_tst = Factory::instance().createComponent("Test", "sdfsdf", "Top");
-        UVMComponent* my_scb = Factory::instance().createComponent("Scoreboard", "nnnn", "sdfsdf");
+        UVMComponent* top = &Top::instance();
+        UVMComponent* my_tst = Factory::instance().createComponent("Test", "sdfsdf", top);
+        UVMComponent* my_scb = Factory::instance().createComponent("Scoreboard", "nnnn", my_tst);
+        top->copyBasefile();
+        top->printInfo();
+        my_tst->copyBasefile();
+        my_tst->printInfo();
+        my_scb->copyBasefile();
         my_scb->printInfo();
     }
 

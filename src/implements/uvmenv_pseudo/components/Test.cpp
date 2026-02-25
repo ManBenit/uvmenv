@@ -1,4 +1,6 @@
+#include <iostream>
 #include "../../../headers/uvmenv_preudo/components/Test.h"
+using namespace std;
 
 
 void Test::addEnvironment(Environment* e) { 
@@ -13,9 +15,10 @@ vector<Environment*> Test::getEnvironments() {
 
 // @Override
 void Test::printInfo() {
-    cout << "[Test] " << name << ", Parent: " << parent << endl;
+    cout << "[Test] " << name << ", Parent: " << parent->getName() << endl;
 }
 
-void Test::copyBasefile() {
-    cout << "print base file of Test" << endl;
-}
+
+// private
+ComponentRegister<Test> Test::reg("Test");
+

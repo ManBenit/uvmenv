@@ -9,7 +9,6 @@ class RefModelImpl : public UVMObject {
 public:
     virtual ~RefModelImpl() = default;
     void printInfo() override;
-    void copyBasefile() override;
 
 private:
     // auto registration

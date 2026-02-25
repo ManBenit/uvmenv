@@ -1,4 +1,10 @@
+#include <unordered_map>
+#include <functional>
+#include <string>
+#include <stdexcept>
 #include "../../headers/uvmenv_preudo/Factory.h"
+#include "../../headers/uvmenv_preudo/components/Top.h"
+using namespace std;
 
 Factory& Factory::instance(){
     static Factory inst;
@@ -13,7 +19,11 @@ void Factory::registerObject(const string& name, ObjectCreator creator){
     objects[name] = creator;
 }
 
-UVMComponent* Factory::createComponent(const string& typeName, const string& instanceName, const string& parent){
+UVMComponent* Factory::createComponent(const string& typeName, const string& instanceName, UVMComponent* parent){
+    if(parent == nullptr){
+        parent = &Top::instance();
+    }
+    
     auto it = components.find(typeName);
 
     if(it == components.end()){

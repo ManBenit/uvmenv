@@ -3,25 +3,28 @@
 
 #include <string>
 #include <iostream>
-using namespace std;
 
 class UVMObject {
 
 protected:
-    string uvmenvProjectDir;
-    string basefilePath;
-    string name;
+    std::string uvmenvProjectDir;
+    std::string basefilePath;
+    std::string name;
 
 public:
-    virtual ~UVMObject() = default;
-
-    virtual void setName(const string& name){
+    UVMObject(const std::string& name, UVMComponent* parent){
         this->name = name;
     }
-
+    virtual ~UVMObject() = default;
     virtual void printInfo(){}
-    virtual void copyBasefile(){}
+    void copyBasefile(){
+        std::cout << "Copiar archivo base de [object] " << basefilePath << "a " << uvmenvProjectDir << std::endl;
+    }
 
+    // for printInfo
+    std::string getName(){
+        return this->name;
+    }
 };
 
 #endif // UVM_OBJECT_H

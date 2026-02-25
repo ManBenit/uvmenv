@@ -6,9 +6,5 @@ void RefModelImpl::printInfo() {
     cout << "[RefModelImpl] " << name << endl;
 }
 
-void RefModelImpl::copyBasefile() {
-    cout << "print base file of RefModelImpl" << endl;
-}
-
 
 

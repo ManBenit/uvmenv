@@ -10,7 +10,6 @@ class BFMImpl : public UVMObject {
 public:
     virtual ~BFMImpl() = default;
     void printInfo() override;
-    void copyBasefile() override;
 
 private:
     // auto registration

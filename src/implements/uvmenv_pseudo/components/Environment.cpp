@@ -23,8 +23,5 @@ Scoreboard* Environment::getScoreboard() {
 void Environment::printInfo() {
     cout << "[Environment] " << name << ", Parent: " << parent << endl;
 }
-void Environment::copyBasefile() {
-    cout << "print base file of Environment" << endl;
-}
 
 

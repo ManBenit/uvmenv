@@ -30,7 +30,3 @@ Coverage* Agent::getCoverage() {
 void Agent::printInfo() {
     cout << "[Agent] " << name << ", Parent: " << parent << endl;
 }
-
-void Agent::copyBasefile() {
-    cout << "print base file of Agent" << endl;
-}

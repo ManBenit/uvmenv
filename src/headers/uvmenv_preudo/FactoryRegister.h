@@ -3,6 +3,8 @@
 
 #include "Factory.h"
 
+class UVMComponent;
+
 // =======================
 // Component Register
 // =======================
@@ -12,10 +14,10 @@ template<typename T>
 class ComponentRegister {
 
 public:
-    ComponentRegister(const string& typeName){
+    ComponentRegister(const std::string& typeName){
         Factory::instance().registerComponent(
             typeName, 
-            [](const string& name, string& parent){
+            [](const std::string& name, UVMComponent* parent){
                 return new T(name, parent);
             }
         );
@@ -32,10 +34,10 @@ template<typename T>
 class ObjectRegister {
 
 public:
-    ObjectRegister(const string& typeName){
+    ObjectRegister(const std::string& typeName){
         Factory::instance().registerObject(
             typeName, 
-            [](const string& name){
+            [](const std::string& name){
                 return new T(name);
             }
         );

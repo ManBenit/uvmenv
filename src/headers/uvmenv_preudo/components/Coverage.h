@@ -9,7 +9,6 @@ class Coverage : public UVMComponent {
 public:
     virtual ~Coverage() = default;
     void printInfo() override;
-    void copyBasefile() override;
 
 private:
     // auto registration

@@ -9,7 +9,6 @@ class Sequence : public UVMObject {
 public:
     virtual ~Sequence() = default;
     void printInfo() override;
-    void copyBasefile() override;
 
 private:
     // auto registration

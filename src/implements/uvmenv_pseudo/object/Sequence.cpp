@@ -6,9 +6,4 @@ void Sequence::printInfo() {
     cout << "[Sequence] " << name << endl;
 }
 
-void Sequence::copyBasefile() {
-    cout << "print base file of Sequence" << endl;
-}
-
-
 

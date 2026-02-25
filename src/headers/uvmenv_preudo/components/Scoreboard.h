@@ -3,15 +3,17 @@
 
 #include "../UVMComponent.h"
 #include "../FactoryRegister.h"
-using namespace std;
 
 class Scoreboard : public UVMComponent {
 
 public:
-    Scoreboard(const string& name, const string& parent);
+    //Scoreboard(const std::string& name, UVMComponent* parent): UVMComponent(name, parent){}
+    Scoreboard(const std::string& name, UVMComponent* parent): UVMComponent(name, parent){
+        basefilePath = "sdfsdfdsf";
+        uvmenvProjectDir = "43tf34f34f";
+    }
     virtual ~Scoreboard() = default;
     void printInfo() override;
-    void copyBasefile() override;
 
 private:
     // auto registration

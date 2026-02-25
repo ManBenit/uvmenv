@@ -10,7 +10,6 @@ class Monitor : public UVMComponent {
 public:
     virtual ~Monitor() = default;
     void printInfo() override;
-    void copyBasefile() override;
 
 private:
     // auto registration

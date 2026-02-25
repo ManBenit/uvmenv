@@ -9,7 +9,6 @@ class Driver : public UVMComponent {
 public:
     virtual ~Driver() = default;
     void printInfo() override;
-    void copyBasefile() override;
 
 private:
     // auto registration

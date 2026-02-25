@@ -1,20 +1,11 @@
+#include <iostream>
 #include "../../../headers/uvmenv_preudo/components/Scoreboard.h"
-
-Scoreboard::Scoreboard(const string& name, const string& parent){
-    basefilePath = "sdfsdfdsf";
-    uvmenvProjectDir = "43tf34f34f";
-}
+using namespace std;
 
 
 // @Override
 void Scoreboard::printInfo() {
-    cout << "[Scoreboard] " << name << ", Parent: " << parent << endl;
-    cout << "basefile: " << basefilePath << endl;
-    cout << "dir: " << uvmenvProjectDir << endl;
-}
-
-void Scoreboard::copyBasefile() {
-    cout << "print base file of Scoreboard" << endl;
+    cout << "[Scoreboard] " << name << ", Parent: " << parent->getName() << endl;
 }
 
 

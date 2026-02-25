@@ -21,7 +21,6 @@ public:
 
 
     void printInfo() override;
-    void copyBasefile() override;
 
 private:
     // auto registration

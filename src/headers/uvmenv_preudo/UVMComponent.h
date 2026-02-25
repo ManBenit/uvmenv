@@ -3,29 +3,31 @@
 
 #include <string>
 #include <iostream>
-using namespace std;
 
 class UVMComponent {
 
 protected:
-    string uvmenvProjectDir;
-    string basefilePath;
-    string parent;
-    string name;
+    std::string uvmenvProjectDir;
+    std::string basefilePath;
+    UVMComponent* parent;
+    std::string name;
 
 public:
-    virtual ~UVMComponent() = default;
-
-    virtual void setParent(const string& parent){
+    UVMComponent(const std::string& name, UVMComponent* parent){
+        this->name = name;
         this->parent = parent;
     }
 
-    virtual void setName(const string& name){
-        this->name = name;
+    virtual ~UVMComponent() = default;
+    virtual void printInfo(){}
+    void copyBasefile(){
+        std::cout << "Copiar archivo base de [component] " << basefilePath << "a " << uvmenvProjectDir << std::endl;
     }
 
-    virtual void printInfo(){}
-    virtual void copyBasefile(){}
+    // for printInfo
+    std::string getName(){
+        return this->name;
+    }
 };
 
 

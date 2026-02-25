@@ -4,7 +4,6 @@
 #include "Environment.h"
 #include "../FactoryRegister.h"
 #include "../UVMComponent.h"
-using namespace std;
 
 
 class Test : public UVMComponent {
@@ -12,13 +11,16 @@ private:
     vector<Environment*> environments;
 
 public:
+    Test(const std::string& name, UVMComponent* parent): UVMComponent(name, parent){
+        basefilePath = "sdfsdfdsf";
+        uvmenvProjectDir = "43tf34f34f";
+    }
     virtual ~Test() = default;
     void addEnvironment(Environment* e);
     vector<Environment*> getEnvironments();
 
 
     void printInfo() override;
-    void copyBasefile() override;
 
 private:
     // auto registration
