@@ -1,4 +1,6 @@
+#include <iostream>
 #include "../../../headers/uvmenv_preudo/components/Agent.h"
+using namespace std;
 
 
 void Agent::setDriver(Driver* d) { 
@@ -25,8 +27,7 @@ Coverage* Agent::getCoverage() {
 }
 
 
+// private
+ComponentRegister<Agent> Agent::reg("Agent");
 
-// @Override
-void Agent::printInfo() {
-    cout << "[Agent] " << name << ", Parent: " << parent << endl;
-}
+

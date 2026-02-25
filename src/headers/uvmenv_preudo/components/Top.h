@@ -6,18 +6,16 @@
 class Top: public UVMComponent {
 
 public:
-
     static Top& instance();
 
     // Nobody must create other
     Top(const Top&) = delete;
     Top& operator=(const Top&) = delete;
 
-    void printInfo() override;
-
 private:
     Top();
     static Top* m_instance;
+
 };
 
 #endif // TOP_H

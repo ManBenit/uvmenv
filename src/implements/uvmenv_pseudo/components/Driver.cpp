@@ -1,8 +1,13 @@
+#include <iostream>
 #include "../../../headers/uvmenv_preudo/components/Driver.h"
+using namespace std;
 
 
-// @Override
-void Driver::printInfo() {
-    cout << "[Driver] " << name << ", Parent: " << parent << endl;
-}
+
+
+
+// private
+ComponentRegister<Driver> Driver::reg("Driver");
+
+
 

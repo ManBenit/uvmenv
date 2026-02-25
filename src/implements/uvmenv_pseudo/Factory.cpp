@@ -31,7 +31,7 @@ UVMComponent* Factory::createComponent(const string& typeName, const string& ins
     }
 
     // "second" returns the value of pair (name, lambda)
-    return it->second(instanceName,parent);
+    return it->second(typeName, instanceName, parent);
 }
 
 UVMObject* Factory::createObject(const string& typeName, const string& instanceName){
@@ -42,6 +42,6 @@ UVMObject* Factory::createObject(const string& typeName, const string& instanceN
     }
 
     // "second" returns the value of pair (name, lambda)
-    return it->second(instanceName);
+    return it->second(typeName, instanceName);
 }
 

@@ -11,22 +11,21 @@ protected:
     std::string basefilePath;
     UVMComponent* parent;
     std::string name;
+    std::string typeName;
 
 public:
-    UVMComponent(const std::string& name, UVMComponent* parent){
-        this->name = name;
-        this->parent = parent;
+    UVMComponent(const std::string& typeName, const std::string& name, UVMComponent* parent){
+        this -> typeName = typeName; 
+        this -> name = name;
+        this -> parent = parent;
     }
-
     virtual ~UVMComponent() = default;
-    virtual void printInfo(){}
-    void copyBasefile(){
-        std::cout << "Copiar archivo base de [component] " << basefilePath << "a " << uvmenvProjectDir << std::endl;
-    }
 
-    // for printInfo
-    std::string getName(){
-        return this->name;
+    void printInfo(){
+        std::cout << "[" << typeName << "] ->\t" << name << "; Parent: " << (parent != nullptr ? parent->name : "N/A") << std::endl;
+    }
+    void copyBasefile(){
+        std::cout << "Copiar archivo base de [component] " << basefilePath << " a " << uvmenvProjectDir << std::endl;
     }
 };
 

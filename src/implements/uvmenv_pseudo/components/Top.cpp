@@ -1,4 +1,5 @@
 #include "../../../headers/uvmenv_preudo/components/Top.h"
+#include "../../../headers/functions/constants.h"
 #include <iostream>
 using namespace std;
 
@@ -12,17 +13,11 @@ Top& Top::instance(){
     return *m_instance;
 }
 
-Top::Top(): UVMComponent("Top", nullptr){
-    this -> basefilePath = "base top";
-    this -> uvmenvProjectDir = "uvmenv dir";
+Top::Top(): UVMComponent("Top", "Top", nullptr){
+    this -> basefilePath = BASES_REPRESENT_DIR + PATH_SEP + "TopBase.py";
+    this -> uvmenvProjectDir = PROJECT_DIR; //AddAliasForNewProject
 }
 
-
-
-// @Override
-void Top::printInfo() {
-    cout << "UVMEnv project Top" << endl;
-}
 
 
 

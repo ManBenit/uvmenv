@@ -1,8 +1,12 @@
+#include <iostream>
 #include "../../../headers/uvmenv_preudo/objects/SequenceItem.h"
+using namespace std;
 
 
-// @Override
-void SequenceItem::printInfo() {
-    cout << "[SequenceItem] " << name << endl;
-}
+
+
+
+// private
+ObjectRegister<SequenceItem> SequenceItem::reg("SequenceItem");
+
 

@@ -1,9 +1,12 @@
+#include <iostream>
 #include "../../../headers/uvmenv_preudo/components/Monitor.h"
+using namespace std;
 
 
-// @Override
-void Monitor::printInfo() {
-    cout << "[Monitor] " << name << ", Parent: " << parent << endl;
-}
+
+
+
+// private
+ComponentRegister<Monitor> Monitor::reg("Monitor");
 
 

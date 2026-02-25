@@ -1,9 +1,12 @@
+#include <iostream>
 #include "../../../headers/uvmenv_preudo/objects/Sequence.h"
+using namespace std;
 
 
-// @Override
-void Sequence::printInfo() {
-    cout << "[Sequence] " << name << endl;
-}
+
+
+
+// private
+ObjectRegister<Sequence> Sequence::reg("Sequence");
 
 

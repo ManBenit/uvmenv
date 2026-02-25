@@ -1,10 +1,12 @@
+#include <iostream>
 #include "../../../headers/uvmenv_preudo/objects/RefModelImpl.h"
+using namespace std;
 
 
-// @Override
-void RefModelImpl::printInfo() {
-    cout << "[RefModelImpl] " << name << endl;
-}
 
+
+
+// private
+ObjectRegister<RefModelImpl> RefModelImpl::reg("RefModelImpl");
 
 

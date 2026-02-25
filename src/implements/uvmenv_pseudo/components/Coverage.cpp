@@ -1,8 +1,12 @@
+#include <iostream>
 #include "../../../headers/uvmenv_preudo/components/Coverage.h"
+using namespace std;
 
 
-// @Override
-void Coverage::printInfo() {
-        cout << "[Coverage] " << name << ", Parent: " << parent << endl;
-}
+
+
+
+// private
+ComponentRegister<Coverage> Coverage::reg("Coverage");
+
 

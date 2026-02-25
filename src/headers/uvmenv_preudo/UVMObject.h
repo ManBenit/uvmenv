@@ -10,15 +10,20 @@ protected:
     std::string uvmenvProjectDir;
     std::string basefilePath;
     std::string name;
+    std::string typeName;
 
 public:
-    UVMObject(const std::string& name, UVMComponent* parent){
-        this->name = name;
+    UVMObject(const std::string& typeName, const std::string& name){
+        this -> typeName = typeName;
+        this -> name = name;
     }
     virtual ~UVMObject() = default;
-    virtual void printInfo(){}
+
+    void printInfo(){
+        std::cout << "[" << typeName << "] ->\t" << name << std::endl;
+    }
     void copyBasefile(){
-        std::cout << "Copiar archivo base de [object] " << basefilePath << "a " << uvmenvProjectDir << std::endl;
+        std::cout << "Copiar archivo base de [object] " << basefilePath << " a " << uvmenvProjectDir << std::endl;
     }
 
     // for printInfo

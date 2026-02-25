@@ -92,15 +92,21 @@ const string OUTSIM_DIR                = PROJECT_DIR + PATH_SEP + "OSimon";
 const string ENVIRONMENT_DIR           = TBENCH_DIR + PATH_SEP + "Envmnt";
 const string BFM_DIR                   = PROJECT_DIR + PATH_SEP + "Itface";
 
+
+
+
 // UVM paths
-const string SCOREBOARD_DIR            = ENVIRONMENT_DIR + PATH_SEP + "Scorbd";
+//const string SCOREBOARD_DIR            = ENVIRONMENT_DIR + PATH_SEP + "Scorbd";
 const string REFMODEL_DIR              = ENVIRONMENT_DIR + PATH_SEP + "RefMdl";
-const string AGENTS_DIR                = ENVIRONMENT_DIR + PATH_SEP + "Agents";
+
+
+
+//const string AGENTS_DIR                = ENVIRONMENT_DIR + PATH_SEP + "Agents";
 const string MISCELANEOUS_DIR          = TBENCH_DIR + PATH_SEP + "Misces";
-const string SEQUENCES_DIR             = TBENCH_DIR + PATH_SEP + "Seqnce";
-const string SEQITEMS_DIR              = TBENCH_DIR + PATH_SEP + "SeqItm";
-const string REFMODELIMPL_DIR          = REFMODEL_DIR + PATH_SEP + "_impl";
-const string BFMIMPL_DIR               = BFM_DIR + PATH_SEP + "_impl";
+//const string SEQUENCES_DIR             = TBENCH_DIR + PATH_SEP + "Seqnce";
+//const string SEQITEMS_DIR              = TBENCH_DIR + PATH_SEP + "SeqItm";
+//const string REFMODELIMPL_DIR          = REFMODEL_DIR + PATH_SEP + "_impl";
+//const string BFMIMPL_DIR               = BFM_DIR + PATH_SEP + "_impl";
 
 
 //************** FILES ************** //
@@ -122,19 +128,19 @@ const string SIGNAL_GETTER_FILEBASE    = BASES_COMMAND_DIR + PATH_SEP + "getSign
 const string VCD_WRHELPER_FILEBASE     = BASES_COMMAND_DIR + PATH_SEP + "writeVcdPart.py";
 
 // Component files
-const string AGENT_FILEBASE            = BASES_COMPONENT_DIR + PATH_SEP + "AgentBase.py";
-const string AGENT_COVCOL_FILEBASE     = BASES_COMPONENT_DIR + PATH_SEP + "AgentCoverageCollectorBase.py";
-const string AGENT_DRIVER_FILEBASE     = BASES_COMPONENT_DIR + PATH_SEP + "AgentDriverBase.py";
-const string AGENT_MONITOR_FILEBASE    = BASES_COMPONENT_DIR + PATH_SEP + "AgentMonitorBase.py";
+//const string AGENT_FILEBASE            = BASES_COMPONENT_DIR + PATH_SEP + "AgentBase.py";
+//const string AGENT_COVCOL_FILEBASE     = BASES_COMPONENT_DIR + PATH_SEP + "AgentCoverageCollectorBase.py";
+//const string AGENT_DRIVER_FILEBASE     = BASES_COMPONENT_DIR + PATH_SEP + "AgentDriverBase.py";
+//const string AGENT_MONITOR_FILEBASE    = BASES_COMPONENT_DIR + PATH_SEP + "AgentMonitorBase.py";
 const string BFM_FILEBASE              = BASES_COMPONENT_DIR + PATH_SEP + "BFMBase.py";
-const string BFM_IMPL_FILEBASE         = BASES_COMPONENT_DIR + PATH_SEP + "BFMImplBase.py";
+//const string BFM_IMPL_FILEBASE         = BASES_COMPONENT_DIR + PATH_SEP + "BFMImplBase.py";
 const string REFMODEL_FILEBASE         = BASES_COMPONENT_DIR + PATH_SEP + "RefmodelBase.py";
-const string REFMODEL_IMPL_FILEBASE    = BASES_COMPONENT_DIR + PATH_SEP + "RefmodelImplBase.py";
-const string SCOREBOARD_FILEBASE       = BASES_COMPONENT_DIR + PATH_SEP + "ScoreboardBase.py";
-const string SEQITEM_FILEBASE          = BASES_COMPONENT_DIR + PATH_SEP + "SeqItemBase.py";
+//const string REFMODEL_IMPL_FILEBASE    = BASES_COMPONENT_DIR + PATH_SEP + "RefmodelImplBase.py";
+//const string SCOREBOARD_FILEBASE       = BASES_COMPONENT_DIR + PATH_SEP + "ScoreboardBase.py";
+//const string SEQITEM_FILEBASE          = BASES_COMPONENT_DIR + PATH_SEP + "SeqItemBase.py";
 const string SEQITEM_REQUEST_FILEBASE  = BASES_COMPONENT_DIR + PATH_SEP + "SeqItemRequestBase.py";
 const string SEQITEM_RESPONSE_FILEBASE = BASES_COMPONENT_DIR + PATH_SEP + "SeqItemResponseBase.py";
-const string SEQUENCE_FILEBASE         = BASES_COMPONENT_DIR + PATH_SEP + "SequenceBase.py";
+//const string SEQUENCE_FILEBASE         = BASES_COMPONENT_DIR + PATH_SEP + "SequenceBase.py";
 
 // Config files
 const string PATHS_FILEBASE            = BASES_CONFIG_DIR + PATH_SEP + "PathsFileBase.py";
@@ -142,9 +148,9 @@ const string UTIL_FILEBASE             = BASES_CONFIG_DIR + PATH_SEP + "UtilsFil
 const string REPORT_FILEBASE           = BASES_CONFIG_DIR + PATH_SEP + "UVMEnvReportBase.py";
 
 // Representative files
-const string ENVIRONMENT_FILEBASE      = BASES_REPRESENT_DIR + PATH_SEP + "EnvironmentBase.py";
-const string TEST_FILEBASE             = BASES_REPRESENT_DIR + PATH_SEP + "TestBase.py";
-const string TOP_FILEBASE              = BASES_REPRESENT_DIR + PATH_SEP + "TopBase.py";
+//const string ENVIRONMENT_FILEBASE      = BASES_REPRESENT_DIR + PATH_SEP + "EnvironmentBase.py";
+//const string TEST_FILEBASE             = BASES_REPRESENT_DIR + PATH_SEP + "TestBase.py";
+//const string TOP_FILEBASE              = BASES_REPRESENT_DIR + PATH_SEP + "TopBase.py";
 
 #endif // CONSTANTS_H
 

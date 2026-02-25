@@ -52,13 +52,13 @@ void createNewEnv(string projectName, string topModule){
     filesystem::copy(PATHS_FILEBASE, "paths.py");
 
     ////// Write Top
-    filesystem::copy(TOP_FILEBASE, "Top_"+topModule+".py");
+    //filesystem::copy(TOP_FILEBASE, "Top_"+topModule+".py");
 
     ////// Write Test
-    filesystem::copy(TEST_FILEBASE, "UVM_TB/Test.py");
+    //filesystem::copy(TEST_FILEBASE, "UVM_TB/Test.py");
 
     ////// Write Environment
-    filesystem::copy(ENVIRONMENT_FILEBASE, "UVM_TB/Envmnt/Environment.py");
+    //filesystem::copy(ENVIRONMENT_FILEBASE, "UVM_TB/Envmnt/Environment.py");
 
     ////// Write interface for BFM
     filesystem::copy(BFM_FILEBASE, "Itface/BFM.py");

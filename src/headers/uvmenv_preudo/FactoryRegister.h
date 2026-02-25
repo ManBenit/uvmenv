@@ -17,8 +17,8 @@ public:
     ComponentRegister(const std::string& typeName){
         Factory::instance().registerComponent(
             typeName, 
-            [](const std::string& name, UVMComponent* parent){
-                return new T(name, parent);
+            [](const std::string& typeName, const std::string& name, UVMComponent* parent){
+                return new T(typeName, name, parent);
             }
         );
     }
@@ -37,8 +37,8 @@ public:
     ObjectRegister(const std::string& typeName){
         Factory::instance().registerObject(
             typeName, 
-            [](const std::string& name){
-                return new T(name);
+            [](const std::string& typeName, const std::string& name){
+                return new T(typeName, name);
             }
         );
     }

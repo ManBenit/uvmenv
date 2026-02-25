@@ -6,15 +6,20 @@
 #include "Coverage.h"
 #include "../UVMComponent.h"
 #include "../FactoryRegister.h"
-using namespace std;
+#include "../../functions/constants.h"
 
 class Agent : public UVMComponent {
+
 private:
     Driver *driver;
     Monitor *monitor;
     Coverage *coverage;
 
 public:
+    Agent(const std::string& typeName, const std::string& name, UVMComponent* parent): UVMComponent(typeName, name, parent){
+        basefilePath = BASES_COMPONENT_DIR + PATH_SEP + "AgentBase.py";
+        uvmenvProjectDir = ENVIRONMENT_DIR + PATH_SEP + "Agents";
+    }
     virtual ~Agent() = default;
 
     void setDriver(Driver* d);
@@ -24,12 +29,10 @@ public:
     Monitor* getMonitor();
     Coverage* getCoverage();
 
-
-    void printInfo() override;
-    
 private:
     // auto registration
     static ComponentRegister<Agent> reg;
+    
 };
 
 

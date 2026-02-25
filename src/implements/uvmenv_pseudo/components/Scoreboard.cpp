@@ -3,10 +3,7 @@
 using namespace std;
 
 
-// @Override
-void Scoreboard::printInfo() {
-    cout << "[Scoreboard] " << name << ", Parent: " << parent->getName() << endl;
-}
+
 
 
 // private

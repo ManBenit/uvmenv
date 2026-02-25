@@ -12,13 +12,7 @@ vector<Environment*> Test::getEnvironments() {
 }
 
 
-
-// @Override
-void Test::printInfo() {
-    cout << "[Test] " << name << ", Parent: " << parent->getName() << endl;
-}
-
-
 // private
 ComponentRegister<Test> Test::reg("Test");
+
 

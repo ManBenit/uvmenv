@@ -4,9 +4,6 @@
 #include <unordered_map>
 #include <functional>
 #include <string>
-//#include "UVMComponent.h"
-//#include "UVMObject.h"
-//using namespace std;
 
 class UVMComponent;
 class UVMObject;
@@ -15,8 +12,8 @@ class Factory {
 
 public:
     // Factory templates (creator types)
-    using ComponentCreator = std::function<UVMComponent*(const std::string&, UVMComponent*)>;
-    using ObjectCreator = std::function<UVMObject*(const std::string&)>;
+    using ComponentCreator = std::function<UVMComponent*(const std::string&,const std::string&, UVMComponent*)>;
+    using ObjectCreator = std::function<UVMObject*(const std::string&, const std::string&)>;
 
     // Singleton
     static Factory& instance();

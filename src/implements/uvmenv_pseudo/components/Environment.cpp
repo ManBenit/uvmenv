@@ -1,4 +1,6 @@
+#include <iostream>
 #include "../../../headers/uvmenv_preudo/components/Environment.h"
+using namespace std;
 
 
 void Environment::addAgent(Agent* a) {
@@ -18,10 +20,8 @@ Scoreboard* Environment::getScoreboard() {
 }
 
 
+// private
+ComponentRegister<Environment> Environment::reg("Environment");
 
-// @Override
-void Environment::printInfo() {
-    cout << "[Environment] " << name << ", Parent: " << parent << endl;
-}
 
 
