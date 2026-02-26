@@ -14,6 +14,8 @@ public:
     }
     virtual ~SequenceItem() = default;
 
+    void copyBaseFile() override;
+
 private:
     // auto registration
     static ObjectRegister<SequenceItem> reg;

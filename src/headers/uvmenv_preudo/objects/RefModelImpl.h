@@ -14,6 +14,8 @@ public:
     }
     virtual ~RefModelImpl() = default;
 
+    void copyBaseFile() override;
+
 private:
     // auto registration
     static ObjectRegister<RefModelImpl> reg;

@@ -19,6 +19,8 @@ public:
     void addEnvironment(Environment* e);
     vector<Environment*> getEnvironments();
 
+    void copyBaseFile() override;
+
 private:
     // auto registration
     static ComponentRegister<Test> reg;

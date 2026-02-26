@@ -27,6 +27,13 @@ Coverage* Agent::getCoverage() {
 }
 
 
+// @Override
+void Agent::copyBaseFile(){
+    cout << "Copiar bases a la carpeta_alias" << endl;
+    cout << "Copiar archivo base de [component] " << basefilePath << " a " << uvmenvProjectDir << endl;
+}
+
+
 // private
 ComponentRegister<Agent> Agent::reg("Agent");
 

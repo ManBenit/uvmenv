@@ -19,5 +19,9 @@ Top::Top(): UVMComponent("Top", "Top", nullptr){
 }
 
 
+// @Override
+void Top::copyBaseFile(){
+    cout << "Copiar base del Top" << endl;
+}
 
 

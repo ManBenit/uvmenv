@@ -24,6 +24,8 @@ public:
     vector<Agent*> getAgents();
     Scoreboard* getScoreboard();
 
+    void copyBaseFile() override;
+
 private:
     // auto registration
     static ComponentRegister<Environment> reg;

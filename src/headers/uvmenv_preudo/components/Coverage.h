@@ -14,6 +14,8 @@ public:
     }
     virtual ~Coverage() = default;
 
+    void copyBaseFile() override;
+
 private:
     // auto registration
     static ComponentRegister<Coverage> reg;

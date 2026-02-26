@@ -14,6 +14,8 @@ public:
     }
     virtual ~BFMImpl() = default;
 
+    void copyBaseFile() override;
+
 private:
     // auto registration
     static ObjectRegister<BFMImpl> reg;

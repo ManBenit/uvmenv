@@ -3,7 +3,13 @@
 using namespace std;
 
 
+//
 
+
+// @Override
+void Scoreboard::copyBaseFile(){
+    cout << "Copiar archivo base de [component] " << basefilePath << " a " << uvmenvProjectDir << endl;
+}
 
 
 // private

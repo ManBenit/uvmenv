@@ -20,6 +20,12 @@ Scoreboard* Environment::getScoreboard() {
 }
 
 
+// @Override
+void Environment::copyBaseFile(){
+    cout << "Copiar archivo base de [component] " << basefilePath << " a " << uvmenvProjectDir << endl;
+}
+
+
 // private
 ComponentRegister<Environment> Environment::reg("Environment");
 

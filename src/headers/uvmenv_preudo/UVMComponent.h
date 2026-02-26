@@ -22,16 +22,19 @@ public:
     }
     virtual ~UVMComponent() = default;
 
-    void printInfo(){
-        std::cout << std::left 
-            << "[" << std::setw(15) << typeName << "]"    // Column 1: Type
-            << " ===>  "                                  // Fixed separator
-            << std::setw(25) << name                      // Column 2: Name
-            << (parent != nullptr ? parent->name : "N/A") // Column 3: Parent
-            << std::endl;
+    virtual void copyBaseFile(){}
+
+    friend std::ostream& operator<<(std::ostream& os, const UVMComponent& obj) {
+        os << std::left 
+            << "[" << std::setw(15) << obj.typeName << "]"
+            << " ===>  " 
+            << std::setw(25) << obj.name
+            << (obj.parent != nullptr ? obj.parent->name : "N/A");
+        return os;
     }
-    void copyBasefile(){
-        std::cout << "Copiar archivo base de [component] " << basefilePath << " a " << uvmenvProjectDir << std::endl;
+    friend std::ostream& operator<<(std::ostream& os, const UVMComponent* obj) {
+        if (obj == nullptr) return os << "NULL";
+        return os << *obj; // Llama a la sobrecarga de arriba
     }
 };
 

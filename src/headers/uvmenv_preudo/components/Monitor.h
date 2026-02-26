@@ -14,6 +14,8 @@ public:
     }
     virtual ~Monitor() = default;
 
+    void copyBaseFile() override;
+
 private:
     // auto registration
     static ComponentRegister<Monitor> reg;

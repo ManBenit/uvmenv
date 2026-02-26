@@ -12,6 +12,12 @@ vector<Environment*> Test::getEnvironments() {
 }
 
 
+// @Override
+void Test::copyBaseFile(){
+    cout << "Copiar archivo base de [component] " << basefilePath << " a " << uvmenvProjectDir << endl;
+}
+
+
 // private
 ComponentRegister<Test> Test::reg("Test");
 

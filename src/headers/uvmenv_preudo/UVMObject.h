@@ -20,20 +20,19 @@ public:
     }
     virtual ~UVMObject() = default;
 
-    void printInfo(){
-        std::cout << std::left 
-            << "[" << std::setw(15) << typeName << "]"    // Column 1: Type
-            << " ===>  "                                  // Fixed separator
-            << std::setw(25) << name                      // Column 2: Name
-            << std::endl;
-    }
-    void copyBasefile(){
-        std::cout << "Copiar archivo base de [object] " << basefilePath << " a " << uvmenvProjectDir << std::endl;
-    }
+    virtual void copyBaseFile(){}
 
-    // for printInfo
-    std::string getName(){
-        return this->name;
+    friend std::ostream& operator<<(std::ostream& os, const UVMObject& obj) {
+        os << std::left 
+            << "[" << std::setw(15) << obj.typeName << "]"
+            << " ===>  " 
+            << std::setw(25) << obj.name;
+            //<< (obj.parent != nullptr ? obj.parent->name : "N/A");
+        return os;
+    }
+    friend std::ostream& operator<<(std::ostream& os, const UVMObject* obj) {
+        if (obj == nullptr) return os << "NULL";
+        return os << *obj; // Llama a la sobrecarga de arriba
     }
 };
 

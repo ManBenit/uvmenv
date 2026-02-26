@@ -14,6 +14,8 @@ public:
     }
     virtual ~Driver() = default;
 
+    void copyBaseFile() override;
+
 private:
     // auto registration
     static ComponentRegister<Driver> reg;

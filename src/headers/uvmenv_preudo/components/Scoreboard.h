@@ -14,6 +14,8 @@ public:
     }
     virtual ~Scoreboard() = default;
 
+    void copyBaseFile() override;
+
 private:
     // auto registration
     static ComponentRegister<Scoreboard> reg;

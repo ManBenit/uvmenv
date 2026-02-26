@@ -12,6 +12,8 @@ public:
     Top(const Top&) = delete;
     Top& operator=(const Top&) = delete;
 
+    void copyBaseFile() override;
+
 private:
     Top();
     static Top* m_instance;

@@ -29,6 +29,8 @@ public:
     Monitor* getMonitor();
     Coverage* getCoverage();
 
+    void copyBaseFile() override;
+
 private:
     // auto registration
     static ComponentRegister<Agent> reg;

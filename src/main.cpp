@@ -117,16 +117,16 @@ int main (int argc, char *argv[]) {
         UVMComponent* top = &Top::instance();
         UVMComponent* my_tst = Factory::instance().createComponent("Test", "Test_1", top);
         UVMComponent* my_scb = Factory::instance().createComponent("Scoreboard", "ScbdDefault_1", my_tst);
-        top->copyBasefile();
-        top->printInfo();
-        my_tst->copyBasefile();
-        my_tst->printInfo();
-        my_scb->copyBasefile();
-        my_scb->printInfo();
+        top->copyBaseFile();
+        cout << top << endl;
+        my_tst->copyBaseFile();
+        cout << my_tst << endl;
+        my_scb->copyBaseFile();
+        cout << my_scb << endl;
 
         UVMObject* seq1 = Factory::instance().createObject("Sequence", "MySeq1");
-        seq1->copyBasefile();
-        seq1->printInfo();
+        seq1->copyBaseFile();
+        cout << seq1 << endl;
     }
 
     else if(option == "uvm_test"){
@@ -224,48 +224,48 @@ void uvm_test(){
      *
      ********************************************************/
 
-    top->copyBasefile();
-    test1->copyBasefile();
-    env1->copyBasefile();
-    env2->copyBasefile();
+    top->copyBaseFile();
+    test1->copyBaseFile();
+    env1->copyBaseFile();
+    env2->copyBaseFile();
 
-    agtA1->copyBasefile();
-    drvA1->copyBasefile();
-    monA1->copyBasefile();
-    covA1->copyBasefile();
-    scbA1->copyBasefile();
+    agtA1->copyBaseFile();
+    drvA1->copyBaseFile();
+    monA1->copyBaseFile();
+    covA1->copyBaseFile();
+    scbA1->copyBaseFile();
 
-    agtA2->copyBasefile();
-    drvA2->copyBasefile();
-    monA2->copyBasefile();
-    covA2->copyBasefile();
-    scbA2->copyBasefile();
+    agtA2->copyBaseFile();
+    drvA2->copyBaseFile();
+    monA2->copyBaseFile();
+    covA2->copyBaseFile();
+    scbA2->copyBaseFile();
 
 
 
-    test2->copyBasefile();
-    env3->copyBasefile();
-    env4->copyBasefile();
+    test2->copyBaseFile();
+    env3->copyBaseFile();
+    env4->copyBaseFile();
 
-    agtB1->copyBasefile();
-    drvB1->copyBasefile();
-    monB1->copyBasefile();
-    covB1->copyBasefile();
-    scbB1->copyBasefile();
+    agtB1->copyBaseFile();
+    drvB1->copyBaseFile();
+    monB1->copyBaseFile();
+    covB1->copyBaseFile();
+    scbB1->copyBaseFile();
 
-    agtB2->copyBasefile();
-    drvB2->copyBasefile();
-    monB2->copyBasefile();
-    covB2->copyBasefile();
-    scbB2->copyBasefile();
+    agtB2->copyBaseFile();
+    drvB2->copyBaseFile();
+    monB2->copyBaseFile();
+    covB2->copyBaseFile();
+    scbB2->copyBaseFile();
 
 
     // Objects
 
-    seqA->copyBasefile();
-    seqItemA->copyBasefile();
-    bfmA->copyBasefile();
-    refA->copyBasefile();
+    seqA->copyBaseFile();
+    seqItemA->copyBaseFile();
+    bfmA->copyBaseFile();
+    refA->copyBaseFile();
 
 
 
@@ -275,46 +275,46 @@ void uvm_test(){
      *
      ********************************************************/
 
-    top->printInfo();
-    test1->printInfo();
+    cout << top << endl;
+    cout << test1 << endl;
+    
+    cout << env1 << endl;
+    cout << agtA1 << endl;
+    cout << drvA1 << endl;
+    cout << monA1 << endl;
+    cout << covA1 << endl;
+    cout << scbA1 << endl;
+    
+    cout << env2 << endl;
+    cout << agtA2 << endl;
+    cout << drvA2 << endl;
+    cout << monA2 << endl;
+    cout << covA2 << endl;
+    cout << scbA2 << endl;
+    
 
-    env1->printInfo();
-    agtA1->printInfo();
-    drvA1->printInfo();
-    monA1->printInfo();
-    covA1->printInfo();
-    scbA1->printInfo();
-
-    env2->printInfo();
-    agtA2->printInfo();
-    drvA2->printInfo();
-    monA2->printInfo();
-    covA2->printInfo();
-    scbA2->printInfo();
-
-
-    test2->printInfo();
-
-    env3->printInfo();
-    agtB1->printInfo();
-    drvB1->printInfo();
-    monB1->printInfo();
-    covB1->printInfo();
-    scbB1->printInfo();
-
-    env4->printInfo();
-    agtB2->printInfo();
-    drvB2->printInfo();
-    monB2->printInfo();
-    covB2->printInfo();
-    scbB2->printInfo();
+    cout << test2 << endl;
+    
+    cout << env3 << endl;
+    cout << agtB1 << endl;
+    cout << drvB1 << endl;
+    cout << monB1 << endl;
+    cout << covB1 << endl;
+    cout << scbB1 << endl;
+    
+    cout << env4 << endl;
+    cout << agtB2 << endl;
+    cout << drvB2 << endl;
+    cout << monB2 << endl;
+    cout << covB2 << endl;
+    cout << scbB2 << endl;
 
 
     // Objects
 
-    seqA->printInfo();
-    seqItemA->printInfo();
-    bfmA->printInfo();
-    refA->printInfo();
+    cout << seqA << endl;
+    cout << seqItemA << endl;
+    cout << bfmA << endl;
+    cout << refA << endl;
 }
 
