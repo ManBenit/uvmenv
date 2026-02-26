@@ -1,6 +1,7 @@
 #ifndef TOP_H
 #define TOP_H
 
+#include <string>
 #include "../UVMComponent.h"
 
 class Top: public UVMComponent {
@@ -14,9 +15,14 @@ public:
 
     void copyBaseFile() override;
 
+    void setTopModuleName(const std::string& topModuleName);
+    void setProjectName(const std::string& projectName);
+
 private:
     Top();
     static Top* m_instance;
+    std::string topModuleName;
+    std::string projectName;
 
 };
 

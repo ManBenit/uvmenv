@@ -5,7 +5,7 @@
 
 bool isUVMEnvProject(const std::string& path);
 void showHelp();
-void createNewEnv(std::string projectName, std::string topModule);
+void createNewEnv(const std::string& projectName, const std::string& topModule);
 void searchProjects();
 
 #endif // FRAMEWORK_H

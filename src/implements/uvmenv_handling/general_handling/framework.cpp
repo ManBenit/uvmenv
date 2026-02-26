@@ -5,6 +5,7 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
+#include "../../../headers/uvmenv_preudo/components/Top.h"
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
 #include "../../../headers/functions/utils.h"
 #include "../../../headers/functions/constants.h"
@@ -14,7 +15,7 @@ using json = nlohmann::json;
 
 
 bool isUVMEnvProject(const string& path){
-    vector<string> pdirParts = splitString( path, '/' );
+    vector<string> pdirParts = splitString( path, PATH_SEP.at(0) );
     string projectIdExpected = "uvm:" + pdirParts[pdirParts.size()-1] + ":env";
     string configFileName = path + PATH_SEP + "config.json";
 
@@ -54,22 +55,22 @@ void showHelp() {
 }
 
 
-void createNewEnv(string projectName, string topModule){    
+void createNewEnv(const string& projectName, const string& topModule){
     // Create directories structure
-    filesystem::create_directory(PROJECT_DIR + "/" + projectName);
-    filesystem::current_path(PROJECT_DIR + "/" + projectName);
+    filesystem::create_directory(PROJECT_DIR + PATH_SEP + projectName);
+    filesystem::current_path(PROJECT_DIR + PATH_SEP + projectName);
 
     // Create UVMenv structure directories
-    filesystem::create_directory("HDLSrc"); // DUT_HDL_DIR
-    filesystem::create_directory("OSimon"); // OUTSIM_DIR
-    filesystem::create_directories("Itface/_impl");
-    filesystem::create_directories("UVM_TB/SeqItm");
-    filesystem::create_directories("UVM_TB/Seqnce");
-    filesystem::create_directories("UVM_TB/Envmnt");
-    filesystem::create_directories("UVM_TB/Misces");
-    filesystem::create_directories("UVM_TB/Envmnt/Scorbd");
-    filesystem::create_directories("UVM_TB/Envmnt/Agents");
-    filesystem::create_directories("UVM_TB/Envmnt/RefMdl/_impl");
+    filesystem::create_directory("HDLSrc");
+    filesystem::create_directory("OSimon");
+    filesystem::create_directories("Itface" + PATH_SEP + "_impl");
+    filesystem::create_directories("UVM_TB" + PATH_SEP + "SeqItm");
+    filesystem::create_directories("UVM_TB" + PATH_SEP + "Seqnce");
+    filesystem::create_directories("UVM_TB" + PATH_SEP + "Envmnt");
+    filesystem::create_directories("UVM_TB" + PATH_SEP + "Misces");
+    filesystem::create_directories("UVM_TB" + PATH_SEP + "Envmnt" + PATH_SEP + "Scorbd");
+    filesystem::create_directories("UVM_TB" + PATH_SEP + "Envmnt" + PATH_SEP + "Agents");
+    filesystem::create_directories("UVM_TB" + PATH_SEP + "Envmnt" + PATH_SEP + "RefMdl" + PATH_SEP + "_impl");
 
     // Create config file
     ofstream config_file("config.json");
@@ -102,6 +103,11 @@ void createNewEnv(string projectName, string topModule){
     filesystem::copy(PATHS_FILEBASE, "paths.py");
 
     ////// Write Top
+    UVMComponent* top = &Top::instance();
+    Top::instance().setProjectName(projectName);
+    Top::instance().setTopModuleName(topModule);
+    top -> copyBaseFile();
+    return;
     //filesystem::copy(TOP_FILEBASE, "Top_"+topModule+".py");
 
     ////// Write Test
@@ -111,13 +117,13 @@ void createNewEnv(string projectName, string topModule){
     //filesystem::copy(ENVIRONMENT_FILEBASE, "UVM_TB/Envmnt/Environment.py");
 
     ////// Write interface for BFM
-    filesystem::copy(BFM_FILEBASE, "Itface/BFM.py");
+    //filesystem::copy(BFM_FILEBASE, "Itface" + PATH_SEP + "BFM.py");
 
     ////// Write interface for Reference model
-    filesystem::copy(REFMODEL_FILEBASE, "UVM_TB/Envmnt/RefMdl/RefModel.py");
+    //filesystem::copy(REFMODEL_FILEBASE, "UVM_TB" + PATH_SEP + "Envmnt" + PATH_SEP + "RefMdl/RefModel.py");
 
     ////// Write report mechanism
-    filesystem::copy(REPORT_FILEBASE, "UVM_TB/Misces/UVMEnvReport.py");
+    //filesystem::copy(REPORT_FILEBASE, "UVM_TB" + PATH_SEP + "Misces" + PATH_SEP + "UVMEnvReport.py");
 
     filesystem::current_path(PROJECT_DIR);
 }
