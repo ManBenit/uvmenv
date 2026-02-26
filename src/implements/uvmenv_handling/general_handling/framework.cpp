@@ -66,11 +66,11 @@ void createNewEnv(const string& projectName, const string& topModule){
     filesystem::create_directories("Itface" + PATH_SEP + "_impl");
     filesystem::create_directories("UVM_TB" + PATH_SEP + "SeqItm");
     filesystem::create_directories("UVM_TB" + PATH_SEP + "Seqnce");
-    filesystem::create_directories("UVM_TB" + PATH_SEP + "Envmnt");
+    //filesystem::create_directories("UVM_TB" + PATH_SEP + "Envmnt");
     filesystem::create_directories("UVM_TB" + PATH_SEP + "Misces");
-    filesystem::create_directories("UVM_TB" + PATH_SEP + "Envmnt" + PATH_SEP + "Scorbd");
-    filesystem::create_directories("UVM_TB" + PATH_SEP + "Envmnt" + PATH_SEP + "Agents");
-    filesystem::create_directories("UVM_TB" + PATH_SEP + "Envmnt" + PATH_SEP + "RefMdl" + PATH_SEP + "_impl");
+    //filesystem::create_directories("UVM_TB" + PATH_SEP + "Envmnt" + PATH_SEP + "Scorbd");
+    //filesystem::create_directories("UVM_TB" + PATH_SEP + "Envmnt" + PATH_SEP + "Agents");
+    //filesystem::create_directories("UVM_TB" + PATH_SEP + "Envmnt" + PATH_SEP + "RefMdl" + PATH_SEP + "_impl");
 
     // Create config file
     ofstream config_file("config.json");
@@ -107,7 +107,6 @@ void createNewEnv(const string& projectName, const string& topModule){
     Top::instance().setProjectName(projectName);
     Top::instance().setTopModuleName(topModule);
     top -> copyBaseFile();
-    return;
     //filesystem::copy(TOP_FILEBASE, "Top_"+topModule+".py");
 
     ////// Write Test
@@ -117,7 +116,7 @@ void createNewEnv(const string& projectName, const string& topModule){
     //filesystem::copy(ENVIRONMENT_FILEBASE, "UVM_TB/Envmnt/Environment.py");
 
     ////// Write interface for BFM
-    //filesystem::copy(BFM_FILEBASE, "Itface" + PATH_SEP + "BFM.py");
+    filesystem::copy(BFM_FILEBASE, "Itface" + PATH_SEP + "BFM.py");
 
     ////// Write interface for Reference model
     //filesystem::copy(REFMODEL_FILEBASE, "UVM_TB" + PATH_SEP + "Envmnt" + PATH_SEP + "RefMdl/RefModel.py");
