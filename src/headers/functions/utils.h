@@ -1,38 +1,30 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <iostream>
-#include <sstream>
-#include <vector>
 #include <string>
-#include <cstdio>
-#include <cstdlib>
-#include <filesystem>
-#include <fstream>
-#include <array>
-#include <stdexcept>
-#include <nlohmann/json.hpp>
-#include "constants.h"
+#include <vector>
 
-using namespace std;
-using json = nlohmann::json;
+
+const std::string WHITESPACE = " \n\r\t\f\v";
 
 // ****************** INTERFACE UTIL FUNCTIONS ****************** //
-void printError(string message);
-void printInfo(string message);
-void printWarning(string message);
-void printOption(string option, string message);
-int countCharOcurrences(char c, string str);
-vector<string> splitString(const string& input, char delimiter);
+void printError(std::string message);
+void printInfo(std::string message);
+void printWarning(std::string message);
+void printOption(std::string option, std::string message);
+int countCharOcurrences(char c, std::string str);
+std::vector<std::string> splitString(const std::string& input, char delimiter);
+std::string trim(const std::string& s);
 
 
 // ****************** Base 64 ****************** //
-string base64_encode(const string &in);
-string base64_decode(const string &in);
+std::string base64_encode(const std::string &in);
+std::string base64_decode(const std::string &in);
 
 // ****************** File operations ****************** //
-void writeFile(const string filePath, const string content);
-string readFile(const string filePath);
-vector<string> getFileNamesInDirectory(const string directoryPath);
+void writeFile(const std::string filePath, const std::string content);
+std::string readFile(const std::string filePath);
+std::vector<std::string> getFileNamesInDirectory(const std::string directoryPath);
+
 
 #endif // UTILS_H

@@ -1,6 +1,9 @@
 #include "headers/functions/utils.h"
-#include "headers/uvmenv_handling/general_handling/pre_project.h"
+#include "headers/functions/constants.h"
+
+#include "headers/uvmenv_handling/general_handling/uvmenv_aux.h"
 #include "headers/uvmenv_handling/general_handling/framework.h"
+
 #include "headers/uvmenv_preudo/Factory.h"
 #include "headers/uvmenv_preudo/components/Top.h"
 #include "headers/uvmenv_preudo/UVMObject.h"
@@ -40,6 +43,11 @@ int main (int argc, char *argv[]) {
         createNewEnv(argv[2], argv[3]);
     } 
     else if(option == "search") {
+        if(isUVMEnvProject(PROJECT_DIR)){
+            printInfo("You are already into a UVMEnv project");
+            return 0;
+        }
+
         searchProjects();
     } 
     else if(option == "help") {
@@ -48,7 +56,7 @@ int main (int argc, char *argv[]) {
 
     ///// PROJECT HANDLING /////
     else if(option == "project"){
-        if(!isUVMEnvProject()){
+        if(!isUVMEnvProject(PROJECT_DIR)){
             printError("You need using a valid project to run this option.");
             return 1;
         }
@@ -79,7 +87,7 @@ int main (int argc, char *argv[]) {
     
     ///// COMPONENT HANDLING /////
     else if(option == "component"){
-        if(!isUVMEnvProject()){
+        if(!isUVMEnvProject(PROJECT_DIR)){
             printError("You need using a valid project to run this option.");
             return 1;
         }
@@ -114,23 +122,6 @@ int main (int argc, char *argv[]) {
     }
 
     else if(option == "test") {
-        UVMComponent* top = &Top::instance();
-        UVMComponent* my_tst = Factory::instance().createComponent("Test", "Test_1", top);
-        UVMComponent* my_scb = Factory::instance().createComponent("Scoreboard", "ScbdDefault_1", my_tst);
-        top->copyBaseFile();
-        cout << top << endl;
-        my_tst->copyBaseFile();
-        cout << my_tst << endl;
-        my_scb->copyBaseFile();
-        cout << my_scb << endl;
-
-        UVMObject* seq1 = Factory::instance().createObject("Sequence", "MySeq1");
-        seq1->copyBaseFile();
-        cout << seq1 << endl;
-    }
-
-    else if(option == "uvm_test"){
-        uvm_test();
     }
 
     else {

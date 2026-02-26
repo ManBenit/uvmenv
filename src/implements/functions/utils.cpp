@@ -1,4 +1,20 @@
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include <string>
+#include <cstdio>
+#include <cstdlib>
+#include <filesystem>
+#include <fstream>
+#include <array>
+#include <stdexcept>
+#include <nlohmann/json.hpp>
+
+#include "../../headers/functions/constants.h"
 #include "../../headers/functions/utils.h"
+using namespace std;
+using json = nlohmann::json;
+
 
 
 // ****************** INTERFACE UTIL FUNCTIONS ****************** //
@@ -36,6 +52,20 @@ vector<string> splitString(const string& input, char delimiter) {
         tokens.push_back(token);
     }
     return tokens;
+}
+
+string trim(const string& s){
+    // Look for the first character different to whithe space
+    size_t first = s.find_first_not_of(WHITESPACE);
+    
+    // Not found => is all empty, so return empty
+    if (first == std::string::npos) 
+        return "";
+    
+    // Look for the last character different to whithe space
+    size_t last = s.find_last_not_of(WHITESPACE);
+    
+    return s.substr(first, (last - first + 1));
 }
 ////////////////////////////////////////////////////////////////////
 
