@@ -1,4 +1,4 @@
-#include "../../../headers/uvmenv_handling/component_handling/list.h"
+#include "../../../headers/uvmenv_handling/component_handling/list_component.h"
 
 
 void showModules(){

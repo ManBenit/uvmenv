@@ -1,0 +1,18 @@
+{
+    "id": "dXZtOk5ld1VWTUVudjplbnY=",
+    "name": "NewUVMEnv",
+    "simtool": "icarus",
+    "dut_design": {
+        "type": "combinatorial",
+        "top_module": "alu_comb",
+        "sync_clock_cycles": "1"
+    },
+    "uvm_components": {
+        "itface": {
+            "bfm_impl": "DefaultBfmImpl"
+        },
+        "refmdl": {
+            "refmdl_impl": "DefaultRefModelImpl"
+        }
+    }
+}

@@ -93,7 +93,7 @@ int main (int argc, char *argv[]) {
         }
 
         if(argv[2] == nullptr){
-            printError("Missing component option");
+            printError("uvmenv -c|--create agnt <attr> <agent_name> <module>");
             return 4;
         }
 
@@ -101,6 +101,11 @@ int main (int argc, char *argv[]) {
             printError("Missing component reference");
             return 4;
         }
+        else{
+            // Validate component existence 
+            cout << "Validate component existence" << endl;
+        }
+
         
         if(argv[2] == "create"){
             
@@ -122,6 +127,7 @@ int main (int argc, char *argv[]) {
     }
 
     else if(option == "test") {
+        
     }
 
     else {

@@ -67,6 +67,21 @@ string trim(const string& s){
     
     return s.substr(first, (last - first + 1));
 }
+
+bool isInOptions(const string& value, const vector<string>* options) {
+    // 1. Verify options pointer is valid
+    if (options == nullptr) {
+        return false;
+    }
+
+    // 2. Look for element. 
+    // std::find  returns an iterator to the element if it is found 
+    // or the iterator 'end()' if not.
+    auto it = find(options->begin(), options->end(), value);
+
+    // 3. Return true if iterator did not comes to end
+    return it != options->end();
+}
 ////////////////////////////////////////////////////////////////////
 
 
