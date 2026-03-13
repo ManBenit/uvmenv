@@ -7,6 +7,7 @@
 
 #include "../../../headers/uvmenv_preudo/components/Top.h"
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
+#include "../../../headers/uvmenv_handling/general_handling/uvmenv_aux.h"
 #include "../../../headers/functions/utils.h"
 #include "../../../headers/functions/constants.h"
 using namespace std;
@@ -122,9 +123,53 @@ void createNewEnv(const string& projectName, const string& topModule){
     //filesystem::copy(REFMODEL_FILEBASE, "UVM_TB" + PATH_SEP + "Envmnt" + PATH_SEP + "RefMdl/RefModel.py");
 
     ////// Write report mechanism
-    //filesystem::copy(REPORT_FILEBASE, "UVM_TB" + PATH_SEP + "Misces" + PATH_SEP + "UVMEnvReport.py");
+    filesystem::copy(REPORT_FILEBASE, "UVM_TB" + PATH_SEP + "Misces" + PATH_SEP + "UVMEnvReport.py");
 
     filesystem::current_path(PROJECT_DIR);
+}
+
+
+void runCurrentProject(){
+    string rtlFiles = execCmdReturn(getScript("sys_commands") + "getRTLfiles " + DUT_HDL_DIR);
+
+    // Leer el archivo de configuración JSON
+    ifstream f(CONFIG_FILE);
+    json config = json::parse(f);
+
+    // Extraer valores del JSON (equivalente a jq)
+    string simtool = config.value("simtool", "icarus");
+    string top_module = config["dut_design"].value("top_module", "unknown");
+
+    // Crear/Sobrescribir el archivo Makefile
+    ofstream makefile("Makefile");
+
+    if (makefile.is_open()) {
+        makefile << "CWD = $(shell pwd)\n";
+        makefile << "HDL_SRC = " << simtool << "\n";
+        makefile << "SIM ?= " << simtool << "\n";
+        makefile << "\n\n";
+        
+        makefile << "VERILOG_SOURCES = " << rtlFiles << "\n";
+        makefile << "\n\n";
+        
+        makefile << "MODULE = Top_" << top_module << "\n";
+        makefile << "TOPLEVEL = " << top_module << "\n";
+        makefile << "TOPLEVEL_LANG ?= verilog\n";
+        makefile << "#COCOTB_HDL_TIMEOUT = 1ns\n";
+        makefile << "#COCOTB_HDL_TIMEPRECISION = 1ns\n";
+        makefile << "\n\n";
+        
+        makefile << "include $(shell cocotb-config --makefiles)/Makefile.sim\n";
+        makefile << "\n";
+
+        makefile.close();
+    } else {
+        cerr << "Error: Impossible to create Makefile." << endl;
+    }
+
+    execCmdSimple("make");
+
+    execCmdSimple(getScript("sys_commands") + "cleanProject " + PROJECT_DIR);
 }
 
 

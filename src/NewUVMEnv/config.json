@@ -4,7 +4,7 @@
     "simtool": "icarus",
     "dut_design": {
         "type": "combinatorial",
-        "top_module": "alu_comb",
+        "top_module": "ALU",
         "sync_clock_cycles": "1"
     },
     "uvm_components": {

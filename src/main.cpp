@@ -70,14 +70,17 @@ int main (int argc, char *argv[]) {
         if(string(argv[2]) == "view"){
             execCmdSimple(getScript("sys_commands")+"viewTreeProject");
         }
-        else if(argv[2] == "init"){
+        else if(string(argv[2]) == "init"){
 
         }
-        else if(argv[2] == "report"){
+        else if(string(argv[2]) == "report"){
             execCmdSimple(getScript("sys_commands")+"viewReport");
         }
-        else if(argv[2] == "wave"){
+        else if(string(argv[2]) == "wave"){
             execCmdSimple(getScript("sys_commands")+"runGTKWave");
+        }
+        else if(string(argv[2]) == "run"){
+            runCurrentProject();
         }
         else {
             printError("Unknown project option: " + string(argv[2]));
