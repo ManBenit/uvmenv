@@ -4,6 +4,7 @@
 #include <string>
 
 bool isUVMEnvProject(const std::string& path);
+bool existsDUT();
 void showHelp();
 void createNewEnv(const std::string& projectName, const std::string& topModule);
 void runCurrentProject();

@@ -32,6 +32,12 @@ bool isUVMEnvProject(const string& path){
 } 
 
 
+bool existsDUT(){
+    string rtlFiles = execCmdReturn(getScript("sys_commands") + "validateRTLExistence " + DUT_HDL_DIR);
+    return trim(rtlFiles) != "";
+}
+
+
 void showHelp() {
     cout << "Usage:\t uvmenv " << C_CYAN << "<OPTION>" << C_N << "\n" << endl;
 

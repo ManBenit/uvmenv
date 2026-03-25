@@ -24,6 +24,11 @@ function getRTLfiles(){
     echo "$files"
 }
 
+# $1: Path for RTL files
+function validateRTLExistence(){
+    echo $(find $1 -type f \( -name "*.v" -o -name "*.sv" \) | sed -E 's/.*\/([^\/]+)\..*/\1/' | sort | uniq)
+}
+
 # $1: Path for project
 function cleanProject(){
     find "$1" -type d -name "__pycache__" -exec rm -rf {} +
@@ -48,6 +53,9 @@ case $1 in
         ;;
     "getRTLfiles")
         getRTLfiles $2
+        ;;
+    "validateRTLExistence")
+        validateRTLExistence $2
         ;;
     "cleanProject")
         cleanProject $2

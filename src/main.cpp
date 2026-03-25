@@ -80,6 +80,10 @@ int main (int argc, char *argv[]) {
             execCmdSimple(getScript("sys_commands")+"runGTKWave");
         }
         else if(string(argv[2]) == "run"){
+            if(!existsDUT()){
+                printError("DUT files not found.");
+                return 3;
+            }
             runCurrentProject();
         }
         else {
