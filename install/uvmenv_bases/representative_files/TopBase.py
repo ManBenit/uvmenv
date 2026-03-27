@@ -4,10 +4,16 @@
 
 import paths
 import cocotb
-from pyuvm import uvm_root
+from pyuvm import uvm_root, uvm_component
 from colorama import Fore
 import pyfiglet
 from utils import load_config
+
+import pyuvm
+from UVMEnvReport import report
+
+
+
 
 # Import your tests when you create someone, for example the next line:
 #from Test import Test
@@ -23,13 +29,39 @@ async def default_test(dut):
     await do_fake_test()
 
     # Await for some specific test
-    #await uvm_root().run_test('Test')
+    await uvm_root().run_test('ExampleTest')
 
 
 
 
 
 
+
+
+
+# ===============================================================
+# Little replication of UVM test using UVMEnv reporting mechanism
+# ===============================================================
+class ExampleTest(pyuvm.uvm_test):
+    def build_phase(self):
+        # Al instanciarlo aquí como hijo del Test, 
+        # pyuvm llamará automáticamente a su build_phase
+        self.comp = UVMComponent('exampleComponent', self)
+
+    async def run_phase(self):
+        self.raise_objection()
+        # Aquí puedes poner lógica adicional o simplemente esperar
+        report.write('Running example run_phase', self, pyuvm.INFO)
+        self.drop_objection()
+
+class UVMComponent(uvm_component):
+    def __init__(self, name, parent):
+        super().__init__(name, parent)
+
+    def build_phase(self):
+        super().build_phase()
+        # Component build code here
+        report.write(f'Report example', self, pyuvm.INFO)
 
 
 
@@ -63,9 +95,9 @@ async def do_fake_test():
     cocotb.log.info('Fake test completed successfully')
 
 
-# ===============================
-# Artificial DUT done with Python
-# ===============================
+# ===================================================
+# Artificial DUT done with Python for using fake_test
+# ===================================================
 class FakeSignal:
     def __init__(self, value=0):
         self.value = value
@@ -78,4 +110,6 @@ class FakeDUT:
 
     def eval(self):
         self.result.value = self.a.value + self.b.value
+
+
 
