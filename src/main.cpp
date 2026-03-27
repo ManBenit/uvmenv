@@ -20,8 +20,6 @@ void uvm_test();
 
 int main (int argc, char *argv[]) {
     cout << C_GREEN << "UVMEnv 2.0 - TESTING/DEVELOPING" << C_N << endl;
-    activatePythonVenv();
-
     if(argc < 2) {
         showHelp();
         return 0;
@@ -68,16 +66,16 @@ int main (int argc, char *argv[]) {
 
         
         if(string(argv[2]) == "view"){
-            execCmdSimple(getScript("sys_commands")+"viewTreeProject");
+            showProjectTree();
         }
         else if(string(argv[2]) == "init"){
-
+            cout << "Initializing project..." << endl;
         }
         else if(string(argv[2]) == "report"){
-            execCmdSimple(getScript("sys_commands")+"viewReport");
+            showReport();
         }
         else if(string(argv[2]) == "wave"){
-            execCmdSimple(getScript("sys_commands")+"runGTKWave");
+            showWaveform();
         }
         else if(string(argv[2]) == "run"){
             if(!existsDUT()){
@@ -134,7 +132,10 @@ int main (int argc, char *argv[]) {
     }
 
     else if(option == "test") {
+        cout << "Pyver: " << getPythonVersion() << endl;
         
+        //activatePythonVenv();
+
     }
 
     else {

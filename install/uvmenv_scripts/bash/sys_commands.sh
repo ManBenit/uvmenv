@@ -4,12 +4,14 @@ function viewTreeProject(){
     tree -C | less -R
 }
 
+# $1: Path of OSimon files
 function runGTKWave(){
-    gtkwave $OUTSIM_DIR/dut_signals.vcd &> /dev/null &
+    gtkwave $1/dut_signals.vcd &> /dev/null &
 }
 
+# $1: Path of OSimon files
 function viewReport(){
-    less $OUTSIM_DIR/uvmenv_report.log
+    less $1/uvmenv_report.log
 }
 
 # $1: Path for RTL files
@@ -46,17 +48,19 @@ case $1 in
         viewTreeProject
         ;;
     "runGTKWave")
-        runGTKWave
+        runGTKWave $2
         ;;
     "viewReport")
-        viewReport
+        viewReport $2
         ;;
+
     "getRTLfiles")
         getRTLfiles $2
         ;;
     "validateRTLExistence")
         validateRTLExistence $2
         ;;
+
     "cleanProject")
         cleanProject $2
         ;;

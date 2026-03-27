@@ -1,6 +1,7 @@
 #include <string>
 #include <stdexcept>
 #include <array>
+#include <iostream>
 
 #include "../../../headers/uvmenv_handling/general_handling/uvmenv_aux.h"
 #include "../../../headers/functions/utils.h"
@@ -41,17 +42,11 @@ string getScript(const string& name){
     return INSTALL_DIR + SCRIPTS_DIR + PATH_SEP + name + SCRIPTS_EXT + " ";
 }
 
-
+// Possible to omit this function, but tests are pending to validate this proposal
 string getPythonVersion(){
-    string python_version_cmd = "python3 --version | awk '{print $2}' | cut -d'.' -f1,2";
-    return execCmdReturn(python_version_cmd);
-}
-
-void activatePythonVenv(){
-    float version = stof(getPythonVersion());
-    if(version >= 3.10){
-        string activate_cmd = "bash -c 'source " + VENV_DIR + "/bin/activate'";
-        execCmdSimple(activate_cmd);
-    }
+    string pyVersionNumber = splitString(execCmdReturn("python3 --version"), ' ')[1];
+    string pyVersionMajor = splitString(pyVersionNumber, '.')[0];
+    string pyVersionMinor = splitString(pyVersionNumber, '.')[1];
+    return pyVersionMajor + "." + pyVersionMinor;
 }
 

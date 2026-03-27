@@ -5,6 +5,9 @@
 
 bool isUVMEnvProject(const std::string& path);
 bool existsDUT();
+void showProjectTree();
+void showReport();
+void showWaveform();
 void showHelp();
 void createNewEnv(const std::string& projectName, const std::string& topModule);
 void runCurrentProject();

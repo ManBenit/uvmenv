@@ -27,6 +27,7 @@ using namespace std;
     const string SCRIPTS_DIR = "\\uvmenv_scripts\\batch";
     const string SCRIPTS_EXT = ".bat";
     const string HOME_DIR = "C:\\Users\\" + USER_VAR;
+    const string VENV_DIR = HOME_DIR + "\\.UVMEnv_virtualenv";
 #elif defined(__APPLE__) || defined(__MACH__)
     const string OS_NAME = "MacOS";
     const string USER_VAR = getenv("USER");
@@ -34,13 +35,15 @@ using namespace std;
     const string SCRIPTS_DIR = "/uvmenv_scripts/bash";
     const string SCRIPTS_EXT = ".sh";
     const string HOME_DIR = "/home/" + USER_VAR;
+    const string VENV_DIR = HOME_DIR + "/.UVMEnv_virtualenv";
 #elif defined(__linux__)
     const string OS_NAME = "Linux";
     const string USER_VAR = getenv("USER");
     const string PATH_SEP = "/";
     const string SCRIPTS_DIR = "/uvmenv_scripts/bash";
     const string SCRIPTS_EXT = ".sh";
-    //const string HOME_DIR = "/home/" + USER_VAR;
+    // const string HOME_DIR = "/home/" + USER_VAR;
+    // const string VENV_DIR = HOME_DIR + "/.UVMEnv_virtualenv";
 #elif defined(__unix__)
     const string OS_NAME = "Unix";
     const string USER_VAR = getenv("USER");
@@ -48,6 +51,7 @@ using namespace std;
     const string SCRIPTS_DIR = "/uvmenv_scripts/bash";
     const string SCRIPTS_EXT = ".sh";
     const string HOME_DIR = "/home/" + USER_VAR;
+    const string VENV_DIR = HOME_DIR + "/.UVMEnv_virtualenv";
 #elif defined(__posix__)
     const string OS_NAME = "Posix";
     const string USER_VAR = getenv("USER");
@@ -55,6 +59,7 @@ using namespace std;
     const string SCRIPTS_DIR = "/uvmenv_scripts/bash";
     const string SCRIPTS_EXT = ".sh";
     const string HOME_DIR = "/home/" + USER_VAR;
+    const string VENV_DIR = HOME_DIR + "/.UVMEnv_virtualenv";
 #else
     const string OS_NAME = "Unknown";
 #endif

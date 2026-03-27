@@ -12,9 +12,6 @@ std::string execCmdReturn(const std::string& cmd);
 std::string getScript(const std::string& name);
 
 std::string getPythonVersion();
-void activatePythonVenv();
-
-
 
 
 #endif // UVMENV_AUX

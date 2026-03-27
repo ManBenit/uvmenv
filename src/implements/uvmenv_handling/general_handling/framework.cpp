@@ -37,6 +37,18 @@ bool existsDUT(){
     return trim(rtlFiles) != "";
 }
 
+void showProjectTree(){
+    execCmdSimple(getScript("sys_commands")+"viewTreeProject");
+}
+
+void showReport(){
+    execCmdSimple(getScript("sys_commands")+"viewReport " + OUTSIM_DIR);
+}
+
+void showWaveform(){
+    execCmdSimple(getScript("sys_commands")+"runGTKWave " + OUTSIM_DIR);
+}
+
 
 void showHelp() {
     cout << "Usage:\t uvmenv " << C_CYAN << "<OPTION>" << C_N << "\n" << endl;
@@ -137,6 +149,7 @@ void createNewEnv(const string& projectName, const string& topModule){
 
 void runCurrentProject(){
     string rtlFiles = execCmdReturn(getScript("sys_commands") + "getRTLfiles " + DUT_HDL_DIR);
+    string pyVersion = getPythonVersion();
 
     // Leer el archivo de configuración JSON
     ifstream f(CONFIG_FILE);
@@ -161,6 +174,7 @@ void runCurrentProject(){
         makefile << "MODULE = Top_" << top_module << "\n";
         makefile << "TOPLEVEL = " << top_module << "\n";
         makefile << "TOPLEVEL_LANG ?= verilog\n";
+        //makefile << (   stof(pyVersion) >= 3.11 ? VENV_DIR + PATH_SEP + "bin" + PATH_SEP + "python" + pyVersion : "python"+pyVersion   );
         makefile << "#COCOTB_HDL_TIMEOUT = 1ns\n";
         makefile << "#COCOTB_HDL_TIMEPRECISION = 1ns\n";
         makefile << "\n\n";
@@ -173,8 +187,7 @@ void runCurrentProject(){
         cerr << "Error: Impossible to create Makefile." << endl;
     }
 
-    execCmdSimple("make");
-
+    execCmdSimple(getScript("python_control") + "runUVMEnvProject " + PROJECT_DIR + " " + pyVersion);
     execCmdSimple(getScript("sys_commands") + "cleanProject " + PROJECT_DIR);
 }
 
