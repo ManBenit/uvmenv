@@ -75,7 +75,8 @@ int main (int argc, char *argv[]) {
             showReport();
         }
         else if(string(argv[2]) == "wave"){
-            showWaveform();
+            cout << "Show waveform..." << endl;
+            //showWaveform();
         }
         else if(string(argv[2]) == "run"){
             if(!existsDUT()){
@@ -133,7 +134,7 @@ int main (int argc, char *argv[]) {
 
     else if(option == "test") {
         cout << "Pyver: " << getPythonVersion() << endl;
-        
+
         //activatePythonVenv();
 
     }

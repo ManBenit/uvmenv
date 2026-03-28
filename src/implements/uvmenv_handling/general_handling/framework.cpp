@@ -51,24 +51,48 @@ void showWaveform(){
 
 
 void showHelp() {
-    cout << "Usage:\t uvmenv " << C_CYAN << "<OPTION>" << C_N << "\n" << endl;
+    const int w = 15;
+    cout << "Usage:\t uvmenv COMMAND OPTION <COMPONENT> <PARAMETERS> " << endl;
 
-    cout << "  OPTION:" << endl;
-    cout << "\t" << C_MAGENTA << "Framework management" << C_N << endl;
-    printOption("-n|--new", "Creates a new UVMEnv project.");
-    printOption("-s|--search", "Looks for a valid UVMEnv project into current directory.");
-    printOption("-h|--help", string("Shows ") + C_YELLOW + "uvmenv" + C_N + " command help into system browser (less).");
-    printOption("-i|--init", "Create default templates for top module.\n\tBFM, reference model, sequence item, sequence, agent, scoreboard.");
-    printOption("-v|--view", "Shows project tree into system browser (less).");
-    printOption("run", "Starts verification process.");
-    printOption("wave", "Shows wave form using GTKWave.");
-    printOption("report", "Shows the report file content.");
+    cout << endl;
 
-    cout << "\t" << C_MAGENTA << "UVM Component handling" << C_N << endl;
-    printOption("-c|--create", "Create a UVM component.");
-    printOption("-l|--list", "List UVM components and RTL modules and signals.");
-    printOption("-e|--edit", "Allow to edit each file of current UVMEnv project.");
-    printOption("-d|--delete", "Delete a UVM component");
+    cout << "COMMAND is mandatory." << endl;
+    cout << "OPTION is required by COMMAND \"project\" and \"component\"." << endl;
+    cout << "COMPONENT is required when COMMAND is \"component\"." << endl;
+    cout << "PARAMETERS are required depending on the OPTION and COMPONENT." << endl;
+
+    cout << endl;
+
+    cout << "COMMAND" << endl;
+    cout << left; // Alineación a la izquierda para el comando
+    cout << "    " << setw(w) << "new"       << "Create a new UVMEnv project." << endl;
+    cout << "    " << setw(w) << "search"    << "Look for UVMEnv projects into current directory." << endl;
+    cout << "    " << setw(w) << "help"      << "Show this help." << endl;
+    cout << "    " << setw(w) << "project"   << "Manage current project." << endl;
+    cout << "    " << setw(w) << "component" << "Manage UVM components of current project." << endl;
+
+    cout << endl;
+
+    cout << "OPTION" << endl;
+    cout << "For \"project\"" << endl;
+    cout << "    " << setw(w) << "init"      << "Create default structure with only one test and environment." << endl;
+    cout << "    " << setw(w) << "view"      << "Shows project tree." << endl;
+    cout << "    " << setw(w) << "run"       << "Starts verification process." << endl;
+    cout << "    " << setw(w) << "wave"      << "Shows waveform." << endl;
+    cout << "    " << setw(w) << "report"    << "Shows the report file content." << endl;
+    cout << "For \"component\"" << endl;
+    cout << "    " << setw(w) << "create"    << "Create a UVM component." << endl;
+    cout << "    " << setw(w) << "edit"      << "Allow to edit each file of current UVMEnv project." << endl;
+    cout << "    " << setw(w) << "delete"    << "Delete a UVM component." << endl;
+    cout << "    " << setw(w) << "list"      << "List UVM components and RTL modules and signals." << endl;
+
+    cout << endl;
+
+    cout << "COMPONENT:" << endl;
+
+    cout << endl;
+
+    cout << "PARAMETERS:" << endl;
 
     cout << endl;
 }
