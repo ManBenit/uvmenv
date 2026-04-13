@@ -33,6 +33,10 @@ void Agent::copyBaseFile(){
     cout << "Copiar archivo base de [component] " << basefilePath << " a " << uvmenvProjectDir << endl;
 }
 
+void Agent::create(){
+    cout << "Create agent component" << endl;
+}
+
 
 // private
 ComponentRegister<Agent> Agent::reg("Agent");

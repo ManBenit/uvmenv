@@ -21,9 +21,12 @@ public:
 
     void copyBaseFile() override;
 
+    void setName(const std::string& name);
+
 private:
     // auto registration
     static ComponentRegister<Test> reg;
+    string name;
     
 };
 

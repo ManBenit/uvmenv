@@ -9,7 +9,7 @@
 class Test;
 class Environment;
 
-std::vector<std::string> options = {"test", "env", "agent", "seqitem", "seqce", "scorebd", "refmod", "bfm"};
+
 
 void createUVMEnvComponent(const std::string& type);
 void listUVMEnvComponents(const std::string& type);

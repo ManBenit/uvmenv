@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <nlohmann/json.hpp>
 
 
 const std::string WHITESPACE = " \n\r\t\f\v";
@@ -16,6 +17,8 @@ void printOption(std::string option, std::string message);
 int countCharOcurrences(char c, std::string str);
 std::vector<std::string> splitString(const std::string& input, char delimiter);
 std::string trim(const std::string& s);
+bool isPascalCase(const std::string& s);
+std::string toPascalCase(const std::string& texto);
 bool isInOptions(const std::string& value, const std::vector<std::string>* options);
 
 
@@ -26,6 +29,8 @@ std::string base64_decode(const std::string &in);
 // ****************** File operations ****************** //
 void writeFile(const std::string filePath, const std::string content);
 std::string readFile(const std::string filePath);
+void writeFileJson(const std::string& filePath, const nlohmann::json& jsonData);
+nlohmann::json readFileJson(const std::string& filePath);
 std::vector<std::string> getFileNamesInDirectory(const std::string directoryPath);
 
 

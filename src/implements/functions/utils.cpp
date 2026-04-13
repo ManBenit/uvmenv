@@ -8,12 +8,15 @@
 #include <fstream>
 #include <array>
 #include <stdexcept>
+#include <cctype>
+#include <algorithm>
 #include <nlohmann/json.hpp>
 
 #include "../../headers/functions/constants.h"
 #include "../../headers/functions/utils.h"
 using namespace std;
 using json = nlohmann::json;
+namespace fs = std::filesystem;
 
 
 
@@ -59,13 +62,56 @@ string trim(const string& s){
     size_t first = s.find_first_not_of(WHITESPACE);
     
     // Not found => is all empty, so return empty
-    if (first == std::string::npos) 
+    if (first == string::npos) 
         return "";
     
     // Look for the last character different to whithe space
     size_t last = s.find_last_not_of(WHITESPACE);
     
     return s.substr(first, (last - first + 1));
+}
+
+bool isPascalCase(const string& s) {
+    if (s.empty()) return true;
+    
+    // Regla 1: La primera letra debe ser mayúscula
+    if (!isupper(static_cast<unsigned char>(s[0]))) return false;
+
+    for (size_t i = 0; i < s.length(); ++i) {
+        unsigned char c = s[i];
+        // Regla 2: No debe contener espacios
+        if (isspace(c)) return false;
+
+        // Regla 3: Si hay una mayúscula después de la primera posición,
+        // debe ser precedida por una minúscula o número (evita ABCCase)
+        // Nota: Esta regla es opcional dependiendo de qué tan estricto quieras ser.
+    }
+    return true;
+}
+
+string toPascalCase(const string& texto) {
+    // Si ya está en PascalCase, devolvemos el original intacto
+    if (isPascalCase(texto)) {
+        return texto;
+    }
+
+    string resultado;
+    bool proximaMayuscula = true;
+
+    for (unsigned char c : texto) {
+        if (isspace(c) || c == '_' || c == '-') { // Añadimos soporte para snake_case y kebab-case
+            proximaMayuscula = true;
+        } else {
+            if (proximaMayuscula) {
+                resultado += (char)toupper(c);
+                proximaMayuscula = false;
+            } else {
+                resultado += (char)tolower(c);
+            }
+        }
+    }
+
+    return resultado;
 }
 
 bool isInOptions(const string& value, const vector<string>* options) {
@@ -75,7 +121,7 @@ bool isInOptions(const string& value, const vector<string>* options) {
     }
 
     // 2. Look for element. 
-    // std::find  returns an iterator to the element if it is found 
+    // find  returns an iterator to the element if it is found 
     // or the iterator 'end()' if not.
     auto it = find(options->begin(), options->end(), value);
 
@@ -149,6 +195,31 @@ string readFile(const string filePath) {
     string content((istreambuf_iterator<char>(inFile)), istreambuf_iterator<char>());
     inFile.close();
     return content;
+}
+
+void writeFileJson(const string& filePath, const json& jsonData) {
+    ofstream file(filePath);
+    fs::path p(filePath);
+
+    if (!file.is_open()) {
+        throw runtime_error("Could not open JSON file ("+p.filename().string()+") for writing: " + filePath);
+    }
+
+    file << jsonData.dump(4); // Pretty print with 4 spaces indentation
+    file.close();
+}
+
+json readFileJson(const string& filePath) {
+    ifstream file(filePath);
+    fs::path p(filePath);
+
+    if (!file.is_open()) {
+        throw runtime_error("Could not open JSON file ("+p.filename().string()+"): " + filePath);
+    }
+    // json jsonData;
+    // file >> jsonData;
+    // return jsonData;
+    return json::parse(file);
 }
 
 vector<string> getFileNamesInDirectory(const string directoryPath) {

@@ -1,6 +1,7 @@
 #include "headers/functions/utils.h"
 #include "headers/functions/constants.h"
 
+#include "headers/uvmenv_handling/component_handling/create_component.h" ///
 #include "headers/uvmenv_handling/general_handling/uvmenv_aux.h"
 #include "headers/uvmenv_handling/general_handling/framework.h"
 
@@ -11,7 +12,10 @@
 #include <iostream>
 #include <cstdlib>
 #include <filesystem>
+#include <fstream>
+#include <nlohmann/json.hpp>
 using namespace std;
+using json = nlohmann::json;
 
 // NOTE: Include sudo apt install nlohmann-json3-dev on install script.
 
@@ -99,7 +103,8 @@ int main (int argc, char *argv[]) {
         }
 
         if(argv[2] == nullptr){
-            printError("uvmenv -c|--create agnt <attr> <agent_name> <module>");
+            printError("USAGE: uvmenv component OPTION COMPONENT ATTRIBUTES");
+            printInfo("See uvmenv help for more details");
             return 4;
         }
 
@@ -113,16 +118,17 @@ int main (int argc, char *argv[]) {
         }
 
         
-        if(argv[2] == "create"){
-            
+        if(string(argv[2]) == "create"){
+            cout << "Creating component..." << endl;
+            //createAgent("Agent_A1", "driver", "Driver_A1", nullptr);
         }
-        else if(argv[2] == "delete"){
+        else if(string(argv[2]) == "delete"){
 
         }
-        else if(argv[2] == "edit"){
+        else if(string(argv[2]) == "edit"){
             
         }
-        else if(argv[2] == "list"){
+        else if(string(argv[2]) == "list"){
             
         }
         else {
@@ -133,9 +139,39 @@ int main (int argc, char *argv[]) {
     }
 
     else if(option == "test") {
-        cout << "Pyver: " << getPythonVersion() << endl;
 
+        //createTest("nueva prueba");
         //activatePythonVenv();
+        string dictComponents = PROJECT_DIR + PATH_SEP + "project_tree.json"; // Make it hidden file in the future
+
+        json j;
+        // Llenamos las listas simples
+        j["seqitems"] = {"SitmPrueba1", "SitmPrueba2", "SitmPrueba3"};
+        j["sequences"] = {"SeqPrueba1", "SeqPrueba2", "SeqPrueba3"};
+        j["refmodels"] = {"RmSpike", "RmImperas", "RmVerilator"};
+
+        // Creamos el objeto interno para "envs"
+        json env;
+        env["name"] = "EnvAbcd";
+        env["agents"] = {"AgentAbcd1", "AgentAbcd2", "AgentAbcd3"};
+        env["scoreboards"] = {"ScbdAbcd1", "ScbdAbcd2", "ScbdAbcd3"};
+
+        // Creamos el objeto del nodo principal (con nombre vacío según tu ejemplo)
+        json test;
+        test["name"] = "";
+        test["envs"] = {env}; // Metemos el env dentro de un arreglo
+
+        // Finalmente asignamos el arreglo de objetos a una llave (ejemplo: "nodes")
+        j["tests"] = {test};
+
+        writeFileJson(dictComponents, j);
+
+        // LECTURA
+        json treef = readFileJson(dictComponents);
+        cout << treef["tests"][0]["envs"][0]["agents"] << endl;
+        for(string g: treef["tests"][0]["envs"][0]["agents"]){
+            cout << g << endl;
+        }
 
     }
 

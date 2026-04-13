@@ -14,6 +14,9 @@
 #include "../../../headers/uvmenv_handling/component_handling/create_component.h"
 using namespace std;
 
+vector<string> options = {"test", "env", "agent", "seqitem", "seqce", "scorebd", "refmod", "bfm"};
+
+
 void createUVMEnvComponent(const string& type){
     if(!isInOptions(type, &options)){
         cout << type << " is not a valid component reference for creation" << endl;
@@ -51,24 +54,38 @@ void deleteUVMEnvComponent(const string& type){
 
 // name: with PascalCase
 void createTest(const string& name){
-    UVMComponent* test = Factory::instance().createComponent("Test", name, &Top::instance());
+    string pascalName = "Test" + toPascalCase(name);
+    Test* test = (Test*) Factory::instance().createComponent("Test", pascalName, &Top::instance());
+    test->setName(pascalName);
     test->copyBaseFile();
 
 }
 
 void createEnvironment(const string& name, Test* test){
-    UVMComponent* env = Factory::instance().createComponent("Environment", name, test);
-    
+    string pascalName = "Env" + toPascalCase(name);
+    Environment* env = (Environment*) Factory::instance().createComponent("Environment", name, test);
+    //env->setName(pascalName);
+    env->copyBaseFile();
 }
 void createEnvironment(const string& name, Environment* env){
     UVMComponent* subEnv = Factory::instance().createComponent("Environment", name, env);
-   
+    //subEnv->setName("Env" + toPascalCase(name));
+    subEnv->copyBaseFile();
 }
 
 // name: with snake_case
 void createAgent(const string& name, const string& attr, const string& module, Environment* env){
     UVMComponent* agent = Factory::instance().createComponent("Agent", name, env);
-    
+    agent->create();
+
+    if (name == "" || attr == "" || module == "") {
+        cout << "Missing parameters for creating an Agent" << endl; 
+        cout << "Usage: uvmenv create component agent <attr> <name> <module>" << endl;
+    //uvmenv -c|--create agnt <attr> <agent_name> <module>
+        exit(3);
+    }
+
+        
 }
 
 

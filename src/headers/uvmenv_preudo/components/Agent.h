@@ -30,6 +30,7 @@ public:
     Coverage* getCoverage();
 
     void copyBaseFile() override;
+    void create() override;
 
 private:
     // auto registration

@@ -23,6 +23,10 @@ public:
     virtual ~UVMComponent() = default;
 
     virtual void copyBaseFile(){}
+    virtual void create(){}
+    virtual void edit(){}
+    virtual void list(){}
+    virtual void remove(){}
 
     friend std::ostream& operator<<(std::ostream& os, const UVMComponent& obj) {
         os << std::left 

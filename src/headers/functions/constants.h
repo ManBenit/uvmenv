@@ -79,7 +79,7 @@ const string BASES_CONFIG_DIR          = BASES_DIR + PATH_SEP + "config_files";
 
 
 const string PROJECT_DIR               = filesystem::current_path().string();
-
+const string PYMODULE                  = "__init__.py";
 
 
 
