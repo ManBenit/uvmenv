@@ -58,17 +58,18 @@ void createTest(const string& name){
     Test* test = (Test*) Factory::instance().createComponent("Test", pascalName, &Top::instance());
     test->setName(pascalName);
     test->copyBaseFile();
-
 }
+
 
 void createEnvironment(const string& name, Test* test){
     string pascalName = "Env" + toPascalCase(name);
-    Environment* env = (Environment*) Factory::instance().createComponent("Environment", name, test);
+    Environment* env    = (Environment*) Factory::instance().createComponent("Environment", pascalName, test);
     //env->setName(pascalName);
     env->copyBaseFile();
 }
 void createEnvironment(const string& name, Environment* env){
-    UVMComponent* subEnv = Factory::instance().createComponent("Environment", name, env);
+    string pascalName = "Env" + toPascalCase(name);
+    Environment* subEnv = (Environment*) Factory::instance().createComponent("Environment", pascalName, env);
     //subEnv->setName("Env" + toPascalCase(name));
     subEnv->copyBaseFile();
 }

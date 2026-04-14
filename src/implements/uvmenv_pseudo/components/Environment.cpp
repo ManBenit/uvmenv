@@ -7,16 +7,20 @@ void Environment::addAgent(Agent* a) {
     agents.push_back(a);
 }
 
-void Environment::setScoreboard(Scoreboard* s) {
-    scoreboard = s;
+void Environment::addScoreboard(Scoreboard* s) {
+    scoreboards.push_back(s);
 }
 
 vector<Agent*> Environment::getAgents() {
     return agents;
 }
 
-Scoreboard* Environment::getScoreboard() {
-    return scoreboard;
+vector<Scoreboard*> Environment::getScoreboards() {
+    return scoreboards;
+}
+
+void Environment::setName(const string& name){
+    this->name = name;
 }
 
 

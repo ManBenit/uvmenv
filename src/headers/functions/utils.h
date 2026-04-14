@@ -19,6 +19,8 @@ std::vector<std::string> splitString(const std::string& input, char delimiter);
 std::string trim(const std::string& s);
 bool isPascalCase(const std::string& s);
 std::string toPascalCase(const std::string& texto);
+bool isSnakeCase(const std::string& s);
+std::string toSnakeCase(const std::string& texto);
 bool isInOptions(const std::string& value, const std::vector<std::string>* options);
 
 

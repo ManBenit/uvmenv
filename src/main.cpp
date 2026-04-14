@@ -20,7 +20,7 @@ using json = nlohmann::json;
 // NOTE: Include sudo apt install nlohmann-json3-dev on install script.
 
 void uvm_test();
-
+void json_handling_test();
 
 int main (int argc, char *argv[]) {
     cout << C_GREEN << "UVMEnv 2.0 - TESTING/DEVELOPING" << C_N << endl;
@@ -139,40 +139,9 @@ int main (int argc, char *argv[]) {
     }
 
     else if(option == "test") {
-
         //createTest("nueva prueba");
+
         //activatePythonVenv();
-        string dictComponents = PROJECT_DIR + PATH_SEP + "project_tree.json"; // Make it hidden file in the future
-
-        json j;
-        // Llenamos las listas simples
-        j["seqitems"] = {"SitmPrueba1", "SitmPrueba2", "SitmPrueba3"};
-        j["sequences"] = {"SeqPrueba1", "SeqPrueba2", "SeqPrueba3"};
-        j["refmodels"] = {"RmSpike", "RmImperas", "RmVerilator"};
-
-        // Creamos el objeto interno para "envs"
-        json env;
-        env["name"] = "EnvAbcd";
-        env["agents"] = {"AgentAbcd1", "AgentAbcd2", "AgentAbcd3"};
-        env["scoreboards"] = {"ScbdAbcd1", "ScbdAbcd2", "ScbdAbcd3"};
-
-        // Creamos el objeto del nodo principal (con nombre vacío según tu ejemplo)
-        json test;
-        test["name"] = "";
-        test["envs"] = {env}; // Metemos el env dentro de un arreglo
-
-        // Finalmente asignamos el arreglo de objetos a una llave (ejemplo: "nodes")
-        j["tests"] = {test};
-
-        writeFileJson(dictComponents, j);
-
-        // LECTURA
-        json treef = readFileJson(dictComponents);
-        cout << treef["tests"][0]["envs"][0]["agents"] << endl;
-        for(string g: treef["tests"][0]["envs"][0]["agents"]){
-            cout << g << endl;
-        }
-
     }
 
     else {
@@ -181,6 +150,63 @@ int main (int argc, char *argv[]) {
     }
 
     return 0;
+}
+
+
+void json_handling_test(){
+    string dictComponents = PROJECT_DIR + PATH_SEP + "project_tree.json"; // Make it hidden file in the future
+
+    json j;
+    // Llenamos las listas simples
+    j["seqitems"] = {"SitmPrueba1", "SitmPrueba2", "SitmPrueba3"};
+    j["sequences"] = {"SeqPrueba1", "SeqPrueba2", "SeqPrueba3"};
+    j["refmodels"] = {"RmSpike", "RmImperas", "RmVerilator"};
+
+    // Creamos el objeto interno para "envs"
+    json env;
+    env["name"] = "EnvAbcd";
+    env["agents"] = {"AgentAbcd1", "AgentAbcd2", "AgentAbcd3"};
+    env["scoreboards"] = {"ScbdAbcd1", "ScbdAbcd2", "ScbdAbcd3"};
+
+    // Creamos el objeto del nodo principal (con nombre vacío según tu ejemplo)
+    json test;
+    test["name"] = "";
+    test["envs"] = {env}; // Metemos el env dentro de un arreglo
+
+    // Finalmente asignamos el arreglo de objetos a una llave (ejemplo: "nodes")
+    j["tests"] = {test};
+
+    writeFileJson(dictComponents, j);
+
+    // LECTURA
+    json treef = readFileJson(dictComponents);
+    cout << treef["tests"][0]["envs"][0]["agents"] << endl;
+    for(string g: treef["tests"][0]["envs"][0]["agents"]){
+        cout << g << endl;
+    }
+
+
+    // --- OPERACIONES ---
+
+    // 1. Agregar un agente nuevo al primer env del primer test
+    j["tests"][0]["envs"][0]["agents"].push_back("Agent_EXTRA");
+
+    // 2. Eliminar "SitmPrueba2" de la lista seqitems
+    // Una forma rápida de borrar por valor en C++11+
+    auto& s = j["seqitems"];
+    for (auto it = s.begin(); it != s.end(); ) {
+        if (*it == "SitmPrueba2") it = s.erase(it);
+        else ++it;
+    }
+
+    // 3. Crear un nuevo 'test' completo y añadirlo al array de tests
+    json nuevo_test = {{"name", "TestSecundario"}, {"envs", json::array()}};
+    j["tests"].push_back(nuevo_test);
+
+    // 4. Eliminar el nombre del primer env (la llave completa)
+    j["tests"][0]["envs"][0].erase("name");
+
+    writeFileJson(dictComponents+".json", j);
 }
 
 

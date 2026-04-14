@@ -10,7 +10,7 @@
 class Environment : public UVMComponent {
 private:
     vector<Agent*> agents;
-    Scoreboard *scoreboard;
+    vector<Scoreboard*> scoreboards;
 
 public:
     Environment(const std::string& typeName, const std::string& name, UVMComponent* parent): UVMComponent(typeName, name, parent){
@@ -20,11 +20,12 @@ public:
     virtual ~Environment() = default;
 
     void addAgent(Agent* a);
-    void setScoreboard(Scoreboard* s);
+    void addScoreboard(Scoreboard* s);
     vector<Agent*> getAgents();
-    Scoreboard* getScoreboard();
+    vector<Scoreboard*> getScoreboards();
 
     void copyBaseFile() override;
+    void setName(const std::string& name);
 
 private:
     // auto registration

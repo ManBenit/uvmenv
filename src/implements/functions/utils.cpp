@@ -114,6 +114,67 @@ string toPascalCase(const string& texto) {
     return resultado;
 }
 
+bool isSnakeCase(const string& s) {
+    if (s.empty()) return true;
+
+    // Regla 1: No debe empezar ni terminar con guion bajo
+    if (s.front() == '_' || s.back() == '_') return false;
+
+    for (size_t i = 0; i < s.length(); ++i) {
+        unsigned char c = s[i];
+
+        // Regla 2: Solo minúsculas, números o guiones bajos
+        if (!islower(c) && !isdigit(c) && c != '_') {
+            return false;
+        }
+
+        // Regla 3: Evitar guiones bajos dobles (opcional pero recomendado)
+        if (c == '_' && i + 1 < s.length() && s[i + 1] == '_') {
+            return false;
+        }
+    }
+    return true;
+}
+
+string toSnakeCase(const string& texto) {
+    // Si ya cumple el formato, devolvemos el original
+    if (isSnakeCase(texto)) {
+        return texto;
+    }
+
+    string resultado;
+    for (size_t i = 0; i < texto.length(); ++i) {
+        unsigned char c = texto[i];
+
+        if (isspace(c) || c == '-') {
+            // Convertimos espacios o guiones de kebab-case a snake_case
+            if (!resultado.empty() && resultado.back() != '_') {
+                resultado += '_';
+            }
+        } else if (isupper(c)) {
+            // Si es mayúscula y no es el inicio, añadimos guion (PascalCase/camelCase)
+            if (!resultado.empty() && resultado.back() != '_') {
+                resultado += '_';
+            }
+            resultado += (char)tolower(c);
+        } else if (c == '_') {
+            // Evitamos duplicar guiones bajos si ya vienen en el input
+            if (!resultado.empty() && resultado.back() != '_') {
+                resultado += '_';
+            }
+        } else {
+            resultado += c;
+        }
+    }
+
+    // Limpieza final: eliminar guion bajo al final si quedó uno por un espacio extra
+    if (!resultado.empty() && resultado.back() == '_') {
+        resultado.pop_back();
+    }
+
+    return resultado;
+}
+
 bool isInOptions(const string& value, const vector<string>* options) {
     // 1. Verify options pointer is valid
     if (options == nullptr) {
