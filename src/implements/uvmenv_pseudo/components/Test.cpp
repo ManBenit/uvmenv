@@ -17,7 +17,7 @@ void Test::setName(const string& name){
     this->name = name;
 }
 
-void Test::writeToTree(){
+void Test::writeOnTree(){
     // 1. Cargar el archivo original
     YAML::Node treeFile = readFileYaml(PROJECT_DIR + PATH_SEP + ".ptree.yml");
 

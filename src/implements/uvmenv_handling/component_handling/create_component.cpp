@@ -60,7 +60,7 @@ void createTest(const string& name){
     Test* test = (Test*) Factory::instance().createComponent("Test", pascalName, &Top::instance());
     test->setName(pascalName);
     test->copyBaseFile();
-    test->writeToTree();
+    test->writeOnTree();
 }
 
 

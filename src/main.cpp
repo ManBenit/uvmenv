@@ -123,6 +123,14 @@ int main (int argc, char *argv[]) {
         
         if(string(argv[2]) == "create"){
             cout << "Creating component..." << endl;
+            cout << "Component type: " << argv[3] << endl;
+            if(string(argv[3]) == "test"){
+                if(argv[4] == nullptr){
+                    printError("Missing component name");
+                    return 4;
+                }
+                createTest(argv[4]);
+            }
             //createAgent("Agent_A1", "driver", "Driver_A1", nullptr);
             //createAgent("Agent_A1", "driver", "Driver_A1", nullptr);
         }
