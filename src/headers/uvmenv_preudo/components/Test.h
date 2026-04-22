@@ -22,6 +22,7 @@ public:
     void copyBaseFile() override;
 
     void setName(const std::string& name);
+    void writeToTree();
 
 private:
     // auto registration

@@ -15,6 +15,7 @@
 using namespace std;
 
 vector<string> options = {"test", "env", "agent", "seqitem", "seqce", "scorebd", "refmod", "bfm"};
+string ptree_file = PROJECT_DIR + PATH_SEP + "ptree.yml";
 
 
 void createUVMEnvComponent(const string& type){
@@ -51,6 +52,7 @@ void deleteUVMEnvComponent(const string& type){
 
 
 
+////// Validate component existence in the future
 
 // name: with PascalCase
 void createTest(const string& name){
@@ -58,6 +60,7 @@ void createTest(const string& name){
     Test* test = (Test*) Factory::instance().createComponent("Test", pascalName, &Top::instance());
     test->setName(pascalName);
     test->copyBaseFile();
+    test->writeToTree();
 }
 
 

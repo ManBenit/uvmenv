@@ -14,6 +14,7 @@
 #include <filesystem>
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <yaml-cpp/yaml.h>
 using namespace std;
 using json = nlohmann::json;
 
@@ -21,6 +22,8 @@ using json = nlohmann::json;
 
 void uvm_test();
 void json_handling_test();
+void yml_handling_test();
+void genYamlUVMEnv();
 
 int main (int argc, char *argv[]) {
     cout << C_GREEN << "UVMEnv 2.0 - TESTING/DEVELOPING" << C_N << endl;
@@ -121,6 +124,7 @@ int main (int argc, char *argv[]) {
         if(string(argv[2]) == "create"){
             cout << "Creating component..." << endl;
             //createAgent("Agent_A1", "driver", "Driver_A1", nullptr);
+            //createAgent("Agent_A1", "driver", "Driver_A1", nullptr);
         }
         else if(string(argv[2]) == "delete"){
 
@@ -139,9 +143,12 @@ int main (int argc, char *argv[]) {
     }
 
     else if(option == "test") {
-        //createTest("nueva prueba");
-
+        createTest("new test");
         //activatePythonVenv();
+        //yml_handling_test();
+        //json_handling_test();
+        //genYamlUVMEnv();
+
     }
 
     else {
@@ -150,6 +157,153 @@ int main (int argc, char *argv[]) {
     }
 
     return 0;
+}
+
+void genYamlUVMEnv() {
+    YAML::Node topNode;
+
+    // --- 1. Sección bfm ---
+    YAML::Node bfm;
+    bfm["bfm"].push_back("BfmAbcd1");
+    bfm["bfm"].push_back("BfmAbcd2");
+    bfm["bfm"].push_back("BfmAbcd3");
+    bfm["bfm"].push_back("BfmAbcd4");
+    topNode["top"].push_back(bfm);
+
+    // --- 2. Preparar la estructura de los ENVS comunes ---
+    auto crearEnv = []() {
+        YAML::Node env;
+        env["name"] = "EnvAbcd";
+        
+        env["refmodels"].push_back("RmSpike");
+        env["refmodels"].push_back("RmImperas");
+        env["refmodels"].push_back("RmVerilator");
+
+        env["agents"].push_back("AgentAbcd1");
+        env["agents"].push_back("AgentAbcd2");
+        env["agents"].push_back("AgentAbcd3");
+
+        env["scoreboards"].push_back("ScbdAbcd1");
+        env["scoreboards"].push_back("ScbdAbcd2");
+        env["scoreboards"].push_back("ScbdAbcd3");
+        return env;
+    };
+
+    // --- 3. Sección tests ---
+    YAML::Node testsSection;
+    
+    // Test 1: Tiene 1 Env
+    YAML::Node test1;
+    test1["name"] = "";
+    test1["seqitems"].push_back("SitmPrueba1");
+    test1["seqitems"].push_back("SitmPrueba2");
+    test1["seqitems"].push_back("SitmPrueba3");
+    test1["sequences"].push_back("SeqPrueba1");
+    test1["sequences"].push_back("SeqPrueba2");
+    test1["sequences"].push_back("SeqPrueba3");
+    test1["envs"].push_back(crearEnv());
+
+    // Test 2: Tiene 2 Envs (según tu última actualización)
+    YAML::Node test2;
+    test2["name"] = "";
+    test2["seqitems"].push_back("SitmPrueba1");
+    test2["seqitems"].push_back("SitmPrueba2");
+    test2["seqitems"].push_back("SitmPrueba3");
+    test2["sequences"].push_back("SeqPrueba1");
+    test2["sequences"].push_back("SeqPrueba2");
+    test2["sequences"].push_back("SeqPrueba3");
+    test2["envs"].push_back(crearEnv());
+    test2["envs"].push_back(crearEnv());
+
+    // Añadir ambos tests a la sección de tests
+    YAML::Node testsWrapper;
+    testsWrapper["tests"].push_back(test1);
+    testsWrapper["tests"].push_back(test2);
+
+    topNode["top"].push_back(testsWrapper);
+
+    // --- 4. Escritura a archivo ---
+    std::ofstream fout("config_verif.yml");
+    fout << topNode;
+    fout.close();
+
+    std::cout << "Archivo .yml generado exitosamente." << std::endl;
+}
+
+void yml_handling_test()
+{
+    string dictComponents = PROJECT_DIR + PATH_SEP + "project_tree.yml";
+
+    YAML::Node y;
+
+    // --- Llenamos las listas simples ---
+    y["seqitems"].push_back("SitmPrueba1");
+    y["seqitems"].push_back("SitmPrueba2");
+    y["seqitems"].push_back("SitmPrueba3");
+
+    y["sequences"].push_back("SeqPrueba1");
+    y["sequences"].push_back("SeqPrueba2");
+    y["sequences"].push_back("SeqPrueba3");
+
+    y["refmodels"].push_back("RmSpike");
+    y["refmodels"].push_back("RmImperas");
+    y["refmodels"].push_back("RmVerilator");
+
+    // --- Creamos el objeto interno para "envs" ---
+    YAML::Node env;
+    env["name"] = "EnvAbcd";
+    env["agents"].push_back("AgentAbcd1");
+    env["agents"].push_back("AgentAbcd2");
+    env["agents"].push_back("AgentAbcd3");
+
+    env["scoreboards"].push_back("ScbdAbcd1");
+    env["scoreboards"].push_back("ScbdAbcd2");
+    env["scoreboards"].push_back("ScbdAbcd3");
+
+    // --- Creamos el objeto test ---
+    YAML::Node test;
+    test["name"] = "";
+    test["envs"].push_back(env);
+
+    y["tests"].push_back(test);
+
+    writeFileYaml(dictComponents, y);
+
+    // -------- LECTURA --------
+    YAML::Node treef = readFileYaml(dictComponents);
+
+    cout << treef["tests"][0]["envs"][0]["agents"] << endl;
+
+    for (const auto& g : treef["tests"][0]["envs"][0]["agents"])
+    {
+        cout << g.as<string>() << endl;
+    }
+
+    // ---------------- OPERACIONES ----------------
+
+    // 1. Agregar un agente nuevo al primer env del primer test
+    y["tests"][0]["envs"][0]["agents"].push_back("Agent_EXTRA");
+
+    // 2. Eliminar "SitmPrueba2" de la lista seqitems
+    YAML::Node nuevaSeq;
+    for (const auto& item : y["seqitems"])
+    {
+        if (item.as<string>() != "SitmPrueba2")
+            nuevaSeq.push_back(item);
+    }
+    y["seqitems"] = nuevaSeq;
+
+    // 3. Crear un nuevo test completo y añadirlo al array
+    YAML::Node nuevo_test;
+    nuevo_test["name"] = "TestSecundario";
+    nuevo_test["envs"] = YAML::Node(YAML::NodeType::Sequence);
+
+    y["tests"].push_back(nuevo_test);
+
+    // 4. Eliminar el nombre del primer env (la llave completa)
+    y["tests"][0]["envs"][0].remove("name");
+
+    writeFileYaml(dictComponents + ".yml", y);
 }
 
 

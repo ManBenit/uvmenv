@@ -11,12 +11,13 @@
 #include <cctype>
 #include <algorithm>
 #include <nlohmann/json.hpp>
+#include <yaml-cpp/yaml.h>
 
 #include "../../headers/functions/constants.h"
 #include "../../headers/functions/utils.h"
-using namespace std;
 using json = nlohmann::json;
 namespace fs = std::filesystem;
+using namespace std;
 
 
 
@@ -281,6 +282,43 @@ json readFileJson(const string& filePath) {
     // file >> jsonData;
     // return jsonData;
     return json::parse(file);
+}
+
+void writeFileYaml(const std::string& filePath, YAML::Node& root) {
+    std::ofstream file(filePath);
+    fs::path p(filePath);
+
+    if (!file.is_open()) {
+        throw std::runtime_error("Could not open YAML file (" + p.filename().string() + ") for writing: " + filePath);
+    }
+
+    // 1. Creamos un Emitter
+    YAML::Emitter emitter;
+
+    // 2. Configuramos la indentación a 4 espacios
+    emitter.SetIndent(4);
+    
+    // Opcional: Esto ayuda a que las secuencias (listas) también respeten la indentación
+    emitter.SetSeqFormat(YAML::Block); 
+
+    // 3. Pasamos el nodo al emitter
+    emitter << root;
+
+    // 4. Escribimos el contenido del emitter en el archivo
+    file << emitter.c_str();
+    
+    file.close();
+}
+
+YAML::Node readFileYaml(const string& filePath){
+    ifstream file(filePath);
+    fs::path p(filePath);
+
+    if (!file.is_open()) {
+        throw runtime_error("Could not open YAML file (" + p.filename().string() + "): " + filePath);
+    }
+
+    return YAML::LoadFile(filePath);
 }
 
 vector<string> getFileNamesInDirectory(const string directoryPath) {

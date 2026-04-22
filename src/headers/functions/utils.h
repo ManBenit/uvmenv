@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <nlohmann/json.hpp>
+#include <yaml-cpp/yaml.h>
 
 
 const std::string WHITESPACE = " \n\r\t\f\v";
@@ -33,6 +34,8 @@ void writeFile(const std::string filePath, const std::string content);
 std::string readFile(const std::string filePath);
 void writeFileJson(const std::string& filePath, const nlohmann::json& jsonData);
 nlohmann::json readFileJson(const std::string& filePath);
+void writeFileYaml(const std::string& filePath, YAML::Node& root);
+YAML::Node readFileYaml(const std::string& filePath);
 std::vector<std::string> getFileNamesInDirectory(const std::string directoryPath);
 
 
