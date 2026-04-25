@@ -32,8 +32,8 @@ std::string base64_decode(const std::string &in);
 // ****************** File operations ****************** //
 void writeFile(const std::string filePath, const std::string content);
 std::string readFile(const std::string filePath);
-void writeFileJson(const std::string& filePath, const nlohmann::json& jsonData);
-nlohmann::json readFileJson(const std::string& filePath);
+void writeFileJson(const std::string& filePath, const nlohmann::ordered_json& jsonData);
+nlohmann::ordered_json readFileJson(const std::string& filePath);
 void writeFileYaml(const std::string& filePath, YAML::Node& root);
 YAML::Node readFileYaml(const std::string& filePath);
 std::vector<std::string> getFileNamesInDirectory(const std::string directoryPath);

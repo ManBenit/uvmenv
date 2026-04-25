@@ -5,6 +5,7 @@
 #include <string>
 #include <filesystem>
 #include <vector>
+#include <vector>
 #include <iostream>
 
 #include "../../../headers/uvmenv_preudo/Factory.h"
@@ -14,6 +15,7 @@
 #include "../../../headers/uvmenv_preudo/components/Environment.h"
 
 #include "../../../headers/uvmenv_preudo/objects/Sequence.h"
+#include "../../../headers/uvmenv_preudo/objects/SequenceItem.h"
 
 #include "../../../headers/functions/utils.h"
 #include "../../../headers/functions/ptree_handling.h"
@@ -58,55 +60,84 @@ void deleteUVMEnvComponent(const string& type){
 
 // name: with PascalCase
 void createTest(const string& name){
-    string pascalName = "Test" + toPascalCase(name);
+    string formatedName = "Test" + toPascalCase(name);
     bool alreadyExists = false;
 
     for(const auto& e: treeListTest()){
-        if(e == pascalName){
+        if(e == formatedName){
             alreadyExists = true;
             break;
         }
     }
 
     if(alreadyExists){
-        printWarning( "The test " + pascalName + " already exists. Please choose another name." );
+        printWarning( "The test " + formatedName + " already exists. Please choose another name." );
         return;
     }
 
-    Test* test = (Test*) Factory::instance().createComponent("Test", pascalName, &Top::instance());
-    test->setName(pascalName);
+    Test* test = (Test*) Factory::instance().createComponent("Test", formatedName, &Top::instance());
+    test->setName(formatedName);
     test->copyBaseFile();
 
     // Create default directories for the test
-    filesystem::create_directory(TBENCH_DIR + PATH_SEP + pascalName + PATH_SEP + "Envmnt");
-    filesystem::create_directory(TBENCH_DIR + PATH_SEP + pascalName + PATH_SEP + "Seqnce");
-    filesystem::create_directory(TBENCH_DIR + PATH_SEP + pascalName + PATH_SEP + "Seqitm");
+    filesystem::create_directory(TBENCH_DIR + PATH_SEP + formatedName + PATH_SEP + "Misces");
+    filesystem::copy(
+        REPORT_FILEBASE,
+        TBENCH_DIR + PATH_SEP + formatedName + PATH_SEP + "Misces" + PATH_SEP + "UVMEnvReport.py"
+    );
+    filesystem::create_directory(TBENCH_DIR + PATH_SEP + formatedName + PATH_SEP + "Envmnt");
+    filesystem::create_directory(TBENCH_DIR + PATH_SEP + formatedName + PATH_SEP + "Seqnce");
+    filesystem::create_directory(TBENCH_DIR + PATH_SEP + formatedName + PATH_SEP + "SeqItm");
 
-    treeAddTest(pascalName);
+    treeAddTest(formatedName);
 }
 
 void createSequence(const string& name, const string& testName){
-    string pascalName = "Seq" + toPascalCase(name);
+    string formatedName = "Seq" + toPascalCase(name);
     bool alreadyExists = false;
 
     for(const auto& e: treeListSequences(testName)){
-        if(e == pascalName){
+        if(e == formatedName){
             alreadyExists = true;
             break;
         }
     }
 
     if(alreadyExists){
-        printWarning( "The sequence " + pascalName + " already exists. Please choose another name." );
+        printWarning( "The sequence " + formatedName + " already exists. Please choose another name." );
         return;
     }
 
-    Sequence* sequence = (Sequence*) Factory::instance().createObject("Sequence", pascalName);
-    sequence->setName(pascalName);
+    Sequence* sequence = (Sequence*) Factory::instance().createObject("Sequence", formatedName);
+    sequence->setName(formatedName);
     sequence->setTestContainer(testName);
     sequence->copyBaseFile();
 
-    treeAddSequences(pascalName, testName);
+    treeAddSequences(formatedName, testName);
+}
+
+void createSeqitem(const string& name, const string& testName){
+    string formatedName = "sit_" + toSnakeCase(name);
+    bool alreadyExists = false;
+
+    for(const auto& e: treeListSeqitem(testName)){
+        if(e == formatedName){
+            alreadyExists = true;
+            break;
+        }
+    }
+
+    if(alreadyExists){
+        printWarning( "The sequence item " + formatedName + " already exists. Please choose another name." );
+        return;
+    }
+
+    SequenceItem* seqitem = (SequenceItem*) Factory::instance().createObject("SequenceItem", formatedName);
+    seqitem->setName(formatedName);
+    seqitem->setTestContainer(testName);
+    seqitem->copyBaseFile();
+
+    treeAddSeqitem(formatedName, testName);
 }
 
 

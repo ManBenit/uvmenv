@@ -12,7 +12,7 @@
 #include "../../../headers/functions/utils.h"
 #include "../../../headers/functions/constants.h"
 using namespace std;
-using json = nlohmann::json;
+using json = nlohmann::ordered_json;
 
 
 
@@ -113,6 +113,10 @@ void createNewEnv(const string& projectName, const string& topModule){
     filesystem::create_directory("HDLSrc");
     filesystem::create_directory("OSimon");
     filesystem::create_directories("Itface" + PATH_SEP + "_impl");
+    filesystem::copy(
+        BASES_COMPONENT_DIR + PATH_SEP + "BFMBase.py",
+        "Itface" + PATH_SEP + "BFM.py"
+    );
     filesystem::create_directory("UVM_TB");
     //// filesystem::create_directories("UVM_TB" + PATH_SEP + "SeqItm");
     //// filesystem::create_directories("UVM_TB" + PATH_SEP + "Seqnce");
@@ -123,27 +127,24 @@ void createNewEnv(const string& projectName, const string& topModule){
     //filesystem::create_directories("UVM_TB" + PATH_SEP + "Envmnt" + PATH_SEP + "RefMdl" + PATH_SEP + "_impl");
 
     // Create config file
-    ofstream config_file("config.json");
-    config_file << "{\n";
-    config_file << TAB << "\"id\": \"" << base64_encode("uvm:"+projectName+":env") << "\",\n";
-    config_file << TAB << "\"name\": \"" << projectName << "\",\n";
-    config_file << TAB << "\"simtool\": \"icarus\",\n";
-    config_file << TAB << "\"dut_design\": {\n";
-    config_file << TAB << TAB << "\"type\": \"combinatorial\",\n";
-    config_file << TAB << TAB << "\"top_module\": \"" << topModule << "\",\n";
-    config_file << TAB << TAB << "\"sync_clock_cycles\": \"1\"\n";
-    config_file << TAB << "},\n";
-    // config_file << TAB << "\"top_extension\""
-    config_file << TAB << "\"uvm_components\": {\n";
-    config_file << TAB << TAB << "\"itface\": {\n";
-    config_file << TAB << TAB << TAB << "\"bfm_impl\": \"DefaultBfmImpl\"\n";
-    config_file << TAB << TAB << "},\n";
-    config_file << TAB << TAB << "\"refmdl\": {\n";
-    config_file << TAB << TAB << TAB << "\"refmdl_impl\": \"DefaultRefModelImpl\"\n";
-    config_file << TAB << TAB << "}\n";
-    config_file << TAB << "}\n";
-    config_file << "}\n";
-    config_file.close();
+    json configContent;
+    configContent["id"] = base64_encode("uvm:" + projectName + ":env");
+    configContent["name"] = projectName;
+    configContent["simtool"] = "icarus";
+    configContent["dut_design"] = {
+        {"type", "combinatorial"},
+        {"top_module", topModule},
+        {"sync_clock_cycles", "1"}
+    };
+    configContent["uvm_components"] = {
+        {"itface", {
+            {"bfm_impl", "DefaultBfmImpl"}
+        }},
+        {"refmdl", {
+            {"refmdl_impl", "DefaultRefModelImpl"}
+        }}
+    };
+    writeFileJson("config.json", configContent);
 
     // Create project tree file
     YAML::Node topNode;

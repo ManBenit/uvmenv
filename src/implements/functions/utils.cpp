@@ -15,7 +15,7 @@
 
 #include "../../headers/functions/constants.h"
 #include "../../headers/functions/utils.h"
-using json = nlohmann::json;
+using json = nlohmann::ordered_json;
 namespace fs = std::filesystem;
 using namespace std;
 

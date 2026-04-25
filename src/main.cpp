@@ -174,7 +174,11 @@ int main (int argc, char *argv[]) {
 
     else if(option == "test") {
         createTest("new test");
-        createSequence("new sequence", "TestNewTest");    
+        createSequence("new sequence", "TestNewTest");
+        createSeqitem("el seqitem", "TestNewTest");  
+        createTest("otro test");
+        createSequence("otra secuencia", "TestOtroTest");
+        createSeqitem("otro seqitem", "TestOtroTest");
         //activatePythonVenv();
         //yml_handling_test();
         //json_handling_test();

@@ -21,8 +21,8 @@ public:
 private:
     // auto registration
     static ObjectRegister<Sequence> reg;
-    string name;
-    string testName;
+    std::string name;
+    std::string testName;
 };
 
 #endif // SEQUENCE_H

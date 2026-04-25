@@ -20,7 +20,8 @@ void deleteUVMEnvComponent(const std::string& type);
 
 // name: with PascalCase
 void createTest(const std::string& name);
-void createSequence(const string& name, const string& testName);
+void createSequence(const std::string& name, const std::string& testName);
+void createSeqitem(const std::string& name, const std::string& testName);
 
 void createEnvironment(const std::string& name, Test* test);
 void createEnvironment(const std::string& name, Environment* env);
