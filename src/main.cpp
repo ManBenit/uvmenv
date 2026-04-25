@@ -1,5 +1,6 @@
 #include "headers/functions/utils.h"
 #include "headers/functions/constants.h"
+#include "headers/functions/ptree_handling.h"
 
 #include "headers/uvmenv_handling/component_handling/create_component.h" ///
 #include "headers/uvmenv_handling/general_handling/uvmenv_aux.h"
@@ -13,6 +14,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
+#include <typeinfo>
 #include <nlohmann/json.hpp>
 #include <yaml-cpp/yaml.h>
 using namespace std;
@@ -24,6 +26,26 @@ void uvm_test();
 void json_handling_test();
 void yml_handling_test();
 void genYamlUVMEnv();
+void test_handling_yaml(char *args[]);
+
+void ymlCreateSeqitem(const string& name){
+    YAML::Node seqitem;
+    seqitem["name"] = name;
+
+}
+
+bool existTest(const string& name){
+    YAML::Node ptree = readFileYaml(PROJECT_DIR + PATH_SEP + ".ptree.yml"); // Proj name (get from config.json)
+
+    for( auto test: ptree["top"]["tests"]){
+        cout << "Test name: " << test["name"] << endl;
+        if(test["name"].as<string>() == name){
+            return true;
+        }
+    }
+
+    return false;
+}
 
 int main (int argc, char *argv[]) {
     cout << C_GREEN << "UVMEnv 2.0 - TESTING/DEVELOPING" << C_N << endl;
@@ -152,11 +174,18 @@ int main (int argc, char *argv[]) {
 
     else if(option == "test") {
         createTest("new test");
+        createSequence("new sequence", "TestNewTest");    
         //activatePythonVenv();
         //yml_handling_test();
         //json_handling_test();
         //genYamlUVMEnv();
 
+        //test_handling_yaml(argv);
+
+        // string dictComponents = PROJECT_DIR + PATH_SEP + "project_tree.yml";
+        // YAML::Node y = readFileYaml(PROJECT_DIR + PATH_SEP + "TestProject/.ptree.yml");
+        // cout << "El tipo: " << typeid(y).name() << endl;
+        // cout << "El tipo: " << typeid(dictComponents).name() << endl;
     }
 
     else {
@@ -165,6 +194,65 @@ int main (int argc, char *argv[]) {
     }
 
     return 0;
+}
+
+void test_handling_yaml(char *args[]){
+    if(string(args[2]) == "test") {
+        if(string(args[3]) == "a")
+            treeAddTest(args[4]);
+        else
+            treeDeleteTest(args[4]);
+        for(const auto& t : treeListTest()) cout << "\t" << t << endl;
+    }
+    else if(string(args[2]) == "bfm"){
+        if(string(args[3]) == "a")
+            treeAddInterface(args[4]);
+        else
+            treeDeleteInterface(args[4]);
+        for(const auto& t : treeListInterface()) cout << "\t" << t << endl;
+    }
+    else if(string(args[2]) == "seqitem"){
+        if(string(args[3]) == "a")
+            treeAddSeqitem(args[4], args[5]);
+        else
+            treeDeleteSeqitem(args[4], args[5]);
+        for(const auto& t : treeListSeqitem(args[5])) cout << "\t" << t << endl;
+    }
+    else if(string(args[2]) == "sequence"){
+        if(string(args[3]) == "a")
+            treeAddSequences(args[4], args[5]);
+        else
+            treeDeleteSequences(args[4], args[5]);
+        for(const auto& t : treeListSequences(args[5])) cout << "\t" << t << endl;
+    }
+    else if(string(args[2]) == "env"){
+        if(string(args[3]) == "a")
+            treeAddEnvironment(args[4], args[5]);
+        else
+            treeDeleteEnvironment(args[4], args[5]);
+        for(const auto& t : treeListEnvironments(args[5])) cout << "\t" << t << endl;
+    }
+    else if(string(args[2]) == "rmod"){
+        if(string(args[3]) == "a")
+            treeAddRefmodel(args[4], args[5], args[6]);
+        else
+            treeDeleteRefmodel(args[4], args[5], args[6]);
+        for(const auto& t : treeListRefmodel(args[5], args[6])) cout << "\t" << t << endl;
+    }
+    else if(string(args[2]) == "agent"){
+        if(string(args[3]) == "a")
+            treeAddAgent(args[4], args[5], args[6]);
+        else
+            treeDeleteAgent(args[4], args[5], args[6]);
+        for(const auto& t : treeListAgents(args[5], args[6])) cout << "\t" << t << endl;
+    }
+    else if(string(args[2]) == "scoreboard"){
+        if(string(args[3]) == "a")
+            treeAddScoreboard(args[4], args[5], args[6]);
+        else
+            treeDeleteScoreboard(args[4], args[5], args[6]);
+        for(const auto& t : treeListScoreboards(args[5], args[6])) cout << "\t" << t << endl;
+    }
 }
 
 void genYamlUVMEnv() {

@@ -6,11 +6,17 @@
 #include <filesystem>
 #include <vector>
 #include <iostream>
+
 #include "../../../headers/uvmenv_preudo/Factory.h"
+
 #include "../../../headers/uvmenv_preudo/components/Top.h"
 #include "../../../headers/uvmenv_preudo/components/Test.h"
 #include "../../../headers/uvmenv_preudo/components/Environment.h"
+
+#include "../../../headers/uvmenv_preudo/objects/Sequence.h"
+
 #include "../../../headers/functions/utils.h"
+#include "../../../headers/functions/ptree_handling.h"
 #include "../../../headers/uvmenv_handling/component_handling/create_component.h"
 using namespace std;
 
@@ -50,17 +56,57 @@ void deleteUVMEnvComponent(const string& type){
     }
 }
 
-
-
-////// Validate component existence in the future
-
 // name: with PascalCase
 void createTest(const string& name){
     string pascalName = "Test" + toPascalCase(name);
+    bool alreadyExists = false;
+
+    for(const auto& e: treeListTest()){
+        if(e == pascalName){
+            alreadyExists = true;
+            break;
+        }
+    }
+
+    if(alreadyExists){
+        printWarning( "The test " + pascalName + " already exists. Please choose another name." );
+        return;
+    }
+
     Test* test = (Test*) Factory::instance().createComponent("Test", pascalName, &Top::instance());
     test->setName(pascalName);
     test->copyBaseFile();
-    test->writeOnTree();
+
+    // Create default directories for the test
+    filesystem::create_directory(TBENCH_DIR + PATH_SEP + pascalName + PATH_SEP + "Envmnt");
+    filesystem::create_directory(TBENCH_DIR + PATH_SEP + pascalName + PATH_SEP + "Seqnce");
+    filesystem::create_directory(TBENCH_DIR + PATH_SEP + pascalName + PATH_SEP + "Seqitm");
+
+    treeAddTest(pascalName);
+}
+
+void createSequence(const string& name, const string& testName){
+    string pascalName = "Seq" + toPascalCase(name);
+    bool alreadyExists = false;
+
+    for(const auto& e: treeListSequences(testName)){
+        if(e == pascalName){
+            alreadyExists = true;
+            break;
+        }
+    }
+
+    if(alreadyExists){
+        printWarning( "The sequence " + pascalName + " already exists. Please choose another name." );
+        return;
+    }
+
+    Sequence* sequence = (Sequence*) Factory::instance().createObject("Sequence", pascalName);
+    sequence->setName(pascalName);
+    sequence->setTestContainer(testName);
+    sequence->copyBaseFile();
+
+    treeAddSequences(pascalName, testName);
 }
 
 

@@ -100,6 +100,11 @@ void showHelp() {
 
 
 void createNewEnv(const string& projectName, const string& topModule){
+    if(filesystem::exists(PROJECT_DIR + PATH_SEP + projectName)){
+        printError("The UVMEnv project " + projectName + " already exists. Please choose another name.");
+        return;
+    }
+
     // Create directories structure
     filesystem::create_directory(PROJECT_DIR + PATH_SEP + projectName);
     filesystem::current_path(PROJECT_DIR + PATH_SEP + projectName);
@@ -141,9 +146,11 @@ void createNewEnv(const string& projectName, const string& topModule){
     config_file.close();
 
     // Create project tree file
-    ofstream tree_file(".ptree.yml");
-    tree_file << "top:\n";
-    tree_file.close();
+    YAML::Node topNode;
+    topNode["top"]["tests"] = YAML::Null;
+    topNode["top"]["itfaces"] = YAML::Null;
+    writeFileYaml(".ptree.yml", topNode);
+
 
 
     // Create UVMenv structure files - Make each manager of UVM level
