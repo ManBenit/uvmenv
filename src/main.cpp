@@ -22,30 +22,13 @@ using json = nlohmann::json;
 
 // NOTE: Include sudo apt install nlohmann-json3-dev on install script.
 
-void uvm_test();
+void uvm_factory_test();
 void json_handling_test();
 void yml_handling_test();
 void genYamlUVMEnv();
 void test_handling_yaml(char *args[]);
+void component_creation_test();
 
-void ymlCreateSeqitem(const string& name){
-    YAML::Node seqitem;
-    seqitem["name"] = name;
-
-}
-
-bool existTest(const string& name){
-    YAML::Node ptree = readFileYaml(PROJECT_DIR + PATH_SEP + ".ptree.yml"); // Proj name (get from config.json)
-
-    for( auto test: ptree["top"]["tests"]){
-        cout << "Test name: " << test["name"] << endl;
-        if(test["name"].as<string>() == name){
-            return true;
-        }
-    }
-
-    return false;
-}
 
 int main (int argc, char *argv[]) {
     cout << C_GREEN << "UVMEnv 2.0 - TESTING/DEVELOPING" << C_N << endl;
@@ -173,41 +156,7 @@ int main (int argc, char *argv[]) {
     }
 
     else if(option == "test") {
-        createBFM("spike");
-        createBFM("otro simulador");
-        createBFM("python model");
-
-        createTest("new test");
-        createSequence("new sequence", "TestNewTest");
-        createSeqitem("el seqitem", "TestNewTest");  
-        createTest("otro test");
-        createSequence("otra secuencia", "TestOtroTest");
-        createSeqitem("otro seqitem", "TestOtroTest");
-
-        createEnvironmentOnTest("env de prueba", "TestNewTest");
-        createEnvironmentOnTest("env de prueba2", "TestNewTest");
-
-        createRefModel("model de prueba", "EnvEnvDePrueba", "TestNewTest");
-        createRefModel("equis de", "EnvEnvDePrueba", "TestNewTest");
-        createRefModel("pichula", "EnvEnvDePrueba2", "TestNewTest");
-        createRefModel("otra pichula", "EnvEnvDePrueba2", "TestNewTest");
-
-        createAgent("agent de prueba", "EnvEnvDePrueba", "TestNewTest");
-        createAgent("uart", "EnvEnvDePrueba", "TestNewTest");
-
-        createScoreboard("prueba", "EnvEnvDePrueba", "TestNewTest");
-        createScoreboard("prueba2", "EnvEnvDePrueba", "TestNewTest");
-        //activatePythonVenv();
-        //yml_handling_test();
-        //json_handling_test();
-        //genYamlUVMEnv();
-
-        //test_handling_yaml(argv);
-
-        // string dictComponents = PROJECT_DIR + PATH_SEP + "project_tree.yml";
-        // YAML::Node y = readFileYaml(PROJECT_DIR + PATH_SEP + "TestProject/.ptree.yml");
-        // cout << "El tipo: " << typeid(y).name() << endl;
-        // cout << "El tipo: " << typeid(dictComponents).name() << endl;
+        component_creation_test();
     }
 
     else {
@@ -216,6 +165,39 @@ int main (int argc, char *argv[]) {
     }
 
     return 0;
+}
+
+
+
+
+// ==============
+// TESTS
+// ==============
+void component_creation_test(){
+    createBFM("spike");
+    createBFM("otro simulador");
+    createBFM("python model");
+
+    createTest("new test");
+    createSequence("new sequence", "TestNewTest");
+    createSeqitem("el seqitem", "TestNewTest");  
+    createTest("otro test");
+    createSequence("otra secuencia", "TestOtroTest");
+    createSeqitem("otro seqitem", "TestOtroTest");
+
+    createEnvironmentOnTest("env de prueba", "TestNewTest");
+    createEnvironmentOnTest("env de prueba2", "TestNewTest");
+
+    createRefModel("model de prueba", "EnvEnvDePrueba", "TestNewTest");
+    createRefModel("equis de", "EnvEnvDePrueba", "TestNewTest");
+    createRefModel("pichula", "EnvEnvDePrueba2", "TestNewTest");
+    createRefModel("otra pichula", "EnvEnvDePrueba2", "TestNewTest");
+
+    createAgent("agent de prueba", "EnvEnvDePrueba", "TestNewTest");
+    createAgent("uart", "EnvEnvDePrueba", "TestNewTest");
+
+    createScoreboard("prueba", "EnvEnvDePrueba", "TestNewTest");
+    createScoreboard("prueba2", "EnvEnvDePrueba", "TestNewTest");
 }
 
 void test_handling_yaml(char *args[]){
@@ -424,7 +406,6 @@ void yml_handling_test()
     writeFileYaml(dictComponents + ".yml", y);
 }
 
-
 void json_handling_test(){
     string dictComponents = PROJECT_DIR + PATH_SEP + "project_tree.json"; // Make it hidden file in the future
 
@@ -481,9 +462,7 @@ void json_handling_test(){
     writeFileJson(dictComponents+".json", j);
 }
 
-
-
-void uvm_test(){
+void uvm_factory_test(){
     UVMComponent* top = &Top::instance();
 
 
