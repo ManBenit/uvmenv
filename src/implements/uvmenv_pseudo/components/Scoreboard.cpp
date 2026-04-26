@@ -3,12 +3,25 @@
 using namespace std;
 
 
-//
+void Scoreboard::setName(const string& name){
+    this->name = name;
+}
+
+void Scoreboard::setTestContainer(const string& testName){
+    this->testName = testName;
+}
+
+void Scoreboard::setEnvContainer(const string& envName){
+    this->envName = envName;
+}
 
 
 // @Override
 void Scoreboard::copyBaseFile(){
-    cout << "Copiar archivo base de [component] " << basefilePath << " a " << uvmenvProjectDir << endl;
+    filesystem::copy(
+        basefilePath, 
+        TBENCH_DIR + PATH_SEP + testName + PATH_SEP + "Envmnt" + PATH_SEP + envName + PATH_SEP + "Scorbd" + PATH_SEP + name+".py"
+    );
 }
 
 

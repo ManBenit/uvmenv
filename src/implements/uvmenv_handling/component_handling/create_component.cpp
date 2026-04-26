@@ -16,6 +16,7 @@
 
 #include "../../../headers/uvmenv_preudo/objects/Sequence.h"
 #include "../../../headers/uvmenv_preudo/objects/SequenceItem.h"
+#include "../../../headers/uvmenv_preudo/objects/RefModelImpl.h"
 
 #include "../../../headers/functions/utils.h"
 #include "../../../headers/functions/ptree_handling.h"
@@ -58,7 +59,7 @@ void deleteUVMEnvComponent(const string& type){
     }
 }
 
-// name: with PascalCase
+
 void createTest(const string& name){
     string formatedName = "Test" + toPascalCase(name);
     bool alreadyExists = false;
@@ -140,35 +141,146 @@ void createSeqitem(const string& name, const string& testName){
     treeAddSeqitem(formatedName, testName);
 }
 
+void createEnvironmentOnTest(const string& name, const string& testName){
+    string formatedName = "Env" + toPascalCase(name);
+    string envPath = TBENCH_DIR + PATH_SEP + testName + PATH_SEP + "Envmnt" + PATH_SEP + formatedName;
+    bool alreadyExists = false;
 
-void createEnvironment(const string& name, Test* test){
-    string pascalName = "Env" + toPascalCase(name);
-    Environment* env    = (Environment*) Factory::instance().createComponent("Environment", pascalName, test);
-    //env->setName(pascalName);
-    env->copyBaseFile();
-}
-void createEnvironment(const string& name, Environment* env){
-    string pascalName = "Env" + toPascalCase(name);
-    Environment* subEnv = (Environment*) Factory::instance().createComponent("Environment", pascalName, env);
-    //subEnv->setName("Env" + toPascalCase(name));
-    subEnv->copyBaseFile();
-}
-
-// name: with snake_case
-void createAgent(const string& name, const string& attr, const string& module, Environment* env){
-    UVMComponent* agent = Factory::instance().createComponent("Agent", name, env);
-    agent->create();
-
-    if (name == "" || attr == "" || module == "") {
-        cout << "Missing parameters for creating an Agent" << endl; 
-        cout << "Usage: uvmenv create component agent <attr> <name> <module>" << endl;
-    //uvmenv -c|--create agnt <attr> <agent_name> <module>
-        exit(3);
+    for(const auto& e: treeListEnvironments(testName)){
+        if(e == formatedName){
+            alreadyExists = true;
+            break;
+        }
     }
 
-        
+    if(alreadyExists){
+        printWarning( "The environment " + formatedName + " already exists. Please choose another name." );
+        return;
+    }
+
+
+    filesystem::create_directory(envPath);
+    filesystem::create_directory(envPath + PATH_SEP + "Agents");
+    filesystem::create_directory(envPath + PATH_SEP + "Scorbd");
+    filesystem::create_directories(envPath + PATH_SEP + "RefMdl" + PATH_SEP + "_impl");
+    filesystem::copy(
+        BASES_COMPONENT_DIR + PATH_SEP + "RefmodelBase.py",
+        envPath + PATH_SEP + "RefMdl" + PATH_SEP + "RefModel.py"
+    );
+
+    Environment* env    = (Environment*) Factory::instance().createComponent("Environment", formatedName, nullptr);
+    env->setName(formatedName);
+    env->setTestContainer(testName);
+    env->copyBaseFile();
+
+    treeAddEnvironment(formatedName, testName);
 }
 
+void createEnvironmentOnEnv(const string& name, const string& envParentName, const string& testName){
+    cout << "Comming soon..." << endl;
+}
+
+void createRefModel(const string& name, const string& envName, const string& testName){
+    string formatedName = "Ref" + toPascalCase(name);
+    bool alreadyExists = false;
+
+    for(const auto& e: treeListRefmodel(testName, envName)){
+        if(e == formatedName){
+            alreadyExists = true;
+            break;
+        }
+    }
+
+    if(alreadyExists){
+        printWarning( "The reference model " + formatedName + " already exists. Please choose another name." );
+        return;
+    }
+
+    RefModelImpl* refmodel = (RefModelImpl*) Factory::instance().createObject("RefModelImpl", formatedName);
+    refmodel->setName(formatedName);
+    refmodel->setTestContainer(testName);
+    refmodel->setEnvContainer(envName);
+    refmodel->copyBaseFile();
+
+    treeAddRefmodel(formatedName, testName, envName);
+}
+
+void createAgent(const string& name, const string& envName, const string& testName){
+    string formatedName = "agnt_" + toSnakeCase(name);
+    bool alreadyExists = false;
+
+    for(const auto& e: treeListAgents(testName, envName)){
+        if(e == formatedName){
+            alreadyExists = true;
+            break;
+        }
+    }
+
+    if(alreadyExists){
+        printWarning( "The sequence item " + formatedName + " already exists. Please choose another name." );
+        return;
+    }
+
+    Agent* agent = (Agent*) Factory::instance().createComponent("Agent", formatedName, nullptr);
+    agent->setName(formatedName);
+    agent->setTestContainer(testName);
+    agent->setEnvContainer(envName);
+    agent->copyBaseFile();
+
+    treeAddAgent(formatedName, testName, envName);
+}
+
+void createScoreboard(const string& name, const string& envName, const string& testName){
+    string formatedName = "Scb" + toPascalCase(name);
+    bool alreadyExists = false;
+
+    for(const auto& e: treeListScoreboards(testName, envName)){
+        if(e == formatedName){
+            alreadyExists = true;
+            break;
+        }
+    }
+
+    if(alreadyExists){
+        printWarning( "The scoreboard " + formatedName + " already exists. Please choose another name." );
+        return;
+    }
+
+    Scoreboard* scoreboard = (Scoreboard*) Factory::instance().createComponent("Scoreboard", formatedName, nullptr);
+    scoreboard->setName(formatedName);
+    scoreboard->setTestContainer(testName);
+    scoreboard->setEnvContainer(envName);
+    scoreboard->copyBaseFile();
+
+    treeAddScoreboard(formatedName, testName, envName);
+}
+
+void createBFM(const string& name){
+    string formatedName = "BFM" + toPascalCase(name);
+    bool alreadyExists = false;
+
+    for(const auto& e: treeListInterface()){
+        if(e == formatedName){
+            alreadyExists = true;
+            break;
+        }
+    }
+
+    if(alreadyExists){
+        printWarning( "The interface " + formatedName + " already exists. Please choose another name." );
+        return;
+    }
+
+    filesystem::copy(
+        BASES_COMPONENT_DIR + PATH_SEP + "RefmodelImplBase.py",
+        BFM_DIR + PATH_SEP + "_impl" + PATH_SEP + formatedName+".py"
+    );
+
+    treeAddInterface(formatedName);
+}
 
 #endif
+
+
+
 

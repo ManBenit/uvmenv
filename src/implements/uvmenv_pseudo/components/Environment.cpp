@@ -23,10 +23,17 @@ void Environment::setName(const string& name){
     this->name = name;
 }
 
+void Environment::setTestContainer(const string& testName){
+    this->testName = testName;
+}
+
 
 // @Override
 void Environment::copyBaseFile(){
-    cout << "Copiar archivo base de [component] " << basefilePath << " a " << uvmenvProjectDir << endl;
+    filesystem::copy(
+        basefilePath, 
+        TBENCH_DIR + PATH_SEP + testName + PATH_SEP + "Envmnt" + PATH_SEP + name + PATH_SEP + PYMODULE
+    );
 }
 
 

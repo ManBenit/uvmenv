@@ -15,11 +15,16 @@ public:
     virtual ~RefModelImpl() = default;
 
     void copyBaseFile() override;
+    void setName(const std::string& name);
+    void setTestContainer(const std::string& testName);
+    void setEnvContainer(const std::string& envName);
 
 private:
     // auto registration
     static ObjectRegister<RefModelImpl> reg;
-
+    std::string name;
+    std::string testName;
+    std::string envName;
 };
 
 

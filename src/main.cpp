@@ -173,12 +173,30 @@ int main (int argc, char *argv[]) {
     }
 
     else if(option == "test") {
+        createBFM("spike");
+        createBFM("otro simulador");
+        createBFM("python model");
+
         createTest("new test");
         createSequence("new sequence", "TestNewTest");
         createSeqitem("el seqitem", "TestNewTest");  
         createTest("otro test");
         createSequence("otra secuencia", "TestOtroTest");
         createSeqitem("otro seqitem", "TestOtroTest");
+
+        createEnvironmentOnTest("env de prueba", "TestNewTest");
+        createEnvironmentOnTest("env de prueba2", "TestNewTest");
+
+        createRefModel("model de prueba", "EnvEnvDePrueba", "TestNewTest");
+        createRefModel("equis de", "EnvEnvDePrueba", "TestNewTest");
+        createRefModel("pichula", "EnvEnvDePrueba2", "TestNewTest");
+        createRefModel("otra pichula", "EnvEnvDePrueba2", "TestNewTest");
+
+        createAgent("agent de prueba", "EnvEnvDePrueba", "TestNewTest");
+        createAgent("uart", "EnvEnvDePrueba", "TestNewTest");
+
+        createScoreboard("prueba", "EnvEnvDePrueba", "TestNewTest");
+        createScoreboard("prueba2", "EnvEnvDePrueba", "TestNewTest");
         //activatePythonVenv();
         //yml_handling_test();
         //json_handling_test();

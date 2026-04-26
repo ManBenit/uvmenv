@@ -17,8 +17,10 @@ private:
 
 public:
     Agent(const std::string& typeName, const std::string& name, UVMComponent* parent): UVMComponent(typeName, name, parent){
-        basefilePath = BASES_COMPONENT_DIR + PATH_SEP + "AgentBase.py";
-        uvmenvProjectDir = ENVIRONMENT_DIR + PATH_SEP + "Agents";
+        agentBasePath = BASES_COMPONENT_DIR + PATH_SEP + "AgentBase.py";
+        driverBasePath = BASES_COMPONENT_DIR + PATH_SEP + "AgentDriverBase.py";
+        monitorBasePath = BASES_COMPONENT_DIR + PATH_SEP + "AgentMonitorBase.py";
+        coverageBasePath = BASES_COMPONENT_DIR + PATH_SEP + "AgentCoverageCollectorBase.py";
     }
     virtual ~Agent() = default;
 
@@ -32,10 +34,21 @@ public:
     void copyBaseFile() override;
     void create() override;
 
+    void setName(const std::string& name);
+    void setTestContainer(const std::string& testName);
+    void setEnvContainer(const std::string& envName);
+
 private:
     // auto registration
     static ComponentRegister<Agent> reg;
-    
+    std::string name;
+    std::string testName;
+    std::string envName;
+
+    std::string agentBasePath;
+    std::string driverBasePath;
+    std::string monitorBasePath;
+    std::string coverageBasePath;
 };
 
 

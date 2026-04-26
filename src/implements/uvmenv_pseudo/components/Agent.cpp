@@ -26,11 +26,45 @@ Coverage* Agent::getCoverage() {
     return coverage; 
 }
 
+void Agent::setName(const string& name){
+    this->name = name;
+}
+
+void Agent::setTestContainer(const string& testName){
+    this->testName = testName;
+}
+
+void Agent::setEnvContainer(const string& envName){
+    this->envName = envName;
+}
+
+
 
 // @Override
 void Agent::copyBaseFile(){
-    cout << "Copiar bases a la carpeta_alias" << endl;
-    cout << "Copiar archivo base de [component] " << basefilePath << " a " << uvmenvProjectDir << endl;
+    string destPath = TBENCH_DIR + PATH_SEP + testName + PATH_SEP + "Envmnt" + PATH_SEP + envName + PATH_SEP + "Agents" + PATH_SEP + name;
+
+    filesystem::create_directory(destPath);
+
+    filesystem::copy(
+        agentBasePath,
+        destPath + PATH_SEP + "__init__.py"
+    );
+
+    filesystem::copy(
+        monitorBasePath,
+        destPath + PATH_SEP + "Monitor.py"
+    );
+
+    filesystem::copy(
+        driverBasePath,
+        destPath + PATH_SEP + "Driver.py"
+    );
+
+    filesystem::copy(
+        coverageBasePath,
+        destPath + PATH_SEP + "Coverage.py"
+    );
 }
 
 void Agent::create(){

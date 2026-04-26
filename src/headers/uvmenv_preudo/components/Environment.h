@@ -26,10 +26,13 @@ public:
 
     void copyBaseFile() override;
     void setName(const std::string& name);
+    void setTestContainer(const std::string& testName);
 
 private:
     // auto registration
     static ComponentRegister<Environment> reg;
+    std::string name;
+    std::string testName;
 };
 
 
