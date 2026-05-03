@@ -120,10 +120,6 @@ int main (int argc, char *argv[]) {
             printError("Missing component reference");
             return 4;
         }
-        else{
-            // Validate component existence 
-            cout << "Validate component existence" << endl;
-        }
 
         
         if(string(argv[2]) == "create"){
@@ -146,7 +142,49 @@ int main (int argc, char *argv[]) {
             
         }
         else if(string(argv[2]) == "list"){
+            if( string(argv[3]) == "test" ){
+                for(const string& s: treeListTest())
+                    cout << s << endl;
+            }
+            else if( string(argv[3]) == "bfm" ){
+                for(const string& s: treeListInterface())
+                    cout << s << endl;
+            }
+            else if( string(argv[3]) == "env" ){
+                for(const string& s: treeListEnvironments(argv[4]))
+                    cout << s << endl;
+            }
+            else if( string(argv[3]) == "seqitem" ){
+                for(const string& s: treeListSeqitem(argv[4]))
+                    cout << s << endl;
+            }
+            else if( string(argv[3]) == "seqce" ){
+                for(const string& s: treeListSequences(argv[4]))
+                    cout << s << endl;
+            }
+            else if( string(argv[3]) == "agent" ){
+                for(const string& s: treeListAgents(argv[4], argv[5]))
+                    cout << s << endl;
+            }
+            else if( string(argv[3]) == "scorebd" ){
+                for(const string& s: treeListScoreboards(argv[4], argv[5]))
+                    cout << s << endl;
+            }
+            else if( string(argv[3]) == "refmod" ){
+                for(const string& s: treeListRefmodel(argv[4], argv[5]))
+                    cout << s << endl;
+            }
             
+            else if( string(argv[3]) == "misc" ){
+                cout << "Comming soon..." << endl;
+            }
+            else if( string(argv[3]) == "rtlsig" ){
+
+            }
+            else if( string(argv[3]) == "rtlmod" ){
+
+            }
+
         }
         else {
             printError("Unknown component option: " + string(argv[2]));

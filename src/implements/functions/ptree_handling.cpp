@@ -3,6 +3,7 @@
 #include "../../headers/functions/constants.h"
 #include <string>
 #include <vector>
+#include <iostream> ///
 #include <yaml-cpp/yaml.h>
 using namespace std;
 
@@ -220,12 +221,12 @@ void treeAddAgent(const string& name, const string& testName, const string& envN
 
 vector<string> treeListAgents(const string& testName, const string& envName){
     YAML::Node treeFile = readFileYaml(ptreeFilePath);
-    vector<string> seqItemNames;
+    vector<string> agents;
 
-    for (const auto& seqitem : treeFile["top"]["tests"][testName]["envs"][envName]["agents"])
-        seqItemNames.push_back(seqitem.as<string>());
+    for (const auto& agent : treeFile["top"]["tests"][testName]["envs"][envName]["agents"])
+        agents.push_back(agent.as<string>());
 
-    return seqItemNames;
+    return agents;
 }
 
 void treeDeleteAgent(const string& name, const string& testName, const string& envName){
