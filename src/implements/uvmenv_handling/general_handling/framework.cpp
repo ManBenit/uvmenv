@@ -34,7 +34,7 @@ bool isUVMEnvProject(const string& path){
 
 
 bool existsDUT(){
-    string rtlFiles = execCmdReturn(getScript("sys_commands") + "validateRTLExistence " + DUT_HDL_DIR);
+    string rtlFiles = execCmdReturn(getScript("sys_commands") + "getRTLModuleNames " + DUT_HDL_DIR);
     return trim(rtlFiles) != "";
 }
 
@@ -188,7 +188,7 @@ void createNewEnv(const string& projectName, const string& topModule){
 
 
 void runCurrentProject(){
-    string rtlFiles = execCmdReturn(getScript("sys_commands") + "getRTLfiles " + DUT_HDL_DIR);
+    string rtlFiles = execCmdReturn(getScript("sys_commands") + "getRTLFullFiles " + DUT_HDL_DIR);
     string pyVersion = getPythonVersion();
 
     // Leer el archivo de configuración JSON
@@ -246,6 +246,67 @@ void searchProjects(){
 
     for(const auto& name: projects)
         cout << name << endl;
+}
+
+
+// @arg option: 'r' for refresh and 'n' for normal options 
+void getDUTSignals(const char& option){
+    if(!existsDUT()){
+        printWarning("No RTL files found in " + DUT_HDL_DIR + " directory. Please, add your RTL source into HDLSrc");
+        return;
+    }
+
+    const string& rtlFullFiles = trim( execCmdReturn(getScript("sys_commands") + "getRTLFullFiles " + DUT_HDL_DIR) );
+    const string& rtlModuleNames = trim( execCmdReturn(getScript("sys_commands") + "getRTLModuleNames " + DUT_HDL_DIR) );
+
+    string auxDir = DUT_HDL_DIR + PATH_SEP + "auxHDL";
+    // Let's consider append option by default
+    char writeOption = 'a';
+    int count = 0;
+
+    // If option is refresh, let's generate a new .allSignalsFie.csv
+    if(option == 'r'){
+        filesystem::remove(DUT_HDL_DIR + PATH_SEP + ".allSignals.csv");
+
+        // Make the auxiliar directory and copy files of DUT
+        filesystem::create_directory(auxDir);
+        for(const string& m: splitString(rtlFullFiles, ' ')){
+            filesystem::copy(m, auxDir);
+        }
+        
+        // Copy the base fiel of signals getter into aux signals.py
+        filesystem::copy(SIGNAL_GETTER_FILEBASE, auxDir + PATH_SEP + "signals.py");
+
+        // Verilate each module into the aux directory
+        filesystem::current_path(auxDir);
+        for(const string& m: splitString(rtlModuleNames, ' ')){
+            if(count > 0)
+                writeOption = 'a';
+            else
+                writeOption = 'w';
+            execCmdSimple(getScript("sys_commands") + "verilateModel " + m);
+            execCmdSimple(getScript("python_control") + "runSignalsGetter " + getPythonVersion() + " " + writeOption + " " + option + " " + m);
+            count++;
+        }
+        filesystem::copy(".allSignals.csv", DUT_HDL_DIR);
+        count = 0;
+        filesystem::current_path(PROJECT_DIR);
+        filesystem::remove_all(auxDir);
+    }
+
+    // Always read from .csv file
+    filesystem::current_path(DUT_HDL_DIR);
+    
+    // Copy signals getter file
+    if( !filesystem::exists("signals.py") )
+        filesystem::copy(SIGNAL_GETTER_FILEBASE, "signals.py");
+    
+    for(const string& m: splitString(rtlModuleNames, ' ')){
+        printInfo("\tSignals of " + m);
+        execCmdSimple(getScript("python_control") + "runSignalsGetter " + getPythonVersion() + " x n " + m);
+    }
+    filesystem::remove("signals.py");
+    filesystem::current_path(PROJECT_DIR);
 }
 
 

@@ -12,6 +12,7 @@ void showHelp();
 void createNewEnv(const std::string& projectName, const std::string& topModule);
 void runCurrentProject();
 void searchProjects();
+void getDUTSignals(const char& option);
 
 #endif // FRAMEWORK_H
 

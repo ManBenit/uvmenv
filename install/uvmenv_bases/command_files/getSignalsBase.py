@@ -2,6 +2,7 @@
 ###    COMMAND FILE    ###
 ##########################
 
+import re
 import sys
 import csv
 
@@ -82,7 +83,7 @@ def get_signals_from_compilation(file, csvwritemode):
 
         # Signals IN and OUT are between PORTS and CELLS lines into .h file.
         if save_line and '//' not in line:
-            added_line = line.replace('\t', ' ').replace('\s+', ' ').strip()
+            added_line = line.replace('\t', ' ').replace(r'\s+', ' ').strip()
             if added_line != '':
                 signals.append(added_line)
 

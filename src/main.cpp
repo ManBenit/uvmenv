@@ -17,6 +17,7 @@
 #include <typeinfo>
 #include <nlohmann/json.hpp>
 #include <yaml-cpp/yaml.h>
+#include <chrono>
 using namespace std;
 using json = nlohmann::json;
 
@@ -28,6 +29,7 @@ void yml_handling_test();
 void genYamlUVMEnv();
 void test_handling_yaml(char *args[]);
 void component_creation_test();
+void getting_signals_test();
 
 
 int main (int argc, char *argv[]) {
@@ -64,6 +66,7 @@ int main (int argc, char *argv[]) {
         showHelp();
     }
 
+
     ///// PROJECT HANDLING /////
     else if(option == "project"){
         if(!isUVMEnvProject(PROJECT_DIR)){
@@ -81,6 +84,10 @@ int main (int argc, char *argv[]) {
             showProjectTree();
         }
         else if(string(argv[2]) == "init"){
+            if(!existsDUT()){
+                printError("DUT files not found.");
+                return 1;
+            }
             cout << "Initializing project..." << endl;
         }
         else if(string(argv[2]) == "report"){
@@ -103,10 +110,16 @@ int main (int argc, char *argv[]) {
         }
     }
     
+
     ///// COMPONENT HANDLING /////
     else if(option == "component"){
         if(!isUVMEnvProject(PROJECT_DIR)){
             printError("You need using a valid project to run this option.");
+            return 1;
+        }
+
+        if(!existsDUT()){
+            printError("DUT files not found.");
             return 1;
         }
 
@@ -194,7 +207,8 @@ int main (int argc, char *argv[]) {
     }
 
     else if(option == "test") {
-        component_creation_test();
+        //component_creation_test();
+        getting_signals_test();
     }
 
     else {
@@ -211,6 +225,22 @@ int main (int argc, char *argv[]) {
 // ==============
 // TESTS
 // ==============
+void getting_signals_test(){
+    auto init1 = chrono::high_resolution_clock::now();
+    getDUTSignals('r');
+    auto end1 = chrono::high_resolution_clock::now();
+
+    auto init2 = chrono::high_resolution_clock::now();
+    getDUTSignals('n');
+    auto end2 = chrono::high_resolution_clock::now();
+
+    chrono::duration<double, std::milli> refreshTime = end1-init1;
+    chrono::duration<double, std::milli> normalTime = end2-init2;
+    cout << endl;
+    cout << "Time with refresh: " << refreshTime.count() << " ms." << endl;
+    cout << "Time with .csv: " << normalTime.count() << " ms." << endl;
+}
+
 void component_creation_test(){
     createBFM("spike");
     createBFM("otro simulador");

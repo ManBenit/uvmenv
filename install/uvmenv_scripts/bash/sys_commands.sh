@@ -15,7 +15,7 @@ function viewReport(){
 }
 
 # $1: Path for RTL files
-function getRTLfiles(){
+function getRTLFullFiles(){
     local files=""
     local modules_list=($(find $1 -type f \( -name "*.v" -o -name "*.sv" \) | sort | uniq))
 
@@ -27,7 +27,7 @@ function getRTLfiles(){
 }
 
 # $1: Path for RTL files
-function validateRTLExistence(){
+function getRTLModuleNames(){
     echo $(find $1 -type f \( -name "*.v" -o -name "*.sv" \) | sed -E 's/.*\/([^\/]+)\..*/\1/' | sort | uniq)
 }
 
@@ -38,6 +38,11 @@ function cleanProject(){
     rm -rf $1/sim_build
     rm -f $1/results.xml
     rm -f $1/Makefile
+}
+
+# $1: File of iteration
+function verilateModel(){
+    verilator -Wno-WIDTHEXPAND -Wno-fatal --trace --x-assign unique --x-initial unique -cc --hierarchical $1 --top-module $(echo $1 | cut -d'.' -f1) >> verilator.log
 }
 
 
@@ -54,15 +59,18 @@ case $1 in
         viewReport $2
         ;;
 
-    "getRTLfiles")
-        getRTLfiles $2
+    "getRTLFullFiles")
+        getRTLFullFiles $2
         ;;
-    "validateRTLExistence")
-        validateRTLExistence $2
+    "getRTLModuleNames")
+        getRTLModuleNames $2
         ;;
 
     "cleanProject")
         cleanProject $2
+        ;;
+    "verilateModel")
+        verilateModel $2
         ;;
     *)
         echo "[sys_commands] Unknown command: $1"
