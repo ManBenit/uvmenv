@@ -119,15 +119,39 @@ int main (int argc, char *argv[]) {
         if(string(argv[2]) == "create"){
             cout << "Creating component..." << endl;
             cout << "Component type: " << argv[3] << endl;
-            if(string(argv[3]) == "test"){
-                if(argv[4] == nullptr){
-                    printError("Missing component name");
-                    return 4;
-                }
+            
+            /** 
+             * For listing components, consider:
+             * - argv[3]: Component you want.
+             * - argv[4]: Component name.
+             * - argv[5]: Test name in which your component is.
+             * - argv[6]: Env name in which your component is.
+             */
+            if( string(argv[3]) == "test" ){
                 createTest(argv[4]);
             }
-            //createAgent("Agent_A1", "driver", "Driver_A1", nullptr);
-            //createAgent("Agent_A1", "driver", "Driver_A1", nullptr);
+            else if( string(argv[3]) == "bfm" ){
+                createBFM(argv[4]);
+            }
+            else if( string(argv[3]) == "env" ){
+                createEnvironmentOnTest(argv[4], argv[5]);
+            }
+            else if( string(argv[3]) == "seqitem" ){
+                createSeqitem          (argv[4], argv[5]);
+            }
+            else if( string(argv[3]) == "seqce" ){
+                createSequence         (argv[4], argv[5]);
+            }
+            else if( string(argv[3]) == "agent" ){
+                createAgent            (argv[4], argv[5], argv[6]);
+            }
+            else if( string(argv[3]) == "scorebd" ){
+                cout << "webos" << endl;
+                createScoreboard       (argv[4], argv[5], argv[6]);
+            }
+            else if( string(argv[3]) == "refmod" ){
+                createRefModel         (argv[4], argv[5], argv[6]);
+            }
         }
         else if(string(argv[2]) == "delete"){
 
