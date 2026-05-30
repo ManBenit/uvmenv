@@ -52,12 +52,12 @@ int main (int argc, char *argv[]) {
     else if(option == "project"){
         if(!isUVMEnvProject(PROJECT_DIR)){
             printError("You need using a valid project to run this option.");
-            return 1;
+            return 3;
         }
 
         if(argv[2] == nullptr){
             printError("Missing project option");
-            return 4;
+            return 6;
         }
 
         
@@ -68,7 +68,7 @@ int main (int argc, char *argv[]) {
         else if(string(argv[2]) == "init"){
             if(!existsDUT()){
                 printError("DUT files not found.");
-                return 3;
+                return 4;
             }
             
             getDUTSignals('r');
@@ -92,13 +92,13 @@ int main (int argc, char *argv[]) {
         else if(string(argv[2]) == "run"){
             if(!existsDUT()){
                 printError("DUT files not found.");
-                return 3;
+                return 4;
             }
             runCurrentProject();
         }
         else {
             printError("Unknown project option: " + string(argv[2]));
-            return 2;
+            return 5;
         }
     }
     
@@ -107,23 +107,23 @@ int main (int argc, char *argv[]) {
     else if(option == "component"){
         if(!isUVMEnvProject(PROJECT_DIR)){
             printError("You need using a valid project to run this option.");
-            return 1;
+            return 3;
         }
 
         if(!existsDUT()){
             printError("DUT files not found.");
-            return 1;
+            return 4;
         }
 
         if(argv[2] == nullptr){
             printError("USAGE: uvmenv component OPTION COMPONENT ATTRIBUTES");
             printInfo("See uvmenv help for more details");
-            return 4;
+            return 6;
         }
 
         if(argv[3] == nullptr){
             printError("Missing component reference");
-            return 4;
+            return 6;
         }
 
         
@@ -222,7 +222,7 @@ int main (int argc, char *argv[]) {
         }
         else {
             printError("Unknown component option: " + string(argv[2]));
-            return 2;
+            return 5;
         }
         
     }
@@ -234,7 +234,7 @@ int main (int argc, char *argv[]) {
 
     else {
         printError("Unknown option: " + option);
-        return 2;
+        return 5;
     }
 
     return 0;
