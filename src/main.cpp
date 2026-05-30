@@ -64,12 +64,23 @@ int main (int argc, char *argv[]) {
         if(string(argv[2]) == "view"){
             showProjectTree();
         }
+
         else if(string(argv[2]) == "init"){
             if(!existsDUT()){
                 printError("DUT files not found.");
-                return 1;
+                return 3;
             }
-            cout << "Initializing project..." << endl;
+            
+            getDUTSignals('r');
+            createBFM("default");
+            createTest("default");
+            createEnvironmentOnTest("default", "TestDefault");
+            createRefModel("default", "TestDefault", "EnvDefault");
+            createSeqitem("default", "TestDefault");
+            createSequence("default", "TestDefault");
+            createAgent("default", "TestDefault", "EnvDefault");
+            createScoreboard("default", "TestDefault", "EnvDefault");
+            
         }
         else if(string(argv[2]) == "report"){
             showReport();
@@ -146,7 +157,6 @@ int main (int argc, char *argv[]) {
                 createAgent            (argv[4], argv[5], argv[6]);
             }
             else if( string(argv[3]) == "scorebd" ){
-                cout << "webos" << endl;
                 createScoreboard       (argv[4], argv[5], argv[6]);
             }
             else if( string(argv[3]) == "refmod" ){

@@ -34,7 +34,6 @@ void Top::copyBaseFile(){
         basefilePath, 
         uvmenvProjectDir + PATH_SEP + projectName + PATH_SEP + "Top_" + topModuleName + ".py"
     );
-    cout << "Copiar base del Top" << endl;
 }
 
 

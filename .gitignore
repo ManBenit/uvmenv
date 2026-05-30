@@ -4,3 +4,13 @@
 */test_project/**
 .vscode/
 
+
+
+# ==========================================
+# FILES FOR TESTING ONLY
+# ==========================================
+docs/fast_docs.md
+src/TestProject/*
+src/compilation.log
+src/runTest.sh
+src/uvmenv_test
