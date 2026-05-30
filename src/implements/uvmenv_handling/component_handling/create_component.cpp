@@ -1,6 +1,4 @@
-#ifndef CREATE
-#define CREATE
-
+#include "../../../headers/uvmenv_handling/component_handling/create_component.h"
 
 #include <string>
 #include <filesystem>
@@ -19,21 +17,18 @@
 #include "../../../headers/uvmenv_preudo/objects/RefModelImpl.h"
 
 #include "../../../headers/functions/utils.h"
-#include "../../../headers/functions/ptree_handling.h"
-#include "../../../headers/uvmenv_handling/component_handling/create_component.h"
+#include "../../../headers/uvmenv_handling/component_handling/ptree_handling.h"
 using namespace std;
 
 vector<string> options = {"test", "env", "agent", "seqitem", "seqce", "scorebd", "refmod", "bfm"};
 string ptree_file = PROJECT_DIR + PATH_SEP + "ptree.yml";
 
 
-void createUVMEnvComponent(const string& type){
-    if(!isInOptions(type, &options)){
-        cout << type << " is not a valid component reference for creation" << endl;
-    }
-
-
-}
+// void createUVMEnvComponent(const string& type){
+//     if(!isInOptions(type, &options)){
+//         cout << type << " is not a valid component reference for creation" << endl;
+//     }
+// }
 
 void listUVMEnvComponents(const string& type){
     vector<string> listOptions = {"rtlsig", "rtlmod"};
@@ -44,21 +39,45 @@ void listUVMEnvComponents(const string& type){
     }
 }
 
-void editUVMEnvComponents(const string& type){
-    vector<string> editOptions = {"top", "config", "util", "path"};
-    editOptions.insert(editOptions.end(), options.begin(), options.end());
+// void editUVMEnvComponents(const string& type){
+//     vector<string> editOptions = {"top", "config", "util", "path"};
+//     editOptions.insert(editOptions.end(), options.begin(), options.end());
 
-    if(!isInOptions(type, &editOptions)){
-        cout << type << " is not a valid component reference for edition" << endl;
+//     if(!isInOptions(type, &editOptions)){
+//         cout << type << " is not a valid component reference for edition" << endl;
+//     }
+// }
+
+// void deleteUVMEnvComponent(const string& type){
+//     if(!isInOptions(type, &options)){
+//         cout << type << " is not a valid component reference for deletion" << endl;
+//     }
+// }
+
+
+void createBFM(const string& name){
+    string formatedName = "BFM" + toPascalCase(name);
+    bool alreadyExists = false;
+
+    for(const auto& e: treeListInterface()){
+        if(e == formatedName){
+            alreadyExists = true;
+            break;
+        }
     }
-}
 
-void deleteUVMEnvComponent(const string& type){
-    if(!isInOptions(type, &options)){
-        cout << type << " is not a valid component reference for deletion" << endl;
+    if(alreadyExists){
+        printWarning( "The interface " + formatedName + " already exists. Please choose another name." );
+        return;
     }
-}
 
+    filesystem::copy(
+        BASES_COMPONENT_DIR + PATH_SEP + "RefmodelImplBase.py",
+        BFM_DIR + PATH_SEP + "_impl" + PATH_SEP + formatedName+".py"
+    );
+
+    treeAddInterface(formatedName);
+}
 
 void createTest(const string& name){
     string formatedName = "Test" + toPascalCase(name);
@@ -176,11 +195,11 @@ void createEnvironmentOnTest(const string& name, const string& testName){
     treeAddEnvironment(formatedName, testName);
 }
 
-void createEnvironmentOnEnv(const string& name, const string& envParentName, const string& testName){
+void createEnvironmentOnEnv(const string& name, const string& testName, const string& envParentName){
     cout << "Comming soon..." << endl;
 }
 
-void createRefModel(const string& name, const string& envName, const string& testName){
+void createRefModel(const string& name, const string& testName, const string& envName){
     string formatedName = "Ref" + toPascalCase(name);
     bool alreadyExists = false;
 
@@ -205,7 +224,7 @@ void createRefModel(const string& name, const string& envName, const string& tes
     treeAddRefmodel(formatedName, testName, envName);
 }
 
-void createAgent(const string& name, const string& envName, const string& testName){
+void createAgent(const string& name, const string& testName, const string& envName){
     string formatedName = "agnt_" + toSnakeCase(name);
     bool alreadyExists = false;
 
@@ -230,7 +249,7 @@ void createAgent(const string& name, const string& envName, const string& testNa
     treeAddAgent(formatedName, testName, envName);
 }
 
-void createScoreboard(const string& name, const string& envName, const string& testName){
+void createScoreboard(const string& name, const string& testName, const string& envName){
     string formatedName = "Scb" + toPascalCase(name);
     bool alreadyExists = false;
 
@@ -254,32 +273,6 @@ void createScoreboard(const string& name, const string& envName, const string& t
 
     treeAddScoreboard(formatedName, testName, envName);
 }
-
-void createBFM(const string& name){
-    string formatedName = "BFM" + toPascalCase(name);
-    bool alreadyExists = false;
-
-    for(const auto& e: treeListInterface()){
-        if(e == formatedName){
-            alreadyExists = true;
-            break;
-        }
-    }
-
-    if(alreadyExists){
-        printWarning( "The interface " + formatedName + " already exists. Please choose another name." );
-        return;
-    }
-
-    filesystem::copy(
-        BASES_COMPONENT_DIR + PATH_SEP + "RefmodelImplBase.py",
-        BFM_DIR + PATH_SEP + "_impl" + PATH_SEP + formatedName+".py"
-    );
-
-    treeAddInterface(formatedName);
-}
-
-#endif
 
 
 

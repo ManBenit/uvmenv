@@ -1,35 +1,28 @@
-#ifndef CREATE_COMPONENT
-#define CREATE_COMPONENT
+#ifndef CREATE_COMPONENT_H
+#define CREATE_COMPONENT_H
 
 
 #include <string>
 #include <filesystem>
 #include <vector>
 
-class Test;
-class Environment;
 
-
-
-void createUVMEnvComponent(const std::string& type);
-void listUVMEnvComponents(const std::string& type);
-void editUVMEnvComponents(const std::string& type);
-void deleteUVMEnvComponent(const std::string& type);
-
-
-
+// Require only name
+void createBFM (const std::string& name);
 void createTest(const std::string& name);
-void createSequence(const std::string& name, const std::string& testName);
-void createSeqitem(const std::string& name, const std::string& testName);
+
+// Require Test
+void createSequence         (const std::string& name, const std::string& testName);
+void createSeqitem          (const std::string& name, const std::string& testName);
 
 void createEnvironmentOnTest(const std::string& name, const std::string& testName);
-void createEnvironmentOnEnv(const std::string& name, const std::string& envParentName, const std::string& testName);
 
-void createRefModel(const std::string& name, const std::string& envName, const std::string& testName);
-void createAgent(const std::string& name, const std::string& envName, const std::string& testName);
-void createScoreboard(const std::string& name, const std::string& envName, const std::string& testName);
+// Require Test and Environment
+void createEnvironmentOnEnv (const std::string& name, const std::string& testName, const std::string& envParentName);
 
-void createBFM(const std::string& name);
+void createRefModel  (const std::string& name, const std::string& testName, const std::string& envName);
+void createAgent     (const std::string& name, const std::string& testName, const std::string& envName);
+void createScoreboard(const std::string& name, const std::string& testName, const std::string& envName);
 
-#endif
+#endif // CREATE_COMPONENT_H
 
