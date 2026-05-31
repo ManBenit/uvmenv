@@ -1,0 +1,53 @@
+#include "../../../headers/functions/context_handlers/ImmediateCtxHandler.h"
+
+#include "../../../headers/functions/utils.h"
+#include "../../../headers/functions/constants.h"
+#include "../../../headers/uvmenv_handling/general_handling/framework.h"
+
+#include <vector>
+#include <string>
+#include <iostream> //
+using namespace std;
+
+
+// public
+int ImmediateOptHandler::cmdNew(const vector<string>& args){
+    // ================================
+    // Double validation of args
+    // Required [1, 2]
+    // ================================
+    // 1. Validate existance of required arguemnts
+    if(args.size() < 3){
+        printWarning("Usage: uvmenv -n|--new <project name> <top module name>");
+        return 6;
+    }
+    // 2. Validate arguments not empty
+    if( !requireArgs(
+        {args[1], args[2]},
+        "Usage: uvmenv -n|--new <project name> <top module name>"
+    ) ) return 6;
+
+    // argv[2]: Project name.
+    // argv[3]: Top module name.
+    createNewEnv(args[1], args[2]);
+
+    return 0;
+}
+
+int ImmediateOptHandler::cmdSearch(){
+    if( isUVMEnvProject(PROJECT_DIR) ){
+        printInfo("You are already into a UVMEnv project");
+        return 0;
+    }
+
+    searchProjects();
+
+    return 0;
+}
+
+int ImmediateOptHandler::cmdHelp(){
+    showHelp();
+    return 0;
+}
+
+

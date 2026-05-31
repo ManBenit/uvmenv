@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <initializer_list>
 
 #include "headers/functions/utils.h"
 #include "headers/functions/constants.h"
@@ -8,57 +9,47 @@
 #include "headers/uvmenv_handling/component_handling/list_component.h"
 #include "headers/uvmenv_handling/general_handling/uvmenv_aux.h"
 #include "test_main.h" // Ommit to prod
+
+#include "headers/functions/context_handlers/ComponentCtxHandler.h"
+#include "headers/functions/context_handlers/ImmediateCtxHandler.h"
+#include "headers/functions/context_handlers/ProjectCtxHandler.h"
 using namespace std;
 
 
 
-
 int main (int argc, char *argv[]) {
+    vector<string> args;
+    for(int i=1; i<argc; i++)
+        args.push_back(argv[i]);
+
     cout << C_GREEN << "UVMEnv 2.0 - TESTING/DEVELOPING" << C_N << endl;
     if(argc < 2) {
         showHelp();
         return 0;
     }
 
-    string option = argv[1];
+    ComponentOptHandler compOptHandlr;
+    ImmediateOptHandler immOptHandlr;
+    ProjectOptHandler projOptHandlr;
+
+    string ctx = args[0];
     
     ///// FRAMEWORK HANDLING /////
-    if(option == "new") {
-
-        if(argv[2] == nullptr || argv[3] == nullptr){
-            printError("Missing parameters");
-            printInfo("Usage: uvmenv -n|--new <project name> <top module name>");
-            exit(0);
-        }
-
-        // argv[2]: Project name.
-        // argv[3]: Top module name.
-        createNewEnv(argv[2], argv[3]);
+    if(ctx == "new") {
+        return immOptHandlr.cmdNew(args);
     } 
-    else if(option == "search") {
-        if(isUVMEnvProject(PROJECT_DIR)){
-            printInfo("You are already into a UVMEnv project");
-            return 0;
-        }
-
-        searchProjects();
+    else if(ctx == "search") {
+        return immOptHandlr.cmdSearch();
     } 
-    else if(option == "help") {
-        showHelp();
+    else if(ctx == "help") {
+        return immOptHandlr.cmdHelp();
     }
 
 
     ///// PROJECT HANDLING /////
-    else if(option == "project"){
-        if(!isUVMEnvProject(PROJECT_DIR)){
-            printError("You need using a valid project to run this option.");
-            return 3;
-        }
-
-        if(argv[2] == nullptr){
-            printError("Missing project option");
-            return 6;
-        }
+    else if(ctx == "project"){
+        if( !requireProject() ) return 3;
+        if( !requireArgs({argv[2]}, "Missing project ctx") ) return 6;
 
         
         if(string(argv[2]) == "view"){
@@ -66,10 +57,7 @@ int main (int argc, char *argv[]) {
         }
 
         else if(string(argv[2]) == "init"){
-            if(!existsDUT()){
-                printError("DUT files not found.");
-                return 4;
-            }
+            if( !requireDUT() ) return 4;
             
             getDUTSignals('r');
             createBFM("default");
@@ -90,41 +78,24 @@ int main (int argc, char *argv[]) {
             //showWaveform();
         }
         else if(string(argv[2]) == "run"){
-            if(!existsDUT()){
-                printError("DUT files not found.");
-                return 4;
-            }
+            if( !requireDUT() ) return 4;
             runCurrentProject();
         }
         else {
-            printError("Unknown project option: " + string(argv[2]));
+            printError("[project] Unknown ctx: " + string(argv[2]));
             return 5;
         }
     }
     
 
     ///// COMPONENT HANDLING /////
-    else if(option == "component"){
-        if(!isUVMEnvProject(PROJECT_DIR)){
-            printError("You need using a valid project to run this option.");
-            return 3;
-        }
-
-        if(!existsDUT()){
-            printError("DUT files not found.");
-            return 4;
-        }
-
-        if(argv[2] == nullptr){
-            printError("USAGE: uvmenv component OPTION COMPONENT ATTRIBUTES");
-            printInfo("See uvmenv help for more details");
-            return 6;
-        }
-
-        if(argv[3] == nullptr){
-            printError("Missing component reference");
-            return 6;
-        }
+    else if(ctx == "component"){
+        if( !requireProject() ) return 3;
+        if( !requireDUT() ) return 4;
+        if( !requireArgs(
+            {argv[2], argv[3]}, 
+            "USAGE: uvmenv component OPTION COMPONENT ATTRIBUTES"
+        ) ) return 6;
 
         
         if(string(argv[2]) == "create"){
@@ -221,23 +192,24 @@ int main (int argc, char *argv[]) {
 
         }
         else {
-            printError("Unknown component option: " + string(argv[2]));
+            printError("[component] Unknown ctx: " + string(argv[2]));
             return 5;
         }
         
     }
 
-    else if(option == "test") {
+    else if(ctx == "test") {
         component_creation_test();
         getting_signals_test();
     }
 
     else {
-        printError("Unknown option: " + option);
+        printError("Unknown ctx: " + ctx);
         return 5;
     }
 
     return 0;
 }
+
 
 

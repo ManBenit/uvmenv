@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <initializer_list>
 #include <array>
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -310,6 +311,35 @@ void getDUTSignals(const char& option){
 }
 
 
+
+
+
+
+bool requireProject(){
+    if(!isUVMEnvProject(PROJECT_DIR)){
+        printError("You need using a valid project to run this option.");
+        return false;
+    }
+    return true;
+}
+
+bool requireDUT(){
+    if(!existsDUT()){
+        printError("DUT files not found.");
+        return false;
+    }
+    return true;
+}
+
+bool requireArgs(initializer_list<string> args, const string& msg){
+    for (const auto& arg : args) {
+        if (arg.empty()) {
+            printWarning(msg);
+            return false;
+        }
+    }
+    return true;
+}
 
 
 
