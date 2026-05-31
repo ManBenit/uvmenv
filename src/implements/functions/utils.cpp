@@ -75,6 +75,26 @@ string trim(const string& s){
     return s.substr(first, (last - first + 1));
 }
 
+string doTabs(const int& n) {
+    if(n<=1) return TAB;
+    
+    string retTabs = "";
+    for(int i=0; i<n; i++)
+        retTabs += TAB;
+
+    return retTabs;
+}
+
+// void replaceAll(string& str, const string& from, const string& to){
+//     size_t pos = 0;
+
+//     while ((pos = str.find(from, pos)) != string::npos)
+//     {
+//         str.replace(pos, from.length(), to);
+//         pos += to.length();
+//     }
+// }
+
 bool isPascalCase(const string& s) {
     if (s.empty()) return true;
     
@@ -346,4 +366,5 @@ vector<string> getFileNamesInDirectory(const string directoryPath) {
     return fileNames;
 }
 ///////////////////////////////////////////////////////////////////
+
 

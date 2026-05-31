@@ -1,10 +1,15 @@
 #include "../../../headers/uvmenv_handling/component_handling/create_component.h"
 
 #include <string>
+#include <fstream>
+#include <sstream>
+#include <regex>
 #include <filesystem>
 #include <vector>
 #include <vector>
 #include <iostream>
+
+#include "../../../headers/uvmenv_handling/general_handling/framework.h"
 
 #include "../../../headers/uvmenv_preudo/Factory.h"
 
@@ -40,10 +45,36 @@ void createBFM(const string& name){
         return;
     }
 
-    filesystem::copy(
-        BASES_COMPONENT_DIR + PATH_SEP + "RefmodelImplBase.py",
-        BFM_DIR + PATH_SEP + "_impl" + PATH_SEP + formatedName+".py"
-    );
+
+    
+    ifstream baseFile(BASES_COMPONENT_DIR + PATH_SEP + "BFMImplBase.py");
+    stringstream buffer;
+    buffer << baseFile.rdbuf();
+    string content = buffer.str();
+
+    // Change class name
+    content = regex_replace(content, regex("CLASS_NAME"), "PruebaCambio");
+    content = regex_replace(content, regex("GET_INS|GET_OUTS"), doTabs(3)+"a: \"99\""); //*** */
+    //getDUTSignals('i');
+    //sed -r "s|CLASS_NAME|$1|g" $BFM_IMPL_FILEBASE > $BFMIMPL_DIR/tmp1.py  
+
+    // ## Change set method (parameters and inits)
+
+    // sed -r "s|PARAMETERS|$parameters_of_set|g" $BFMIMPL_DIR/tmp1.py > $BFMIMPL_DIR/tmp2.py  
+    // sed -r "s|INIT_VALUES|$init_values_on_set|g" $BFMIMPL_DIR/tmp2.py > $BFMIMPL_DIR/tmp3.py  
+    // rm $BFMIMPL_DIR/tmp1.py
+    // rm $BFMIMPL_DIR/tmp2.py
+
+    // ## Change get method (ins and outs sets)
+    // sed -r "s|GET_INS|$inputs_of_get|g" $BFMIMPL_DIR/tmp3.py > $BFMIMPL_DIR/tmp2.py  
+    // sed -r "s|GET_OUTS|$outputs_of_get|g" $BFMIMPL_DIR/tmp2.py > destPath + formatedName+".py" 
+    // rm $BFMIMPL_DIR/tmp3.py
+    // rm $BFMIMPL_DIR/tmp2.py
+
+    ofstream bfmImplFile(BFM_DIR + PATH_SEP + "_impl" + PATH_SEP + formatedName+".py");
+    bfmImplFile << content;
+
+
 
     treeAddInterface(formatedName);
 }

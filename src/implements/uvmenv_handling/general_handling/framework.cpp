@@ -303,8 +303,8 @@ void getDUTSignals(const char& option){
         filesystem::copy(SIGNAL_GETTER_FILEBASE, "signals.py");
     
     for(const string& m: splitString(rtlModuleNames, ' ')){
-        printInfo("\tSignals of " + m);
-        execCmdSimple(getScript("python_control") + "runSignalsGetter " + getPythonVersion() + " x n " + m);
+        if(option!='i') printInfo("\tSignals of " + m);
+        execCmdSimple(getScript("python_control") + "runSignalsGetter " + getPythonVersion() + " x " + (option=='r'?'n':option) + " " + m);
     }
     filesystem::remove("signals.py");
     filesystem::current_path(PROJECT_DIR);

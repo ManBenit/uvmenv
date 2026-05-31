@@ -19,6 +19,8 @@ void printOption(std::string option, std::string message);
 int countCharOcurrences(char c, std::string str);
 std::vector<std::string> splitString(const std::string& input, char delimiter);
 std::string trim(const std::string& s);
+std::string doTabs(const int& n);
+//void replaceAll(std::string& src, const std::string& from, const std::string& to);
 bool isPascalCase(const std::string& s);
 std::string toPascalCase(const std::string& texto);
 bool isSnakeCase(const std::string& s);
