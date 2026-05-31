@@ -11,6 +11,7 @@
 const std::string WHITESPACE = " \n\r\t\f\v";
 
 // ****************** INTERFACE UTIL FUNCTIONS ****************** //
+void print(std::string message);
 void printError(std::string message);
 void printInfo(std::string message);
 void printWarning(std::string message);

@@ -2,14 +2,8 @@
 #include <cstdlib>
 #include <initializer_list>
 
-#include "headers/functions/utils.h"
-#include "headers/functions/constants.h"
-#include "headers/uvmenv_handling/general_handling/framework.h"
-#include "headers/uvmenv_handling/component_handling/create_component.h"
-#include "headers/uvmenv_handling/component_handling/list_component.h"
-#include "headers/uvmenv_handling/general_handling/uvmenv_aux.h"
 #include "test_main.h" // Ommit to prod
-
+#include "headers/functions/utils.h"
 #include "headers/functions/context_handlers/ComponentCtxHandler.h"
 #include "headers/functions/context_handlers/ImmediateCtxHandler.h"
 #include "headers/functions/context_handlers/ProjectCtxHandler.h"
@@ -22,17 +16,13 @@ int main (int argc, char *argv[]) {
     for(int i=1; i<argc; i++)
         args.push_back(argv[i]);
 
-    cout << C_GREEN << "UVMEnv 2.0 - TESTING/DEVELOPING" << C_N << endl;
-    if(argc < 2) {
-        showHelp();
-        return 0;
-    }
-
     ComponentCtxHandler compCtxHandlr;
     ImmediateCtxHandler immCtxHandlr;
     ProjectCtxHandler projCtxHandlr;
-
     string ctx = args[0];
+
+    printInfo("UVMEnv 2.0 - TESTING/DEVELOPING");
+    if(argc < 2) return immCtxHandlr.cmdHelp();    
     
     ///// FRAMEWORK HANDLING /////
     if(ctx == "new") {
@@ -45,121 +35,14 @@ int main (int argc, char *argv[]) {
         return immCtxHandlr.cmdHelp();
     }
 
-
     ///// PROJECT HANDLING /////
     else if(ctx == "project"){
         return projCtxHandlr.cmdProject(args);
     }
     
-
     ///// COMPONENT HANDLING /////
     else if(ctx == "component"){
-        if( !requireProject() ) return 3;
-        if( !requireDUT() ) return 4;
-        if( !requireArgs(
-            {argv[2], argv[3]}, 
-            "USAGE: uvmenv component OPTION COMPONENT ATTRIBUTES"
-        ) ) return 6;
-
-        
-        if(string(argv[2]) == "create"){
-            cout << "Creating component..." << endl;
-            cout << "Component type: " << argv[3] << endl;
-            
-            /** 
-             * For listing components, consider:
-             * - argv[3]: Component you want.
-             * - argv[4]: Component name.
-             * - argv[5]: Test name in which your component is.
-             * - argv[6]: Env name in which your component is.
-             */
-            if( string(argv[3]) == "test" ){
-                createTest(argv[4]);
-            }
-            else if( string(argv[3]) == "bfm" ){
-                createBFM(argv[4]);
-            }
-            else if( string(argv[3]) == "env" ){
-                createEnvironmentOnTest(argv[4], argv[5]);
-            }
-            else if( string(argv[3]) == "seqitem" ){
-                createSeqitem          (argv[4], argv[5]);
-            }
-            else if( string(argv[3]) == "seqce" ){
-                createSequence         (argv[4], argv[5]);
-            }
-            else if( string(argv[3]) == "agent" ){
-                createAgent            (argv[4], argv[5], argv[6]);
-            }
-            else if( string(argv[3]) == "scorebd" ){
-                createScoreboard       (argv[4], argv[5], argv[6]);
-            }
-            else if( string(argv[3]) == "refmod" ){
-                createRefModel         (argv[4], argv[5], argv[6]);
-            }
-        }
-        else if(string(argv[2]) == "delete"){
-
-        }
-        else if(string(argv[2]) == "edit"){
-            
-        }
-        else if(string(argv[2]) == "list"){
-            /** 
-             * For listing components, consider:
-             * - argv[3]: Component you want.
-             * - argv[4]: Test name in which your component is.
-             * - argv[5]: Env name in which your component is.
-             */
-            if( string(argv[3]) == "test" ){
-                for(const string& s: listTests())
-                    cout << s << endl;
-            }
-            else if( string(argv[3]) == "bfm" ){
-                for(const string& s: listBFMInterfaces())
-                    cout << s << endl;
-            }
-            else if( string(argv[3]) == "env" ){
-                for(const string& s: listEnvsOnTest (argv[4]))
-                    cout << s << endl;
-            }
-            else if( string(argv[3]) == "seqitem" ){
-                for(const string& s: listSeqitems   (argv[4]))
-                    cout << s << endl;
-            }
-            else if( string(argv[3]) == "seqce" ){
-                for(const string& s: listSequences  (argv[4]))
-                    cout << s << endl;
-            }
-            else if( string(argv[3]) == "agent" ){
-                for(const string& s: listAgents     (argv[4], argv[5]))
-                    cout << s << endl;
-            }
-            else if( string(argv[3]) == "scorebd" ){
-                for(const string& s: listScoreboards(argv[4], argv[5]))
-                    cout << s << endl;
-            }
-            else if( string(argv[3]) == "refmod" ){
-                for(const string& s: listRefModels  (argv[4], argv[5]))
-                    cout << s << endl;
-            }
-            
-            else if( string(argv[3]) == "misc" ){
-                cout << "Comming soon..." << endl;
-            }
-            else if( string(argv[3]) == "rtlsig" ){
-
-            }
-            else if( string(argv[3]) == "rtlmod" ){
-
-            }
-
-        }
-        else {
-            printError("[component] Unknown ctx: " + string(argv[2]));
-            return 5;
-        }
-        
+        return compCtxHandlr.cmdComponent(args);
     }
 
     else if(ctx == "test") {

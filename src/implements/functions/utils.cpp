@@ -22,6 +22,9 @@ using namespace std;
 
 
 // ****************** INTERFACE UTIL FUNCTIONS ****************** //
+void print(std::string message){
+    cout << message << endl;
+}
 void printError(string message){
     cout << C_RED << message << C_N << endl;
 }

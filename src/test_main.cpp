@@ -18,6 +18,7 @@
 #include <nlohmann/json.hpp>
 #include <yaml-cpp/yaml.h>
 #include <chrono>
+#include <sstream>
 using namespace std;
 using json = nlohmann::json;
 
@@ -33,9 +34,12 @@ void getting_signals_test(){
 
     chrono::duration<double, std::milli> refreshTime = end1-init1;
     chrono::duration<double, std::milli> normalTime = end2-init2;
-    cout << endl;
-    cout << "Time with refresh: " << refreshTime.count() << " ms." << endl;
-    cout << "Time with .csv: " << normalTime.count() << " ms." << endl;
+    print("");
+    stringstream trefresh, tcsv;
+    trefresh << "Time with refresh: " << refreshTime.count() << " ms.";
+    tcsv << "Time with .csv: " << normalTime.count() << " ms.";
+    print(trefresh.str());
+    print(tcsv.str());
 }
 
 void component_creation_test(){
