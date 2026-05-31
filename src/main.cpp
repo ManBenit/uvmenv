@@ -28,63 +28,27 @@ int main (int argc, char *argv[]) {
         return 0;
     }
 
-    ComponentOptHandler compOptHandlr;
-    ImmediateOptHandler immOptHandlr;
-    ProjectOptHandler projOptHandlr;
+    ComponentCtxHandler compCtxHandlr;
+    ImmediateCtxHandler immCtxHandlr;
+    ProjectCtxHandler projCtxHandlr;
 
     string ctx = args[0];
     
     ///// FRAMEWORK HANDLING /////
     if(ctx == "new") {
-        return immOptHandlr.cmdNew(args);
+        return immCtxHandlr.cmdNew(args);
     } 
     else if(ctx == "search") {
-        return immOptHandlr.cmdSearch();
+        return immCtxHandlr.cmdSearch();
     } 
     else if(ctx == "help") {
-        return immOptHandlr.cmdHelp();
+        return immCtxHandlr.cmdHelp();
     }
 
 
     ///// PROJECT HANDLING /////
     else if(ctx == "project"){
-        if( !requireProject() ) return 3;
-        if( !requireArgs({argv[2]}, "Missing project ctx") ) return 6;
-
-        
-        if(string(argv[2]) == "view"){
-            showProjectTree();
-        }
-
-        else if(string(argv[2]) == "init"){
-            if( !requireDUT() ) return 4;
-            
-            getDUTSignals('r');
-            createBFM("default");
-            createTest("default");
-            createEnvironmentOnTest("default", "TestDefault");
-            createRefModel("default", "TestDefault", "EnvDefault");
-            createSeqitem("default", "TestDefault");
-            createSequence("default", "TestDefault");
-            createAgent("default", "TestDefault", "EnvDefault");
-            createScoreboard("default", "TestDefault", "EnvDefault");
-            
-        }
-        else if(string(argv[2]) == "report"){
-            showReport();
-        }
-        else if(string(argv[2]) == "wave"){
-            cout << "Show waveform..." << endl;
-            //showWaveform();
-        }
-        else if(string(argv[2]) == "run"){
-            if( !requireDUT() ) return 4;
-            runCurrentProject();
-        }
-        else {
-            printError("[project] Unknown ctx: " + string(argv[2]));
-            return 5;
-        }
+        return projCtxHandlr.cmdProject(args);
     }
     
 

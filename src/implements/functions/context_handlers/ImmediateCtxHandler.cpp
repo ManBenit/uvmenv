@@ -11,12 +11,12 @@ using namespace std;
 
 
 // public
-int ImmediateOptHandler::cmdNew(const vector<string>& args){
+int ImmediateCtxHandler::cmdNew(const vector<string>& args){
     // ================================
     // Double validation of args
     // Required [1, 2]
     // ================================
-    // 1. Validate existance of required arguemnts
+    // 1. Validate existance of required arguments
     if(args.size() < 3){
         printWarning("Usage: uvmenv -n|--new <project name> <top module name>");
         return 6;
@@ -26,6 +26,7 @@ int ImmediateOptHandler::cmdNew(const vector<string>& args){
         {args[1], args[2]},
         "Usage: uvmenv -n|--new <project name> <top module name>"
     ) ) return 6;
+    // ================================
 
     // argv[2]: Project name.
     // argv[3]: Top module name.
@@ -34,7 +35,7 @@ int ImmediateOptHandler::cmdNew(const vector<string>& args){
     return 0;
 }
 
-int ImmediateOptHandler::cmdSearch(){
+int ImmediateCtxHandler::cmdSearch(){
     if( isUVMEnvProject(PROJECT_DIR) ){
         printInfo("You are already into a UVMEnv project");
         return 0;
@@ -45,7 +46,7 @@ int ImmediateOptHandler::cmdSearch(){
     return 0;
 }
 
-int ImmediateOptHandler::cmdHelp(){
+int ImmediateCtxHandler::cmdHelp(){
     showHelp();
     return 0;
 }

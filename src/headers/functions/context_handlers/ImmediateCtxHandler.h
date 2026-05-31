@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-class ImmediateOptHandler {
+class ImmediateCtxHandler {
     public:
     int cmdNew(const std::vector<std::string>& args);
     int cmdSearch();

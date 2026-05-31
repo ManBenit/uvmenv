@@ -1,16 +1,16 @@
 #ifndef COMPONENT_OPT_HANDLER_H
 #define COMPONENT_OPT_HANDLER_H
 
-class ComponentOptHandler {
+class ComponentCtxHandler {
     public:
     int cmdComponent();
 
     private:
-    int runInit();
-    int runView();
-    int runRun();
-    int runWave();
-    int runReport();
+    int runCreate();
+    int runList();
+    int runDelete();
+    int runEdit();
+    
 };
 
 #endif // COMPONENT_OPT_HANDLER_H

@@ -1,15 +1,19 @@
 #ifndef PROJECT_OPT_HANDLER_H
 #define PROJECT_OPT_HANDLER_H
 
-class ProjectOptHandler {
+#include <vector>
+#include <string>
+
+class ProjectCtxHandler {
     public:
-    int cmdProject();
+    int cmdProject(const std::vector<std::string>& args);
 
     private:
-    int runCreate();
-    int runList();
-    int runDelete();
-    int runEdit();
+    int runInit();
+    int runView();
+    int runRun();
+    int runWave();
+    int runReport();
 };
 
 #endif // PROJECT_OPT_HANDLER_H

@@ -7,30 +7,27 @@ using namespace std;
 
 
 // public
-int ComponentOptHandler::cmdComponent(){
+int ComponentCtxHandler::cmdComponent(){
     return 0;
 }
 
 
 // private
-int ComponentOptHandler::runInit(){
+int ComponentCtxHandler::runCreate(){
     return 0;
 }
 
-int ComponentOptHandler::runView(){
+int ComponentCtxHandler::runList(){
     return 0;
 }
 
-int ComponentOptHandler::runRun(){
+int ComponentCtxHandler::runDelete(){
     return 0;
 }
 
-int ComponentOptHandler::runWave(){
+int ComponentCtxHandler::runEdit(){
     return 0;
 }
 
-int ComponentOptHandler::runReport(){
-    return 0;
-}
 
 
