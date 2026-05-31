@@ -24,37 +24,6 @@ vector<string> options = {"test", "env", "agent", "seqitem", "seqce", "scorebd",
 string ptree_file = PROJECT_DIR + PATH_SEP + "ptree.yml";
 
 
-// void createUVMEnvComponent(const string& type){
-//     if(!isInOptions(type, &options)){
-//         cout << type << " is not a valid component reference for creation" << endl;
-//     }
-// }
-
-void listUVMEnvComponents(const string& type){
-    vector<string> listOptions = {"rtlsig", "rtlmod"};
-    listOptions.insert(listOptions.end(), options.begin(), options.end());
-
-    if(!isInOptions(type, &listOptions)){
-        cout << type << " is not a valid component reference for listing" << endl;
-    }
-}
-
-// void editUVMEnvComponents(const string& type){
-//     vector<string> editOptions = {"top", "config", "util", "path"};
-//     editOptions.insert(editOptions.end(), options.begin(), options.end());
-
-//     if(!isInOptions(type, &editOptions)){
-//         cout << type << " is not a valid component reference for edition" << endl;
-//     }
-// }
-
-// void deleteUVMEnvComponent(const string& type){
-//     if(!isInOptions(type, &options)){
-//         cout << type << " is not a valid component reference for deletion" << endl;
-//     }
-// }
-
-
 void createBFM(const string& name){
     string formatedName = "BFM" + toPascalCase(name);
     bool alreadyExists = false;
