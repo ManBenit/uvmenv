@@ -6,21 +6,37 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include <yaml-cpp/yaml.h>
+#include <pybind11/embed.h>
+#include <pybind11/stl.h>
 
 #include "../../../headers/uvmenv_preudo/components/Top.h"
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
 #include "../../../headers/uvmenv_handling/general_handling/uvmenv_aux.h"
 #include "../../../headers/functions/utils.h"
 #include "../../../headers/functions/constants.h"
+
 using namespace std;
 using json = nlohmann::ordered_json;
+namespace py = pybind11;
 
+// ===========================================================
+// Block to expose C++ to Python embedded instance
+// ===========================================================
+PYBIND11_EMBEDDED_MODULE(signalsGetter, m) {
+    py::class_<Signal>(m, "Signal")
+        .def(py::init<>()) // Constructor por defecto
+        .def(py::init<string, string, int>()) // Constructor personalizado (opcional pero recomendado)
+        .def_readwrite("name", &Signal::name)
+        .def_readwrite("type", &Signal::type)
+        .def_readwrite("size", &Signal::size);
+}
+// ===========================================================
 
 
 bool isUVMEnvProject(const string& path){
     vector<string> pdirParts = splitString( path, PATH_SEP.at(0) );
     string projectIdExpected = "uvm:" + pdirParts[pdirParts.size()-1] + ":env";
-    string configFileName = path + PATH_SEP + "config.json";
+    string configFileName = joinStr({path, "config.json"}, PATH_SEP);
 
     
     if( !filesystem::exists(configFileName) ){
@@ -281,19 +297,57 @@ void getDUTSignals(const char& option){
         // Verilate each module into the aux directory
         filesystem::current_path(auxDir);
         for(const string& m: splitString(rtlModuleNames, ' ')){
+            print("Modulo -> " + m);
             if(count > 0)
                 writeOption = 'a';
             else
                 writeOption = 'w';
-            execCmdSimple(getScript("sys_commands") + "verilateModel " + m);
-            execCmdSimple(getScript("python_control") + "runSignalsGetter " + getPythonVersion() + " " + writeOption + " " + option + " " + m);
+            execCmdSimple(joinStr(
+                {getScript("sys_commands")+" verilateModel", m},
+                " "
+            ));
+            try{
+                static py::scoped_interpreter guard{}; // Inicia el intérprete de Python una vez
+                print("Aqui 1");
+                // 1. Conseguimos el módulo 'sys' de Python para modificar el Path de búsqueda
+                py::module_ sys = py::module_::import("sys");
+                print("Aqui 1.1");
+                // 2. Agregamos tu directorio dinámico (auxDir) al sys.path de Python
+                // Usamos .c_str() para convertir el std::string a const char*
+                sys.attr("path").attr("append")(auxDir.c_str());
+                print("Aqui 1.2");
+                // 3. Ahora importamos el módulo SOLO por su nombre (sin ".py" y sin ruta completa)
+                py::module_ LeyendoPy = py::module_::import("signals");
+                print("Aqui 1.3");
+                print(auxDir);
+                print("Aqui 2");
+
+                py::object resultado = LeyendoPy.attr("get_signals")("obj_dir/V"+m+".h", writeOption, option);
+                print("Aqui 3");
+
+                std::vector<Signal> signals = resultado.cast<std::vector<Signal>>();
+                print("Aqui 4");
+
+                std::cout << "[C++] Procesando señales en mifunc()..." << endl;
+                for (const auto& s : signals) {
+                    std::cout << s.name << ", " << s.type << ", " << s.size << std::endl;
+                }
+
+            } catch (py::error_already_set &e) {
+                std::cerr << "[Error de Python] " << e.what() << std::endl;
+            }
+            
+            // execCmdSimple(joinStr(
+            //     {getScript("python_control")+" runSignalsGetter", getPythonVersion(), string(1,writeOption), string(1,option), "obj_dir/V"+m},
+            //     " "
+            // ));
             count++;
         }
         filesystem::copy(".allSignals.csv", DUT_HDL_DIR);
         count = 0;
         filesystem::current_path(PROJECT_DIR);
         filesystem::remove_all(auxDir);
-    }
+    } // End if option is r
 
     // Always read from .csv file
     filesystem::current_path(DUT_HDL_DIR);

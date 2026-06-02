@@ -41,8 +41,10 @@ int main (int argc, char *argv[]) {
     }
 
     else if(ctx == "test") {
-        component_creation_test();
-        getting_signals_test();
+        //component_creation_test();
+        //getting_signals_test();
+
+        //print( joinStr({"uno", "otro"}, ".") );
     }
 
     else {

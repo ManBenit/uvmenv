@@ -10,6 +10,8 @@
 #include <stdexcept>
 #include <cctype>
 #include <algorithm>
+#include <variant>
+#include <initializer_list>
 #include <nlohmann/json.hpp>
 #include <yaml-cpp/yaml.h>
 
@@ -17,6 +19,7 @@
 #include "../../headers/functions/utils.h"
 using json = nlohmann::ordered_json;
 namespace fs = std::filesystem;
+using t_tojoin = std::variant<std::string, char, int>;
 using namespace std;
 
 
@@ -83,6 +86,22 @@ string doTabs(const int& n) {
         retTabs += TAB;
 
     return retTabs;
+}
+
+string joinStr(vector<string> args, const string& sep) {
+    stringstream ret;
+
+    for (const auto& item : args) {
+        ret << item << sep;
+    }
+
+    string result = ret.str();
+    if (!result.empty()) {
+        // Delete last character
+        result.pop_back();
+    }
+
+    return result;
 }
 
 // void replaceAll(string& str, const string& from, const string& to){

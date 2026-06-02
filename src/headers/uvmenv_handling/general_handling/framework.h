@@ -4,6 +4,12 @@
 #include <string>
 #include <initializer_list>
 
+struct Signal {
+    std::string name;
+    std::string type;
+    int size;
+};
+
 bool isUVMEnvProject(const std::string& path);
 bool existsDUT();
 void showProjectTree();
