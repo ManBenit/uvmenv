@@ -46,7 +46,7 @@ def read_csv(file, rowtype='d'):
 
 # Function called when request previous detected signals,
 # it runs reading of csv file (recomended when project is large).
-def get_signals_from_csv(file, pretty_info=True):
+def get_signals_from_csv(file):
     retSignals = []
     try:
         signals = read_csv(file=f'.{CSV_FILENAME}', rowtype='d')
@@ -61,16 +61,9 @@ def get_signals_from_csv(file, pretty_info=True):
         s = signalsGetter.Signal()
         s.name = signal['signal']
         s.type = signal['type']
-        s.size = signal['lenght']
+        s.size = int(signal['lenght'])
         retSignals.append(s)
 
-        # plural='s'
-        # if int(signal['lenght']) == 1:
-        #     plural=' '
-        # if pretty_info:
-        #     print( '{}, {} bit{}: {}'.format(signal['type'], signal['lenght'], plural, signal['signal']) )
-        # else:
-        #     print( '{},{},{}'.format(signal['type'], signal['lenght'], signal['signal']) )
     return retSignals
 
 
@@ -132,45 +125,13 @@ def get_signals_from_compilation(file, csvwritemode):
 
 
 def get_signals(v_file, write_option, option='n'):
-    s1 = signalsGetter.Signal()
-    s1.name = "signal1"
-    s1.type = "INPUT"
-    s1.size = 10
-
-    s2 = signalsGetter.Signal()
-    s2.name = "signal2"
-    s2.type = "OUTPUT"
-    s2.size = 20
-
     # Refresh option
     if option == 'r':
         get_signals_from_compilation(v_file, write_option)
-        #return [s1, s2]
-    # Intern usage option
-    elif option == 'i':
-        return [s1, s2]
-        #get_signals_from_csv(file=v_file, pretty_info=False)
-    # Default: print option
+        return []
     else:
         return get_signals_from_csv(file=v_file)
 
-if __name__ == '__main__':
-    # Ask again ('cause first ask is on .sh) in order to select the function
-    option = str(sys.argv[1])
-    v_file = str(sys.argv[2])
-    
-    # Refresh option
-    if option == 'r':
-        write_option = str(sys.argv[3])
-        get_signals_from_compilation(v_file, write_option)
-    # Intern usage option
-    elif option == 'i':
-        get_signals_from_csv(file=v_file, pretty_info=False)
-    # Default: print option
-    else:
-        get_signals_from_csv(file=v_file)
-
-    
 
 
 

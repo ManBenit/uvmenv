@@ -25,7 +25,7 @@ void getDUTSignals(const char& option);
 bool requireProject();
 bool requireDUT();
 bool requireArgs(std::initializer_list<std::string> args, const std::string& msg);
-
+std::vector<Signal> runSignalsGetter(const std::string& module, char writeOption, char option);
 
 #endif // FRAMEWORK_H
 

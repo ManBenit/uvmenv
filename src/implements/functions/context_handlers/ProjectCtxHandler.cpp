@@ -46,18 +46,17 @@ int ProjectCtxHandler::cmdProject(const vector<string>& args){
 
 // private
 int ProjectCtxHandler::runInit(){
-    print("Entrado...");
     if( !requireDUT() ) return 4;
 
     getDUTSignals('r');
-    // createBFM("default");
-    // createTest("default");
-    // createEnvironmentOnTest("default", "TestDefault");
-    // createRefModel("default", "TestDefault", "EnvDefault");
-    // createSeqitem("default", "TestDefault");
-    // createSequence("default", "TestDefault");
-    // createAgent("default", "TestDefault", "EnvDefault");
-    // createScoreboard("default", "TestDefault", "EnvDefault");
+    createBFM("default");
+    createTest("default");
+    createEnvironmentOnTest("default", "TestDefault");
+    createRefModel("default", "TestDefault", "EnvDefault");
+    createSeqitem("default", "TestDefault");
+    createSequence("default", "TestDefault");
+    createAgent("default", "TestDefault", "EnvDefault");
+    createScoreboard("default", "TestDefault", "EnvDefault");
 
     return 0;
 }

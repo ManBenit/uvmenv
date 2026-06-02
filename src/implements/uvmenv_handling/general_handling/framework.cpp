@@ -281,7 +281,21 @@ void getDUTSignals(const char& option){
     char writeOption = 'a';
     int count = 0;
 
+
+    // ==================================================================
+    // Initialize Python interpreter and add auxDir to Python path
+    // ==================================================================
+    // This block is necesarry to correct work of runSignalsGetter
+    static py::scoped_interpreter guard{};
+
+    py::module_ sys = py::module_::import("sys");
+    sys.attr("path").attr("append")(auxDir.c_str());
+    // ==================================================================
+
+    
+    // ==================================================================
     // If option is refresh, let's generate a new .allSignalsFie.csv
+    // ==================================================================
     if(option == 'r'){
         filesystem::remove(DUT_HDL_DIR + PATH_SEP + ".allSignals.csv");
 
@@ -296,51 +310,17 @@ void getDUTSignals(const char& option){
 
         // Verilate each module into the aux directory
         filesystem::current_path(auxDir);
-        for(const string& m: splitString(rtlModuleNames, ' ')){
-            print("Modulo -> " + m);
+        for(const string& mod: splitString(rtlModuleNames, ' ')){
             if(count > 0)
                 writeOption = 'a';
             else
                 writeOption = 'w';
             execCmdSimple(joinStr(
-                {getScript("sys_commands")+" verilateModel", m},
+                {getScript("sys_commands")+" verilateModel", mod},
                 " "
             ));
-            try{
-                static py::scoped_interpreter guard{}; // Inicia el intérprete de Python una vez
-                print("Aqui 1");
-                // 1. Conseguimos el módulo 'sys' de Python para modificar el Path de búsqueda
-                py::module_ sys = py::module_::import("sys");
-                print("Aqui 1.1");
-                // 2. Agregamos tu directorio dinámico (auxDir) al sys.path de Python
-                // Usamos .c_str() para convertir el std::string a const char*
-                sys.attr("path").attr("append")(auxDir.c_str());
-                print("Aqui 1.2");
-                // 3. Ahora importamos el módulo SOLO por su nombre (sin ".py" y sin ruta completa)
-                py::module_ LeyendoPy = py::module_::import("signals");
-                print("Aqui 1.3");
-                print(auxDir);
-                print("Aqui 2");
 
-                py::object resultado = LeyendoPy.attr("get_signals")("obj_dir/V"+m+".h", writeOption, option);
-                print("Aqui 3");
-
-                std::vector<Signal> signals = resultado.cast<std::vector<Signal>>();
-                print("Aqui 4");
-
-                std::cout << "[C++] Procesando señales en mifunc()..." << endl;
-                for (const auto& s : signals) {
-                    std::cout << s.name << ", " << s.type << ", " << s.size << std::endl;
-                }
-
-            } catch (py::error_already_set &e) {
-                std::cerr << "[Error de Python] " << e.what() << std::endl;
-            }
-            
-            // execCmdSimple(joinStr(
-            //     {getScript("python_control")+" runSignalsGetter", getPythonVersion(), string(1,writeOption), string(1,option), "obj_dir/V"+m},
-            //     " "
-            // ));
+            runSignalsGetter(mod, writeOption, option);
             count++;
         }
         filesystem::copy(".allSignals.csv", DUT_HDL_DIR);
@@ -348,20 +328,29 @@ void getDUTSignals(const char& option){
         filesystem::current_path(PROJECT_DIR);
         filesystem::remove_all(auxDir);
     } // End if option is r
+    // ==================================================================
 
+
+    // ==================================================================
     // Always read from .csv file
+    // ==================================================================
     filesystem::current_path(DUT_HDL_DIR);
     
     // Copy signals getter file
     if( !filesystem::exists("signals.py") )
         filesystem::copy(SIGNAL_GETTER_FILEBASE, "signals.py");
     
-    for(const string& m: splitString(rtlModuleNames, ' ')){
-        if(option!='i') printInfo("\tSignals of " + m);
-        execCmdSimple(getScript("python_control") + "runSignalsGetter " + getPythonVersion() + " x " + (option=='r'?'n':option) + " " + m);
+    for(const string& mod: splitString(rtlModuleNames, ' ')){
+        printInfo("\tSignals of " + mod);
+        vector<Signal> signals = runSignalsGetter(mod, 'x', 'n');
+        
+        for (const auto& s : signals) {
+            print(s.type + "[" + to_string(s.size) + " bit]: " +s.name);
+        }
     }
     filesystem::remove("signals.py");
     filesystem::current_path(PROJECT_DIR);
+    // ==================================================================
 }
 
 
@@ -393,6 +382,23 @@ bool requireArgs(initializer_list<string> args, const string& msg){
         }
     }
     return true;
+}
+
+
+vector<Signal> runSignalsGetter(const string& module, char writeOption, char option){
+    try{
+        py::module_ LeyendoPy = py::module_::import("signals");
+
+        py::object resultado = LeyendoPy.attr("get_signals")("obj_dir/V"+module+".h", writeOption, option);
+
+        std::vector<Signal> signals = resultado.cast<std::vector<Signal>>();
+
+        return signals;
+
+    } catch (py::error_already_set &e) {
+        std::cerr << "[Error de Python] " << e.what() << std::endl;
+        return {};
+    }
 }
 
 
