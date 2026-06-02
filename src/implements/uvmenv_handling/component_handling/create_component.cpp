@@ -55,7 +55,14 @@ void createBFM(const string& name){
     // Change class name
     content = regex_replace(content, regex("CLASS_NAME"), "PruebaCambio");
     content = regex_replace(content, regex("GET_INS|GET_OUTS"), doTabs(3)+"a: \"99\""); //*** */
-    //getDUTSignals('i');
+    
+    for (const auto& grupo_senales : getDUTSignals('n')) {
+        // Ahora iteramos sobre cada Signal individual dentro de ese grupo
+        for (const auto& s : grupo_senales) {
+            // En C++ accedemos con s.type, s.size y s.name (NO con ["string"])
+            print(s.type + "[" + to_string(s.size) + " bit]: " + s.name);
+        }
+    }
     //sed -r "s|CLASS_NAME|$1|g" $BFM_IMPL_FILEBASE > $BFMIMPL_DIR/tmp1.py  
 
     // ## Change set method (parameters and inits)

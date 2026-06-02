@@ -19,7 +19,7 @@ void showHelp();
 void createNewEnv(const std::string& projectName, const std::string& topModule);
 void runCurrentProject();
 void searchProjects();
-void getDUTSignals(const char& option);
+std::vector<std::vector<Signal>> getDUTSignals(const char& option);
 
 
 bool requireProject();

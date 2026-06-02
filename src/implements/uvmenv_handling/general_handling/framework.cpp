@@ -267,10 +267,11 @@ void searchProjects(){
 
 
 // @arg option: 'r' for refresh and 'n' for normal options 
-void getDUTSignals(const char& option){
+ vector<vector<Signal>> getDUTSignals(const char& option){
+    vector<vector<Signal>> dutSignals;
     if(!existsDUT()){
         printWarning("No RTL files found in " + DUT_HDL_DIR + " directory. Please, add your RTL source into HDLSrc");
-        return;
+        return dutSignals;
     }
 
     const string& rtlFullFiles = trim( execCmdReturn(getScript("sys_commands") + "getRTLFullFiles " + DUT_HDL_DIR) );
@@ -341,13 +342,12 @@ void getDUTSignals(const char& option){
         filesystem::copy(SIGNAL_GETTER_FILEBASE, "signals.py");
     
     for(const string& mod: splitString(rtlModuleNames, ' ')){
-        printInfo("\tSignals of " + mod);
+        //printInfo("\tSignals of " + mod);
         vector<Signal> signals = runSignalsGetter(mod, 'x', 'n');
-        
-        for (const auto& s : signals) {
-            print(s.type + "[" + to_string(s.size) + " bit]: " +s.name);
-        }
+        dutSignals.push_back(signals);
     }
+
+    return dutSignals;
     filesystem::remove("signals.py");
     filesystem::current_path(PROJECT_DIR);
     // ==================================================================
