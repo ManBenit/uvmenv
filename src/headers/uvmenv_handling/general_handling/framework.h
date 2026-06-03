@@ -6,11 +6,7 @@
 #include <unordered_map>
 #include <vector>
 
-struct Signal {
-    std::string name;
-    std::string type;
-    int size;
-};
+class Signal;
 
 bool isUVMEnvProject(const std::string& path);
 bool existsDUT();

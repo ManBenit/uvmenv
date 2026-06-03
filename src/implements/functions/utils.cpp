@@ -96,9 +96,10 @@ string joinStr(vector<string> args, const string& sep) {
     }
 
     string result = ret.str();
-    if (!result.empty()) {
-        // Delete last character
-        result.pop_back();
+    // If both of sep and result are not empty
+    if (!result.empty() && !sep.empty()) {
+        // Delete from (total length - separator length) until the end
+        result.erase(result.length() - sep.length());
     }
 
     return result;

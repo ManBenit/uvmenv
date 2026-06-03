@@ -45,34 +45,47 @@ void createBFM(const string& name){
         return;
     }
 
-
-    
     ifstream baseFile(BASES_COMPONENT_DIR + PATH_SEP + "BFMImplBase.py");
     stringstream buffer;
     buffer << baseFile.rdbuf();
     string content = buffer.str();
 
-    // Change class name
-    content = regex_replace(content, regex("CLASS_NAME"), "PruebaCambio");
-    content = regex_replace(content, regex("GET_INS|GET_OUTS"), doTabs(3)+"a: \"99\""); //*** */
-    
     unordered_map<string, vector<Signal>> dutSignals = getDUTSignals('n');
-    printDUTSignals(getDUTSignals('n'));
-    //sed -r "s|CLASS_NAME|$1|g" $BFM_IMPL_FILEBASE > $BFMIMPL_DIR/tmp1.py  
+    vector<string> parameters_of_set;
+    vector<string> init_values_on_set;
+    vector<string> inputs_of_get;
+    vector<string> outputs_of_get;
 
-    // ## Change set method (parameters and inits)
+    // Modify class name
+    content = regex_replace(content, regex("CLASS_NAME"), formatedName);
+    
+    for(const auto& [signalName, signalProps] : dutSignals) {
+        for (const auto& signal : signalProps) {
+            if(signal.type == "INPUT"){
+                parameters_of_set.push_back(signal.name);
+                init_values_on_set.push_back(
+                    doTabs(2)+"self.dut." + signal.name + ".value = " + signal.name
+                );
+                inputs_of_get.push_back(
+                    doTabs(3)+"'"+signal.name + "': self.dut." + signal.name + ".value"
+                );
+            }
+            else if(signal.type == "OUTPUT"){
+                outputs_of_get.push_back(
+                    doTabs(3)+"'"+signal.name + "': self.dut." + signal.name + ".value"
+                );
+            }
+        }
+    }
+    // Modify 'set' method (parameters and init values)
+    content = regex_replace(content, regex("PARAMETERS"), joinStr(parameters_of_set, ", ") );
+    content = regex_replace(content, regex("INIT_VALUES"), joinStr(init_values_on_set, "\n") );
 
-    // sed -r "s|PARAMETERS|$parameters_of_set|g" $BFMIMPL_DIR/tmp1.py > $BFMIMPL_DIR/tmp2.py  
-    // sed -r "s|INIT_VALUES|$init_values_on_set|g" $BFMIMPL_DIR/tmp2.py > $BFMIMPL_DIR/tmp3.py  
-    // rm $BFMIMPL_DIR/tmp1.py
-    // rm $BFMIMPL_DIR/tmp2.py
+    // Modify 'get' method (ins and outs sets)
+    content = regex_replace(content, regex("GET_INS"), joinStr(inputs_of_get, ",\n") );
+    content = regex_replace(content, regex("GET_OUTS"), joinStr(outputs_of_get, ",\n") );
 
-    // ## Change get method (ins and outs sets)
-    // sed -r "s|GET_INS|$inputs_of_get|g" $BFMIMPL_DIR/tmp3.py > $BFMIMPL_DIR/tmp2.py  
-    // sed -r "s|GET_OUTS|$outputs_of_get|g" $BFMIMPL_DIR/tmp2.py > destPath + formatedName+".py" 
-    // rm $BFMIMPL_DIR/tmp3.py
-    // rm $BFMIMPL_DIR/tmp2.py
-
+    // Write project file
     ofstream bfmImplFile(BFM_DIR + PATH_SEP + "_impl" + PATH_SEP + formatedName+".py");
     bfmImplFile << content;
 

@@ -22,24 +22,13 @@ function runUVMEnvProject(){
 }
 
 
-# $1: Python version (x.xx)
-# $2: Write option ('a' for append, 'w' for write)
-# $3: Get option ('r' for refresh, 'i' for internal and 'n' for normal options)
-# $4: File of iteration
-function runSignalsGetter(){
-    if (( $(echo "$2 >= 3.11" | bc -l) )); then
-        activatePythonVenv $1
-    fi
-    python$1 signals.py $3 obj_dir/V$(echo $4 | cut -d'.' -f1).h $2
-}
-
 
 case $1 in
     "runUVMEnvProject")
         runUVMEnvProject $2 $3
         ;;
     "runSignalsGetter")
-        runSignalsGetter $2 $3 $4 $5
+        echo "Deprecated option"
         ;;
     *)
         echo "[python_control] Unknown command: $1"

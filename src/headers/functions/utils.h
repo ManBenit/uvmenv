@@ -11,6 +11,12 @@
 
 const std::string WHITESPACE = " \n\r\t\f\v";
 
+struct Signal {
+    std::string name;
+    std::string type;
+    int size;
+};
+
 // ****************** INTERFACE UTIL FUNCTIONS ****************** //
 void print(std::string message);
 void printError(std::string message);
