@@ -4,6 +4,7 @@
 #include <initializer_list>
 #include <array>
 #include <fstream>
+#include <unordered_map>
 #include <nlohmann/json.hpp>
 #include <yaml-cpp/yaml.h>
 #include <pybind11/embed.h>
@@ -267,8 +268,8 @@ void searchProjects(){
 
 
 // @arg option: 'r' for refresh and 'n' for normal options 
- vector<vector<Signal>> getDUTSignals(const char& option){
-    vector<vector<Signal>> dutSignals;
+ unordered_map<string, vector<Signal>> getDUTSignals(const char& option){
+    unordered_map<string, vector<Signal>> dutSignals;
     if(!existsDUT()){
         printWarning("No RTL files found in " + DUT_HDL_DIR + " directory. Please, add your RTL source into HDLSrc");
         return dutSignals;
@@ -342,15 +343,23 @@ void searchProjects(){
         filesystem::copy(SIGNAL_GETTER_FILEBASE, "signals.py");
     
     for(const string& mod: splitString(rtlModuleNames, ' ')){
-        //printInfo("\tSignals of " + mod);
-        vector<Signal> signals = runSignalsGetter(mod, 'x', 'n');
-        dutSignals.push_back(signals);
+        dutSignals[mod] = runSignalsGetter(mod, 'x', 'n');
     }
 
-    return dutSignals;
     filesystem::remove("signals.py");
     filesystem::current_path(PROJECT_DIR);
+
+    return dutSignals;
     // ==================================================================
+}
+
+void printDUTSignals(const unordered_map<string, vector<Signal>>& dutSignals){
+    for(const auto& [mod, signals]: dutSignals){
+        printInfo("\tSignals of " + mod);
+        for(const auto& sig: signals){
+            print(sig.type + "[" + to_string(sig.size) + " bit]: " + sig.name);
+        }
+    }
 }
 
 
