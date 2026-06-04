@@ -2,8 +2,8 @@
 #include <functional>
 #include <string>
 #include <stdexcept>
-#include "../../headers/uvmenv_preudo/Factory.h"
-#include "../../headers/uvmenv_preudo/components/Top.h"
+#include "../../headers/uvmenv_pseudo/Factory.h"
+#include "../../headers/uvmenv_pseudo/components/Top.h"
 using namespace std;
 
 Factory& Factory::instance(){

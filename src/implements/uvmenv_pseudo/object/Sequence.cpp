@@ -1,5 +1,11 @@
+#include "../../../headers/uvmenv_pseudo/objects/Sequence.h"
+
+#include "../../../headers/functions/utils.h"
+#include "../../../headers/uvmenv_handling/general_handling/framework.h"
+
 #include <iostream>
-#include "../../../headers/uvmenv_preudo/objects/Sequence.h"
+#include <regex>
+#include <fstream>
 using namespace std;
 
 
@@ -13,10 +19,17 @@ void Sequence::setTestContainer(const string& testName){
 
 // @Override
 void Sequence::copyBaseFile(){
-    filesystem::copy(
-        basefilePath, 
-        TBENCH_DIR + PATH_SEP + testName + PATH_SEP + "Seqnce" + PATH_SEP + name+".py"
-    );
+    ifstream baseFile(basefilePath);
+    stringstream buffer;
+    buffer << baseFile.rdbuf();
+    string content = buffer.str();
+
+    // Modify class name
+    content = regex_replace(content, regex("CLASS_NAME"), name);
+
+    // Write project file
+    ofstream testFile(joinStr({TBENCH_DIR, testName, "Seqnce", name+".py"}, PATH_SEP));
+    testFile << content;
 }
 
 

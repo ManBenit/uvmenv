@@ -1,6 +1,6 @@
 #include <iostream>
 #include <filesystem>
-#include "../../../headers/uvmenv_preudo/components/Top.h"
+#include "../../../headers/uvmenv_pseudo/components/Top.h"
 #include "../../../headers/functions/constants.h"
 using namespace std;
 

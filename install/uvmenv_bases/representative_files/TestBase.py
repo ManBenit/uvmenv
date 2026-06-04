@@ -24,7 +24,7 @@ from DefaultSequence import DefaultSequence
 
 
 
-class Test(uvm_test):
+class CLASS_NAME(uvm_test):
     def build_phase(self):
         super().build_phase()
         self.env = Environment('env', self)

@@ -1,5 +1,10 @@
+#include "../../../headers/uvmenv_pseudo/components/Environment.h"
+
+#include "../../../headers/functions/utils.h"
+
 #include <iostream>
-#include "../../../headers/uvmenv_preudo/components/Environment.h"
+#include <regex>
+#include <fstream>
 using namespace std;
 
 
@@ -30,10 +35,17 @@ void Environment::setTestContainer(const string& testName){
 
 // @Override
 void Environment::copyBaseFile(){
-    filesystem::copy(
-        basefilePath, 
-        TBENCH_DIR + PATH_SEP + testName + PATH_SEP + "Envmnt" + PATH_SEP + name + PATH_SEP + PYMODULE
-    );
+    ifstream baseFile(basefilePath);
+    stringstream buffer;
+    buffer << baseFile.rdbuf();
+    string content = buffer.str();
+
+    // Modify class name
+    content = regex_replace(content, regex("CLASS_NAME"), name);
+
+    // Write project file
+    ofstream testFile(joinStr({TBENCH_DIR, testName, "Envmnt", name, PYMODULE}, PATH_SEP));
+    testFile << content;
 }
 
 

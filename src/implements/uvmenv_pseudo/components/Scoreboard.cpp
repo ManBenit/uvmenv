@@ -1,5 +1,12 @@
+
+#include "../../../headers/uvmenv_pseudo/components/Scoreboard.h"
+
+#include "../../../headers/functions/utils.h"
+#include "../../../headers/uvmenv_handling/general_handling/framework.h"
+
 #include <iostream>
-#include "../../../headers/uvmenv_preudo/components/Scoreboard.h"
+#include <regex>
+#include <fstream>
 using namespace std;
 
 
@@ -18,10 +25,19 @@ void Scoreboard::setEnvContainer(const string& envName){
 
 // @Override
 void Scoreboard::copyBaseFile(){
-    filesystem::copy(
-        basefilePath, 
-        TBENCH_DIR + PATH_SEP + testName + PATH_SEP + "Envmnt" + PATH_SEP + envName + PATH_SEP + "Scorbd" + PATH_SEP + name+".py"
-    );
+    ifstream baseFile(basefilePath);
+    stringstream buffer;
+    buffer << baseFile.rdbuf();
+    string content = buffer.str();
+
+    // Modify class name
+    content = regex_replace(content, regex("CLASS_NAME"), name);
+
+    // Write project file
+    ofstream testFile(joinStr({
+        TBENCH_DIR, testName, "Envmnt", envName, "Scorbd", name+".py"
+    }, PATH_SEP));
+    testFile << content;
 }
 
 

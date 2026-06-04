@@ -6,10 +6,10 @@
 #include "headers/uvmenv_handling/general_handling/uvmenv_aux.h"
 #include "headers/uvmenv_handling/general_handling/framework.h"
 
-#include "headers/uvmenv_preudo/Factory.h"
-#include "headers/uvmenv_preudo/components/Top.h"
-#include "headers/uvmenv_preudo/UVMObject.h"
-#include "headers/uvmenv_preudo/UVMComponent.h"
+#include "headers/uvmenv_pseudo/Factory.h"
+#include "headers/uvmenv_pseudo/components/Top.h"
+#include "headers/uvmenv_pseudo/UVMObject.h"
+#include "headers/uvmenv_pseudo/UVMComponent.h"
 #include <iostream>
 #include <cstdlib>
 #include <filesystem>

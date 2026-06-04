@@ -10,7 +10,7 @@
 #include <pybind11/embed.h>
 #include <pybind11/stl.h>
 
-#include "../../../headers/uvmenv_preudo/components/Top.h"
+#include "../../../headers/uvmenv_pseudo/components/Top.h"
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
 #include "../../../headers/uvmenv_handling/general_handling/uvmenv_aux.h"
 #include "../../../headers/functions/utils.h"

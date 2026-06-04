@@ -1,7 +1,11 @@
-#include <iostream>
-#include <yaml-cpp/yaml.h>
+#include "../../../headers/uvmenv_pseudo/components/Test.h"
+
 #include "../../../headers/functions/utils.h"
-#include "../../../headers/uvmenv_preudo/components/Test.h"
+
+#include <iostream>
+#include <regex>
+#include <fstream>
+#include <yaml-cpp/yaml.h>
 using namespace std;
 
 
@@ -21,10 +25,18 @@ void Test::setName(const string& name){
 // @Override
 void Test::copyBaseFile(){
     filesystem::create_directory(uvmenvProjectDir + PATH_SEP + name);
-    filesystem::copy(
-        basefilePath, 
-        uvmenvProjectDir + PATH_SEP + name + PATH_SEP + PYMODULE
-    );
+
+    ifstream baseFile(basefilePath);
+    stringstream buffer;
+    buffer << baseFile.rdbuf();
+    string content = buffer.str();
+
+    // Modify class name
+    content = regex_replace(content, regex("CLASS_NAME"), name);
+
+    // Write project file
+    ofstream testFile(joinStr({uvmenvProjectDir, name, PYMODULE}, PATH_SEP));
+    testFile << content;
 }
 
 

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../../../headers/uvmenv_preudo/components/Coverage.h"
+#include "../../../headers/uvmenv_pseudo/components/Coverage.h"
 using namespace std;
 
 

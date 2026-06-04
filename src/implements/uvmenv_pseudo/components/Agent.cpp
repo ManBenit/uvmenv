@@ -1,5 +1,11 @@
+#include "../../../headers/uvmenv_pseudo/components/Agent.h"
+
+#include "../../../headers/functions/utils.h"
+#include "../../../headers/uvmenv_handling/general_handling/framework.h"
+
 #include <iostream>
-#include "../../../headers/uvmenv_preudo/components/Agent.h"
+#include <regex>
+#include <fstream>
 using namespace std;
 
 
@@ -57,14 +63,34 @@ void Agent::copyBaseFile(){
     );
 
     filesystem::copy(
-        driverBasePath,
-        destPath + PATH_SEP + "Driver.py"
-    );
-
-    filesystem::copy(
         coverageBasePath,
         destPath + PATH_SEP + "Coverage.py"
     );
+
+
+
+
+    ifstream baseFile(driverBasePath);
+    stringstream buffer;
+    buffer << baseFile.rdbuf();
+    string content = buffer.str();
+
+    unordered_map<string, vector<Signal>> dutSignals = getDUTSignals('n');
+    vector<string> inputs;
+
+    for(const auto& [signalName, signalProps] : dutSignals)
+        for (const auto& signal : signalProps)
+            if(signal.type == "INPUT")
+                inputs.push_back(
+                    doTabs(4) + signal.name + " = op." + signal.name
+                );
+    content = regex_replace(content, regex("BFM_SET"), joinStr(inputs, ",\n") );
+
+    // Write project file
+    ofstream testFile(joinStr({
+        destPath, "Driver.py"
+    }, PATH_SEP));
+    testFile << content;
 }
 
 void Agent::create(){

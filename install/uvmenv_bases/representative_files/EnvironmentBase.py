@@ -28,7 +28,7 @@ from  your_agnt import Agent as YourAgentAlias
 from default_agent import Agent as DefaultAgent
 
 
-class Environment(uvm_env):
+class CLASS_NAME(uvm_env):
     def __init__(self, name, parent):
         super().__init__(name, parent)
 

@@ -11,15 +11,15 @@
 
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
 
-#include "../../../headers/uvmenv_preudo/Factory.h"
+#include "../../../headers/uvmenv_pseudo/Factory.h"
 
-#include "../../../headers/uvmenv_preudo/components/Top.h"
-#include "../../../headers/uvmenv_preudo/components/Test.h"
-#include "../../../headers/uvmenv_preudo/components/Environment.h"
+#include "../../../headers/uvmenv_pseudo/components/Top.h"
+#include "../../../headers/uvmenv_pseudo/components/Test.h"
+#include "../../../headers/uvmenv_pseudo/components/Environment.h"
 
-#include "../../../headers/uvmenv_preudo/objects/Sequence.h"
-#include "../../../headers/uvmenv_preudo/objects/SequenceItem.h"
-#include "../../../headers/uvmenv_preudo/objects/RefModelImpl.h"
+#include "../../../headers/uvmenv_pseudo/objects/Sequence.h"
+#include "../../../headers/uvmenv_pseudo/objects/SequenceItem.h"
+#include "../../../headers/uvmenv_pseudo/objects/RefModelImpl.h"
 
 #include "../../../headers/functions/utils.h"
 #include "../../../headers/uvmenv_handling/component_handling/ptree_handling.h"
