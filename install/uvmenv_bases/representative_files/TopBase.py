@@ -3,6 +3,8 @@
 #################################
 
 import paths
+paths.loadProjectPaths()
+
 import cocotb
 from pyuvm import uvm_root, uvm_component
 from colorama import Fore
