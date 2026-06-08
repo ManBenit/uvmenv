@@ -9,7 +9,7 @@ class SequenceItem : public UVMObject {
 
 public:
     SequenceItem(const std::string& typeName, const std::string& name): UVMObject(typeName, name){
-        //basefilePath = BASES_COMPONENT_DIR + PATH_SEP + "SeqItemBase.py";
+        basefilePath = BASES_COMPONENT_DIR + PATH_SEP + "SeqItemBase.py";
         requestBasePath = BASES_COMPONENT_DIR + PATH_SEP + "SeqItemRequestBase.py";
         responseBasePath = BASES_COMPONENT_DIR + PATH_SEP + "SeqItemResponseBase.py";
         uvmenvProjectDir = TBENCH_DIR + PATH_SEP + "SeqItm"; //AddAliasForREquestAndResponse

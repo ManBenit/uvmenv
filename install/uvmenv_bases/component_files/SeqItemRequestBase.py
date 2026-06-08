@@ -4,11 +4,9 @@
 
 import random
 import json
-from pyuvm import uvm_sequence_item
 
-class Request(uvm_sequence_item):
-    def __init__(self, name):
-        super().__init__(name)
+class Request:
+    def __init__(self):
 ATTRIB_SIGNALS
 
 

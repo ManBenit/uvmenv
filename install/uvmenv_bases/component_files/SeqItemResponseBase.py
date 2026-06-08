@@ -2,14 +2,12 @@
 ###    COMPONENT FILE    ###
 ############################
 
-from pyuvm import uvm_sequence_item
 from utils import dict_to_namespace
 import copy
 import json
 
-class Response(uvm_sequence_item):
-    def __init__(self, name):
-        super().__init__(name)
+class Response:
+    def __init__(self):
         self.ins = None
         self.outs = None
     

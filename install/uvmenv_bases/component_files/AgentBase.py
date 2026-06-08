@@ -3,11 +3,11 @@
 ############################
 
 from pyuvm import uvm_agent, uvm_sequencer, ConfigDB
-from .Driver import Driver
-from .Monitor import Monitor
-from .CoverageCollector import CoverageCollector
+from Driver import Driver
+from Monitor import Monitor
+from Coverage import Coverage
 
-class Agent(uvm_agent):
+class CLASS_NAME(uvm_agent):
     def __init__(self, name, parent):
         super().__init__(name, parent)
 
@@ -18,7 +18,7 @@ class Agent(uvm_agent):
         self.monitor = Monitor('monitor', self)
         self.seqr = uvm_sequencer('seqr', self)
         ConfigDB().set(None, '*', 'SEQR', self.seqr)
-        self.coverage = CoverageCollector('coverage', self)
+        self.coverage = Coverage('coverage', self)
 
     def connect_phase(self):
         super().connect_phase()
@@ -27,4 +27,4 @@ class Agent(uvm_agent):
         self.monitor.send.connect(self.coverage.result_export)
         self.driver.seq_item_port.connect(self.seqr.seq_item_export)
 
-
+sys.modules[__name__] = CLASS_NAME

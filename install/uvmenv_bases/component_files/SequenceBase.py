@@ -2,17 +2,18 @@
 ###    COMPONENT FILE    ###
 ############################
 
+import sys
 from pyuvm import uvm_sequence
 
 """
-Import all request from a seqence item, with an specific alias for each.
+Import all sequece item responses from SeqItm directory, with an specific alias for each.
 Use: 
-    uvmenv --show-seqitems
+    uvmenv component list seqitem
 to show the available sequence items on your project.
 Example:
-from your_seqitem import Request as YourRequestAlias
+import sit_default as SitDefault
 """
-from default_seqitem import Request as DefaultSeqitemRequest
+import sit_default as SitDefault
 
 # Set the number of items you want to send
 NUM_OF_ITEMS = 1
@@ -27,16 +28,17 @@ class CLASS_NAME(uvm_sequence):
             """ Use the class invoked with your_seqitem module, for example:
             req = YourRequestAlias('req_CLASS_NAME')
             """
-            req = DefaultSeqitemRequest('req_CLASS_NAME')
+            req = SitDefault('req_SeqDefault')
 
-            await self.start_item(req)
+            await self.start_item(req.request)
             """ Write the focused or random sequence of stimulus here, example:
             req.randomize()
             req.signal1        = 8
             req.signal2        = 0
             """
-            req.randomize()
-            await self.finish_item(req)
+            req.request.randomize()
+            await self.finish_item(req.request)
 
 
+sys.modules[__name__] = CLASS_NAME
 

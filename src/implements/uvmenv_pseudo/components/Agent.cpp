@@ -52,10 +52,16 @@ void Agent::copyBaseFile(){
 
     filesystem::create_directory(destPath);
 
-    filesystem::copy(
-        agentBasePath,
-        destPath + PATH_SEP + "__init__.py"
-    );
+    ifstream agentBaseFile(agentBasePath);
+    stringstream agentBuffer;
+    agentBuffer << agentBaseFile.rdbuf();
+    string agentContent = agentBuffer.str();
+    agentContent = regex_replace(agentContent, regex("CLASS_NAME"), name );
+    ofstream agetFile(joinStr({
+        destPath, "__init__.py"
+    }, PATH_SEP));
+    agetFile << agentContent;
+
 
     filesystem::copy(
         monitorBasePath,

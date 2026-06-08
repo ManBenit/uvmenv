@@ -8,26 +8,39 @@ from cocotb.triggers import Timer
 # Also import uvm_sequencer from pyuvm if you will use virtual sequencer
 
 
-from Environment import Environment
+"""
+Import here all environments that you consider necesary.
+All sequences are into Envmnt directory of each Test.
+Use: 
+    uvmenv component list env
+to show the available environments on your project.
+Import the Environment from your Module.
+
+Example:
+import EnvDefault
+"""
+import EnvDefault
+
 """
 Import here all sequences that you consider necesary.
 All sequences are into Seqnce directory.
 Use: 
-    uvmenv --show-sequences
+    uvmenv component list seqce
 to show the available sequences on your project.
 Import the Sequence from your Module.
 
 Example:
-from YourSequence import YourSequence
+import SeqDefault
 """
-from DefaultSequence import DefaultSequence
+import SeqDefault
+
 
 
 
 class CLASS_NAME(uvm_test):
     def build_phase(self):
         super().build_phase()
-        self.env = Environment('env', self)
+        self.env = EnvDefault('env', self)
         ConfigDB().set(None, 'env.*', 'dut', cocotb.top)
 
         """
@@ -41,7 +54,7 @@ class CLASS_NAME(uvm_test):
         self.vseq1 = YourVirtualSequencer('YourVSeq1', self)
         self.vseq2 = YourVirtualSequencer('YourVSeq2', self)
         """
-        self.seq = DefaultSequence('DefaultSequence')
+        self.seq = SeqDefault('SeqDefault')
 
     async def run_phase(self):
         await super().run_phase()

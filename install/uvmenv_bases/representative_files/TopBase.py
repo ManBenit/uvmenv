@@ -21,12 +21,12 @@ from UVMEnvReport import report
 #from Test import Test
 
 CONFIG = load_config('config.json')
+print( Fore.BLUE+pyfiglet.figlet_format('UVMEnv')+Fore.RESET )
+print( Fore.YELLOW+pyfiglet.figlet_format(CONFIG.dut_design.top_module)+Fore.RESET )
+
 
 @cocotb.test()
 async def default_test(dut):
-    print( Fore.BLUE+pyfiglet.figlet_format('UVMEnv')+Fore.RESET )
-    print( Fore.YELLOW+pyfiglet.figlet_format(CONFIG.dut_design.top_module)+Fore.RESET )
-
     # This is a fake test, you can delete it when you create your own tests.
     await do_fake_test()
 

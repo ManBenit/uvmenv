@@ -2,6 +2,7 @@
 ###    COMPONENT FILE    ###
 ############################
 
+import sys
 import pyuvm
 from queue import Queue
 from pyuvm import uvm_scoreboard, uvm_tlm_analysis_fifo, uvm_get_port, uvm_sequence_item
@@ -158,7 +159,9 @@ class CLASS_NAME(uvm_scoreboard):
         Analyze here each transaction with DUT if necessary. Recommended to use assertions.
         assert <condition>, 'Error message'
         """
-        
+
+
+sys.modules[__name__] = CLASS_NAME
 
         
             

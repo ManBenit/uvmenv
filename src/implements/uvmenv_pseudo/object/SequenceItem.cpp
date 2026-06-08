@@ -137,6 +137,12 @@ void SequenceItem::copyBaseFile(){
         newSeqitemPath, "Response.py"
     }, PATH_SEP));
     responseFile << contentResponse;
+
+
+    filesystem::copy(
+        basefilePath,
+        joinStr({newSeqitemPath, "__init__.py"}, PATH_SEP)
+    );
 }
 
 

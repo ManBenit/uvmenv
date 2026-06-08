@@ -13,12 +13,12 @@ from UVMEnvReport import report
 """
 Import all sequece item responses from SeqItm directory, with an specific alias for each.
 Use: 
-    uvmenv --show-seqitems
+    uvmenv component list seqitem
 to show the available sequence items on your project.
 Example:
-from your_seqitem import Response as YourResponseAlias
+import sit_default as DefaultSeqitemResponse
 """
-from default_seqitem import Response as DefaultSeqitemResponse
+import sit_default as SitDefault
 
 CONFIG = load_config('config.json')
 SEQUENTIAL_DUT = True if CONFIG.dut_design.type == 'sequential' else False
@@ -40,7 +40,7 @@ class Monitor(uvm_monitor):
             """ Use the class invoked with your_seqitem module to encapsulate the transaction, for example:
             transaction = YourResponseAlias("monitor_item")
             """
-            transaction = DefaultSeqitemResponse('monitor_item')
+            transaction = SitDefault('monitor_item')
 
             # Time for waiting Monitor response from DUT 
             ## The next await line when DUT is combinatorial (watch config.json)
@@ -50,13 +50,13 @@ class Monitor(uvm_monitor):
             ###await RisingEdge(self.bfm.dut.YOUR_CLOCK_SIGNAL)
 
             inputs, outputs = await self.bfm.get()
-            transaction.ins = inputs
-            transaction.outs = outputs
+            transaction.response.ins = inputs
+            transaction.response.outs = outputs
 
-            report.write(message=f'{transaction}', component=self, level=pyuvm.INFO)
+            report.write(message=f'{transaction.response}', component=self, level=pyuvm.INFO)
             self.logger.info(f'Received from DUT')
 
-            self.send.write(transaction)
+            self.send.write(transaction.response)
 
 
     def _import_bfm(self):

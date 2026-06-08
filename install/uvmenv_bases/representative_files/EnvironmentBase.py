@@ -2,6 +2,7 @@
 ###    REPRESENTATIVE FILE    ###
 #################################
 
+import sys
 import importlib
 from pyuvm import uvm_env
 from utils import load_config
@@ -9,23 +10,23 @@ from utils import load_config
 """
 Import all Scoreboard classes you need.
 Use: 
-    uvmenv --show-scoreboards
+    uvmenv component list scorebd
 to show the available scoreboards on your project.
 Example:
-from  YourScoreboard import YourScoreboard
+import ScbDefault
 """
-from DefaultScoreboard import DefaultScoreboard
+import ScbDefault
 
 
 """
 Import all Agent classes from your agents, with an specific alias for each.
 Use: 
-    uvmenv --show-agents
+    uvmenv component list agent
 to show the available agents on your project.
 Example:
-from  your_agnt import Agent as YourAgentAlias
+import agnt_default as AgentDefault
 """
-from default_agent import Agent as DefaultAgent
+import agnt_default as AgentDefault
 
 
 class CLASS_NAME(uvm_env):
@@ -43,14 +44,14 @@ class CLASS_NAME(uvm_env):
         Example:
         self.scoreboard = YourScoreboard('YourScoreboard', self)
         """
-        self.scoreboard = DefaultScoreboard('DefaultScoreboard', self)
+        self.scoreboard = ScbDefault('ScbDefault', self)
 
         """
         Instenciate here your agent modules.
         Example:
         self.agent = YourAgentAlias('DefaultAgent', self)
         """
-        self.agent = DefaultAgent('DefaultAgent', self)
+        self.agent = AgentDefault('AgentDefault', self)
 
     def connect_phase(self):
         super().connect_phase()
@@ -86,4 +87,4 @@ class CLASS_NAME(uvm_env):
             self.logger.critical(f'Failed to load RefModel implementation: {e}')
             return
 
-
+sys.modules[__name__] = CLASS_NAME

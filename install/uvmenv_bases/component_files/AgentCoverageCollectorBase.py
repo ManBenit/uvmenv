@@ -6,9 +6,18 @@ from pyuvm import uvm_component, uvm_tlm_analysis_fifo, uvm_get_port
 from cocotb_coverage.coverage import CoverPoint, CoverCross, coverage_db
 
 from utils import dict_to_namespace
-from default_seqitem import Response as DefaultSeqitemResponse
 
-class CoverageCollector(uvm_component):
+"""
+Import all sequece item responses from SeqItm directory, with an specific alias for each.
+Use: 
+    uvmenv component list seqitem
+to show the available sequence items on your project.
+Example:
+from your_seqitem import Response as YourResponseAlias
+"""
+import sit_default as DefaultSeqitemResponse
+
+class Coverage(uvm_component):
     def __init__(self, name, parent):
         super().__init__(name, parent)
         self.num_transactions = 0
