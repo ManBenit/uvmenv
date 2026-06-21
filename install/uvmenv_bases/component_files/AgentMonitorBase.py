@@ -2,27 +2,22 @@
 ###    COMPONENT FILE    ###
 ############################
 
-
+# ====================
+# Python imports
+# ====================
 import importlib
 import pyuvm
 from pyuvm import uvm_monitor, uvm_analysis_port
 from cocotb.triggers import Timer, RisingEdge, FallingEdge
-from utils import load_config
+
+# ====================
+# Python imports
+# ====================
 from UVMEnvReport import report
+from utils import config
+ISDUTSEQ = config.dut_design.type == 'sequential'
+CLOCK_CYCLES = int(config.dut_design.sync_clock_cycles)
 
-"""
-Import all sequece item responses from SeqItm directory, with an specific alias for each.
-Use: 
-    uvmenv component list seqitem
-to show the available sequence items on your project.
-Example:
-import sit_default as DefaultSeqitemResponse
-"""
-import sit_default as SitDefault
-
-CONFIG = load_config('config.json')
-SEQUENTIAL_DUT = True if CONFIG.dut_design.type == 'sequential' else False
-CLOCK_CYCLES = int(CONFIG.dut_design.sync_clock_cycles)
 
 class Monitor(uvm_monitor):
     def __init__(self, name, parent):
@@ -31,37 +26,27 @@ class Monitor(uvm_monitor):
 
     def build_phase(self):
         super().build_phase()
-        self._import_bfm()
+        self.__import_bfm()
         self.send = uvm_analysis_port('send_monitor', self)
 
     async def run_phase(self):
         await super().run_phase()
         while True:
-            """ Use the class invoked with your_seqitem module to encapsulate the transaction, for example:
-            transaction = YourResponseAlias("monitor_item")
-            """
-            transaction = SitDefault('monitor_item')
+            # Time for waiting response from DUT 
+            if ISDUTSEQ:            
+                ## This await is for matching with event on BFMImpl)
+                ## (you can use also FallingEdge)
+                await RisingEdge(self.bfm.dut.YOUR_CLOCK_SIGNAL)
+            else:
+                await Timer(CLOCK_CYCLES, units='ns')
 
-            # Time for waiting Monitor response from DUT 
-            ## The next await line when DUT is combinatorial (watch config.json)
-            await Timer(CLOCK_CYCLES, units='ns')
-            ## The next await line when DUT is sequential (It must match with event on BFMImpl)
-            ## (you can use also FallingEdge)
-            ###await RisingEdge(self.bfm.dut.YOUR_CLOCK_SIGNAL)
-
-            inputs, outputs = await self.bfm.get()
-            transaction.response.ins = inputs
-            transaction.response.outs = outputs
-
-            report.write(message=f'{transaction.response}', component=self, level=pyuvm.INFO)
-            self.logger.info(f'Received from DUT')
-
+            transaction = await self.bfm.get()
+            report.write(message=str(transaction), component=self, level=pyuvm.INFO)
             self.send.write(transaction.response)
 
 
-    def _import_bfm(self):
+    def __import_bfm(self):
         # Get an specific value from .json
-        config = load_config('config.json')
         implementation_class = config.uvm_components.itface.bfm_impl
 
         # Convert value into Python implementation that you want to use

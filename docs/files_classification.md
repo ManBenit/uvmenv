@@ -30,7 +30,7 @@ which will be replaced through the user interface.
 | **getSignalsBase.py**        | comnd                    |                          |                                  |                                  |                                      |
 | **writeVcdPart**             | comnd                    |                          |                                  |                                  |                                      |
 | **AgentBase.py**             | comp                     |                          | ✅                               |                                  |                                      |
-| **AgentCoverageCollectorBase.py** | comp                |                          |                                  |                                  | ✅                                   |
+| **AgentCoverageBase.py** | comp                |                          |                                  |                                  | ✅                                   |
 | **AgentDriverBase.py**       | comp                     |                          |                                  | ✅                               |                                      |
 | **AgentMonitorBase.py**      | comp                     |                          |                                  |                                  | ✅                                   |
 | **BFMBase.py**               | comp                     |                          | ✅                               |                                  |                                      |

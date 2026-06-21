@@ -2,27 +2,40 @@
 ###    REPRESENTATIVE FILE    ###
 #################################
 
-import paths
-paths.loadProjectPaths()
-
+# ====================
+# Python imports
+# ====================
 import cocotb
 from pyuvm import uvm_root, uvm_component
 from colorama import Fore
 import pyfiglet
-from utils import load_config
+
+# ====================
+# UVMEnv imports
+# ====================
+import paths
+paths.loadProjectPaths()
 
 import pyuvm
+from utils import config
 from UVMEnvReport import report
 
 
 
+# ============================================================
+# Every tests are into UVM_TB/.
+#
+# Use: 
+#     uvmenv component list test
+# to show the available Tests.
+#
+# Import the Tests you need, i.e.:
+# import TestDefault
+# ============================================================
 
-# Import your tests when you create someone, for example the next line:
-#from Test import Test
 
-CONFIG = load_config('config.json')
 print( Fore.BLUE+pyfiglet.figlet_format('UVMEnv')+Fore.RESET )
-print( Fore.YELLOW+pyfiglet.figlet_format(CONFIG.dut_design.top_module)+Fore.RESET )
+print( Fore.YELLOW+pyfiglet.figlet_format(config.dut_design.top_module)+Fore.RESET )
 
 
 @cocotb.test()

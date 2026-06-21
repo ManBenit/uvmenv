@@ -19,7 +19,7 @@ To assist in writing, these files contain instructions and fill-in examples in t
 - `ScoreboardBase.py`
 - `SequenceBase.py`
 - `RefmodelImplBase.py`
-- `AgentCoverageCollectorBase.py`
+- `AgentCoverageBase.py`
 - `AgentMonitorBase.py`
 
 

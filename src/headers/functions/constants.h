@@ -143,7 +143,7 @@ const string VCD_WRHELPER_FILEBASE     = BASES_COMMAND_DIR + PATH_SEP + "writeVc
 
 // Component files
 //const string AGENT_FILEBASE            = BASES_COMPONENT_DIR + PATH_SEP + "AgentBase.py";
-//const string AGENT_COVCOL_FILEBASE     = BASES_COMPONENT_DIR + PATH_SEP + "AgentCoverageCollectorBase.py";
+//const string AGENT_COVCOL_FILEBASE     = BASES_COMPONENT_DIR + PATH_SEP + "AgentCoverageBase.py";
 //const string AGENT_DRIVER_FILEBASE     = BASES_COMPONENT_DIR + PATH_SEP + "AgentDriverBase.py";
 //const string AGENT_MONITOR_FILEBASE    = BASES_COMPONENT_DIR + PATH_SEP + "AgentMonitorBase.py";
 const string BFM_FILEBASE              = BASES_COMPONENT_DIR + PATH_SEP + "BFMBase.py";

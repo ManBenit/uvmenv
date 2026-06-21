@@ -2,7 +2,15 @@
 ###    COMPONENT FILE    ###
 ############################
 
+# ====================
+# Python imports
+# ====================
+import sys
 from pyuvm import uvm_agent, uvm_sequencer, ConfigDB
+
+# ====================
+# UVMEnv imports
+# ====================
 from Driver import Driver
 from Monitor import Monitor
 from Coverage import Coverage

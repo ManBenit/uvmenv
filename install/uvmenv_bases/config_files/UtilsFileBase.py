@@ -39,5 +39,5 @@ def dict_to_namespace(d):
     return SimpleNamespace(**d)
 
 
-
+config = load_config('config.json')
 

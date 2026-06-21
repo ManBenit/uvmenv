@@ -9,7 +9,7 @@ class Coverage : public UVMComponent {
 
 public:
     Coverage(const std::string& typeName, const std::string& name, UVMComponent* parent): UVMComponent(typeName, name, parent){
-        basefilePath = BASES_COMPONENT_DIR + PATH_SEP + "AgentCoverageCollectorBase.py";
+        basefilePath = BASES_COMPONENT_DIR + PATH_SEP + "AgentCoverageBase.py";
         uvmenvProjectDir = ENVIRONMENT_DIR + PATH_SEP + "Agents"; //AddAlias
     }
     virtual ~Coverage() = default;

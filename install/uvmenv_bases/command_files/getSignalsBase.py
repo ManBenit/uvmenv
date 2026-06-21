@@ -5,9 +5,9 @@
 import re
 import sys
 import csv
-import signalsGetter
+import signalsGetter # Used by c++
 
-CSV_FIELDS = ['module', 'signal', 'lenght', 'type']
+CSV_FIELDS = ['module', 'signal', 'length', 'type']
 CSV_FILENAME = 'allSignals.csv'
 
 # mode: file reading mode (w, r, a, etc.).

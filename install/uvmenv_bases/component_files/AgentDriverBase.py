@@ -2,10 +2,16 @@
 ###    COMPONENT FILE    ###
 ############################
 
+# ====================
+# Python imports
+# ====================
 import importlib
 from pyuvm import uvm_driver
 
-from utils import load_config
+# ====================
+# UVMEnv imports
+# ====================
+from utils import config
 
 
 class Driver(uvm_driver):
@@ -15,28 +21,23 @@ class Driver(uvm_driver):
 
     def build_phase(self):
         super().build_phase()
-        self._import_bfm()
+        self.__import_bfm()
 
     async def run_phase(self):
         await super().run_phase()
         while True:
-            op = await self.seq_item_port.get_next_item()
-            self.logger.info(f'Sent to DUT')
+            transaction = await self.seq_item_port.get_next_item()
 
-            await self.bfm.set(
-BFM_SET
-            )
-            
-            self.get_parent().get_parent().refmodel.set_inputs(
-BFM_SET
-            )
+            # Send transaction to DUT
+            await self.bfm.set(transaction)
+            # Send transaction to reference model
+            self.get_parent().get_parent().refmodel.set_inputs(transaction)
 
             self.seq_item_port.item_done()
 
             
-    def _import_bfm(self):
+    def __import_bfm(self):
         # Get an specific value from .json
-        config = load_config('config.json')
         implementation_class = config.uvm_components.itface.bfm_impl
 
         # Convert value into Python implementation that you want to use

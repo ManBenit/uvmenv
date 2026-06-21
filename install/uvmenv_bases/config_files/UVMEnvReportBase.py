@@ -1,5 +1,42 @@
+#########################
+###    CONFIG FILE    ###
+#########################
+
+# ====================
+# Python imports
+# ====================
 import pyuvm
 from pyuvm import logging
+
+
+# ====================================================
+# HOW TO USE UVMEnv REPORTING MECHANISM
+# ====================================================
+# On the component from you want to write, you must import the next:
+# import pyuvm
+# from UVMEnvReport import report
+#
+# You are able to define your own logging levels 
+# (remember the values specified at python logger module)
+# (remember only uvm_component classes have logger by themselves)
+# so add them using __add_custom_loglevels method.
+#
+# Since you can create your levels, you can print them like defined levels:
+# self.logger.log(pyuvm.INFO, 'An info message') # This is defined
+# self.logger.log(26, 'A level message') # This is custom
+#
+# Also, you can use getLevelName method, but it is deprecated:
+# self.logger.log(logging.getLevelName('MYLEVEL'), 'A level message')
+#
+# Then you can write at UVMEnv report file like this:
+# report.write('This is report message', self, logging.getLevelName('MYLEVEL')) # But deprecated
+# report.write('This is report message', self, 26) # Using custom logging level
+# report.write('This is report message', self, pyuvm.WARNING) # Using defined levels
+#
+# Finally, use: 
+#     uvmenv project report
+# to show the generated report file.
+# ====================================================
 
 
 # Class encapsulating the reporting mechanism.
@@ -33,14 +70,14 @@ class UVMEnvReport(metaclass=pyuvm.Singleton):
         file_handler.setLevel(self.generalReportLevel)
 
         # Formatting creation
-        formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(message)s')
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s %(message)s')
         formatter.format
         file_handler.setFormatter(formatter)
 
         # Add new handler to logger
         self.logger.addHandler(file_handler)
 
-        self._add_custom_loglevels()
+        self.__add_custom_loglevels()
 
     
     # The only method available to call since UVM components.
@@ -51,41 +88,15 @@ class UVMEnvReport(metaclass=pyuvm.Singleton):
         if not isinstance(level, int):
             raise TypeError('UVMEnv reporting: level must be an integer')
         
-        # Método para escribir en el archivo de log
-        self.logger.log(level, f'[{component}] | {message}')
+        # Write on report file (implies watching the message also on log output)
+        self.logger.log(level, f'[{component}]: {message}')
 
-    """
-    # HOW TO USE write METHOD.
-
-    
-    ## Into component from you want to write, you must import the next:
-    import pyuvm
-    from UVMEnvReport import report
-
-    ## You are able to define your own logging levels 
-    ## (remember the values specified at python logger module)
-    ## (remember only uvm_component classes have logger by themselves)
-    ## so add them using _add_custom_loglevels method.
-
-    ## Since you can create your levels, you can print them like classical levels:
-    self.logger.log(pyuvm.INFO, 'An info message')
-    self.logger.log(26, 'A level message')
-
-    ## also you can use getLevelName method, but it is deprecated:
-    self.logger.log(logging.getLevelName('MYLEVEL'), 'A level message')
-
-    # Then you can writing at UVMEnv report file like:
-    report.write('This is report message', self, logging.getLevelName('MYLEVEL')) # But deprecated
-    report.write('This is report message', self, 26)
-    report.write('This is report message', self, pyuvm.WARNING)
-    """
-
-    def _add_custom_loglevels(self):
-        """
-        Add your own logging levels here, example
-        logging.addLevelName(26, 'MYLEVEL') # This is a level in range of INFO level
-        """
-
+    def __add_custom_loglevels(self):
+        ''' Add your own logging levels here '''
+        
+        # i.e, this is a level in range of INFO level:
+        # logging.addLevelName(26, 'MYLEVEL')
+        
 
 
 # Singleton instance of reporting mechanism, ready for using.

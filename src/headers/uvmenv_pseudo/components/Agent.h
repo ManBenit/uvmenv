@@ -20,7 +20,7 @@ public:
         agentBasePath = BASES_COMPONENT_DIR + PATH_SEP + "AgentBase.py";
         driverBasePath = BASES_COMPONENT_DIR + PATH_SEP + "AgentDriverBase.py";
         monitorBasePath = BASES_COMPONENT_DIR + PATH_SEP + "AgentMonitorBase.py";
-        coverageBasePath = BASES_COMPONENT_DIR + PATH_SEP + "AgentCoverageCollectorBase.py";
+        coverageBasePath = BASES_COMPONENT_DIR + PATH_SEP + "AgentCoverageBase.py";
     }
     virtual ~Agent() = default;
 

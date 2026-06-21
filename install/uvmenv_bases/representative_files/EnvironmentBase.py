@@ -2,30 +2,43 @@
 ###    REPRESENTATIVE FILE    ###
 #################################
 
+# ====================
+# Python imports
+# ====================
 import sys
 import importlib
 from pyuvm import uvm_env
-from utils import load_config
 
-"""
-Import all Scoreboard classes you need.
-Use: 
-    uvmenv component list scorebd
-to show the available scoreboards on your project.
-Example:
+# ====================
+# UVMEnv imports
+# ====================
+from utils import config
+
+
+
+# ============================================================
+# Every scoreboards are into Scorbd/ of each Environment.
+#
+# Use: 
+#     uvmenv component list scorebd <TestName> <EnvName>
+# to show the available scoreboards on your specific Environment.
+#
+# Import the Scoreboards you need, i.e.:
+# import ScbDefault
+# ============================================================
 import ScbDefault
-"""
-import ScbDefault
 
 
-"""
-Import all Agent classes from your agents, with an specific alias for each.
-Use: 
-    uvmenv component list agent
-to show the available agents on your project.
-Example:
-import agnt_default as AgentDefault
-"""
+# ============================================================
+# Every agents are into Agents/ of each Environment.
+#
+# Use: 
+#     uvmenv component list agent <TestName> <EnvName>
+# to show the available agents on your specific Environment.
+#
+# Import the Agents you need, i.e.:
+# import agnt_default as AgentDefault
+# ============================================================
 import agnt_default as AgentDefault
 
 
@@ -37,45 +50,34 @@ class CLASS_NAME(uvm_env):
     def build_phase(self):
         super().build_phase()
 
-        self._import_refmdl()
+        self.__import_refmdl()
           
-        """
-        Instanciate here your scoreboard modules
-        Example:
-        self.scoreboard = YourScoreboard('YourScoreboard', self)
-        """
+        # ====================================================
+        # Instance here your scoreboard modules, i.e.:
+        # self.scoreboard = ScbDefault('ScbDefault', self)
+        # ====================================================
         self.scoreboard = ScbDefault('ScbDefault', self)
 
-        """
-        Instenciate here your agent modules.
-        Example:
-        self.agent = YourAgentAlias('DefaultAgent', self)
-        """
+        # ====================================================
+        # Instance here your agent modules, i.e.:
+        # self.agent = AgentDefault('AgentDefault', self)
+        # ====================================================
         self.agent = AgentDefault('AgentDefault', self)
 
     def connect_phase(self):
         super().connect_phase()
 
-        """
-        Subscribe your scoreboard as listeners of your agent monitors and reference model:
-        self.agent.monitor.send.subscribers.append(self.scoreboard)
-        self.refmodel.send.subscribers.append(self.scoreboard)
-        """
+        # Subscribe your scoreboard as listeners of your agent monitors and reference model:
         self.agent.monitor.send.subscribers.append(self.scoreboard)
         self.refmodel.send.subscribers.append(self.scoreboard)
 
-        """
-        Connect your scoreboard result_export with all your monitors and reference model ports:
-        self.agent.monitor.send.connect(self.scoreboard.dut_result_export)
-        self.refmodel.send.connect(self.scoreboard.refmodel_result_export)
-        """
+        # Connect your scoreboard result_export with all your monitors and reference model ports:
         self.agent.monitor.send.connect(self.scoreboard.dut_result_export)
         self.refmodel.send.connect(self.scoreboard.refmodel_result_export)
 
     
-    def _import_refmdl(self):
+    def __import_refmdl(self):
         # Get an specific value from .json
-        config = load_config('config.json')
         implementation_class = config.uvm_components.refmdl.refmdl_impl
 
         # Convert value into Python implementation that you want to use

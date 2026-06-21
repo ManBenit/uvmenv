@@ -17,9 +17,9 @@ class RefModel(ABC, uvm_component, metaclass=UvmMeta):
         uvm_component.__init__(self, name, parent)
         self.abstract_param = abstract_param
 
-    @abstractmethod
-    def makeTest(self):
+    # Auto -> send the parameters signals to DUT.
+    @abstractmethod    
+    def set(self):
         pass
-
 
 

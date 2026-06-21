@@ -2,6 +2,9 @@
 ###    CONFIG FILE    ###
 #########################
 
+# ====================
+# Python imports
+# ====================
 import sys
 import os
 
@@ -13,6 +16,7 @@ def loadProjectPaths():
     sys.path.append(os.path.join(PROJECT_PATH, 'Itface'))
     sys.path.append(os.path.join(PROJECT_PATH, 'Itface', '_impl'))
     sys.path.append(os.path.join(PROJECT_PATH, 'UVM_TB'))
+    sys.path.append(os.path.join(PROJECT_PATH, 'HDLSrc'))
 
     for testPath in os.listdir(os.path.join(PROJECT_PATH, 'UVM_TB')):
         if os.path.isdir(os.path.join(PROJECT_PATH, 'UVM_TB', testPath)):

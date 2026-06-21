@@ -2,36 +2,44 @@
 ###    REPRESENTATIVE FILE    ###
 #################################
 
+# ====================
+# Python imports
+# ====================
+import sys
 import cocotb
-from pyuvm import uvm_test, ConfigDB
+from pyuvm import uvm_test, ConfigDB, uvm_sequencer
 from cocotb.triggers import Timer 
-# Also import uvm_sequencer from pyuvm if you will use virtual sequencer
+
+# ====================
+# UVMEnv imports
+# ====================
+from utils import config
+ISDUTSEQ = config.dut_design.type == 'sequential'
 
 
-"""
-Import here all environments that you consider necesary.
-All sequences are into Envmnt directory of each Test.
-Use: 
-    uvmenv component list env
-to show the available environments on your project.
-Import the Environment from your Module.
 
-Example:
+# ============================================================
+# Every environments are into Envmnt/ of each Test.
+#
+# Use: 
+#     uvmenv component list env <TestName>
+# to show the available environments on your specific Test.
+#
+# Import the Environments you need, i.e.:
+# import EnvDefault
+# ============================================================
 import EnvDefault
-"""
-import EnvDefault
 
-"""
-Import here all sequences that you consider necesary.
-All sequences are into Seqnce directory.
-Use: 
-    uvmenv component list seqce
-to show the available sequences on your project.
-Import the Sequence from your Module.
-
-Example:
-import SeqDefault
-"""
+# ============================================================
+# Every sequences are into Seqnce/ of each Test.
+#
+# Use: 
+#     uvmenv component list seqce <TestName>
+# to show the available sequences on your specific Test.
+#
+# Import the Sequences you need, i.e.:
+# import SeqDefault
+# ============================================================
 import SeqDefault
 
 
@@ -43,49 +51,55 @@ class CLASS_NAME(uvm_test):
         self.env = EnvDefault('env', self)
         ConfigDB().set(None, 'env.*', 'dut', cocotb.top)
 
-        """
-        Instance here all sequences you need:
+        # ====================================================
+        # Instance here all sequences you need:
         
-        If you will use them INDIVIDUALLY, follow the next:
-        self.seq1 = YourSequence1('YourSequence1')
-        self.seq2 = YourSequence2('YourSequence2')
+        # If you will use them INDIVIDUALLY, follow the next:
+        # self.seq1 = YourSequence1('YourSequence1')
+        # self.seq2 = YourSequence2('YourSequence2')
 
-        If you will use VIRTUAL SEQUENCER, follow the next:
-        self.vseq1 = YourVirtualSequencer('YourVSeq1', self)
-        self.vseq2 = YourVirtualSequencer('YourVSeq2', self)
-        """
+        # If you will use VIRTUAL SEQUENCER, follow the next:
+        # self.vseq1 = YourVirtualSequencer('YourVSeq1', self)
+        # self.vseq2 = YourVirtualSequencer('YourVSeq2', self)
+        # ====================================================
         self.seq = SeqDefault('SeqDefault')
 
     async def run_phase(self):
         await super().run_phase()
 
         self.raise_objection()
-        # Uncomment the next line if you are verifying a sequential DUT:
-        #await self.env.agent.driver.bfm.init()
         
-        """
-        Start here all sequences you need:
+        if ISDUTSEQ:
+            await self.env.agent.driver.bfm.init()
+        
+        # ====================================================
+        # Start here all sequences you need:
 
-        If you are using them INDIVIDUALLY, follow the next:
-        await self.seq1.start(self.env.agent.seqr)
-        await self.seq2.start(self.env.agent.seqr)
+        # If you are using them INDIVIDUALLY, follow the next:
+        # await self.seq1.start(self.env.agent.seqr)
+        # await self.seq2.start(self.env.agent.seqr)
         
-        If you are using VIRTUAL SEQUENCER, follow the next:
-        await self.vseq1.setMyTestVersion1(self.env)
-        await self.vseq2.setMyTestVersion2(self.env)
-        """
+        # If you are using VIRTUAL SEQUENCER, follow the next:
+        # await self.vseq1.setMyTestVersion1(self.env)
+        # await self.vseq2.setMyTestVersion2(self.env)
+        # ====================================================
         await self.seq.start(self.env.agent.seqr)
 
-        # At the end of objection, you need 2 extra explicit cycles are required when DUT is sequential:
-        # One to wait for the als output and other to read it correctly.
-        # So, unblock the next line when DUT is sequential.
-        ###await Timer(2, units='ns') 
+        # ====================================================
+        # At the end of objection, 2 extra explicit cycles are required 
+        # when DUT is sequential:
+        # 1. To wait for the last output.
+        # 2. To read it correctly.
+        # ====================================================
+        if ISDUTSEQ:
+            await Timer(2, units='ns') 
 
         self.drop_objection()
 
+sys.modules[__name__] = CLASS_NAME
         
 
-"""
+'''
 # Use this template for your virtual sequences
 class YourVirtualSequencer(uvm_sequencer):
     def __init__(self, name, parent):
@@ -99,7 +113,7 @@ class YourVirtualSequencer(uvm_sequencer):
     async def setMyTestVersion(self, env):
         await self.seq1.start(env.agent.seqr)
         await self.seq2.start(env.agent.seqr)
-"""
+'''
 
 
 

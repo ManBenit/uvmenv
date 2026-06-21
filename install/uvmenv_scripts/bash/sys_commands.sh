@@ -11,7 +11,7 @@ function runGTKWave(){
 
 # $1: Path of OSimon files
 function viewReport(){
-    less $1/uvmenv_report.log
+    less +G $1/uvmenv_report.log
 }
 
 # $1: Path for RTL files

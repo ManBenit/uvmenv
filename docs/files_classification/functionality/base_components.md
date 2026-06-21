@@ -23,7 +23,7 @@ All agents components are stored on `Agents` directory, into a directory named w
 
 - `AgentBase.py`: Will become the `__init__.py` of the generated agent; in other words, it is the file that defines the agent as a Python module. It contains the instances of the coverage collector, driver, monitor, and sequencer.
 
-- `AgentCoverageCollectorBase.py`: Will become `CoverageCollector.py`.
+- `AgentCoverageBase.py`: Will become `CoverageCollector.py`.
 - `AgentDriverBase.py`: Will become `Driver.py`.
 - `AgentMonitorBase.py`: Will become `Monitor.py`.
 
