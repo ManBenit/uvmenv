@@ -1,4 +1,4 @@
-module,signal,lenght,type
+module,signal,length,type
 MUX,i_a,4,INPUT
 MUX,i_b,4,INPUT
 MUX,i_c,4,INPUT

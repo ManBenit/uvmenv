@@ -3,10 +3,12 @@
 #include "../../../headers/functions/utils.h"
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
 
-#include <iostream>
 #include <regex>
 #include <fstream>
+#include <cmath>
+#include <nlohmann/json.hpp>
 using namespace std;
+using json = nlohmann::json;
 
 
 void Agent::setDriver(Driver* d) { 
@@ -69,38 +71,52 @@ void Agent::copyBaseFile(){
     );
 
     filesystem::copy(
-        coverageBasePath,
-        destPath + PATH_SEP + "Coverage.py"
+        driverBasePath,
+        destPath + PATH_SEP + "Driver.py"
     );
 
-
-
-
-    ifstream baseFile(driverBasePath);
+    ifstream baseFile(coverageBasePath);
     stringstream buffer;
     buffer << baseFile.rdbuf();
     string content = buffer.str();
 
     unordered_map<string, vector<Signal>> dutSignals = getDUTSignals('n');
-    vector<string> inputs;
+    vector<string> coverPoints;
+    
+    json config = readFileJson(joinStr({
+        PROJECT_DIR, "config.json"
+    }, PATH_SEP));
+    string topModule = config["dut_design"]["top_module"];
+    string topModuleLower = toLowerCase(topModule);
 
-    for(const auto& [signalName, signalProps] : dutSignals)
-        for (const auto& signal : signalProps)
-            if(signal.type == "INPUT")
-                inputs.push_back(
-                    doTabs(4) + signal.name + " = op." + signal.name
-                );
-    content = regex_replace(content, regex("BFM_SET"), joinStr(inputs, ",\n") );
+    string coverPLine;
+    for(const auto& [module, signalProps] : dutSignals){
+        if(module == topModule){
+            for (const auto& signal : signalProps){
+                coverPLine = "";
+                coverPLine += doTabs(1) + "@CoverPoint('" + topModuleLower + "." + signal.name + "',\n";
+                coverPLine += doTabs(2) + "xf=lambda tr: tr." + signal.name + ",\n";
+                coverPLine += doTabs(2) + "bins = [\n";
+                coverPLine += doTabs(3) + "i for i in range(" + to_string(2*signal.size) + ")\n";
+                coverPLine += doTabs(2) + "]\n";
+                coverPLine += doTabs(1) + ")";
+
+                coverPoints.push_back(coverPLine);
+            }   
+        }
+    }
+    
+    content = regex_replace(content, regex("COVER_POINTS"), joinStr(coverPoints, "\n") );
 
     // Write project file
     ofstream testFile(joinStr({
-        destPath, "Driver.py"
+        destPath, "Coverage.py"
     }, PATH_SEP));
     testFile << content;
 }
 
 void Agent::create(){
-    cout << "Create agent component" << endl;
+    print("Create agent component");
 }
 
 

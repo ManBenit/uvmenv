@@ -1,4 +1,4 @@
-module,signal,lenght,type
+module,signal,length,type
 alu,clk,1,INPUT
 alu,reset,1,INPUT
 alu,alu_op,4,INPUT

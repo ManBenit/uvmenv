@@ -26,6 +26,7 @@ void printOption(std::string option, std::string message);
 int countCharOcurrences(char c, std::string str);
 std::vector<std::string> splitString(const std::string& input, char delimiter);
 std::string trim(const std::string& s);
+std::string toLowerCase(const std::string& s);
 std::string doTabs(const int& n);
 std::string joinStr(std::vector<std::string> args, const std::string& sep);
 //void replaceAll(std::string& src, const std::string& from, const std::string& to);

@@ -160,6 +160,7 @@ const string SEQITEM_RESPONSE_FILEBASE = BASES_COMPONENT_DIR + PATH_SEP + "SeqIt
 const string PATHS_FILEBASE            = BASES_CONFIG_DIR + PATH_SEP + "PathsFileBase.py";
 const string UTIL_FILEBASE             = BASES_CONFIG_DIR + PATH_SEP + "UtilsFileBase.py";
 const string REPORT_FILEBASE           = BASES_CONFIG_DIR + PATH_SEP + "UVMEnvReportBase.py";
+const string SIGREADER_FILEBASE        = BASES_CONFIG_DIR + PATH_SEP + "SignalsReaderBase.py";
 
 // Representative files
 //const string ENVIRONMENT_FILEBASE      = BASES_REPRESENT_DIR + PATH_SEP + "EnvironmentBase.py";

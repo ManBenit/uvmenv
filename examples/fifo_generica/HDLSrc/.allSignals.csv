@@ -1,4 +1,4 @@
-module,signal,lenght,type
+module,signal,length,type
 fifo_gen,clk_i,1,INPUT
 fifo_gen,rst_ni,1,INPUT
 fifo_gen,rd_i,1,INPUT

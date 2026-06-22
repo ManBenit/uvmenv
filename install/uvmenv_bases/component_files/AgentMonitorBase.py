@@ -42,7 +42,7 @@ class Monitor(uvm_monitor):
 
             transaction = await self.bfm.get()
             report.write(message=str(transaction), component=self, level=pyuvm.INFO)
-            self.send.write(transaction.response)
+            self.send.write(transaction)
 
 
     def __import_bfm(self):
@@ -52,8 +52,7 @@ class Monitor(uvm_monitor):
         # Convert value into Python implementation that you want to use
         try:
             module = importlib.import_module(implementation_class)
-            clazz = getattr(module, implementation_class)
-            self.bfm = clazz()
+            self.bfm = module()
         except Exception as e:
             self.logger.critical(f'Failed to load BFM implementation: {e}')
             return

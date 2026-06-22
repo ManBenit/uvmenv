@@ -1,4 +1,4 @@
-module,signal,lenght,type
+module,signal,length,type
 ALU,ex_aluop_i,4,INPUT
 ALU,ex_zerof_o,1,OUTPUT
 ALU,ex_datars1_i,32,INPUT

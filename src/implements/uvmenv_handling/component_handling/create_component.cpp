@@ -8,6 +8,7 @@
 #include <vector>
 #include <vector>
 #include <iostream>
+#include <nlohmann/json.hpp>
 
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
 
@@ -24,6 +25,7 @@
 #include "../../../headers/functions/utils.h"
 #include "../../../headers/uvmenv_handling/component_handling/ptree_handling.h"
 using namespace std;
+using json = nlohmann::json;
 
 vector<string> options = {"test", "env", "agent", "seqitem", "seqce", "scorebd", "refmod", "bfm"};
 string ptree_file = PROJECT_DIR + PATH_SEP + "ptree.yml";
@@ -51,39 +53,40 @@ void createBFM(const string& name){
     string content = buffer.str();
 
     unordered_map<string, vector<Signal>> dutSignals = getDUTSignals('n');
-    vector<string> parameters_of_set;
-    vector<string> init_values_on_set;
-    vector<string> inputs_of_get;
-    vector<string> outputs_of_get;
+    vector<string> req_values;
+    vector<string> res_values;
 
     // Modify class name
     content = regex_replace(content, regex("CLASS_NAME"), formatedName);
+
+
+    json config = readFileJson(joinStr({
+        PROJECT_DIR, "config.json"
+    }, PATH_SEP));
+    string topModule = config["dut_design"]["top_module"];
     
-    for(const auto& [signalName, signalProps] : dutSignals) {
-        for (const auto& signal : signalProps) {
-            if(signal.type == "INPUT"){
-                parameters_of_set.push_back(signal.name);
-                init_values_on_set.push_back(
-                    doTabs(2)+"self.dut." + signal.name + ".value = " + signal.name
-                );
-                inputs_of_get.push_back(
-                    doTabs(3)+"'"+signal.name + "': self.dut." + signal.name + ".value"
-                );
-            }
-            else if(signal.type == "OUTPUT"){
-                outputs_of_get.push_back(
-                    doTabs(3)+"'"+signal.name + "': self.dut." + signal.name + ".value"
-                );
+    for(const auto& [module, signalProps] : dutSignals) {
+        // Create file content only with top module signals
+        if(module == topModule){
+            for (const auto& signal : signalProps) {
+                if(signal.type == "INPUT"){
+                    req_values.push_back(
+                        doTabs(2)+"self.dut." + signal.name + ".value = self.__transaction." + signal.name
+                    );
+                }
+                else if(signal.type == "OUTPUT"){
+                    res_values.push_back(
+                        doTabs(2)+"self.__transaction." + signal.name + " = self.dut." + signal.name + ".value"
+                    );
+                }
             }
         }
     }
-    // Modify 'set' method (parameters and init values)
-    content = regex_replace(content, regex("PARAMETERS"), joinStr(parameters_of_set, ", ") );
-    content = regex_replace(content, regex("INIT_VALUES"), joinStr(init_values_on_set, "\n") );
+    // Modify 'set' method
+    content = regex_replace(content, regex("ASSIGN_REQ_VALUES"), joinStr(req_values, "\n") );
 
-    // Modify 'get' method (ins and outs sets)
-    content = regex_replace(content, regex("GET_INS"), joinStr(inputs_of_get, ",\n") );
-    content = regex_replace(content, regex("GET_OUTS"), joinStr(outputs_of_get, ",\n") );
+    // Modify 'get' method
+    content = regex_replace(content, regex("ASSIGN_RES_VALUES"), joinStr(res_values, "\n") );
 
     // Write project file
     ofstream bfmImplFile(BFM_DIR + PATH_SEP + "_impl" + PATH_SEP + formatedName+".py");
@@ -120,6 +123,10 @@ void createTest(const string& name){
         REPORT_FILEBASE,
         TBENCH_DIR + PATH_SEP + formatedName + PATH_SEP + "Misces" + PATH_SEP + "UVMEnvReport.py"
     );
+    filesystem::copy(
+        SIGREADER_FILEBASE,
+        TBENCH_DIR + PATH_SEP + formatedName + PATH_SEP + "Misces" + PATH_SEP + "SignalsReader.py"
+    );
     filesystem::create_directory(TBENCH_DIR + PATH_SEP + formatedName + PATH_SEP + "Envmnt");
     filesystem::create_directory(TBENCH_DIR + PATH_SEP + formatedName + PATH_SEP + "Seqnce");
     filesystem::create_directory(TBENCH_DIR + PATH_SEP + formatedName + PATH_SEP + "SeqItm");
@@ -152,7 +159,7 @@ void createSequence(const string& name, const string& testName){
 }
 
 void createSeqitem(const string& name, const string& testName){
-    string formatedName = "sit_" + toSnakeCase(name);
+    string formatedName = "Sit" + toPascalCase(name);
     bool alreadyExists = false;
 
     for(const auto& e: treeListSeqitem(testName)){

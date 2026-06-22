@@ -13,6 +13,7 @@ from pyuvm import uvm_scoreboard, uvm_tlm_analysis_fifo, uvm_get_port, uvm_seque
 # ====================
 # UVMEnv imports
 # ====================
+from SignalsReader import get_dut_signames
 from UVMEnvReport import report
 from utils import config
 ISDUTSEQ = config.dut_design.type == 'sequential'
@@ -31,7 +32,7 @@ class CLASS_NAME(uvm_scoreboard):
         self.reqdut_queue = Queue(maxsize=NUM_SEQUENCES)
         self.resdut_queue = Queue(maxsize=NUM_SEQUENCES)
         self.resrmod_queue = Queue(maxsize=NUM_SEQUENCES)
-        self.enable_scoreboarding = False if CONFIG.dut_design.type == 'sequential' else True
+        self.enable_scoreboarding = not ISDUTSEQ
 
 
     def build_phase(self):
@@ -92,17 +93,17 @@ class CLASS_NAME(uvm_scoreboard):
                                 f'FAILED [{signame}]: DUT({hex(getattr(tr_dut, signame))}) | RefModel({hex(getattr(tr_rmod, signame))})'
 
                         # You can also validate signals individually:
-                        cond = tr_dut.ex_data_o == tr_rmod.ex_data_o
+                        cond = tr_dut.SIGNAL_NAME == tr_rmod.SIGNAL_NAME
                         assert cond, \
-                            f'FAILED [ex_data_o]: DUT({hex(tr_dut.ex_data_o)}) | RefModel({hex(tr_rmod.ex_data_o)})'
+                            f'FAILED [SIGNAL_NAME]: DUT({hex(tr_dut.SIGNAL_NAME)}) | RefModel({hex(tr_rmod.SIGNAL_NAME)})'
                         
                         # You can use the report mechanism in any moment
                         if cond:
-                            report.write(message=f'[TEST PASSED] ex_data_o', component=self, level=pyuvm.INFO)
+                            report.write(message=f'[TEST PASSED] SIGNAL_NAME', component=self, level=pyuvm.INFO)
                         else:
                             report.write(message=f'[TEST FAILED] {tr_dut}', component=self, level=pyuvm.ERROR)
                             report.write(
-                                message=f'DUT({hex(tr_dut.ex_data_o)}) | RefModel({hex(tr_rmod.ex_data_o)}) [ex_data_o]', 
+                                message=f'DUT({hex(tr_dut.SIGNAL_NAME)}) | RefModel({hex(tr_rmod.SIGNAL_NAME)}) [SIGNAL_NAME]', 
                                 component=self, 
                                 level=pyuvm.INFO
                             )

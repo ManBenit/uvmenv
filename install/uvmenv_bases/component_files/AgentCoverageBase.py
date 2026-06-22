@@ -5,6 +5,7 @@
 # ====================
 # Python imports
 # ====================
+import pyuvm
 from pyuvm import uvm_component, uvm_tlm_analysis_fifo, uvm_get_port
 from cocotb_coverage.coverage import CoverPoint, CoverCross, coverage_db
 
@@ -33,7 +34,9 @@ class Coverage(uvm_component):
         self.__num_transactions = 0
 
     # Write as many CoverPoints and CoverCross as you need
-    COVER_POINTS_GROUPS
+COVER_POINTS
+    def __sample_coverage(self, tr: SitDefault):
+        pass
 
 
     def build_phase(self):

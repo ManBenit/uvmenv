@@ -61,7 +61,7 @@ def get_signals_from_csv(file):
         s = signalsGetter.Signal()
         s.name = signal['signal']
         s.type = signal['type']
-        s.size = int(signal['lenght'])
+        s.size = int(signal['length'])
         retSignals.append(s)
 
     return retSignals
@@ -108,12 +108,12 @@ def get_signals_from_compilation(file, csvwritemode):
         parts=signal.split(',')
 
         signal_name = parts[0][parts[0].find('&')+1:]
-        signal_lenght = int(parts[1]) + 1
+        signal_length = int(parts[1]) + 1
 
         # Order in csv_row must be strict, because of .csv organization
         csv_row.append(module_name)
         csv_row.append(signal_name)
-        csv_row.append(signal_lenght)
+        csv_row.append(signal_length)
         csv_row.append(signal_type)
 
         csv_rows.append(csv_row)

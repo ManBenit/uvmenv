@@ -83,8 +83,7 @@ class CLASS_NAME(uvm_env):
         # Convert value into Python implementation that you want to use
         try:
             module = importlib.import_module(implementation_class)
-            clazz = getattr(module, implementation_class)
-            self.refmodel = clazz('reference_model', self)
+            self.refmodel = module('reference_model', self)
         except Exception as e:
             self.logger.critical(f'Failed to load RefModel implementation: {e}')
             return

@@ -78,6 +78,16 @@ string trim(const string& s){
     return s.substr(first, (last - first + 1));
 }
 
+string toLowerCase(const string& s){
+    string txt = s;
+    
+    transform(txt.begin(), txt.end(), txt.begin(), [](unsigned char c) {
+        return std::tolower(c);
+    });
+
+    return txt;
+}
+
 string doTabs(const int& n) {
     if(n<=1) return TAB;
     

@@ -6,7 +6,9 @@
 #include <iostream>
 #include <regex>
 #include <fstream>
+#include <nlohmann/json.hpp>
 using namespace std;
+using json = nlohmann::json;
 
 
 void RefModelImpl::setName(const string& name){
@@ -30,37 +32,30 @@ void RefModelImpl::copyBaseFile(){
     string content = buffer.str();
 
     unordered_map<string, vector<Signal>> dutSignals = getDUTSignals('n');
-    vector<string> parameters;
+    vector<string> trOuts;
     vector<string> assigns;
     vector<string> returns;
 
     // Modify class name
     content = regex_replace(content, regex("CLASS_NAME"), name);
 
-    for(const auto& [signalName, signalProps] : dutSignals) {
-        for (const auto& signal : signalProps) {
-            if(signal.type == "INPUT"){
-                parameters.push_back(signal.name);
-                assigns.push_back(
-                    doTabs(2)+"self." + signal.name + " = " + signal.name
-                );
-            }
-            else if(signal.type == "OUTPUT"){
-                returns.push_back(
-                    doTabs(3)+"'"+signal.name + "': None"
-                );
-            }
-        }
-    }
-    // Modify 'set_inputs' method (parameters)
-    content = regex_replace(content, regex("PARAMETERS"), joinStr(parameters, ", ") );
+
+    json config = readFileJson(joinStr({
+        PROJECT_DIR, "config.json"
+    }, PATH_SEP));
+    string topModule = config["dut_design"]["top_module"];
+
+    for(const auto& [module, signalProps] : dutSignals) 
+        // Create file content only with top module signals
+        if(module == topModule)
+            for (const auto& signal : signalProps) 
+                if(signal.type == "OUTPUT")
+                    trOuts.push_back(
+                        doTabs(2)+"self.__transaction." + signal.name + " = 0"
+                    );
     
-    // Modify 'set_inputs' method (inits)
-    content = regex_replace(content, regex("PARAMS_ASSIGNS"), joinStr(assigns, "\n") );
-
-    // Modify set test make_test method (for Python and Verilator)
-    content = regex_replace(content, regex("RETURNS"), joinStr(returns, ",\n") );
-
+    // Modify '__do_with_python' and '__do_with_verilator' methods
+    content = regex_replace(content, regex("TRANSACTION_OUTS"), joinStr(trOuts, "\n") );
 
     // Write project file
     ofstream testFile(joinStr({
