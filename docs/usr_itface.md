@@ -28,7 +28,7 @@ Where:
 ## Format details
 ```bash
 uvmenv
-    new <project_name> <rtltop_name>
+    new <project_name> <rtltop_name> [init]
     search
     help
     project

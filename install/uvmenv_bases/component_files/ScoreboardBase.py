@@ -88,25 +88,25 @@ class CLASS_NAME(uvm_scoreboard):
                         # Edit as you need
                         # ====================================================
                         # You can use the mechanism of general assertions and use filters:
-                        for signame in get_dut_signames(): # You can filter, i.e. type='INPUT'
-                            assert getattr(tr_dut, signame) == getattr(tr_rmod, signame), \
-                                f'FAILED [{signame}]: DUT({hex(getattr(tr_dut, signame))}) | RefModel({hex(getattr(tr_rmod, signame))})'
+                        # # for signame in get_dut_signames(): # You can filter, i.e. type='INPUT'
+                        # #     assert getattr(tr_dut, signame) == getattr(tr_rmod, signame), \
+                        # #         f'FAILED [{signame}]: DUT({hex(getattr(tr_dut, signame))}) | RefModel({hex(getattr(tr_rmod, signame))})'
 
-                        # You can also validate signals individually:
-                        cond = tr_dut.SIGNAL_NAME == tr_rmod.SIGNAL_NAME
-                        assert cond, \
-                            f'FAILED [SIGNAL_NAME]: DUT({hex(tr_dut.SIGNAL_NAME)}) | RefModel({hex(tr_rmod.SIGNAL_NAME)})'
+                        # # # You can also validate signals individually:
+                        # # cond = tr_dut.SIGNAL_NAME == tr_rmod.SIGNAL_NAME
+                        # # assert cond, \
+                        # #     f'FAILED [SIGNAL_NAME]: DUT({hex(tr_dut.SIGNAL_NAME)}) | RefModel({hex(tr_rmod.SIGNAL_NAME)})'
                         
-                        # You can use the report mechanism in any moment
-                        if cond:
-                            report.write(message=f'[TEST PASSED] SIGNAL_NAME', component=self, level=pyuvm.INFO)
-                        else:
-                            report.write(message=f'[TEST FAILED] {tr_dut}', component=self, level=pyuvm.ERROR)
-                            report.write(
-                                message=f'DUT({hex(tr_dut.SIGNAL_NAME)}) | RefModel({hex(tr_rmod.SIGNAL_NAME)}) [SIGNAL_NAME]', 
-                                component=self, 
-                                level=pyuvm.INFO
-                            )
+                        # # # You can use the report mechanism in any moment
+                        # # if cond:
+                        # #     report.write(message=f'[TEST PASSED] SIGNAL_NAME', component=self, level=pyuvm.INFO)
+                        # # else:
+                        # #     report.write(message=f'[TEST FAILED] {tr_dut}', component=self, level=pyuvm.ERROR)
+                        # #     report.write(
+                        # #         message=f'DUT({hex(tr_dut.SIGNAL_NAME)}) | RefModel({hex(tr_rmod.SIGNAL_NAME)}) [SIGNAL_NAME]', 
+                        # #         component=self, 
+                        # #         level=pyuvm.INFO
+                        # #     )
                         # ====================================================
                     except ValueError as ex:
                         self.logger.error(f'{ex}')
