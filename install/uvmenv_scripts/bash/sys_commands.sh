@@ -14,6 +14,11 @@ function viewReport(){
     less +G $1/uvmenv_report.log
 }
 
+# $1: Path of OSimon files
+function viewCoverage(){
+    less $1/coverage_report.xml
+}
+
 # $1: Path for RTL files
 function getRTLFullFiles(){
     local files=""
@@ -57,6 +62,9 @@ case $1 in
         ;;
     "viewReport")
         viewReport $2
+        ;;
+    "viewCoverage")
+        viewCoverage $2
         ;;
 
     "getRTLFullFiles")

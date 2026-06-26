@@ -47,7 +47,6 @@ which is its hierarchy level.
 ## Requirements
 
 - Linux Debian based distribution.
-
 - Python 3.10 or later.
 
 ## Sections
@@ -61,3 +60,11 @@ which is its hierarchy level.
 - [Naming conventions](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/name_conventions.md).
 
 
+## What is new
+- It is necessary to edit less files to run a successfully UVM environment (before, 10 for sequential and 5 for combinatorial; now, 5 for both of them and optionally configuration file).
+- Compiled instead of interpreted code base, so now is faster.
+- Better organization of user interface options.
+- Changed files classification.
+- Autocompleted default coverage.
+- First general scoreboarding (comparing all inputs and outputs are the same between reference model and DUT).
+- ...

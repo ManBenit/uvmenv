@@ -13,6 +13,7 @@ bool existsDUT();
 void showProjectTree();
 void showReport();
 void showWaveform();
+void showCoverage();
 void showHelp();
 void createNewEnv(const std::string& projectName, const std::string& topModule);
 void runCurrentProject();

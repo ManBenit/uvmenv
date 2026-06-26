@@ -60,9 +60,9 @@ Requires being into a valid UVMEnv project.
 - `show`: Shows some of the results into OSimon directory (see Project showing).
 
 #### Project showing
-- `wave`: Shows the generated waveform using GTKWave. **(currently implemented directly on project handling)**
-- `report`: Shows the generated UVM report file. **(currently implemented directly on project handling)**
-- `coverage`. Shows the result of functional coverage. (soon implemented)
+- `wave`: Shows the generated waveform using GTKWave.
+- `report`: Shows the generated UVM report file.
+- `coverage`. Shows the result of functional coverage.
 
 
 ### Component handling

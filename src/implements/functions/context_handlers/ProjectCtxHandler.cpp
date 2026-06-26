@@ -17,24 +17,35 @@ int ProjectCtxHandler::cmdProject(const vector<string>& args){
     // Double validation of args
     // Required [1]
     // ================================
-    // 1. Validate existance of required arguments
+    // 1. Validate existance of required arguments and arguments not empty
+    const string& warMsg = "Usage: uvmenv project <option>";
     if(args.size() < 2){
-        printWarning("Usage: uvmenv project <option>");
+        printWarning(warMsg); 
         return 6;
     }
-    // 2. Validate arguments not empty
-    if( !requireArgs(
-        {args[1]},
-        "[project] Missing context"
-    ) ) return 6;
+    if(!requireArgs({args[1]}, warMsg) ) return 6;
     // ================================
 
     
     if(args[1] == "view")        return this->runView();
     else if(args[1] == "init")   return this->runInit();
-    else if(args[1] == "report") return this->runReport();
-    else if(args[1] == "wave")   return this->runWave();
     else if(args[1] == "run")    return this->runRun();
+    else if(args[1] == "show"){
+        // ================================
+        // Double validation of args
+        // Required [1]
+        // ================================
+        // 1. Validate existance of required arguments and arguments not empty
+        const string& warMsg = "Missing option: wave | report | coverage";
+        if(args.size() < 3){
+            printWarning(warMsg); 
+            return 6;
+        }
+        if(!requireArgs({args[2]}, warMsg) ) return 6;
+        // ================================
+        
+        return this->runShow(args[2]);
+    }
     else {
         printError("[project] Unknown opt: " + args[1]);
         return 5;
@@ -73,13 +84,22 @@ int ProjectCtxHandler::runRun(){
     return 0;
 }
 
-int ProjectCtxHandler::runWave(){
-    showWaveform();
-    return 0;
-}
-
-int ProjectCtxHandler::runReport(){
-    showReport();
+int ProjectCtxHandler::runShow(const string& showOption){
+    if(showOption == "coverage"){
+        showCoverage();
+    }
+    else if(showOption == "report"){
+        showReport();
+    }
+    else if(showOption == "wave"){
+        showWaveform();
+    }
+    
+    else {
+        printError("[project] Unknown comp: " + showOption);
+        return 5;
+    }
+    
     return 0;
 }
 

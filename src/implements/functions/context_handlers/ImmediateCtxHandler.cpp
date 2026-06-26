@@ -16,16 +16,13 @@ int ImmediateCtxHandler::cmdNew(const vector<string>& args){
     // Double validation of args
     // Required [1, 2]
     // ================================
-    // 1. Validate existance of required arguments
+    // 1. Validate existance of required arguments and arguments not empty
+    const string& warMsg = "Usage: uvmenv new <project name> <top module name>";
     if(args.size() < 3){
-        printWarning("Usage: uvmenv -n|--new <project name> <top module name>");
+        printWarning(warMsg); 
         return 6;
     }
-    // 2. Validate arguments not empty
-    if( !requireArgs(
-        {args[1], args[2]},
-        "Usage: uvmenv -n|--new <project name> <top module name>"
-    ) ) return 6;
+    if(!requireArgs({args[1], args[2]}, warMsg) ) return 6;
     // ================================
 
     // argv[2]: Project name.

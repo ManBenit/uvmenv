@@ -12,8 +12,7 @@ class ProjectCtxHandler {
     int runInit();
     int runView();
     int runRun();
-    int runWave();
-    int runReport();
+    int runShow(const std::string& showOption);
 };
 
 #endif // PROJECT_OPT_HANDLER_H

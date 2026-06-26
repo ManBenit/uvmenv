@@ -69,6 +69,10 @@ void showWaveform(){
     execCmdSimple(getScript("sys_commands")+"runGTKWave " + OUTSIM_DIR);
 }
 
+void showCoverage(){
+    execCmdSimple(getScript("sys_commands")+"viewCoverage " + OUTSIM_DIR);
+}
+
 
 void showHelp() {
     const int w = 15;
@@ -437,6 +441,8 @@ bool requireDUT(){
     return true;
 }
 
+// This function validates existing arguments not empty (does not work if arg is null)
+// TODO: let be able to validate also null
 bool requireArgs(initializer_list<string> args, const string& msg){
     for (const auto& arg : args) {
         if (arg.empty()) {

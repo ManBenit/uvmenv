@@ -17,16 +17,13 @@ int ComponentCtxHandler::cmdComponent(const vector<string>& args){
     // Double validation of args
     // Required [1, 2]
     // ================================
-    // 1. Validate existance of required arguments
+    // 1. Validate existance of required arguments and arguments not empty
+    const string& warMsg = "Usage: uvmenv component <opt> <comp> <name> [test] [env]";
     if(args.size() < 3){
-        printWarning("USAGE: uvmenv component OPTION COMPONENT ATTRIBUTES");
+        printWarning(warMsg); 
         return 6;
     }
-    // 2. Validate arguments not empty
-    if( !requireArgs(
-        {args[1], args[2]},
-        "USAGE: uvmenv component OPTION COMPONENT ATTRIBUTES"
-    ) ) return 6;
+    if(!requireArgs({args[1], args[2]}, warMsg) ) return 6;
     // ================================
 
     
