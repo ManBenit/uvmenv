@@ -9,9 +9,8 @@
 # ==========================================
 # FILES FOR TESTING ONLY
 # ==========================================
-docs/fast_docs.md
-src/TestProject/*
-src/TheProj/*
+src/alu_comb/*
+src/alu_seq/*
 src/compilation.log
 src/runTest.sh
 src/uvmenv_test
