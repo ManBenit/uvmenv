@@ -36,7 +36,7 @@ uvmenv
         view
         run
         show
-               wave
+               wave  <wave_level>
                report
                coverage
     component

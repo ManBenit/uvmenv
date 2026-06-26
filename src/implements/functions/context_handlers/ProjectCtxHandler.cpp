@@ -74,8 +74,7 @@ int ProjectCtxHandler::runRun(){
 }
 
 int ProjectCtxHandler::runWave(){
-    printInfo("Show waveform...");
-    //showWaveform();
+    showWaveform();
     return 0;
 }
 

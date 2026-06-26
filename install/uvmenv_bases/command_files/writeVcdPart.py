@@ -52,35 +52,29 @@ def append_unique_to_file(filepath, text):
 
 
 
-if __name__=='__main__':
-    topfile = sys.argv[1]
+
+
+def write_vcd(topfile, vcdlevel, option):
     topmodule = topfile.split('.')[-2]
     topmodule = topmodule.split('/')[-1]
-    level = int(sys.argv[2])
-    option = int(sys.argv[3])
 
-    
     # Delete last line (endmodule)
-    if option == 1:
+    if int(option) == 1:
         init_line = get_index_of_line(topfile, 'endmodule')
         end_line = count_lines(topfile)
 
         remove_lines(topfile, init_line, end_line)
 
     # Write new lines    
-    elif option == 2:
-        new_string=f'//vcd_dump\ninitial begin $dumpfile("dut_signals.vcd");$dumpvars({level}, {topmodule}); end\n'
+    elif int(option) == 2:
+        new_string=f'//vcd_dump\ninitial begin $dumpfile("dut_signals.vcd");$dumpvars({vcdlevel}, {topmodule}); end\n'
         append_unique_to_file(topfile, new_string)
         append_unique_to_file(topfile, 'endmodule\n')
 
     # Delete new lines and write only "endmodule"
-    elif option == 3:
+    elif int(option) == 3:
         init_line = get_index_of_line(topfile, '//vcd_dump')
         end_line = count_lines(topfile)
 
         remove_lines(topfile, init_line, end_line)
         append_unique_to_file(topfile, 'endmodule\n')    
-    
-
-
-

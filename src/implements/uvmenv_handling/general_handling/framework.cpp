@@ -23,6 +23,7 @@ namespace py = pybind11;
 // ===========================================================
 // Block to expose C++ to Python embedded instance
 // ===========================================================
+// Inject module "signalsGetter" from C++ to Python, to be able to use Signal
 PYBIND11_EMBEDDED_MODULE(signalsGetter, m) {
     py::class_<Signal>(m, "Signal")
         .def(py::init<>()) // Constructor por defecto
@@ -245,7 +246,60 @@ void runCurrentProject(){
         cerr << "Error: Impossible to create Makefile." << endl;
     }
 
+
+    // ==================================================================
+    // Main running process
+    // ==================================================================
+    static py::scoped_interpreter guard{};
+
+    py::module_ sys = py::module_::import("sys");
+    sys.attr("path").attr("append")(DUT_HDL_DIR);
+
+    filesystem::current_path(DUT_HDL_DIR);
+    
+    // Get necessary data for VCD writer
+    string topModule = config["dut_design"]["top_module"];
+
+    const string& rtlFullFiles = trim( execCmdReturn(getScript("sys_commands") + "getRTLFullFiles " + DUT_HDL_DIR) );
+    string topFile = "";
+
+    for(const string& s: splitString(rtlFullFiles, ' ')){
+        // s.contains(topModule) // Since C++23
+        if(s.find(topModule) != string::npos){
+            topFile = s;
+            break;
+        }
+    }
+
+    // Copy VCD writer file
+    if( !filesystem::exists("vcdWriter.py") )
+        filesystem::copy(VCD_WRHELPER_FILEBASE, "vcdWriter.py");
+        
+    // Run VCD writer (delete endmodule and write VCD dump)
+    //// TODO: parametrize VCD level to get it from user option (instead of 4)
+    runVcdWriter(topFile, "4", "1");
+    runVcdWriter(topFile, "4", "2");
+    
+    filesystem::current_path(PROJECT_DIR);
+
+
+
     execCmdSimple(getScript("python_control") + "runUVMEnvProject " + PROJECT_DIR + " " + pyVersion);
+
+
+    // Run VCD writer (delete written code and rewrite endmodule)
+    filesystem::current_path(DUT_HDL_DIR);
+    runVcdWriter(topFile, "4", "3");
+    
+    // Remove VCD writer
+    filesystem::remove("vcdWriter.py");
+
+    filesystem::current_path(PROJECT_DIR);
+
+    filesystem::rename("dut_signals.vcd", joinStr({OUTSIM_DIR, "dut_signals.vcd"}, PATH_SEP));
+    // ==================================================================
+
+
     execCmdSimple(getScript("sys_commands") + "cleanProject " + PROJECT_DIR);
 }
 
@@ -263,7 +317,7 @@ void searchProjects(){
     }
 
     for(const auto& name: projects)
-        cout << name << endl;
+        print(name);
 }
 
 
@@ -307,7 +361,7 @@ void searchProjects(){
             filesystem::copy(m, auxDir);
         }
         
-        // Copy the base fiel of signals getter into aux signals.py
+        // Copy the base file of signals getter into aux signals.py
         filesystem::copy(SIGNAL_GETTER_FILEBASE, auxDir + PATH_SEP + "signals.py");
 
         // Verilate each module into the aux directory
@@ -396,18 +450,26 @@ bool requireArgs(initializer_list<string> args, const string& msg){
 
 vector<Signal> runSignalsGetter(const string& module, char writeOption, char option){
     try{
-        py::module_ LeyendoPy = py::module_::import("signals");
-
-        py::object resultado = LeyendoPy.attr("get_signals")("obj_dir/V"+module+".h", writeOption, option);
-
+        py::module_ readingPy = py::module_::import("signals");
+        py::object resultado = readingPy.attr("get_signals")("obj_dir/V"+module+".h", writeOption, option);
         std::vector<Signal> signals = resultado.cast<std::vector<Signal>>();
 
         return signals;
-
     } catch (py::error_already_set &e) {
         std::cerr << "[Error de Python] " << e.what() << std::endl;
         return {};
     }
+}
+
+
+void runVcdWriter(const string& topFile, const string& vcdLevel, const string& runningMode){
+    try{
+        py::module_ readingPy = py::module_::import("vcdWriter");
+        readingPy.attr("write_vcd")(topFile, vcdLevel, runningMode);
+    } catch (py::error_already_set &e) {
+        std::cerr << "[Error de Python] " << e.what() << std::endl;
+    }
+
 }
 
 
