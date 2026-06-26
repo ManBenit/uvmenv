@@ -38,7 +38,7 @@ Attribution is required in both of cases.
 `UVMEnv` is intended for easy UVM environments creation, using a screaming architecture and  working by projects with a general 
 hierarchy based on [UVM standard 1.2](https://accellera.org/images/downloads/standards/uvm/uvm_users_guide_1.2.pdf), 
 making directly understandable the `UVMEnv` project structure (files and directories) with the hierarchy, supported
-by the command [user interface](https://github.com/ManBenit/uvmenv/blob/main/docs/usr_itface.md).
+by the command [user interface](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/usr_itface.md).
 
 In other words: seeing the `UVMEnv` main hierarchy, get exactly which part of project structure is necessary to edit and
 which is its hierarchy level.
@@ -51,13 +51,13 @@ which is its hierarchy level.
 - Python 3.10 or later.
 
 ## Sections
-- [`UVMEnv` main structure](https://github.com/ManBenit/uvmenv/blob/main/docs/main_structure.md).
-- [Install/Uninstall](https://github.com/ManBenit/uvmenv/blob/main/docs/installation.md).
-- [User interface](https://github.com/ManBenit/uvmenv/blob/main/docs/usr_itface.md).
-- [Generic testbench](https://github.com/ManBenit/uvmenv/blob/main/docs/generic_tb.md).
-- [Project configuration](https://github.com/ManBenit/uvmenv/blob/main/docs/project_configuration.md).
-- [Files classification](https://github.com/ManBenit/uvmenv/blob/main/docs/files_classification.md).
-- [Directories classification](https://github.com/ManBenit/uvmenv/blob/main/docs/dirs_classification.md).
-- [Naming conventions](https://github.com/ManBenit/uvmenv/blob/main/docs/name_conventions.md).
+- [`UVMEnv` main structure](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/main_structure.md).
+- [Install/Uninstall](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/installation.md).
+- [User interface](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/usr_itface.md).
+- [Generic testbench](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/generic_tb.md).
+- [Project configuration](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/project_configuration.md).
+- [Files classification](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/files_classification.md).
+- [Directories classification](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/dirs_classification.md).
+- [Naming conventions](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/name_conventions.md).
 
 

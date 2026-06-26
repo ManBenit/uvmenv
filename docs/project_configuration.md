@@ -45,7 +45,7 @@ In particular case of driver, monitor and environment there is an extra block wh
 ### Configuration file
 It does not have a base file; instead, it is generated at the moment the verification environment 
 is created using the `-n|--new` option from the 
-[user interface](https://github.com/ManBenit/uvmenv/blob/main/docs/usr_itface.md).
+[user interface](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/usr_itface.md).
 
 The generated file is `config.json`, located in the `UvmenvProject` directory.
 
