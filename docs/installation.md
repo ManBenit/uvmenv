@@ -21,10 +21,10 @@ The local installation path is `/home/<your_user>/.UVMEnv`, also written as `~/.
 
 ### `bases`
 Templates for code generation.
-- [`command_files`](https://github.com/ManBenit/uvmenv/blob/main/docs/files_classification/functionality/base_commands.md) directory.
-- [`component_files`](https://github.com/ManBenit/uvmenv/blob/main/docs/files_classification/functionality/base_components.md) directory.
-- [`config_files`](https://github.com/ManBenit/uvmenv/blob/main/docs/files_classification/functionality/base_configurations.md) directory.
-- [`representative_iles`](https://github.com/ManBenit/uvmenv/blob/main/docs/files_classification/functionality/base_representatives.md) directory.
+- [`command_files`](https://github.com/ManBenit/uvmenv/blob/uvmenv-1.0/docs/files_classification/functionality/base_commands.md) directory.
+- [`component_files`](https://github.com/ManBenit/uvmenv/blob/uvmenv-1.0/docs/files_classification/functionality/base_components.md) directory.
+- [`config_files`](https://github.com/ManBenit/uvmenv/blob/uvmenv-1.0/docs/files_classification/functionality/base_configurations.md) directory.
+- [`representative_iles`](https://github.com/ManBenit/uvmenv/blob/uvmenv-1.0/docs/files_classification/functionality/base_representatives.md) directory.
 
 
 ### `repos`
@@ -37,7 +37,7 @@ and
 Scripts for run verification (`run.sh`) and user interface source (`command.sh`).
 
 After your installation you should have available the `uvmenv` command, this is your 
-[user interface](https://github.com/ManBenit/uvmenv/blob/main/docs/usr_itface.md).
+[user interface](https://github.com/ManBenit/uvmenv/blob/uvmenv-1.0/docs/usr_itface.md).
 Test it typing `uvmenv --help`.
 
 

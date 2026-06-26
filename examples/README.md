@@ -58,7 +58,7 @@ Here there are 10 example projects done by `UVMEnv`, proved and correctly workin
     Additional to example of FIFO, this project ilustrate the proposal of include the same Verilator as extra tool to have a golden model, but implemented on HDL, maybe when this model is too specific. This proyect has the `RTLRef` directory, which has different implementation (using verilator) and uses `_do_with_verilator` into `DefaultRefModelImpl` to do this switch.
    
 - Projects described on 
-  [generic testbench](https://github.com/ManBenit/uvmenv/blob/main/docs/generic_tb) 
+  [generic testbench](https://github.com/ManBenit/uvmenv/blob/uvmenv-1.0/docs/generic_tb) 
   (and also thesis document):
   1. Example combinatorial ALU (`alu_simple`).
    

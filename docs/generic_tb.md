@@ -39,10 +39,10 @@ Aditionally, you can see the generated waveform, with `uvmenv wave`, and the gen
 5. Agent.
 6. Scoreboard.
 
-[Command details here](https://github.com/ManBenit/uvmenv/blob/main/docs/usr_itface.md)
+[Command details here](https://github.com/ManBenit/uvmenv/blob/uvmenv-1.0/docs/usr_itface.md)
 
 <p align="center">
-  <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/uvmConsoleV2.png" 
+  <img src="https://github.com/ManBenit/uvmenv/blob/uvmenv-1.0/docs/img/uvmConsoleV2.png" 
     alt="Execution immediatly after creation"
     width="70%" 
   />
