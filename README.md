@@ -68,3 +68,6 @@ which is its hierarchy level.
 - Autocompleted default coverage.
 - First general scoreboarding (comparing all inputs and outputs are the same between reference model and DUT).
 - ...
+
+## More excercices
+- [Verilog to `UVMEnv`](https://github.com/ManBenit/v2uvmenv).
