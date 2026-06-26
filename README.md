@@ -27,7 +27,7 @@ Master thesis title: "UVMEnv: Framework de código abierto, basado en Python y U
 Attribution is required in both of cases.
 
 ```
-<a href="https://github.com/ManBenit/uvmenv/">UVMEnv: Framework de código abierto, basado en Python y UVM, para generar ambientes de verificación de circuitos digitales</a> © 2026 por <a href="https://www.linkedin.com/in/manbenit/">Manuel Emilio Benítez Morales</a> está licenciado bajo <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International</a>
+<a href="https://github.com/ManBenit/uvmenv/">UVMEnv: Framework de código abierto, basado en Python y UVM, para generar ambientes de verificación de circuitos digitales</a> © 2026 by <a href="https://www.linkedin.com/in/manbenit/">Manuel Emilio Benítez Morales</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International</a>
 <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" width="20" height="20">
 <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" width="20" height="20">
 <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" width="20" height="20">
