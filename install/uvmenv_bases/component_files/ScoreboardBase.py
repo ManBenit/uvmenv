@@ -77,13 +77,6 @@ class CLASS_NAME(uvm_scoreboard):
                             tr_dut = self.resdut_queue.get()
 
                         # ====================================================
-                        #  (Maybe next deprecation)
-                        # Specular validation for possible negative values
-                        # # if(tr_dut.POSSIBLE_NEGATIVE_SIGNAL.signed_integer < 0):
-                        # #     tr_dut.POSSIBLE_NEGATIVE_SIGNAL=tr_dut.POSSIBLE_NEGATIVE_SIGNAL.signed_integer
-                        # ====================================================
-
-                        # ====================================================
                         # Scorboarding proposal (using available UVMEnv tools)
                         # Edit as you need
                         # ====================================================
@@ -112,10 +105,10 @@ class CLASS_NAME(uvm_scoreboard):
                         self.logger.error(f'{ex}')
                         pass
 
-        self.logger.info('Final general scoreboarding')
 
         if ISDUTSEQ:
             # (Maybe next deprecation)
+            # # self.logger.info('Final general scoreboarding')
             # Get the last result (after last cycle) to be able to compare with reference model.
             # This process is made checking the aux queues.
             # (for now, is repeated code)

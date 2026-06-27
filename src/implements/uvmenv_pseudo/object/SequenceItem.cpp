@@ -39,8 +39,8 @@ void SequenceItem::copyBaseFile(){
     vector<string> the_inputs;
     vector<string> the_outputs;
 
-    // // Modify class name
-    // content = regex_replace(content, regex("CLASS_NAME"), name);
+    // Modify class name
+    content = regex_replace(content, regex("CLASS_NAME"), name);
 
     json config = readFileJson(joinStr({
         PROJECT_DIR, "config.json"

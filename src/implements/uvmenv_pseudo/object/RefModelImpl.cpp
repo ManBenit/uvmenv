@@ -51,7 +51,7 @@ void RefModelImpl::copyBaseFile(){
             for (const auto& signal : signalProps) 
                 if(signal.type == "OUTPUT")
                     trOuts.push_back(
-                        doTabs(2)+"self.__transaction." + signal.name + " = 0"
+                        doTabs(2)+"self.__transaction." + signal.name + " = to_bin_repr(0000000000000000, " + to_string(signal.size) +")"
                     );
     
     // Modify '__do_with_python' and '__do_with_verilator' methods

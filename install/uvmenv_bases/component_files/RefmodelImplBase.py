@@ -13,6 +13,7 @@ from pyuvm import uvm_analysis_port, uvm_sequence_item
 # ====================
 # UVMEnv imports
 # ====================
+from utils import to_bin_repr
 from RefModel import RefModel
 
 
@@ -42,6 +43,8 @@ class CLASS_NAME(RefModel):
         ''' Write here your Python model handling '''
 
         # All you need to analyse is to assign results to transaction signals, i.e.:
+        # self.__transaction.SIGNAL = to_bin_repr(SIGNAL, SIGNAL_SIZE)
+        # Where SIGNAL_SIZE is auto written by UVMEnv.
 TRANSACTION_OUTS
 
 
@@ -56,6 +59,8 @@ TRANSACTION_OUTS
         # ====================================================
 
         # All you need to analyse is to assign results to transaction signals, i.e.:
+        # self.__transaction.SIGNAL = to_bin_repr(CALCULATED_VALUE, SIGNAL_SIZE)
+        # Where SIGNAL_SIZE is auto written by UVMEnv.
 TRANSACTION_OUTS
     
 

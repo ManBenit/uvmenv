@@ -12,7 +12,7 @@ from pyuvm import uvm_sequence_item
 
 
 
-class SitDefault(uvm_sequence_item):
+class CLASS_NAME(uvm_sequence_item):
     def __init__(self, name="alu_item"):
         super().__init__(name)
 ATTRIB_SIGNALS
@@ -52,5 +52,5 @@ THE_OUTPUTS
         return str( self.__get_transaction() )
         
 
-sys.modules[__name__] = SitDefault
+sys.modules[__name__] = CLASS_NAME
 
