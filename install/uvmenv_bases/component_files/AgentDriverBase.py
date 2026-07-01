@@ -30,9 +30,7 @@ class Driver(uvm_driver):
 
             # Send transaction to DUT
             await self.bfm.set(transaction)
-            # Send transaction to reference model
-            self.get_parent().get_parent().refmodel.set(transaction)
-
+            
             self.seq_item_port.item_done()
 
             

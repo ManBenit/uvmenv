@@ -142,6 +142,7 @@ function installPythonDependencies(){
     python$PY_VERSION -m pip install $upgrade cocotb
     python$PY_VERSION -m pip install $upgrade cocotb-coverage
     python$PY_VERSION -m pip install $upgrade pyuvm
+    python$PY_VERSION -m pip install $upgrade pytest # Used for cocotb.regression
     python$PY_VERSION -m pip install $upgrade pyfiglet
     python$PY_VERSION -m pip install $upgrade colorama
 }

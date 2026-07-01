@@ -23,5 +23,14 @@ def to_bin_repr(value: int, bitsize: int) -> BinaryValue:
     return BinaryValue(value=twos_complement_value, n_bits=bitsize, bigEndian=False)
 
 
+# Function handle special values like 'x', 'z', 'u', 'w' in transaction signals.
+# @param [value]: Value to process.
+def process_unkn_val(value):
+    if 'x' in str(value): return 'X'
+    elif 'z' in str(value): return 'Z'
+    elif 'u' in str(value): return 'U'
+    elif 'w' in str(value): return 'W'
+
+
 config = load_config('config.json')
 

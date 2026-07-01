@@ -86,13 +86,12 @@ class CLASS_NAME(uvm_test):
         await self.seq.start(self.env.agent.seqr)
 
         # ====================================================
-        # At the end of objection, 2 extra explicit cycles are required 
+        # At the end of objection, 1 extra explicit cycle is required 
         # when DUT is sequential:
         # 1. To wait for the last output.
-        # 2. To read it correctly.
         # ====================================================
         if ISDUTSEQ:
-            await Timer(2, units='ns') 
+            await ClockCycles(self.dut.clk, 1)
 
         self.drop_objection()
 

@@ -157,7 +157,14 @@ void createNewEnv(const string& projectName, const string& topModule){
     configContent["dut_design"] = {
         {"type", "combinatorial"},
         {"top_module", topModule},
-        {"sync_clock_cycles", "1"}
+        {"sim_units", "ns"}
+    };
+    configContent["dut_cs4seq"] = {
+        {"clock_name", "clk"},
+        {"reset_name", "rst"},
+        {"sync_cycles", 1},
+        {"clock_period", 1},
+        {"cycles4wait_reset", 1}
     };
     configContent["uvm_components"] = {
         {"itface", {

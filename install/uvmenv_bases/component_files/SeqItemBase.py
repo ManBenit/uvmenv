@@ -10,6 +10,10 @@ import random
 import json
 from pyuvm import uvm_sequence_item
 
+# ====================
+# UVMEnv imports
+# ====================
+from utils import process_unkn_val
 
 
 class CLASS_NAME(uvm_sequence_item):
@@ -36,9 +40,14 @@ THE_INPUTS
         }
 
     def __response_dict(self):
-        return {
+        try:
+            return {
 THE_OUTPUTS
-        }
+            }
+        except ValueError as err:
+            return {
+THE_OUTPUTS
+            }
 
     def __get_transaction(self):
         return {

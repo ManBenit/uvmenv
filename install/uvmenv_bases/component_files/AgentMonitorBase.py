@@ -8,15 +8,13 @@
 import importlib
 import pyuvm
 from pyuvm import uvm_monitor, uvm_analysis_port
-from cocotb.triggers import Timer, RisingEdge, FallingEdge
 
 # ====================
-# Python imports
+# UVMEnv imports
 # ====================
 from UVMEnvReport import report
 from utils import config
 ISDUTSEQ = config.dut_design.type == 'sequential'
-CLOCK_CYCLES = int(config.dut_design.sync_clock_cycles)
 
 
 class Monitor(uvm_monitor):
@@ -32,16 +30,16 @@ class Monitor(uvm_monitor):
     async def run_phase(self):
         await super().run_phase()
         while True:
-            # Time for waiting response from DUT 
-            if ISDUTSEQ:            
-                ## This await is for matching with event on BFMImpl)
-                ## (you can use also FallingEdge)
-                await RisingEdge(self.bfm.dut.YOUR_CLOCK_SIGNAL)
-            else:
-                await Timer(CLOCK_CYCLES, units='ns')
-
+            # Read transaction from DUT   
             transaction = await self.bfm.get()
+
+            # Send to reference model
+            self.get_parent().get_parent().refmodel.set(transaction)
+
+            # Write on report (optional)
             report.write(message=str(transaction), component=self, level=pyuvm.INFO)
+
+            # Send transaction to subscribers
             self.send.write(transaction)
 
 

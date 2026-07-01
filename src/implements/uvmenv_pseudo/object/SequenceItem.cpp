@@ -67,7 +67,7 @@ void SequenceItem::copyBaseFile(){
                 }
                 else if(signal.type == "OUTPUT"){
                     the_outputs.push_back(
-                        doTabs(3)+"'" + signal.name + "': hex(self." + signal.name + ")"
+                        doTabs(4)+"'" + signal.name + "': hex(self." + signal.name + ")"
                     );
                 }
             }

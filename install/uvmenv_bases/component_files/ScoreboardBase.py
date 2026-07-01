@@ -81,7 +81,7 @@ class CLASS_NAME(uvm_scoreboard):
                         # Edit as you need
                         # ====================================================
                         # You can use the mechanism of general assertions and use filters:
-                        for signame in get_dut_signames(): # You can filter, i.e. type='INPUT'
+                        for signame in get_dut_signames(type='OUTPUT'): # You can filter by type, signal length or module name
                             assert getattr(tr_dut, signame) == getattr(tr_rmod, signame), \
                                 f'FAILED [{signame}]: DUT({hex(getattr(tr_dut, signame))}) | RefModel({hex(getattr(tr_rmod, signame))})'
 
