@@ -12,6 +12,7 @@ VENV_DIR=$HOME_DIR/.UVMEnv_virtualenv
 REPOS_DIR=$MAIN_DIR/repos
 BASES_DIR=$MAIN_DIR/bases
 TOOLS_DIR=$MAIN_DIR/tools
+SCRIPTS_DIR=$MAIN_DIR/scripts
 COMMAND=/usr/bin/uvmenv
 ###########################
 
@@ -25,16 +26,29 @@ C_WHITE="\e[37m"
 C_N="\e[39m"
 ####################
 
-PY_VERSION=""
+#PY_VERSION=""
 
-IS_UPDATE=0
-IS_PY10_OR_MINOR=0
+#IS_UPDATE=0
+#IS_PY10_OR_MINOR=0
+#PKG_MNGR=""
 
 
 function main(){
+    local final_msg="INSTALLED"
+    PKG_MNGR=$(get_pkg_mngr)
+    PY_VERSION=$(python3 --version | awk '{print $2}' | cut -d'.' -f1-2)
+
+    printInfo "Current Python version: $PY_VERSION"
+
+    if [ "$EUID" -eq 0 ]; then
+        printWarning "You should run as NON root, only write root password if necessary during installation"
+        exit 1
+    fi
+
     # Firstly, get parameter 'update' value
      if [ "$1" == "update" ];then
         IS_UPDATE=1
+	final_msg="UPDATED"
     fi
 
     # PRE-INSTALLING PROCESS
@@ -50,37 +64,36 @@ function main(){
         exit 0
     fi
 
-    # Make a general update/upgrade
-    sudo apt update && sudo apt upgrade -y
 
-    # INSTALLING PROCESS
+    # ===========================
+    # Main installation process
+    # ===========================
+    # System requirements
     installSystemRequirements
 
-    # Get the installed Python version and activate virtual environment if version is > 3.10
-    getPythonVersion
-    if [ $IS_PY10_OR_MINOR -eq 0 ]; then
-        activatePythonVenv
-    fi
-
+    # Python dependencies
+    activatePythonVenv
     installPythonDependencies
-   
+
     # Create UVMEnv main structure if is installation and remove bases/tools from structure is is update
     if [[ $IS_UPDATE -eq 1 ]]; then
         updateUVMEnvRepository
         rm -rf $BASES_DIR
         rm -rf $TOOLS_DIR
-    else 
-        createMainStructure
+    else
+        createUVMEnvInstallDirs
     fi
     
-    installSimulators
-    createFrameworkEnv
+    installExternalTools
+
+    installUVMEnv   
 
     #Finally, show message
-    if [[ $IS_UPDATE -eq 1 ]]; then
-        printInfo "UVMEnv has been succesfully UPDATED"
+    if [ "$?" -eq 0  ]; then
+        printInfo "UVMEnv has been succesfully $final_msg"
     else
-        printInfo "UVMEnv has been succesfully INSTALLED"
+	createUVMEnvInstallDirs -del
+        printError "Something went wront during UVMEnv installation"
     fi
 }
 
@@ -97,34 +110,139 @@ function printWarning(){
 }
 
 
+function get_pkg_mngr(){
+    local container_name="$1"
+
+    # Try to read os-release
+    local os_info=$(cat /etc/os-release 2>/dev/null)
+
+    # If os_info is not defined, then assign "unknown" value
+    if [ -z "$os_info" ]; then
+        echo "unknown"
+        return 0
+    fi
+
+    # Extract ID and ID_LIKE by using "source" into a subshell,
+    # this avoid troubles with regular expressions
+    local id_brand
+    id_brand=$(echo "$os_info" | (source /dev/stdin; echo "${ID} ${ID_LIKE}") 2>/dev/null)
+
+    # Convert everything to lowercase
+    id_brand=$(echo "$id_brand" | tr '[:upper:]' '[:lower:]')
+
+    case "$id_brand" in
+        *ubuntu*|*debian*)                           echo "apt" ;;
+        *rhel*|*fedora*|*centos*|*rocky*|*almalinux*) echo "dnf" ;;
+        *arch*)                                      echo "pacman" ;;
+        *suse*|*opensuse*)                           echo "zypper" ;;
+        *alpine*)                                    echo "apk" ;;
+        *)                                           echo "unknown" ;;
+    esac
+}
+
 
 
 function installSystemRequirements(){
     # Necesary libraries for tools
+    local jsonlib_name="nlohmann-json3-dev"
+    local ymllib_name="libyaml-cpp-dev"
+
+    if [ $PKG_MNGR == "dnf" ] || [ $PKG_MNGR == "zypper" ]; then
+        jsonlib_name="nlohmann-json-devel"
+	ymllib_name="yaml-cpp-devel"
+    fi
+
+    if [ $PKG_MNGR == "pacman" ] || [ $PKG_MNGR == "apk" ]; then
+        jsonlib_name="nlohmann-json"
+	ymllib_name="yaml-cpp"
+    fi
+
     printInfo "############### Verifying prerequisites... ###############"
-    sudo apt install -y git tree help2man perl python3 python3-pip make autoconf g++ flex bison ccache gperf
-    sudo apt install -y libgoogle-perftools-dev numactl perl-doc
-    sudo apt install -y libfl2  # Ubuntu only (ignore if gives error)
-    sudo apt install -y libfl-dev  # Ubuntu only (ignore if gives error)
-    sudo apt install -y zlib1g zlib1g-dev #zlibc  # Ubuntu only (ignore if gives error)
+    sudo $PKG_MNGR install -y $jsonlib_name
+    sudo $PKG_MNGR install -y git tree jq help2man perl python3 python3-pip make autoconf g++ flex bison ccache gperf
+    sudo $PKG_MNGR install -y libgoogle-perftools-dev numactl perl-doc
+    
+
+    if [ "$PKG_MNGR" == "apt" ]; then
+        sudo $PKG_MNGR install -y libfl2  # Ubuntu only (ignore if gives error)
+        sudo $PKG_MNGR install -y libfl-dev  # Ubuntu only (ignore if gives error)
+        sudo $PKG_MNGR install -y zlib1g zlib1g-dev #zlibc  # Ubuntu only (ignore if gives error)
+    fi
 }
 
-function getPythonVersion(){
-    local pyv_major=$(python3 --version | awk '{print $2}' | cut -d'.' -f1)
-    local pyv_minor=$(python3 --version | awk '{print $2}' | cut -d'.' -f2)
-    PY_VERSION=$pyv_major.$pyv_minor
+# This function requires have created REPOS_DIR
+function installExternalTools(){
+    # GTKWave
+    if [ "$(which gtkwave)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
+        printInfo "############### Installing GTKWave... ###############"
+        installGtkwave
+    fi
 
-    if [ "$pyv_major" -gt 3 ] || { [ "$pyv_major" -eq 3 ] && [ "$pyv_minor" -gt 10 ]; }; then
-        IS_PY10_OR_MINOR=0
+    # Simulators
+    if [ "$(which iverilog)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
+        printInfo "############### Installing Icarus... ###############"
+        installIcarus
+    fi
+
+    if [ "$(which verilator)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
+        printInfo "############### Installing Verilator... ###############"
+        installVerilator
+    fi
+}
+
+function installUVMEnv(){
+    # Go to current dir (UVMEnv repository)
+    cd $REPO_PATH
+
+    #TODO: change to rsync
+    # Copy tools
+    cp -r ./install/uvmenv_tools/* $TOOLS_DIR
+
+    # Copy bases
+    cp -r ./install/uvmenv_bases/* $BASES_DIR
+
+    # Copy system scripts
+    cp -r ./install/uvmenv_scripts/* $SCRIPTS_DIR
+
+    # Compile UVMEnv
+
+    # Create completion (ln -s)
+
+    # Create command (ln -s)
+    #if [ ! -L $COMMAND ]; then
+    #    sudo ln -s $TOOLS_DIR/command.sh $COMMAND
+    #fi    
+
+    # Delete generated compilation from repo
+}
+
+# $1: Deletion option (-del)
+function createUVMEnvInstallDirs(){
+    if [ "$1" == "-del" ]; then
+        rm -rf $BASES_DIR
+	rm -rf $REPOS_DIR
+	rm -rf $TOOLS_DIR
+	rm -rf $SCRIPTS_DIR
+	rm -rf $VENV_DIR
     else
-        IS_PY10_OR_MINOR=1
+        mkdir -p $BASES_DIR
+        mkdir -p $REPOS_DIR
+        mkdir -p $TOOLS_DIR
+	mkdir -p $SCRIPTS_DIR
     fi
 }
 
 function activatePythonVenv(){
+    # Verify Python version
+    # Return if is <=3.10 cause is not necesary a virtualenv
+    local comp=$(echo "$PY_VERSION > 3.10" | bc -l)
+    if [[ $comp -eq 0 ]]; then
+        return
+    fi
+
     # Install venv module if not exists
     if python$PY_VERSION -m venv --help > /dev/null 2>&1; then
-        sudo apt install python$PY_VERSION-venv
+        sudo $PKG_MNGR install python$PY_VERSION-venv
     fi
 
     python$PY_VERSION -m venv $VENV_DIR
@@ -142,9 +260,9 @@ function installPythonDependencies(){
     python$PY_VERSION -m pip install $upgrade cocotb
     python$PY_VERSION -m pip install $upgrade cocotb-coverage
     python$PY_VERSION -m pip install $upgrade pyuvm
-    python$PY_VERSION -m pip install $upgrade pytest # Used for cocotb.regression
     python$PY_VERSION -m pip install $upgrade pyfiglet
     python$PY_VERSION -m pip install $upgrade colorama
+    python$PY_VERSION -m pip install $upgrade pytest
 }
 
 function updateUVMEnvRepository(){
@@ -169,52 +287,21 @@ function updateUVMEnvRepository(){
     git pull origin main
 }
 
-function createFrameworkEnv(){
-    cd $REPO_PATH
 
-    # Copy tools
-    cp -r ./uvmenv_tools $TOOLS_DIR
 
-    # Copy bases
-    cp -r ./uvmenv_bases $BASES_DIR
-
-    # Create command
-    if [ ! -L $COMMAND ]; then
-        sudo ln -s $TOOLS_DIR/command.sh $COMMAND
-    fi
-}
-
-function createMainStructure(){
-    mkdir $MAIN_DIR
-    mkdir $REPOS_DIR
-
-    git clone https://github.com/steveicarus/iverilog.git $REPOS_DIR/iverilog
-    git clone https://github.com/verilator/verilator.git $REPOS_DIR/verilator
-}
-
-function installSimulators(){
-    printInfo "############### Installing jq... ###############"
-    sudo apt install -y jq
-
-    printInfo "############### Installing GTKWave... ###############"
-    sudo apt install -y gtkwave
-
-    
-    if [ "$(which iverilog)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
-        printInfo "############### Installing Icarus... ###############"
-        installIcarus
-    fi
-
-    if [ "$(which verilator)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
-        printInfo "############### Installing Verilator... ###############"
-        installVerilator
-    fi
+function installGtkwave(){
+    sudo $PKG_MNGR install -y gtkwave #TODO: Install from repository)
 }
 
 
 function installIcarus(){
+    if [ ! -d $REPOS_DIR/iverilog ]; then
+        git clone https://github.com/steveicarus/iverilog.git $REPOS_DIR/iverilog
+    fi
+    
     cd $REPOS_DIR/iverilog
 
+    # Remove previous compilation if update
     if [[ $IS_UPDATE -eq 1 ]]; then
         sudo make -j $(nproc) clean
     fi
@@ -237,8 +324,13 @@ function installIcarus(){
 
 
 function installVerilator(){
+    if [ ! -d $REPOS_DIR/verilator ]; then
+        git clone https://github.com/verilator/verilator.git $REPOS_DIR/verilator
+    fi
+    
     cd $REPOS_DIR/verilator
 
+    # Remove previous compilation if update
     if [[ $IS_UPDATE -eq 1 ]]; then
         sudo make -j $(nproc) clean
     fi
@@ -271,5 +363,6 @@ function installVerilator(){
 
 
 main "$@"; exit
+
 
 
