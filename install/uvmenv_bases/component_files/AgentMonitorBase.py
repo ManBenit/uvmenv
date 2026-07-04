@@ -7,6 +7,7 @@
 # ====================
 import importlib
 import pyuvm
+import copy
 from pyuvm import uvm_monitor, uvm_analysis_port
 
 # ====================
@@ -40,7 +41,7 @@ class Monitor(uvm_monitor):
             report.write(message=str(transaction), component=self, level=pyuvm.INFO)
 
             # Send transaction to subscribers
-            self.send.write(transaction)
+            self.send.write(copy.copy(transaction))
 
 
     def __import_bfm(self):
