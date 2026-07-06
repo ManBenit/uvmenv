@@ -7,7 +7,7 @@
 # ====================
 import sys
 import cocotb
-from pyuvm import uvm_test, ConfigDB, uvm_sequencer
+from pyuvm import uvm_test, ConfigDB
 from cocotb.triggers import Timer 
 
 # ====================

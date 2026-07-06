@@ -7,7 +7,7 @@
 # ====================
 import sys
 import cocotb
-from cocotb.triggers import Timer, RisingEdge, FallingEdge, ClockCycles
+from cocotb.triggers import Timer, RisingEdge, FallingEdge, ClockCycles #, Event
 from cocotb.clock import Clock
 from pyuvm import uvm_sequence_item
 

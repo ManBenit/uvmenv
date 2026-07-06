@@ -38,6 +38,7 @@ void SequenceItem::copyBaseFile(){
     vector<string> random_signals;
     vector<string> the_inputs;
     vector<string> the_outputs;
+    vector<string> the_unkn_values;
 
     // Modify class name
     content = regex_replace(content, regex("CLASS_NAME"), name);
@@ -62,12 +63,15 @@ void SequenceItem::copyBaseFile(){
                         doTabs(2)+"self." + signal.name + " = random.randint(0, " + to_string(randMax) + ")"
                     );
                     the_inputs.push_back(
-                        doTabs(3)+"'" + signal.name + "': hex(self." + signal.name + ")"
+                        doTabs(3)+"'" + signal.name + "': self." + signal.name
                     );
                 }
                 else if(signal.type == "OUTPUT"){
                     the_outputs.push_back(
-                        doTabs(4)+"'" + signal.name + "': hex(self." + signal.name + ")"
+                        doTabs(4)+"'" + signal.name + "': self." + signal.name
+                    );
+                    the_unkn_values.push_back(
+                        doTabs(4)+"'" + signal.name + "': process_unkn_val(self." + signal.name + ")"
                     );
                 }
             }
@@ -85,6 +89,9 @@ void SequenceItem::copyBaseFile(){
     );
     content = regex_replace(content, 
         regex("THE_OUTPUTS"), joinStr(the_outputs, ",\n") 
+    );
+    content = regex_replace(content, 
+        regex("THE_UNKN_OUTPUTS"), joinStr(the_unkn_values, ",\n") 
     );
     
     ofstream outFile(joinStr({

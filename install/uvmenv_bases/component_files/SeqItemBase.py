@@ -32,6 +32,12 @@ RANDOM_SIGNALS
             default=str
         ))
 
+    def get_ins_only(self):
+        return self.__request_dict()
+    
+    def get_outs_only(self):
+        return self.__response_dict()
+
 
 
     def __request_dict(self):
@@ -46,13 +52,14 @@ THE_OUTPUTS
             }
         except ValueError as err:
             return {
-THE_OUTPUTS
+THE_UNKN_OUTPUTS
             }
 
     def __get_transaction(self):
+        convert_to_hex = lambda d: {k: hex(v) for k, v in d.items()}
         return {
-            'request': self.__request_dict(),
-            'response': self.__response_dict()
+            'request': convert_to_hex(self.__request_dict()),
+            'response': convert_to_hex(self.__response_dict())
         }
 
 

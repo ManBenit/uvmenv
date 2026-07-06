@@ -7,8 +7,8 @@
 # ====================
 import sys
 import pyuvm
-from queue import Queue
-from pyuvm import uvm_scoreboard, uvm_tlm_analysis_fifo, uvm_get_port, uvm_sequence_item
+from collections import deque
+from pyuvm import uvm_scoreboard, uvm_tlm_analysis_fifo, uvm_get_port
 
 # ====================
 # UVMEnv imports
@@ -19,20 +19,15 @@ from utils import config
 ISDUTSEQ = config.dut_design.type == 'sequential'
 
 
-# You can define the maximum size for auxiliar queues (ensure is more than total of sequences).
-# (thery are used only when verifying sequential designs)
-# (Maybe next deprecation)
-NUM_SEQUENCES=10
-
 
 class CLASS_NAME(uvm_scoreboard):
     def __init__(self, name, parent):
         super().__init__(name, parent)
-        # Auxiliar queues when DUT is sequential (Maybe next deprecation)
-        self.reqdut_queue = Queue(maxsize=NUM_SEQUENCES)
-        self.resdut_queue = Queue(maxsize=NUM_SEQUENCES)
-        self.resrmod_queue = Queue(maxsize=NUM_SEQUENCES)
-        self.enable_scoreboarding = not ISDUTSEQ
+        # Auxiliar queues to syncronize DUT data
+        self.pending_dut   = deque()
+        self.pending_rmod  = deque()
+        self.sync_dut_ins  = deque()
+        self.sync_dut_outs = deque()
 
 
     def build_phase(self):
@@ -57,83 +52,70 @@ class CLASS_NAME(uvm_scoreboard):
     def check_phase(self):
         super().check_phase()
 
+        # Save data on history queues
         while self.dut_result_get_port.can_get() and self.refmodel_result_get_port.can_get():
-            success_dut, tr_dut = self.dut_result_get_port.try_get()
+            success_dut,  tr_dut  = self.dut_result_get_port.try_get()
             success_rmod, tr_rmod = self.refmodel_result_get_port.try_get()
+
+            self.pending_dut.append(tr_dut)
+            self.pending_rmod.append(tr_rmod)
 
             if not success_dut or not success_rmod:
                 self.logger.critical(f'Fail getting transaction info: (dut:{success_dut},rmod:{success_rmod})')
-            else:
-                if ISDUTSEQ:
-                    self.resrmod_queue.put(response_rmod) # (Maybe next deprecation)
-                    if request_dut.YOUR_RESET_SIGNAL == 0 and self.enable_scoreboarding == False:
-                        self.enable_scoreboarding = True
-                        self.resdut_queue.get()
-
-                if self.enable_scoreboarding:  
-                    try:
-                        if ISDUTSEQ:
-                            tr_rmod = self.resrmod_queue.get()
-                            tr_dut = self.resdut_queue.get()
-
-                        # ====================================================
-                        # Scorboarding proposal (using available UVMEnv tools)
-                        # Edit as you need
-                        # ====================================================
-                        # You can use the mechanism of general assertions and use filters:
-                        for signame in get_dut_signames(type='OUTPUT'): # You can filter by type, signal length or module name
-                            assert getattr(tr_dut, signame) == getattr(tr_rmod, signame), \
-                                f'FAILED [{signame}]: DUT({hex(getattr(tr_dut, signame))}) | RefModel({hex(getattr(tr_rmod, signame))})'
-
-                        # # # You can also validate signals individually:
-                        # # cond = tr_dut.SIGNAL_NAME == tr_rmod.SIGNAL_NAME
-                        # # assert cond, \
-                        # #     f'FAILED [SIGNAL_NAME]: DUT({hex(tr_dut.SIGNAL_NAME)}) | RefModel({hex(tr_rmod.SIGNAL_NAME)})'
-                        
-                        # # # You can use the report mechanism in any moment
-                        # # if cond:
-                        # #     report.write(message=f'[TEST PASSED] SIGNAL_NAME', component=self, level=pyuvm.INFO)
-                        # # else:
-                        # #     report.write(message=f'[TEST FAILED] {tr_dut}', component=self, level=pyuvm.ERROR)
-                        # #     report.write(
-                        # #         message=f'DUT({hex(tr_dut.SIGNAL_NAME)}) | RefModel({hex(tr_rmod.SIGNAL_NAME)}) [SIGNAL_NAME]', 
-                        # #         component=self, 
-                        # #         level=pyuvm.INFO
-                        # #     )
-                        # ====================================================
-                    except ValueError as ex:
-                        self.logger.error(f'{ex}')
-                        pass
-
 
         if ISDUTSEQ:
-            # (Maybe next deprecation)
-            # # self.logger.info('Final general scoreboarding')
-            # Get the last result (after last cycle) to be able to compare with reference model.
-            # This process is made checking the aux queues.
-            # (for now, is repeated code)
-            # # while not self.resdut_queue.empty() and not self.resrmod_queue.empty():
-            # #     response_rmod = self.resrmod_queue.get()
-            # #     response_dut = self.resdut_queue.get()
+            # Delete the last ref model transaction because it is duplicated
+            self.pending_rmod.pop()
 
-            # #     # Specular validation for possible negative values
-            # #     #if(response_dut.POSSIBLE_NEGATIVE_SIGNAL.signed_integer < 0):
-            # #     #    response_dut.POSSIBLE_NEGATIVE_SIGNAL=response_dut.POSSIBLE_NEGATIVE_SIGNAL.signed_integer
-                
-            # #     ## Save conditions
-            # #     condition_1 = response_dut.result_signal_1 == response_rmod.result_signal_1
-            # #     condition_N = response_dut.result_signal_N == response_rmod.result_signal_N
+            # Syncronize DUT inputs and outputs for scoreboarding (Current support, only when response is got on the next immediate cycle)
+            for i in range( len(self.pending_dut) ):
+                pending_dut_ins  = self.pending_dut[i].get_ins_only()
+                pending_dut_outs = self.pending_dut[i].get_outs_only()
+                if i == 0:
+                    self.sync_dut_ins.append(pending_dut_ins)
+                elif i > 0 and i < len(self.pending_dut)-1:
+                    self.sync_dut_ins.append(pending_dut_ins)
+                    self.sync_dut_outs.append(pending_dut_outs)
+                else:
+                    self.sync_dut_outs.append(pending_dut_outs)
 
-            # #     # Make assertions
-            # #     assert condition_1, f'TEST FAILED result_signal_1 dut({hex(response_dut.result_signal_1)}), rmod({hex(response_rmod.result_signal_1)})'
-            # #     assert condition_N, f'TEST FAILED result_signal_N dut({hex(response_dut.result_signal_N)}), rmod({hex(response_rmod.result_signal_N)})'
+        # Ensure data pending lists have a coherent size for scoreboarding
+        assert len(self.sync_dut_ins) == len(self.sync_dut_outs), \
+            f'FAILED: DUT Ins({len(self.sync_dut_ins)}) | DUT Outs({len(self.sync_dut_outs)})'
+        assert len(self.sync_dut_outs) == len(self.pending_rmod), \
+            f'FAILED: DUT Out({len(self.sync_dut_outs)}) | RefModel({len(self.pending_rmod)})'
+        
 
-            # #     # Save on report file if necessary (watch Misces/UVMEnvReport.py for help)
-            # #     if condition_1:
-            # #         report.write(message=f'[TEST PASSED] {tr_dut}', component=self, level=pyuvm.INFO)
-            # #     else:
-            # #         report.write(message=f'[TEST FAILED] {tr_dut}', component=self, level=pyuvm.ERROR)
-            ''''''
+        # ====================================================
+        # Scorboarding proposal (using available UVMEnv tools)
+        # Edit as you need
+        # ====================================================
+        # You can use the mechanism of general assertions and use filters:
+        for prefmod, dutin, dutout in zip(self.pending_rmod, self.sync_dut_ins, self.sync_dut_outs):
+            for signame in get_dut_signames(type='INPUT'): # You can filter
+                assert dutin.get(signame) == getattr(prefmod, signame), \
+                    f'FAILED [{signame}]: DUT({hex(dutin.get(signame))}) | RefModel({hex(getattr(prefmod, signame))})'
+            for signame in get_dut_signames(type='OUTPUT'): # You can filter
+                assert dutout.get(signame) == getattr(prefmod, signame), \
+                    f'FAILED [{signame}]: DUT({hex(dutout.get(signame))}) | RefModel({hex(getattr(prefmod, signame))})'
+        
+        # # You can also validate signals individually:
+        # cond = tr_dut.SIGNAL_NAME == tr_rmod.SIGNAL_NAME
+        # assert cond, \
+        #     f'FAILED [SIGNAL_NAME]: DUT({hex(tr_dut.SIGNAL_NAME)}) | RefModel({hex(tr_rmod.SIGNAL_NAME)})'
+        # ''''''
+                            
+        # # You can use the report mechanism in any moment
+        # if cond:
+        #     report.write(message=f'[TEST PASSED] SIGNAL_NAME', component=self, level=pyuvm.INFO)
+        # else:
+        #     report.write(message=f'[TEST FAILED] {tr_dut}', component=self, level=pyuvm.ERROR)
+        #     report.write(
+        #         message=f'DUT({hex(tr_dut.SIGNAL_NAME)}) | RefModel({hex(tr_rmod.SIGNAL_NAME)}) [SIGNAL_NAME]', 
+        #         component=self, 
+        #         level=pyuvm.INFO
+        #     )
+        # ====================================================
 
     def report_phase(self):
         super().report_phase()
@@ -142,16 +124,7 @@ class CLASS_NAME(uvm_scoreboard):
 
 
     def write(self, t):
-        self.__tr = t
-        if ISDUTSEQ:
-            # (Maybe next deprecation)
-            # # if self.__tr.get_transaction().request.YOUR_RESET_SIGNAL == 0:
-            # #     self.resdut_queue.put(self.__tr.get_transaction().response)
-            ''''''
-
-        # You can analyze here each transaction if necessary:
-        #assert <condition>, 'Error message'
-        
+        pass
 
 
 sys.modules[__name__] = CLASS_NAME
