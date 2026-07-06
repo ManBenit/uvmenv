@@ -1,10 +1,8 @@
 #!/bin/bash
 
-############################################################################################################
-# Installer to Debian based Linux distros.
-############################################################################################################
-
-### Installation paths ####
+# =============================================
+# Installation paths
+# =============================================
 REPO_PATH=$(pwd)
 HOME_DIR=/home/$(whoami)
 MAIN_DIR=$HOME_DIR/.UVMEnv
@@ -14,9 +12,12 @@ BASES_DIR=$MAIN_DIR/bases
 TOOLS_DIR=$MAIN_DIR/tools
 SCRIPTS_DIR=$MAIN_DIR/scripts
 COMMAND=/usr/bin/uvmenv
-###########################
+# =============================================
 
-### Bash colors ####
+
+# =============================================
+# Bash colors
+# =============================================
 C_RED="\e[31m"
 C_BLUE="\e[34m"
 C_CYAN="\e[36m"
@@ -24,13 +25,8 @@ C_GREEN="\e[32m"
 C_YELLOW="\e[33m"
 C_WHITE="\e[37m"
 C_N="\e[39m"
-####################
+# =============================================
 
-#PY_VERSION=""
-
-#IS_UPDATE=0
-#IS_PY10_OR_MINOR=0
-#PKG_MNGR=""
 
 
 function main(){
@@ -48,7 +44,7 @@ function main(){
     # Firstly, get parameter 'update' value
      if [ "$1" == "update" ];then
         IS_UPDATE=1
-	final_msg="UPDATED"
+        final_msg="UPDATED"
     fi
 
     # PRE-INSTALLING PROCESS
@@ -84,19 +80,22 @@ function main(){
         createUVMEnvInstallDirs
     fi
     
-    installExternalTools
+    installExternalDependencies
 
     installUVMEnv   
 
-    #Finally, show message
+    #Finally, show message # TODO: review efectivity
     if [ "$?" -eq 0  ]; then
         printInfo "UVMEnv has been succesfully $final_msg"
     else
-	createUVMEnvInstallDirs -del
+    createUVMEnvInstallDirs -del
         printError "Something went wront during UVMEnv installation"
     fi
 }
 
+# =============================================
+# Installation utils
+# =============================================
 function printError(){
     echo -e "${C_RED}$1${C_N}"
 }
@@ -108,7 +107,6 @@ function printInfo(){
 function printWarning(){
     echo -e "${C_YELLOW}$1${C_N}"
 }
-
 
 function get_pkg_mngr(){
     local container_name="$1"
@@ -141,24 +139,31 @@ function get_pkg_mngr(){
 }
 
 
-
+# =============================================
+# System requirements
+# =============================================
 function installSystemRequirements(){
-    # Necesary libraries for tools
+    # Let's suppose apt
     local jsonlib_name="nlohmann-json3-dev"
     local ymllib_name="libyaml-cpp-dev"
+    local pybind_name="pybind11-dev"
 
     if [ $PKG_MNGR == "dnf" ] || [ $PKG_MNGR == "zypper" ]; then
         jsonlib_name="nlohmann-json-devel"
-	ymllib_name="yaml-cpp-devel"
+        ymllib_name="yaml-cpp-devel"
+        pybind_name="pybind11-devel"
     fi
 
     if [ $PKG_MNGR == "pacman" ] || [ $PKG_MNGR == "apk" ]; then
         jsonlib_name="nlohmann-json"
-	ymllib_name="yaml-cpp"
+        ymllib_name="yaml-cpp"
+        pybind_name="pybind11"
     fi
 
     printInfo "############### Verifying prerequisites... ###############"
     sudo $PKG_MNGR install -y $jsonlib_name
+    sudo $PKG_MNGR install -y $ymllib_name
+    sudo $PKG_MNGR install -y $pybind_name
     sudo $PKG_MNGR install -y git tree jq help2man perl python3 python3-pip make autoconf g++ flex bison ccache gperf
     sudo $PKG_MNGR install -y libgoogle-perftools-dev numactl perl-doc
     
@@ -170,26 +175,10 @@ function installSystemRequirements(){
     fi
 }
 
-# This function requires have created REPOS_DIR
-function installExternalTools(){
-    # GTKWave
-    if [ "$(which gtkwave)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
-        printInfo "############### Installing GTKWave... ###############"
-        installGtkwave
-    fi
 
-    # Simulators
-    if [ "$(which iverilog)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
-        printInfo "############### Installing Icarus... ###############"
-        installIcarus
-    fi
-
-    if [ "$(which verilator)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
-        printInfo "############### Installing Verilator... ###############"
-        installVerilator
-    fi
-}
-
+# =============================================
+# UVMEnv installation handling
+# =============================================
 function installUVMEnv(){
     # Go to current dir (UVMEnv repository)
     cd $REPO_PATH
@@ -220,18 +209,44 @@ function installUVMEnv(){
 function createUVMEnvInstallDirs(){
     if [ "$1" == "-del" ]; then
         rm -rf $BASES_DIR
-	rm -rf $REPOS_DIR
-	rm -rf $TOOLS_DIR
-	rm -rf $SCRIPTS_DIR
-	rm -rf $VENV_DIR
+        rm -rf $REPOS_DIR
+        rm -rf $TOOLS_DIR
+        rm -rf $SCRIPTS_DIR
+        rm -rf $VENV_DIR
     else
         mkdir -p $BASES_DIR
         mkdir -p $REPOS_DIR
         mkdir -p $TOOLS_DIR
-	mkdir -p $SCRIPTS_DIR
+        mkdir -p $SCRIPTS_DIR
     fi
 }
 
+function updateUVMEnvRepository(){
+    local script_name="install.sh"
+    local remote_branch="origin/main"
+
+    # Get local hash if installer
+    local local_hash=$(git hash-object "$script_name")
+
+    # Get remote hash of installer
+    local remote_hash=$(git show "$remote_branch:$script_name" 2>/dev/null | git hash-object --stdin)
+
+    # Compare both of them
+    if [[ "$local_hash" != "$remote_hash" ]]; then
+        printWarning "Installer has changes from remote, please run:"
+        printInfo "git pull origin main"
+        printWarning "and try again the update."
+        exit 1
+    fi
+
+    # If installer has no changes, make pull normally
+    git pull origin main
+}
+
+
+# =============================================
+# Python dependencies
+# =============================================
 function activatePythonVenv(){
     # Verify Python version
     # Return if is <=3.10 cause is not necesary a virtualenv
@@ -265,34 +280,34 @@ function installPythonDependencies(){
     python$PY_VERSION -m pip install $upgrade pytest
 }
 
-function updateUVMEnvRepository(){
-    local script_name="install.sh"
-    local remote_branch="origin/main"
 
-    # Get local hash if installer
-    local local_hash=$(git hash-object "$script_name")
-
-    # Get remote hash of installer
-    local remote_hash=$(git show "$remote_branch:$script_name" 2>/dev/null | git hash-object --stdin)
-
-    # Compare both of them
-    if [[ "$local_hash" != "$remote_hash" ]]; then
-        printWarning "Installer has changes from remote, please run:"
-        printInfo "git pull origin main"
-        printWarning "and try again the update."
-        exit 1
+# =============================================
+# External tools dependencies
+# =============================================
+# This function requires have created REPOS_DIR
+function installExternalDependencies(){
+    # GTKWave
+    if [ "$(which gtkwave)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
+        printInfo "############### Installing GTKWave... ###############"
+        installGtkwave
     fi
 
-    # If installer has no changes, make pull normally
-    git pull origin main
-}
+    # Simulators
+    if [ "$(which iverilog)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
+        printInfo "############### Installing Icarus... ###############"
+        installIcarus
+    fi
 
+    if [ "$(which verilator)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
+        printInfo "############### Installing Verilator... ###############"
+        installVerilator
+    fi
+}
 
 
 function installGtkwave(){
     sudo $PKG_MNGR install -y gtkwave #TODO: Install from repository)
 }
-
 
 function installIcarus(){
     if [ ! -d $REPOS_DIR/iverilog ]; then
@@ -321,7 +336,6 @@ function installIcarus(){
     make -j $(nproc)
     sudo make install
 }
-
 
 function installVerilator(){
     if [ ! -d $REPOS_DIR/verilator ]; then
