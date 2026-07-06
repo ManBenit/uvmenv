@@ -272,6 +272,11 @@ function installPythonDependencies(){
         upgrade=""
     fi
 
+    if [ "$VIRTUAL_ENV" == "" ]; then
+        printError "Wrong virtualenv activation"
+        exit 1
+    fi
+
     python$PY_VERSION -m pip install $upgrade cocotb
     python$PY_VERSION -m pip install $upgrade cocotb-coverage
     python$PY_VERSION -m pip install $upgrade pyuvm
