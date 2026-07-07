@@ -32,7 +32,7 @@ from UVMEnvReport import report
 # Import the Tests you need, i.e.:
 # import TestDefault
 # ============================================================
-
+import TestDefault
 
 print( Fore.BLUE+pyfiglet.figlet_format('UVMEnv')+Fore.RESET )
 print( Fore.YELLOW+pyfiglet.figlet_format(config.dut_design.top_module)+Fore.RESET )
@@ -44,7 +44,7 @@ async def default_test(dut):
     await do_fake_test()
 
     # Await for some specific test
-    await uvm_root().run_test('ExampleTest')
+    #await uvm_root().run_test('TestDefault')
 
 
 

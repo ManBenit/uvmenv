@@ -8,7 +8,7 @@
 import sys
 import cocotb
 from pyuvm import uvm_test, ConfigDB
-from cocotb.triggers import Timer 
+from cocotb.triggers import Timer, ClockCycles
 
 # ====================
 # UVMEnv imports
@@ -48,8 +48,9 @@ import SeqDefault
 class CLASS_NAME(uvm_test):
     def build_phase(self):
         super().build_phase()
+        self.dut = cocotb.top
         self.env = EnvDefault('env', self)
-        ConfigDB().set(None, 'env.*', 'dut', cocotb.top)
+        ConfigDB().set(None, 'env.*', 'dut', self.dut)
 
         # ====================================================
         # Instance here all sequences you need:

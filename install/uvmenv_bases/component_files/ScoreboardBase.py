@@ -78,6 +78,10 @@ class CLASS_NAME(uvm_scoreboard):
                     self.sync_dut_outs.append(pending_dut_outs)
                 else:
                     self.sync_dut_outs.append(pending_dut_outs)
+        else:
+            for i in range( len(self.pending_dut) ):
+                self.sync_dut_ins.append( self.pending_dut[i].get_ins_only() )
+                self.sync_dut_outs.append( self.pending_dut[i].get_outs_only() )
 
         # Ensure data pending lists have a coherent size for scoreboarding
         assert len(self.sync_dut_ins) == len(self.sync_dut_outs), \

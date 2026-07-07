@@ -23,7 +23,7 @@ from pyuvm import uvm_sequence
 import SitDefault
 
 # Define how many times you want to send the sequence
-REPEAT_SEQ = 1
+REPEAT_SEQ = 50
 
 class CLASS_NAME(uvm_sequence):
     def __init__(self, name):
