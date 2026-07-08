@@ -3,27 +3,25 @@
 
 One you have installed `UVMEnv`, you need creating a new project:
 ``` bash
-uvmenv --new
+uvmenv new
 ```
 
+(give a project name and specify your top model name, without extension).
+
+At this point, you have the basic general architecture (without funcional components), you can verify this by running `uvmenv project view`.
 
 
-(give a project name and specify your top model name without extension).
-
-At this point, you have the basic general architecture (without funcional components), you can verify this by running `uvmenv --view`.
-
-
-Then, **put your DUT (HDL source code) into `HDLSrc` directory** and use the environment initialization:
+Then, **put your DUT into `HDLSrc` directory** and use the project initialization:
 ``` bash
-uvmenv --init
+uvmenv project init
 ```
 
-At this point, you have a full general prohject structure (with default funcional components), you can verify this by running `uvmenv --view`.
+Now, you have a full default project structure, you can verify this by running `uvmenv project view`.
 
 
 Now you can start the verification process:
 ``` bash
-uvmenv run
+uvmenv project run
 ```
 
 

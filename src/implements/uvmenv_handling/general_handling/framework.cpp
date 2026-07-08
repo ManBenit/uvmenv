@@ -127,10 +127,11 @@ void createNewEnv(const string& projectName, const string& topModule){
         printError("The UVMEnv project " + projectName + " already exists. Please choose another name.");
         return;
     }
+    string formattedPName = toPascalCase(projectName);
 
     // Create directories structure
-    filesystem::create_directory(PROJECT_DIR + PATH_SEP + projectName);
-    filesystem::current_path(PROJECT_DIR + PATH_SEP + projectName);
+    filesystem::create_directory(PROJECT_DIR + PATH_SEP + formattedPName);
+    filesystem::current_path(PROJECT_DIR + PATH_SEP + formattedPName);
 
     // Create UVMenv structure directories
     filesystem::create_directory("HDLSrc");
@@ -141,18 +142,11 @@ void createNewEnv(const string& projectName, const string& topModule){
         "Itface" + PATH_SEP + "BFM.py"
     );
     filesystem::create_directory("UVM_TB");
-    //// filesystem::create_directories("UVM_TB" + PATH_SEP + "SeqItm");
-    //// filesystem::create_directories("UVM_TB" + PATH_SEP + "Seqnce");
-    //filesystem::create_directories("UVM_TB" + PATH_SEP + "Envmnt");
-    //// filesystem::create_directories("UVM_TB" + PATH_SEP + "Misces");
-    //filesystem::create_directories("UVM_TB" + PATH_SEP + "Envmnt" + PATH_SEP + "Scorbd");
-    //filesystem::create_directories("UVM_TB" + PATH_SEP + "Envmnt" + PATH_SEP + "Agents");
-    //filesystem::create_directories("UVM_TB" + PATH_SEP + "Envmnt" + PATH_SEP + "RefMdl" + PATH_SEP + "_impl");
 
     // Create config file
     json configContent;
-    configContent["id"] = base64_encode("uvm:" + projectName + ":env");
-    configContent["name"] = projectName;
+    configContent["id"] = base64_encode("uvm:" + formattedPName + ":env");
+    configContent["name"] = formattedPName;
     configContent["simtool"] = "icarus";
     configContent["dut_design"] = {
         {"type", "combinatorial"},
@@ -193,26 +187,10 @@ void createNewEnv(const string& projectName, const string& topModule){
 
     ////// Write Top
     UVMComponent* top = &Top::instance();
-    Top::instance().setProjectName(projectName);
+    Top::instance().setProjectName(formattedPName);
     Top::instance().setTopModuleName(topModule);
     top -> copyBaseFile();
-    //filesystem::copy(TOP_FILEBASE, "Top_"+topModule+".py");
-
-    ////// Write Test
-    //filesystem::copy(TEST_FILEBASE, "UVM_TB/Test.py");
-
-    ////// Write Environment
-    //filesystem::copy(ENVIRONMENT_FILEBASE, "UVM_TB/Envmnt/Environment.py");
-
-    ////// Write interface for BFM
-    //// filesystem::copy(BFM_FILEBASE, "Itface" + PATH_SEP + "BFM.py");
-
-    ////// Write interface for Reference model
-    //filesystem::copy(REFMODEL_FILEBASE, "UVM_TB" + PATH_SEP + "Envmnt" + PATH_SEP + "RefMdl/RefModel.py");
-
-    ////// Write report mechanism
-    //// filesystem::copy(REPORT_FILEBASE, "UVM_TB" + PATH_SEP + "Misces" + PATH_SEP + "UVMEnvReport.py");
-
+    
     filesystem::current_path(PROJECT_DIR);
 }
 
@@ -228,6 +206,7 @@ void runCurrentProject(){
     // Extraer valores del JSON (equivalente a jq)
     string simtool = config.value("simtool", "icarus");
     string top_module = config["dut_design"].value("top_module", "unknown");
+    string projName = config.value("name", "unknown");
 
     // Crear/Sobrescribir el archivo Makefile
     ofstream makefile("Makefile");
@@ -241,7 +220,7 @@ void runCurrentProject(){
         makefile << "VERILOG_SOURCES = " << rtlFiles << "\n";
         makefile << "\n\n";
         
-        makefile << "MODULE = Top_" << top_module << "\n";
+        makefile << "MODULE = Top" << projName << "\n";
         makefile << "TOPLEVEL = " << top_module << "\n";
         makefile << "TOPLEVEL_LANG ?= verilog\n";
         //makefile << (   stof(pyVersion) >= 3.11 ? VENV_DIR + PATH_SEP + "bin" + PATH_SEP + "python" + pyVersion : "python"+pyVersion   );

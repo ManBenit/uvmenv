@@ -32,7 +32,7 @@ string ptree_file = PROJECT_DIR + PATH_SEP + "ptree.yml";
 
 
 void createBFM(const string& name){
-    string formatedName = "BFM" + toPascalCase(name);
+    string formatedName = "Bfm" + toPascalCase(name);
     bool alreadyExists = false;
 
     for(const auto& e: treeListInterface()){

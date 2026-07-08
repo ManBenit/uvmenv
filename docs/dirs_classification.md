@@ -10,6 +10,8 @@
   />
 </p>
 
+UVMEnv official directories are named by following the next format:
+
 The directory and file hierarchy is a direct representation of the proposed structure shown in image, hierarchically corresponding to some visible element in it (except for `Misces` and `OSimon`).
 [Here the directories details](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/dirs_classification/dirs_details.md).
 

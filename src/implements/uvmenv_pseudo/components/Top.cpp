@@ -32,7 +32,7 @@ void Top::setProjectName(const string& projectName){
 void Top::copyBaseFile(){
     filesystem::copy(
         basefilePath, 
-        uvmenvProjectDir + PATH_SEP + projectName + PATH_SEP + "Top_" + topModuleName + ".py"
+        uvmenvProjectDir + PATH_SEP + projectName + PATH_SEP + "Top" + projectName + ".py"
     );
 }
 
