@@ -6,12 +6,12 @@
 
 class ProjectCtxHandler {
     public:
-    int cmdProject(const std::vector<std::string>& args);
+    int cmdProject(const std::vector<std::string>& args, const std::string& waveLevel);
 
     private:
     int runInit();
     int runView();
-    int runRun();
+    int runRun(const std::string& waveLevel);
     int runShow(const std::string& showOption);
 };
 

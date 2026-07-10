@@ -195,7 +195,8 @@ void createNewEnv(const string& projectName, const string& topModule){
 }
 
 
-void runCurrentProject(){
+void runCurrentProject(const string& waveLevel){
+    // TODO: use wavelevel when writing waveform
     string rtlFiles = execCmdReturn(getScript("sys_commands") + "getRTLFullFiles " + DUT_HDL_DIR);
     string pyVersion = getPythonVersion();
 

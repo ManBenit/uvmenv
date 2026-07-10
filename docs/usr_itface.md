@@ -34,9 +34,9 @@ uvmenv
     project
         init
         view
-        run
+        run  <wave_level>
         show
-               wave  <wave_level>
+               wave
                report
                coverage
     component

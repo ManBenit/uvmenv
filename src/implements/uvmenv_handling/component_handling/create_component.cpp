@@ -246,7 +246,8 @@ void createRefModel(const string& name, const string& testName, const string& en
     treeAddRefmodel(formatedName, testName, envName);
 }
 
-void createAgent(const string& name, const string& testName, const string& envName){
+void createAgent(const string& name, const string& testName, const string& envName, const string& type){
+    // TODO: Use "type" to create specific kind of agents (active, passive or reactive)
     string formatedName = "agnt_" + toSnakeCase(name);
     bool alreadyExists = false;
 

@@ -10,7 +10,7 @@
 using namespace std;
 
 // public
-int ProjectCtxHandler::cmdProject(const vector<string>& args){
+int ProjectCtxHandler::cmdProject(const vector<string>& args, const string& waveLevel){
     if( !requireProject() ) return 3;
 
     // ================================
@@ -29,7 +29,7 @@ int ProjectCtxHandler::cmdProject(const vector<string>& args){
     
     if(args[1] == "view")        return this->runView();
     else if(args[1] == "init")   return this->runInit();
-    else if(args[1] == "run")    return this->runRun();
+    else if(args[1] == "run")    return this->runRun(waveLevel);
     else if(args[1] == "show"){
         // ================================
         // Double validation of args
@@ -66,7 +66,7 @@ int ProjectCtxHandler::runInit(){
     createRefModel("default", "TestDefault", "EnvDefault");
     createSeqitem("default", "TestDefault");
     createSequence("default", "TestDefault");
-    createAgent("default", "TestDefault", "EnvDefault");
+    createAgent("default", "TestDefault", "EnvDefault", "");
     createScoreboard("default", "TestDefault", "EnvDefault");
 
     return 0;
@@ -77,10 +77,10 @@ int ProjectCtxHandler::runView(){
     return 0;
 }
 
-int ProjectCtxHandler::runRun(){
+int ProjectCtxHandler::runRun(const string& waveLevel){
     if( !requireDUT() ) return 4;
 
-    runCurrentProject();
+    runCurrentProject(waveLevel);
     return 0;
 }
 

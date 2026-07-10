@@ -7,9 +7,38 @@ using namespace std;
 
 
 int main (int argc, char *argv[]) {
+    string mod = "";
+    string test = "";
+    string env = "";
+    string wlevel = "";
+    string type = "";
     vector<string> args;
-    for(int i=1; i<argc; i++)
-        args.push_back(argv[i]);
+
+    for(int i=1; i<argc; i++){
+        if(string(argv[i]) == "--module"){
+            mod = argv[i+1];
+            i++;
+        }
+        else if(string(argv[i]) == "--test"){
+            test = argv[i+1];
+            i++;
+        }
+        else if(string(argv[i]) == "--type"){
+            type = argv[i+1];
+            i++;
+        }
+        else if(string(argv[i]) == "--env"){
+            env = argv[i+1];
+            i++;
+        }
+        else if(string(argv[i]) == "--wave-level"){
+            wlevel = argv[i+1];
+            i++;
+        }
+        else{
+            args.push_back(argv[i]);
+        }
+    }
 
     ComponentCtxHandler compCtxHandlr;
     ImmediateCtxHandler immCtxHandlr;
@@ -32,12 +61,12 @@ int main (int argc, char *argv[]) {
 
     ///// PROJECT HANDLING /////
     else if(ctx == "project"){
-        return projCtxHandlr.cmdProject(args);
+        return projCtxHandlr.cmdProject(args, wlevel);
     }
     
     ///// COMPONENT HANDLING /////
     else if(ctx == "component"){
-        return compCtxHandlr.cmdComponent(args);
+        return compCtxHandlr.cmdComponent(args, test, env, mod, type);
     }
 
     else if(ctx == "test") {
@@ -54,6 +83,3 @@ int main (int argc, char *argv[]) {
 
     return 0;
 }
-
-
-

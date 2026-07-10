@@ -16,7 +16,7 @@ void showWaveform();
 void showCoverage();
 void showHelp();
 void createNewEnv(const std::string& projectName, const std::string& topModule);
-void runCurrentProject();
+void runCurrentProject(const std::string& waveLevel);
 void searchProjects();
 std::unordered_map<std::string, std::vector<Signal>> getDUTSignals(const char& option);
 void printDUTSignals(const std::unordered_map<std::string, std::vector<Signal>>& dutSignals);
