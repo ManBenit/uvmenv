@@ -7,12 +7,21 @@ using namespace std;
 
 
 int main (int argc, char *argv[]) {
+    ComponentCtxHandler compCtxHandlr;
+    ImmediateCtxHandler immCtxHandlr;
+    ProjectCtxHandler projCtxHandlr;
+
+    if(argc == 1){
+        return immCtxHandlr.cmdHelp();
+    }
+
     string mod = "";
     string test = "";
     string env = "";
     string wlevel = "";
     string type = "";
     vector<string> args;
+
 
     for(int i=1; i<argc; i++){
         if(string(argv[i]) == "--module"){
@@ -40,9 +49,7 @@ int main (int argc, char *argv[]) {
         }
     }
 
-    ComponentCtxHandler compCtxHandlr;
-    ImmediateCtxHandler immCtxHandlr;
-    ProjectCtxHandler projCtxHandlr;
+    
     string ctx = args[0];
 
     printInfo("UVMEnv 2.0 - TESTING/DEVELOPING");

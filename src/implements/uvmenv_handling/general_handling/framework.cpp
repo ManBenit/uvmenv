@@ -1,4 +1,5 @@
 #include <string>
+#include <sstream>
 #include <iostream>
 #include <vector>
 #include <initializer_list>
@@ -76,49 +77,40 @@ void showCoverage(){
 
 void showHelp() {
     const int w = 15;
-    cout << "Usage:\t uvmenv COMMAND OPTION <COMPONENT> <PARAMETERS> " << endl;
+    stringstream helpMessage;
+    helpMessage << "Usage:\t uvmenv <ctx> <opt> <comp> <name> [<other>] [--options]" << "\n\n";
 
-    cout << endl;
+    helpMessage << "COMMAND is mandatory." << "\n";
+    helpMessage << "OPTION is required by COMMAND \"project\" and \"component\"." << "\n";
+    helpMessage << "COMPONENT is required when COMMAND is \"component\"." << "\n";
+    helpMessage << "PARAMETERS are required depending on the OPTION and COMPONENT." << "\n";
 
-    cout << "COMMAND is mandatory." << endl;
-    cout << "OPTION is required by COMMAND \"project\" and \"component\"." << endl;
-    cout << "COMPONENT is required when COMMAND is \"component\"." << endl;
-    cout << "PARAMETERS are required depending on the OPTION and COMPONENT." << endl;
+    helpMessage << "\n";
 
-    cout << endl;
+    helpMessage << "COMMAND" << "\n";
+    helpMessage << left; // Alineación a la izquierda para el comando
+    helpMessage << doTabs(1) << setw(w) << "new"       << "Create a new UVMEnv project." << "\n";
+    helpMessage << doTabs(1) << setw(w) << "search"    << "Look for UVMEnv projects into current directory." << "\n";
+    helpMessage << doTabs(1) << setw(w) << "help"      << "Show this help." << "\n";
+    helpMessage << doTabs(1) << setw(w) << "project"   << "Manage current project." << "\n";
+    helpMessage << doTabs(1) << setw(w) << "component" << "Manage UVM components of current project." << "\n";
 
-    cout << "COMMAND" << endl;
-    cout << left; // Alineación a la izquierda para el comando
-    cout << "    " << setw(w) << "new"       << "Create a new UVMEnv project." << endl;
-    cout << "    " << setw(w) << "search"    << "Look for UVMEnv projects into current directory." << endl;
-    cout << "    " << setw(w) << "help"      << "Show this help." << endl;
-    cout << "    " << setw(w) << "project"   << "Manage current project." << endl;
-    cout << "    " << setw(w) << "component" << "Manage UVM components of current project." << endl;
+    helpMessage << "\n";
 
-    cout << endl;
+    helpMessage << "OPTION" << "\n";
+    helpMessage << "For \"project\"" << "\n";
+    helpMessage << doTabs(1) << setw(w) << "init"      << "Create default structure with only one test and environment." << "\n";
+    helpMessage << doTabs(1) << setw(w) << "view"      << "Shows project tree." << "\n";
+    helpMessage << doTabs(1) << setw(w) << "run"       << "Starts verification process." << "\n";
+    helpMessage << doTabs(1) << setw(w) << "wave"      << "Shows waveform." << "\n";
+    helpMessage << doTabs(1) << setw(w) << "report"    << "Shows the report file content." << "\n";
+    helpMessage << "For \"component\"" << "\n";
+    helpMessage << doTabs(1) << setw(w) << "create"    << "Create a UVM component." << "\n";
+    helpMessage << doTabs(1) << setw(w) << "edit"      << "Allow to edit each file of current UVMEnv project." << "\n";
+    helpMessage << doTabs(1) << setw(w) << "delete"    << "Delete a UVM component." << "\n";
+    helpMessage << doTabs(1) << setw(w) << "list"      << "List UVM components and RTL modules and signals." << "\n";
 
-    cout << "OPTION" << endl;
-    cout << "For \"project\"" << endl;
-    cout << "    " << setw(w) << "init"      << "Create default structure with only one test and environment." << endl;
-    cout << "    " << setw(w) << "view"      << "Shows project tree." << endl;
-    cout << "    " << setw(w) << "run"       << "Starts verification process." << endl;
-    cout << "    " << setw(w) << "wave"      << "Shows waveform." << endl;
-    cout << "    " << setw(w) << "report"    << "Shows the report file content." << endl;
-    cout << "For \"component\"" << endl;
-    cout << "    " << setw(w) << "create"    << "Create a UVM component." << endl;
-    cout << "    " << setw(w) << "edit"      << "Allow to edit each file of current UVMEnv project." << endl;
-    cout << "    " << setw(w) << "delete"    << "Delete a UVM component." << endl;
-    cout << "    " << setw(w) << "list"      << "List UVM components and RTL modules and signals." << endl;
-
-    cout << endl;
-
-    cout << "COMPONENT:" << endl;
-
-    cout << endl;
-
-    cout << "PARAMETERS:" << endl;
-
-    cout << endl;
+    print(helpMessage.str());
 }
 
 
@@ -234,7 +226,7 @@ void runCurrentProject(const string& waveLevel){
 
         makefile.close();
     } else {
-        cerr << "Error: Impossible to create Makefile." << endl;
+        printError("Error: Impossible to create Makefile.");
     }
 
 
@@ -449,7 +441,9 @@ vector<Signal> runSignalsGetter(const string& module, char writeOption, char opt
 
         return signals;
     } catch (py::error_already_set &e) {
-        std::cerr << "[Error de Python] " << e.what() << std::endl;
+        stringstream err("[Error de Python] (signals) ");
+        err << e.what() << "\n";
+        printError(err.str());
         return {};
     }
 }
@@ -460,7 +454,9 @@ void runVcdWriter(const string& topFile, const string& vcdLevel, const string& r
         py::module_ readingPy = py::module_::import("vcdWriter");
         readingPy.attr("write_vcd")(topFile, vcdLevel, runningMode);
     } catch (py::error_already_set &e) {
-        std::cerr << "[Error de Python] " << e.what() << std::endl;
+        stringstream err("[Error de Python (vcd)] ");
+        err << e.what() << "\n";
+        printError(err.str());
     }
 
 }

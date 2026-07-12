@@ -8,9 +8,11 @@ After the installation, you will have available the
 `uvmenv` command, which works as described below.
 
 ## General format
-| cmd    |   0  |  1  |  2   |  3   |  4    |  5   |  6   |  7   |
-|--------|------|-----|------|------|-------|------|------|------|
-| uvmenv |  ctx | opt | comp | name | test  | env  | mt   | attr |
+| cmd    |   0  |  1  |  2   |  3   |  4    |
+|--------|------|-----|------|------|-------|
+| uvmenv |  ctx | opt | comp | name | other |
+
+
 
 Where:
 |   Param    |   Meaning      |      Mandatory                         | Description                                                                                             |
