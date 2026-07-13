@@ -19,6 +19,7 @@
 #include "../../../headers/uvmenv_pseudo/components/Environment.h"
 
 #include "../../../headers/uvmenv_pseudo/objects/Sequence.h"
+#include "../../../headers/uvmenv_pseudo/objects/BFMImpl.h"
 #include "../../../headers/uvmenv_pseudo/objects/SequenceItem.h"
 #include "../../../headers/uvmenv_pseudo/objects/RefModelImpl.h"
 
@@ -47,52 +48,10 @@ void createBFM(const string& name){
         return;
     }
 
-    ifstream baseFile(BASES_COMPONENT_DIR + PATH_SEP + "BFMImplBase.py");
-    stringstream buffer;
-    buffer << baseFile.rdbuf();
-    string content = buffer.str();
 
-    unordered_map<string, vector<Signal>> dutSignals = getDUTSignals('n');
-    vector<string> req_values;
-    vector<string> res_values;
-
-    // Modify class name
-    content = regex_replace(content, regex("CLASS_NAME"), formatedName);
-
-
-    json config = readFileJson(joinStr({
-        PROJECT_DIR, "config.json"
-    }, PATH_SEP));
-    string topModule = config["dut_design"]["top_module"];
-    
-    for(const auto& [module, signalProps] : dutSignals) {
-        // Create file content only with top module signals
-        if(module == topModule){
-            for (const auto& signal : signalProps) {
-                if(signal.type == "INPUT"){
-                    req_values.push_back(
-                        doTabs(2)+"self.dut." + signal.name + ".value = self.__transaction." + signal.name
-                    );
-                }
-                else if(signal.type == "OUTPUT"){
-                    res_values.push_back(
-                        doTabs(2)+"self.__transaction." + signal.name + " = self.dut." + signal.name + ".value"
-                    );
-                }
-            }
-        }
-    }
-    // Modify 'set' method
-    content = regex_replace(content, regex("ASSIGN_REQ_VALUES"), joinStr(req_values, "\n") );
-
-    // Modify 'get' method
-    content = regex_replace(content, regex("ASSIGN_RES_VALUES"), joinStr(res_values, "\n") );
-
-    // Write project file
-    ofstream bfmImplFile(BFM_DIR + PATH_SEP + "_impl" + PATH_SEP + formatedName+".py");
-    bfmImplFile << content;
-
-
+    BFMImpl* bfm = (BFMImpl*) Factory::instance().createObject("BFMImpl", formatedName);
+    bfm->setName(formatedName);
+    bfm->copyBaseFile();
 
     treeAddInterface(formatedName);
 }
