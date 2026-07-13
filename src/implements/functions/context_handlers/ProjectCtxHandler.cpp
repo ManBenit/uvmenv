@@ -18,7 +18,7 @@ int ProjectCtxHandler::cmdProject(const vector<string>& args, const string& wave
     // Required [1]
     // ================================
     // 1. Validate existance of required arguments and arguments not empty
-    const string& warMsg = "Usage: uvmenv project <option>";
+    const string& warMsg = "Usage: uvmenv project < init | run | view | show >";
     if(args.size() < 2){
         printWarning(warMsg); 
         return 6;
@@ -66,7 +66,7 @@ int ProjectCtxHandler::runInit(){
     createRefModel("default", "TestDefault", "EnvDefault");
     createSeqitem("default", "TestDefault");
     createSequence("default", "TestDefault");
-    createAgent("default", "TestDefault", "EnvDefault", "");
+    createAgent("default", "TestDefault", "EnvDefault", "std");
     createScoreboard("default", "TestDefault", "EnvDefault");
 
     return 0;
@@ -96,7 +96,7 @@ int ProjectCtxHandler::runShow(const string& showOption){
     }
     
     else {
-        printError("[project] Unknown comp: " + showOption);
+        printError("[project] Unknown comp \"" + showOption + "\", use: wave | report | coverage");
         return 5;
     }
     

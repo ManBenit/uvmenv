@@ -267,6 +267,7 @@ void createAgent(const string& name, const string& testName, const string& envNa
     agent->setName(formatedName);
     agent->setTestContainer(testName);
     agent->setEnvContainer(envName);
+    agent->setAgentType(type);
     agent->copyBaseFile();
 
     treeAddAgent(formatedName, testName, envName);

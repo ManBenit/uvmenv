@@ -37,6 +37,7 @@ public:
     void setName(const std::string& name);
     void setTestContainer(const std::string& testName);
     void setEnvContainer(const std::string& envName);
+    void setAgentType(const std::string& agentType);
 
 private:
     // auto registration
@@ -44,6 +45,7 @@ private:
     std::string name;
     std::string testName;
     std::string envName;
+    std::string agentType;
 
     std::string agentBasePath;
     std::string driverBasePath;

@@ -36,7 +36,7 @@ uvmenv
     project
         init
         view
-        run  <wave_level>
+        run  [--wave-level N]
         show
                wave
                report
@@ -95,6 +95,7 @@ Agents on UVMEnv can be generated as passive, active or standard type and you ca
 - `s` (standard): With monitor, driver and coverage.
 - `a` (active): With driver.
 - `p` (passive) With monitor and coverage.
+- `r` (reactive) With monitor, driver and coverage but activated when DUT demands.
 
 Note: Currently in not implemented functionality for UVM callbacks. 
 It is highly not recommended to do coverage into a drive, please find another mechanism while

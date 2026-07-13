@@ -191,6 +191,7 @@ void runCurrentProject(const string& waveLevel){
     // TODO: use wavelevel when writing waveform
     string rtlFiles = execCmdReturn(getScript("sys_commands") + "getRTLFullFiles " + DUT_HDL_DIR);
     string pyVersion = getPythonVersion();
+    string vcdLevel = waveLevel == "" ? "1" : waveLevel;
 
     // Leer el archivo de configuración JSON
     ifstream f(CONFIG_FILE);
@@ -259,9 +260,8 @@ void runCurrentProject(const string& waveLevel){
         filesystem::copy(VCD_WRHELPER_FILEBASE, "vcdWriter.py");
         
     // Run VCD writer (delete endmodule and write VCD dump)
-    //// TODO: parametrize VCD level to get it from user option (instead of 4)
-    runVcdWriter(topFile, "4", "1");
-    runVcdWriter(topFile, "4", "2");
+    runVcdWriter(topFile, vcdLevel, "1");
+    runVcdWriter(topFile, vcdLevel, "2");
     
     filesystem::current_path(PROJECT_DIR);
 
@@ -272,7 +272,7 @@ void runCurrentProject(const string& waveLevel){
 
     // Run VCD writer (delete written code and rewrite endmodule)
     filesystem::current_path(DUT_HDL_DIR);
-    runVcdWriter(topFile, "4", "3");
+    runVcdWriter(topFile, vcdLevel, "3");
     
     // Remove VCD writer
     filesystem::remove("vcdWriter.py");

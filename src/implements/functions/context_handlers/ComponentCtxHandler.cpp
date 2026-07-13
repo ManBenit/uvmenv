@@ -15,15 +15,15 @@ int ComponentCtxHandler::cmdComponent(const vector<string>& args, const string& 
 
     // ================================
     // Double validation of args
-    // Required [1, 2]
+    // Required [0,1]
     // ================================
     // 1. Validate existance of required arguments and arguments not empty
-    const string& warMsg = "Usage: uvmenv component <opt> <comp> <name> --test <test> --env <env> --type <type> --module <module>";
-    if(args.size() < 3){
+    const string& warMsg = "Usage: uvmenv component < create | delete | edit | list >";
+    if(args.size() < 2){
         printWarning(warMsg); 
         return 6;
     }
-    if(!requireArgs({args[1], args[2]}, warMsg) ) return 6;
+    if(!requireArgs({args[0], args[1]}, warMsg) ) return 6;
     // ================================
 
     
@@ -32,7 +32,7 @@ int ComponentCtxHandler::cmdComponent(const vector<string>& args, const string& 
     else if(string(args[1]) == "edit")   return this->runEdit(args);
     else if(string(args[1]) == "list")   return this->runList(args, test, env);
     else {
-        printError("[component] Unknown ctx: " + string(args[1]));
+        printError("[component] Unknown opt: " + string(args[1]));
         return 5;
     }
 
@@ -42,85 +42,139 @@ int ComponentCtxHandler::cmdComponent(const vector<string>& args, const string& 
 
 // private
 int ComponentCtxHandler::runCreate(const vector<string>& args, const string& test, const string& env, const string& module, const string& type){
-    /** 
-     * For listing components, consider:
-     * - args[2]: Component you want.
-     * - args[3]: Component name.
-     */
-    if( string(args[2]) == "test" ){
-        createTest(args[3]);
+    // ================================
+    // Double validation of args
+    // Required [3]
+    // ================================
+    // 1. Validate existance of required arguments and arguments not empty
+    const string& warMsg = "Missing cmponent name. Usage: uvmenv component create < CRT_OPTS > <name>";
+    if(args.size() < 4){
+        printWarning(warMsg); 
+        return 6;
     }
-    else if( string(args[2]) == "bfm" ){
-        createBFM(args[3]);
+    if(!requireArgs({args[2], args[3]}, warMsg) ) return 6;
+    // ================================
+    const string missTestMsg = "Missing name of parent Test";
+    const string missEnvMsg = "Missing name of parent Environment";
+
+    const string comp = args[2];
+    const string name = args[3];
+
+    if( comp == "test" ){
+        createTest(name);
     }
-    else if( string(args[2]) == "env" ){
-        createEnvironmentOnTest(args[3], test);
+    else if( comp == "bfm" ){
+        createBFM(name);
     }
-    else if( string(args[2]) == "seqitem" ){
-        createSeqitem          (args[3], test);
+    else if( comp == "env" ){
+        if(!requireArgs({test}, missTestMsg) ) return 6;
+        createEnvironmentOnTest(name, test);
     }
-    else if( string(args[2]) == "seqce" ){
-        createSequence         (args[3], test);
+    else if( comp == "seqitem" ){
+        if(!requireArgs({test}, missTestMsg) ) return 6;
+        createSeqitem          (name, test);
     }
-    else if( string(args[2]) == "agent" ){
-        createAgent            (args[3], test, env, type);
+    else if( comp == "seqce" ){
+        if(!requireArgs({test}, missTestMsg) ) return 6;
+        createSequence         (name, test);
     }
-    else if( string(args[2]) == "scorebd" ){
-        createScoreboard       (args[3], test, env);
+    else if( comp == "agent" ){
+        if(!requireArgs({test}, missTestMsg) ) return 6;
+        if(!requireArgs({env}, missEnvMsg) ) return 6;
+        createAgent            (name, test, env, type);
     }
-    else if( string(args[2]) == "refmod" ){
-        createRefModel         (args[3], test, env);
+    else if( comp == "scorebd" ){
+        if(!requireArgs({test}, missTestMsg) ) return 6;
+        if(!requireArgs({env}, missEnvMsg) ) return 6;
+        createScoreboard       (name, test, env);
+    }
+    else if( comp == "refmod" ){
+        if(!requireArgs({test}, missTestMsg) ) return 6;
+        if(!requireArgs({env}, missEnvMsg) ) return 6;
+        createRefModel         (name, test, env);
+    }
+    else {
+        printError("[component] Unknown comp: " + comp);
+        return 5;
     }
 
     return 0;
 }
 
 int ComponentCtxHandler::runList(const vector<string>& args, const string& test, const string& env){
-    /** 
-     * For listing components, consider:
-     * - args[2]: Component you want.
-     */
-    if( string(args[2]) == "test" ){
+    // ================================
+    // Double validation of args
+    // Required [3]
+    // ================================
+    // 1. Validate existance of required arguments and arguments not empty
+    const string& warMsg = "Missing cmponent name. Usage: uvmenv component list < LST_OPTS >";
+    if(args.size() < 3){
+        printWarning(warMsg); 
+        return 6;
+    }
+    if(!requireArgs({args[2]}, warMsg) ) return 6;
+    // ================================
+    const string missTestMsg = "Missing name of parent Test";
+    const string missEnvMsg = "Missing name of parent Environment";
+
+    const string comp = args[2];
+
+    if( comp == "test" ){
         for(const string& s: listTests())
             print(s);
     }
-    else if( string(args[2]) == "bfm" ){
+    else if( comp == "bfm" ){
         for(const string& s: listBFMInterfaces())
             print(s);
     }
-    else if( string(args[2]) == "env" ){
+    else if( comp == "env" ){
+        if(!requireArgs({test}, missTestMsg) ) return 6;
         for(const string& s: listEnvsOnTest (test))
             print(s);
     }
-    else if( string(args[2]) == "seqitem" ){
+    else if( comp == "seqitem" ){
+        if(!requireArgs({test}, missTestMsg) ) return 6;
         for(const string& s: listSeqitems   (test))
             print(s);
     }
-    else if( string(args[2]) == "seqce" ){
+    else if( comp == "seqce" ){
+        if(!requireArgs({test}, missTestMsg) ) return 6;
         for(const string& s: listSequences  (test))
             print(s);
     }
-    else if( string(args[2]) == "agent" ){
+    else if( comp == "agent" ){
+        if(!requireArgs({test}, missTestMsg) ) return 6;
+        if(!requireArgs({env}, missEnvMsg) ) return 6;
         for(const string& s: listAgents     (test, env))
             print(s);
     }
-    else if( string(args[2]) == "scorebd" ){
+    else if( comp == "scorebd" ){
+        if(!requireArgs({test}, missTestMsg) ) return 6;
+        if(!requireArgs({env}, missEnvMsg) ) return 6;
         for(const string& s: listScoreboards(test, env))
             print(s);
     }
-    else if( string(args[2]) == "refmod" ){
+    else if( comp == "refmod" ){
+        if(!requireArgs({test}, missTestMsg) ) return 6;
+        if(!requireArgs({env}, missEnvMsg) ) return 6;
         for(const string& s: listRefModels  (test, env))
             print(s);
     }
     
-    else if( string(args[2]) == "misc" ){
-        print("Comming soon...");
+    else if( comp == "misc" ){
+        print("Comming soon, list Misces directory...");
     }
-    else if( string(args[2]) == "rtlsig" ){
+    else if( comp == "rtlsig" ){
+        print("Comming soon, list RTL signals with/wothout filtering...");
 
     }
-    else if( string(args[2]) == "rtlmod" ){
+    else if( comp == "rtlmod" ){
+        print("Comming soon, list RTL modules...");
 
+    }
+    else {
+        printError("[component] Unknown comp: " + comp);
+        return 5;
     }
 
     return 0;
