@@ -8,7 +8,6 @@
 #include <vector>
 #include <vector>
 #include <iostream>
-#include <nlohmann/json.hpp>
 
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
 
@@ -26,7 +25,6 @@
 #include "../../../headers/functions/utils.h"
 #include "../../../headers/uvmenv_handling/component_handling/ptree_handling.h"
 using namespace std;
-using json = nlohmann::json;
 
 vector<string> options = {"test", "env", "agent", "seqitem", "seqce", "scorebd", "refmod", "bfm"};
 string ptree_file = PROJECT_DIR + PATH_SEP + "ptree.yml";

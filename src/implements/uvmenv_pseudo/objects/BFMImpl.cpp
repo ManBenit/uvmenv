@@ -2,10 +2,12 @@
 #include "../../../headers/uvmenv_pseudo/objects/BFMImpl.h"
 
 #include "../../../headers/functions/utils.h"
+#include "../../../headers/uvmenv_handling/general_handling/uvmenv_aux.h"
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
 
 #include <regex>
 #include <fstream>
+#include <cstdlib>
 #include <nlohmann/json.hpp>
 using namespace std;
 using json = nlohmann::json;
@@ -16,10 +18,20 @@ void BFMImpl::setName(const string& name){
     this->name = name;
 }
 
+void BFMImpl::editFile(const string& name){
+    const string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDirPrefix + name+".py";
+    int sysResult = system(file.c_str());
+    if (sysResult== 0) {
+        printInfo("Finished edition of " + name);
+    } else {
+        printError( "Something went wrong while editing " + name + ". Returned code " + to_string(sysResult) );
+    }
+}
+
 
 // @Override
 void BFMImpl::copyBaseFile(){
-    ifstream baseFile(BASES_COMPONENT_DIR + PATH_SEP + "BFMImplBase.py");
+    ifstream baseFile(basefilePath);
     stringstream buffer;
     buffer << baseFile.rdbuf();
     string content = buffer.str();
@@ -61,7 +73,7 @@ void BFMImpl::copyBaseFile(){
     content = regex_replace(content, regex("ASSIGN_RES_VALUES"), joinStr(res_values, "\n") );
 
     // Write project file
-    ofstream bfmImplFile(BFM_DIR + PATH_SEP + "_impl" + PATH_SEP + name+".py");
+    ofstream bfmImplFile(uvmenvProjectDir);
     bfmImplFile << content;
     bfmImplFile.close();
 }

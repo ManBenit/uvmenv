@@ -1,5 +1,9 @@
 #!/bin/bash
 
+DEFAULT_SYS_EDITOR="vi"
+
+
+
 function viewTreeProject(){
     tree -C | less -R
 }
@@ -19,6 +23,14 @@ function viewCoverage(){
     less $1/coverage_report.xml
 }
 
+# $1: Path of file
+function openEditor(){
+    $DEFAULT_SYS_EDITOR $1
+    exit $?
+}
+
+
+
 # $1: Path for RTL files
 function getRTLFullFiles(){
     local files=""
@@ -35,6 +47,8 @@ function getRTLFullFiles(){
 function getRTLModuleNames(){
     echo $(find $1 -type f \( -name "*.v" -o -name "*.sv" \) | sed -E 's/.*\/([^\/]+)\..*/\1/' | sort | uniq)
 }
+
+
 
 # $1: Path for project
 function cleanProject(){
@@ -66,6 +80,10 @@ case $1 in
     "viewCoverage")
         viewCoverage $2
         ;;
+    "openEditor")
+        openEditor $2
+        ;;
+
 
     "getRTLFullFiles")
         getRTLFullFiles $2
@@ -73,6 +91,7 @@ case $1 in
     "getRTLModuleNames")
         getRTLModuleNames $2
         ;;
+
 
     "cleanProject")
         cleanProject $2

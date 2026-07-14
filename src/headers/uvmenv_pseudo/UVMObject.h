@@ -8,6 +8,7 @@
 class UVMObject {
 
 protected:
+    std::string uvmenvProjectDirPrefix;
     std::string uvmenvProjectDir;
     std::string basefilePath;
     std::string name;
