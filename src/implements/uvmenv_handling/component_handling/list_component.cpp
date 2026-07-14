@@ -16,47 +16,69 @@ using namespace std;
 
 
 // Require only name
-std::vector<std::string> listBFMInterfaces (){
+vector<string> listBFMInterfaces (){
     return treeListInterface();
 }
 
-std::vector<std::string> listTests(){
+vector<string> listTests(){
     return treeListTest();
 }
 
 
 // Require Test
-std::vector<std::string> listSequences         (const string& testName){
+vector<string> listSequences  (const string& testName){
     return treeListSequences(testName);
 }
 
-std::vector<std::string> listSeqitems          (const string& testName){
+vector<string> listSeqitems   (const string& testName){
     return treeListSeqitem(testName);
 }
 
 
-std::vector<std::string> listEnvsOnTest(const string& testName){
+vector<string> listEnvsOnTest (const string& testName){
     return treeListEnvironments(testName);
 }
 
 
 // Require Test and Environment
-// std::vector<std::string> listEnvsOnEnv (const string& testName, const string& envParentName){
+// vector<string> listEnvsOnEnv (const string& testName, const string& envParentName){
 //     return treeListEnvironments(testName);
 // }
 
 
-std::vector<std::string> listRefModels  (const string& testName, const string& envName){
+vector<string> listRefModels  (const string& testName, const string& envName){
     return treeListRefmodel(testName, envName);
 }
 
-std::vector<std::string> listAgents     (const string& testName, const string& envName){
+vector<string> listAgents     (const string& testName, const string& envName){
     return treeListAgents(testName, envName);
 }
 
-std::vector<std::string> listScoreboards(const string& testName, const string& envName){
+vector<string> listScoreboards(const string& testName, const string& envName){
     return treeListScoreboards(testName, envName);
 }
+
+
+// UVMEnv characteristics
+vector<string> listMiscelaneous(const string& testName){
+    vector<string> existingMisces;
+    const string miscDir = joinStr({
+        TBENCH_DIR, testName, "Misces"
+    }, PATH_SEP);
+
+    for(const string& s: getFileNamesInDirectory(miscDir))
+        existingMisces.push_back( splitString(s, '.')[0] );
+        
+    return existingMisces;
+}
+
+// vector<string> listRtlSignals(){
+
+// }
+
+// vector<string> listRtlModules(){
+
+// }
 
 
 

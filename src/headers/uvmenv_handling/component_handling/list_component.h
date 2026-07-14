@@ -24,5 +24,12 @@ std::vector<std::string> listAgents            (const std::string& testName, con
 std::vector<std::string> listScoreboards       (const std::string& testName, const std::string& envName);
 
 
+// UVMEnv characteristics
+std::vector<std::string> listMiscelaneous      (const std::string& testName);
+std::vector<std::string> listRtlSignals();
+std::vector<std::string> listRtlModules();
+
+
+
 #endif // LIST_H
 

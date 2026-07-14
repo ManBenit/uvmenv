@@ -1,7 +1,6 @@
 #include "../../../headers/functions/context_handlers/ComponentCtxHandler.h"
 
 #include "../../../headers/functions/utils.h"
-#include "../../../headers/functions/constants.h"
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
 #include "../../../headers/uvmenv_handling/component_handling/create_component.h"
 #include "../../../headers/uvmenv_handling/component_handling/edit_component.h"
@@ -163,7 +162,9 @@ int ComponentCtxHandler::runList(const vector<string>& args, const string& test,
     }
     
     else if( comp == "misc" ){
-        print("Comming soon, list Misces directory...");
+        if(!requireArgs({test}, missTestMsg) ) return 6;
+        for(const string& s: listMiscelaneous  (test))
+            print(s);
     }
     else if( comp == "rtlsig" ){
         print("Comming soon, list RTL signals with/wothout filtering...");
