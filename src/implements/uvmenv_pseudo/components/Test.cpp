@@ -24,10 +24,11 @@ void Test::setName(const string& name){
 }
 
 void Test::editFile(const string& name){
+    uvmenvProjectDir = joinStr({TBENCH_DIR, name, PYMODULE}, PATH_SEP);
     const string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDir;
 
     if(!filesystem::exists(uvmenvProjectDir)){
-        printError("Does not exist " + name);
+        printError("[Test] Does not exist " + name);
         exit(5);
     }
 
@@ -45,7 +46,7 @@ void Test::copyBaseFile(){
     uvmenvProjectDir = joinStr({TBENCH_DIR, name, PYMODULE}, PATH_SEP);
 
     
-    filesystem::create_directory(uvmenvProjectDir + PATH_SEP + name);
+    filesystem::create_directory(TBENCH_DIR + PATH_SEP + name);
 
     ifstream baseFile(basefilePath);
     stringstream buffer;

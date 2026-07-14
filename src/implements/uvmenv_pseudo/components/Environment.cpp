@@ -35,10 +35,11 @@ void Environment::setTestContainer(const string& testName){
 }
 
 void Environment::editFile(const string& name){
+    uvmenvProjectDir = joinStr({TBENCH_DIR, testName, "Envmnt", name, PYMODULE}, PATH_SEP);
     const string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDir;
 
     if(!filesystem::exists(uvmenvProjectDir)){
-        printError("Does not exist " + name);
+        printError("[Environment] Does not exist " + name);
         exit(5);
     }
     

@@ -72,7 +72,7 @@ void editScoreboard(const string& name, const string& testName, const string& en
     Scoreboard* scoreboard = (Scoreboard*) Factory::instance().createComponent("Scoreboard", name, nullptr);
     scoreboard->setTestContainer(testName);
     scoreboard->setEnvContainer(envName);
-    scoreboard->copyBaseFile();
+    scoreboard->editFile(name);
 }
 
 

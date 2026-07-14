@@ -24,7 +24,7 @@ void Sequence::editFile(const string& name){
     const string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDir;
     
     if(!filesystem::exists(uvmenvProjectDir)){
-        printError("Does not exist " + name);
+        printError("[Sequence] Does not exist " + name);
         exit(5);
     }
     

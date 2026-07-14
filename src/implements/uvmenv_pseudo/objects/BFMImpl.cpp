@@ -23,7 +23,7 @@ void BFMImpl::editFile(const string& name){
     const string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDirPrefix  + PATH_SEP +  name+".py";
 
     if(!filesystem::exists(uvmenvProjectDir)){
-        printError("Does not exist " + name);
+        printError("[BFM] Does not exist " + name);
         exit(5);
     }
 

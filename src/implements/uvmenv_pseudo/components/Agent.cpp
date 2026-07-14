@@ -53,22 +53,25 @@ void Agent::setAgentType(const string& agentType){
 }
 
 void Agent::editFile(const string& name, const string& element){
+    uvmenvProjectDir = joinStr({
+        TBENCH_DIR, testName, "Envmnt", envName, "Agents", name
+    }, PATH_SEP);
     int sysResult = 0;
-    string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDir + PATH_SEP;
+    string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDir;
 
     if(!filesystem::exists(uvmenvProjectDir)){
-        printError("Does not exist " + name);
+        printError("[Agent] Does not exist " + name);
         exit(5);
     }
 
     if(element == "")
-        file += PYMODULE;
+        file += PATH_SEP + PYMODULE;
     else if(element == "drv")
-        file += "Driver.py";
+        file += PATH_SEP + "Driver.py";
     else if(element == "mon")
-        file += "Monitor.py";
+        file += PATH_SEP + "Monitor.py";
     else if(element == "cov")
-        file += "Coverage.py";
+        file += PATH_SEP + "Coverage.py";
     else{
         printError("Wrong element of Agent " + name);
         exit(5);

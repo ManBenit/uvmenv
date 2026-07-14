@@ -48,7 +48,7 @@ int ComponentCtxHandler::runCreate(const vector<string>& args, const string& tes
     // Required [3]
     // ================================
     // 1. Validate existance of required arguments and arguments not empty
-    const string& warMsg = "Missing cmponent name. Usage: uvmenv component create < CRT_OPTS > <name>";
+    const string& warMsg = "Missing component name. Usage: uvmenv component create < CRT_OPTS > <name>";
     if(args.size() < 4){
         printWarning(warMsg); 
         return 6;
@@ -108,7 +108,7 @@ int ComponentCtxHandler::runList(const vector<string>& args, const string& test,
     // Required [3]
     // ================================
     // 1. Validate existance of required arguments and arguments not empty
-    const string& warMsg = "Missing cmponent name. Usage: uvmenv component list < LST_OPTS >";
+    const string& warMsg = "Missing component name. Usage: uvmenv component list < LST_OPTS >";
     if(args.size() < 3){
         printWarning(warMsg); 
         return 6;
@@ -205,8 +205,7 @@ int ComponentCtxHandler::runEdit(const vector<string>& args, const string& test,
     const string name = args[3];
 
     if( comp == "test" ){
-        print("Noyet");
-        // createTest(name);
+        editTest(name);
     }
     else if( comp == "bfm" ){
         editBFM(name);

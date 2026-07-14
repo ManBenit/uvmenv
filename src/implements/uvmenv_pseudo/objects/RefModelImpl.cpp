@@ -26,10 +26,13 @@ void RefModelImpl::setEnvContainer(const string& envName){
 }
 
 void RefModelImpl::editFile(const string& name){
-    const string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDirPrefix  + PATH_SEP +  name+".py";
+    uvmenvProjectDir = joinStr({
+        TBENCH_DIR, testName, "Envmnt", envName, "RefMdl", "_impl", name+".py"
+    }, PATH_SEP);
+    const string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDir;
     
     if(!filesystem::exists(uvmenvProjectDir)){
-        printError("Does not exist " + name);
+        printError("[Ref model] Does not exist " + name);
         exit(5);
     }
     
@@ -48,9 +51,6 @@ void RefModelImpl::copyBaseFile(){
         TBENCH_DIR, testName, "Envmnt", envName, "RefMdl", "_impl", name+".py"
     }, PATH_SEP);
 
-    uvmenvProjectDirPrefix = joinStr({
-        TBENCH_DIR, testName, "Envmnt", envName, "RefMdl", "_impl"
-    }, PATH_SEP);
 
     ifstream baseFile(basefilePath);
     stringstream buffer;
