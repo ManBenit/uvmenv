@@ -5,9 +5,12 @@
 #include <vector>
 #include <vector>
 #include <iostream>
+#include <unordered_map>
 
 #include "../../../headers/functions/utils.h"
 #include "../../../headers/functions/constants.h"
+#include "../../../headers/uvmenv_handling/general_handling/framework.h"
+#include "../../../headers/uvmenv_handling/general_handling/uvmenv_aux.h"
 #include "../../../headers/uvmenv_handling/component_handling/ptree_handling.h"
 using namespace std;
 
@@ -72,13 +75,21 @@ vector<string> listMiscelaneous(const string& testName){
     return existingMisces;
 }
 
-// vector<string> listRtlSignals(){
+unordered_map<string, vector<Signal>> listRtlSignals(){
+    return getDUTSignals('n');
+}
 
-// }
+vector<string> listRtlModules(){
+    // TODO: highlight top module
+    vector<string> existingModules;
+    const string& rtlModuleNames = trim( execCmdReturn(getScript("sys_commands") + "getRTLModuleNames " + DUT_HDL_DIR) );
 
-// vector<string> listRtlModules(){
+    for(const string& mod: splitString(rtlModuleNames, ' ')){
+        existingModules.push_back( splitString(mod, '.')[0] );
+    }
 
-// }
+    return existingModules;
+}
 
 
 

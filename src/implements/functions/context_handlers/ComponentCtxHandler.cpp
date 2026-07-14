@@ -1,10 +1,12 @@
 #include "../../../headers/functions/context_handlers/ComponentCtxHandler.h"
 
+
 #include "../../../headers/functions/utils.h"
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
 #include "../../../headers/uvmenv_handling/component_handling/create_component.h"
 #include "../../../headers/uvmenv_handling/component_handling/edit_component.h"
 #include "../../../headers/uvmenv_handling/component_handling/list_component.h"
+#include <sstream>
 using namespace std;
 
 
@@ -167,12 +169,22 @@ int ComponentCtxHandler::runList(const vector<string>& args, const string& test,
             print(s);
     }
     else if( comp == "rtlsig" ){
-        print("Comming soon, list RTL signals with/wothout filtering...");
+        stringstream sigInfo;
 
+        for(const auto& [module, signalProps] : listRtlSignals()) {
+            // Create file content only with top module signals
+            printInfo("Signals of " + module);
+            for (const auto& signal : signalProps) {
+                sigInfo.str("");
+                sigInfo.clear();
+                sigInfo << signal.type << " [" << signal.size << " bits]: " << signal.name;
+                print(sigInfo.str());
+            }
+        }
     }
     else if( comp == "rtlmod" ){
-        print("Comming soon, list RTL modules...");
-
+        for(const string& s: listRtlModules())
+            print(s);
     }
     else {
         printError("[component] Unknown comp: " + comp);

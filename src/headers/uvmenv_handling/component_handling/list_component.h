@@ -4,7 +4,10 @@
 #include <string>
 #include <filesystem>
 #include <vector>
+#include <unordered_map>
+#include "../../functions/utils.h"
 
+class Signal;
 
 // Require only name
 std::vector<std::string> listBFMInterfaces ();
@@ -26,7 +29,7 @@ std::vector<std::string> listScoreboards       (const std::string& testName, con
 
 // UVMEnv characteristics
 std::vector<std::string> listMiscelaneous      (const std::string& testName);
-std::vector<std::string> listRtlSignals();
+std::unordered_map<std::string, std::vector<Signal>> listRtlSignals();
 std::vector<std::string> listRtlModules();
 
 
