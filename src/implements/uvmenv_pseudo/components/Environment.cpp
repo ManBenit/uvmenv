@@ -51,6 +51,17 @@ void Environment::editFile(const string& name){
     }
 }
 
+void Environment::deleteFile(const string& name){
+    const string toDelete = joinStr({TBENCH_DIR, testName, "Envmnt", name}, PATH_SEP);
+    
+    if(!filesystem::exists(toDelete)){
+        printError("[Environment] Does not exist " + name);
+        exit(5);
+    }
+    
+    filesystem::remove_all(toDelete);
+}
+
 
 // @Override
 void Environment::copyBaseFile(){

@@ -41,6 +41,19 @@ void SequenceItem::editFile(const string& name){
     }
 }
 
+void SequenceItem::deleteFile(const string& name){
+    const string toDelete = joinStr({
+        TBENCH_DIR, testName, "SeqItm", name+".py"
+    }, PATH_SEP);
+    
+    if(!filesystem::exists(toDelete)){
+        printError("[Sequence item] Does not exist " + name);
+        exit(5);
+    }
+    
+    filesystem::remove(toDelete);
+}
+
 
 // @Override
 void SequenceItem::copyBaseFile(){

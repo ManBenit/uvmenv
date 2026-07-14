@@ -25,9 +25,6 @@
 #include "../../../headers/uvmenv_handling/component_handling/ptree_handling.h"
 using namespace std;
 
-vector<string> options = {"test", "env", "agent", "seqitem", "seqce", "scorebd", "refmod", "bfm"};
-string ptree_file = PROJECT_DIR + PATH_SEP + "ptree.yml";
-
 
 void createBFM(const string& name){
     string formatedName = "Bfm" + toPascalCase(name);

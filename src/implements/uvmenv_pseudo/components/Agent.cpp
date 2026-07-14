@@ -85,6 +85,19 @@ void Agent::editFile(const string& name, const string& element){
     }
 }
 
+void Agent::deleteFile(const string& name){
+    const string toDelete = joinStr({
+        TBENCH_DIR, testName, "Envmnt", envName, "Agents", name
+    }, PATH_SEP);
+    
+    if(!filesystem::exists(toDelete)){
+        printError("[Agent] Does not exist " + name);
+        exit(5);
+    }
+    
+    filesystem::remove_all(toDelete);
+}
+
 
 
 // @Override
@@ -106,7 +119,7 @@ void Agent::copyBaseFile(){
     copyCoverage = agentType=="std" || agentType=="psv" || agentType=="rct";
 
     if(!copyMonitor && !copyDriver && !copyCoverage){
-        printError("Missing agent type for creation: std | psv | act | rct");
+        printError("Missing agent type for creation: --type < std | psv | act | rct >");
         exit(5);
     }
 

@@ -35,6 +35,17 @@ void BFMImpl::editFile(const string& name){
     }
 }
 
+void BFMImpl::deleteFile(const string& name){
+    const string toDelete = uvmenvProjectDirPrefix  + PATH_SEP +  name+".py";
+
+    if(!filesystem::exists(toDelete)){
+        printError("[BFM] Does not exist " + name);
+        exit(5);
+    }
+
+    filesystem::remove(toDelete);
+}
+
 
 // @Override
 void BFMImpl::copyBaseFile(){

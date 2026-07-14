@@ -40,6 +40,17 @@ void Test::editFile(const string& name){
     }
 }
 
+void Test::deleteFile(const string& name){
+    const string toDelete = joinStr({TBENCH_DIR, name}, PATH_SEP);
+
+    if(!filesystem::exists(toDelete)){
+        printError("[Test] Does not exist " + name);
+        exit(5);
+    }
+
+    filesystem::remove_all(toDelete);
+}
+
 
 // @Override
 void Test::copyBaseFile(){

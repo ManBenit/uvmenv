@@ -49,6 +49,10 @@ int main (int argc, char *argv[]) {
         }
     }
 
+    if(args.size() == 0){
+        return immCtxHandlr.cmdHelp();
+    }
+
     
     string ctx = args[0];
 

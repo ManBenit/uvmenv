@@ -14,9 +14,6 @@
 #include "../../../headers/uvmenv_handling/component_handling/ptree_handling.h"
 using namespace std;
 
-//vector<string> options = {"test", "env", "agent", "seqitem", "seqce", "scorebd", "refmod", "bfm"};
-//string ptree_file = PROJECT_DIR + PATH_SEP + "ptree.yml";
-
 
 // Require only name
 vector<string> listBFMInterfaces (){

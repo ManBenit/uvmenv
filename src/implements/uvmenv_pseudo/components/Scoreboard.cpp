@@ -43,6 +43,20 @@ void Scoreboard::editFile(const string& name){
     }
 }
 
+void Scoreboard::deleteFile(const string& name){
+    const string toDelete = joinStr({
+        TBENCH_DIR, testName, "Envmnt", envName, "Scorbd", name+".py"
+    }, PATH_SEP);
+    
+    if(!filesystem::exists(toDelete)){
+        printError("[Scoreboard] Does not exist " + name);
+        exit(5);
+    }
+    
+    filesystem::remove(toDelete);
+}
+
+
 
 // @Override
 void Scoreboard::copyBaseFile(){

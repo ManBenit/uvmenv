@@ -44,6 +44,19 @@ void RefModelImpl::editFile(const string& name){
     }
 }
 
+void RefModelImpl::deleteFile(const string& name){
+    const string toDelete = joinStr({
+        TBENCH_DIR, testName, "Envmnt", envName, "RefMdl", "_impl", name+".py"
+    }, PATH_SEP);
+    
+    if(!filesystem::exists(toDelete)){
+        printError("[Ref model] Does not exist " + name);
+        exit(5);
+    }
+    
+    filesystem::remove(toDelete);
+}
+
 
 // @Override
 void RefModelImpl::copyBaseFile(){

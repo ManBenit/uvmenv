@@ -17,6 +17,7 @@ public:
 
 
     void editFile(const std::string& name);
+    void deleteFile(const std::string& name);
     void setName(const std::string& name);
     void setTestContainer(const std::string& testName);
     void setEnvContainer(const std::string& envName);
