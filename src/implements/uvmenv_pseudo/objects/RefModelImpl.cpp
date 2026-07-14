@@ -1,11 +1,13 @@
 #include "../../../headers/uvmenv_pseudo/objects/RefModelImpl.h"
 
 #include "../../../headers/functions/utils.h"
+#include "../../../headers/uvmenv_handling/general_handling/uvmenv_aux.h"
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
 
 #include <iostream>
 #include <regex>
 #include <fstream>
+#include <filesystem>
 #include <nlohmann/json.hpp>
 using namespace std;
 using json = nlohmann::json;
@@ -23,9 +25,33 @@ void RefModelImpl::setEnvContainer(const string& envName){
     this->envName = envName;
 }
 
+void RefModelImpl::editFile(const string& name){
+    const string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDirPrefix  + PATH_SEP +  name+".py";
+    
+    if(!filesystem::exists(uvmenvProjectDir)){
+        printError("Does not exist " + name);
+        exit(5);
+    }
+    
+    int sysResult = system(file.c_str());
+    if (sysResult== 0) {
+        printInfo("Finished edition of " + name);
+    } else {
+        printError( "Something went wrong while editing " + name + ". Returned code " + to_string(sysResult) );
+    }
+}
+
 
 // @Override
 void RefModelImpl::copyBaseFile(){
+    uvmenvProjectDir = joinStr({
+        TBENCH_DIR, testName, "Envmnt", envName, "RefMdl", "_impl", name+".py"
+    }, PATH_SEP);
+
+    uvmenvProjectDirPrefix = joinStr({
+        TBENCH_DIR, testName, "Envmnt", envName, "RefMdl", "_impl"
+    }, PATH_SEP);
+
     ifstream baseFile(basefilePath);
     stringstream buffer;
     buffer << baseFile.rdbuf();
@@ -58,10 +84,9 @@ void RefModelImpl::copyBaseFile(){
     content = regex_replace(content, regex("TRANSACTION_OUTS"), joinStr(trOuts, "\n") );
 
     // Write project file
-    ofstream testFile(joinStr({
-        TBENCH_DIR, testName, "Envmnt", envName, "RefMdl", "_impl", name+".py"
-    }, PATH_SEP));
-    testFile << content;
+    ofstream outFile(uvmenvProjectDir);
+    outFile << content;
+    outFile.close();
 }
 
 

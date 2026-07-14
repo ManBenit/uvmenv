@@ -10,12 +10,12 @@ class Scoreboard : public UVMComponent {
 public:
     Scoreboard(const std::string& typeName, const std::string& name, UVMComponent* parent): UVMComponent(typeName, name, parent){
         basefilePath = BASES_COMPONENT_DIR + PATH_SEP + "ScoreboardBase.py";
-        uvmenvProjectDir = ENVIRONMENT_DIR + PATH_SEP + "Scorbd";
     }
     virtual ~Scoreboard() = default;
 
     void copyBaseFile() override;
 
+    void editFile(const std::string& name);
     void setName(const std::string& name);
     void setTestContainer(const std::string& testName);
     void setEnvContainer(const std::string& envName);

@@ -1,11 +1,13 @@
 #include "../../../headers/uvmenv_pseudo/components/Agent.h"
 
 #include "../../../headers/functions/utils.h"
+#include "../../../headers/uvmenv_handling/general_handling/uvmenv_aux.h"
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
 
 #include <regex>
 #include <fstream>
 #include <cmath>
+#include <filesystem>
 #include <nlohmann/json.hpp>
 using namespace std;
 using json = nlohmann::json;
@@ -50,6 +52,36 @@ void Agent::setAgentType(const string& agentType){
     this->agentType = agentType;
 }
 
+void Agent::editFile(const string& name, const string& element){
+    int sysResult = 0;
+    string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDir + PATH_SEP;
+
+    if(!filesystem::exists(uvmenvProjectDir)){
+        printError("Does not exist " + name);
+        exit(5);
+    }
+
+    if(element == "")
+        file += PYMODULE;
+    else if(element == "drv")
+        file += "Driver.py";
+    else if(element == "mon")
+        file += "Monitor.py";
+    else if(element == "cov")
+        file += "Coverage.py";
+    else{
+        printError("Wrong element of Agent " + name);
+        exit(5);
+    }
+    
+    sysResult = system(file.c_str());
+    if (sysResult== 0) {
+        printInfo("Finished edition of " + name);
+    } else {
+        printError( "Something went wrong while editing " + name + ". Returned code " + to_string(sysResult) );
+    }
+}
+
 
 
 // @Override
@@ -76,10 +108,13 @@ void Agent::copyBaseFile(){
     }
 
 
-    
-    string destPath = TBENCH_DIR + PATH_SEP + testName + PATH_SEP + "Envmnt" + PATH_SEP + envName + PATH_SEP + "Agents" + PATH_SEP + name;
+    uvmenvProjectDir = joinStr({
+        TBENCH_DIR, testName, "Envmnt", envName, "Agents", name
+    }, PATH_SEP);
 
-    filesystem::create_directory(destPath);
+
+    filesystem::create_directory(uvmenvProjectDir);
+
 
     ifstream agentBaseFile(agentBasePath);
     stringstream agentBuffer;
@@ -87,7 +122,7 @@ void Agent::copyBaseFile(){
     string agentContent = agentBuffer.str();
     agentContent = regex_replace(agentContent, regex("CLASS_NAME"), name );
     ofstream agentFile(joinStr({
-        destPath, "__init__.py"
+        uvmenvProjectDir, PYMODULE
     }, PATH_SEP));
     agentFile << agentContent;
     agentFile.close();
@@ -97,14 +132,14 @@ void Agent::copyBaseFile(){
     if(copyMonitor){
         filesystem::copy(
             monitorBasePath,
-            destPath + PATH_SEP + "Monitor.py"
+            uvmenvProjectDir + PATH_SEP + "Monitor.py"
         );
     }
 
     if(copyDriver){
         filesystem::copy(
             driverBasePath,
-            destPath + PATH_SEP + "Driver.py"
+            uvmenvProjectDir + PATH_SEP + "Driver.py"
         );
     }
 
@@ -144,7 +179,7 @@ void Agent::copyBaseFile(){
 
         // Write project file
         ofstream covFile(joinStr({
-            destPath, "Coverage.py"
+            uvmenvProjectDir, "Coverage.py"
         }, PATH_SEP));
         covFile << content;
         covFile.close();

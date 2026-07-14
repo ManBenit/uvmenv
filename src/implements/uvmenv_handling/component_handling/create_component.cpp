@@ -7,7 +7,6 @@
 #include <filesystem>
 #include <vector>
 #include <vector>
-#include <iostream>
 
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
 
@@ -175,7 +174,7 @@ void createEnvironmentOnTest(const string& name, const string& testName){
 }
 
 void createEnvironmentOnEnv(const string& name, const string& testName, const string& envParentName){
-    cout << "Comming soon..." << endl;
+    print("Comming soon...");
 }
 
 void createRefModel(const string& name, const string& testName, const string& envName){
@@ -204,7 +203,6 @@ void createRefModel(const string& name, const string& testName, const string& en
 }
 
 void createAgent(const string& name, const string& testName, const string& envName, const string& type){
-    // TODO: Use "type" to create specific kind of agents (active, passive or reactive)
     string formatedName = "agnt_" + toSnakeCase(name);
     bool alreadyExists = false;
 

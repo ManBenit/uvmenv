@@ -8,6 +8,7 @@
 class UVMComponent {
 
 protected:
+    std::string uvmenvProjectDirPrefix;
     std::string uvmenvProjectDir;
     std::string basefilePath;
     UVMComponent* parent;

@@ -21,7 +21,7 @@ void editEnvironmentOnTest  (const std::string& name, const std::string& testNam
 void editEnvironmentOnEnv   (const std::string& name, const std::string& testName, const std::string& envParentName);
 
 void editRefModel           (const std::string& name, const std::string& testName, const std::string& envName);
-void editAgent              (const std::string& name, const std::string& testName, const std::string& envName);
+void editAgent              (const std::string& name, const std::string& testName, const std::string& envName, const std::string& agntComponent);
 void editScoreboard         (const std::string& name, const std::string& testName, const std::string& envName);
 
 #endif // EDIT_COMPONENT_H

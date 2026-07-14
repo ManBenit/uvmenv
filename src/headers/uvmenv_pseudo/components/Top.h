@@ -15,6 +15,8 @@ public:
 
     void copyBaseFile() override;
 
+    void editFile(const std::string& name);
+
     void setTopModuleName(const std::string& topModuleName);
     void setProjectName(const std::string& projectName);
 

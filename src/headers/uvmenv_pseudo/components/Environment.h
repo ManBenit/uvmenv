@@ -15,7 +15,6 @@ private:
 public:
     Environment(const std::string& typeName, const std::string& name, UVMComponent* parent): UVMComponent(typeName, name, parent){
         basefilePath = BASES_REPRESENT_DIR + PATH_SEP + "EnvironmentBase.py";
-        uvmenvProjectDir = ENVIRONMENT_DIR;
     }
     virtual ~Environment() = default;
 
@@ -25,6 +24,8 @@ public:
     vector<Scoreboard*> getScoreboards();
 
     void copyBaseFile() override;
+
+    void editFile(const std::string& name);
     void setName(const std::string& name);
     void setTestContainer(const std::string& testName);
 

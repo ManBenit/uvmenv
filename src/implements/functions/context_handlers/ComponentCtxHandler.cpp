@@ -10,7 +10,7 @@ using namespace std;
 
 
 // public
-int ComponentCtxHandler::cmdComponent(const vector<string>& args, const string& test, const string& env, const string& module, const string& type){
+int ComponentCtxHandler::cmdComponent(const vector<string>& args, const string& test, const string& env, const string& module, const string& typeOrComp){
     if( !requireProject() ) return 3;
     if( !requireDUT() ) return 4;
 
@@ -28,9 +28,9 @@ int ComponentCtxHandler::cmdComponent(const vector<string>& args, const string& 
     // ================================
 
     
-    if(string(args[1]) == "create")      return this->runCreate(args, test, env, module, type);
+    if(string(args[1]) == "create")      return this->runCreate(args, test, env, module, typeOrComp); // type
     else if(string(args[1]) == "delete") return this->runDelete(args);
-    else if(string(args[1]) == "edit")   return this->runEdit(args, test, env);
+    else if(string(args[1]) == "edit")   return this->runEdit(args, test, env, typeOrComp); // comp
     else if(string(args[1]) == "list")   return this->runList(args, test, env);
     else {
         printError("[component] Unknown opt: " + string(args[1]));
@@ -185,7 +185,7 @@ int ComponentCtxHandler::runDelete(const vector<string>& args){
     return 0;
 }
 
-int ComponentCtxHandler::runEdit(const vector<string>& args, const string& test, const string& env){
+int ComponentCtxHandler::runEdit(const vector<string>& args, const string& test, const string& env, const string& agntComponent){
     // ================================
     // Double validation of args
     // Required [3]
@@ -211,33 +211,33 @@ int ComponentCtxHandler::runEdit(const vector<string>& args, const string& test,
     else if( comp == "bfm" ){
         editBFM(name);
     }
-    // else if( comp == "env" ){
-    //     if(!requireArgs({test}, missTestMsg) ) return 6;
-    //     createEnvironmentOnTest(name, test);
-    // }
-    // else if( comp == "seqitem" ){
-    //     if(!requireArgs({test}, missTestMsg) ) return 6;
-    //     createSeqitem          (name, test);
-    // }
-    // else if( comp == "seqce" ){
-    //     if(!requireArgs({test}, missTestMsg) ) return 6;
-    //     createSequence         (name, test);
-    // }
-    // else if( comp == "agent" ){
-    //     if(!requireArgs({test}, missTestMsg) ) return 6;
-    //     if(!requireArgs({env}, missEnvMsg) ) return 6;
-    //     createAgent            (name, test, env, type);
-    // }
-    // else if( comp == "scorebd" ){
-    //     if(!requireArgs({test}, missTestMsg) ) return 6;
-    //     if(!requireArgs({env}, missEnvMsg) ) return 6;
-    //     createScoreboard       (name, test, env);
-    // }
-    // else if( comp == "refmod" ){
-    //     if(!requireArgs({test}, missTestMsg) ) return 6;
-    //     if(!requireArgs({env}, missEnvMsg) ) return 6;
-    //     createRefModel         (name, test, env);
-    // }
+    else if( comp == "env" ){
+        if(!requireArgs({test}, missTestMsg) ) return 6;
+        editEnvironmentOnTest(name, test);
+    }
+    else if( comp == "seqitem" ){
+        if(!requireArgs({test}, missTestMsg) ) return 6;
+        editSeqitem          (name, test);
+    }
+    else if( comp == "seqce" ){
+        if(!requireArgs({test}, missTestMsg) ) return 6;
+        editSequence         (name, test);
+    }
+    else if( comp == "agent" ){
+        if(!requireArgs({test}, missTestMsg) ) return 6;
+        if(!requireArgs({env}, missEnvMsg) ) return 6;
+        editAgent            (name, test, env, agntComponent);
+    }
+    else if( comp == "scorebd" ){
+        if(!requireArgs({test}, missTestMsg) ) return 6;
+        if(!requireArgs({env}, missEnvMsg) ) return 6;
+        editScoreboard       (name, test, env);
+    }
+    else if( comp == "refmod" ){
+        if(!requireArgs({test}, missTestMsg) ) return 6;
+        if(!requireArgs({env}, missEnvMsg) ) return 6;
+        editRefModel         (name, test, env);
+    }
     else {
         printError("[component] Unknown comp: " + comp);
         return 5;

@@ -8,6 +8,7 @@
 #include <regex>
 #include <fstream>
 #include <cstdlib>
+#include <filesystem>
 #include <nlohmann/json.hpp>
 using namespace std;
 using json = nlohmann::json;
@@ -19,7 +20,13 @@ void BFMImpl::setName(const string& name){
 }
 
 void BFMImpl::editFile(const string& name){
-    const string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDirPrefix + name+".py";
+    const string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDirPrefix  + PATH_SEP +  name+".py";
+
+    if(!filesystem::exists(uvmenvProjectDir)){
+        printError("Does not exist " + name);
+        exit(5);
+    }
+
     int sysResult = system(file.c_str());
     if (sysResult== 0) {
         printInfo("Finished edition of " + name);
@@ -73,9 +80,9 @@ void BFMImpl::copyBaseFile(){
     content = regex_replace(content, regex("ASSIGN_RES_VALUES"), joinStr(res_values, "\n") );
 
     // Write project file
-    ofstream bfmImplFile(uvmenvProjectDir);
-    bfmImplFile << content;
-    bfmImplFile.close();
+    ofstream outFile(uvmenvProjectDir);
+    outFile << content;
+    outFile.close();
 }
 
 

@@ -1,12 +1,14 @@
 #include "../../../headers/uvmenv_pseudo/objects/SequenceItem.h"
 
 #include "../../../headers/functions/utils.h"
+#include "../../../headers/uvmenv_handling/general_handling/uvmenv_aux.h"
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
 
 #include <iostream>
 #include <regex>
 #include <fstream>
 #include <cmath>
+#include <filesystem>
 #include <nlohmann/json.hpp>
 using namespace std;
 using json = nlohmann::json;
@@ -20,9 +22,34 @@ void SequenceItem::setTestContainer(const string& testName){
     this->testName = testName;
 }
 
+void SequenceItem::editFile(const string& name){
+    const string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDirPrefix  + PATH_SEP +  name+".py";
+    
+    if(!filesystem::exists(uvmenvProjectDir)){
+        printError("Does not exist " + name);
+        exit(5);
+    }
+    
+    int sysResult = system(file.c_str());
+    if (sysResult== 0) {
+        printInfo("Finished edition of " + name);
+    } else {
+        printError( "Something went wrong while editing " + name + ". Returned code " + to_string(sysResult) );
+    }
+}
+
 
 // @Override
 void SequenceItem::copyBaseFile(){
+    uvmenvProjectDir = joinStr({
+        TBENCH_DIR, testName, "SeqItm", name+".py"
+    }, PATH_SEP);
+
+    uvmenvProjectDirPrefix = joinStr({
+        TBENCH_DIR, testName, "SeqItm"
+    }, PATH_SEP);
+
+
     string seqitemPath = joinStr({
         TBENCH_DIR, testName, "SeqItm", name
     }, PATH_SEP);  
@@ -94,10 +121,9 @@ void SequenceItem::copyBaseFile(){
         regex("THE_UNKN_OUTPUTS"), joinStr(the_unkn_values, ",\n") 
     );
     
-    ofstream outFile(joinStr({
-        TBENCH_DIR, testName, "SeqItm", name+".py"
-    }, PATH_SEP));
+    ofstream outFile(uvmenvProjectDir);
     outFile << content;
+    outFile.close();
 }
 
 

@@ -13,7 +13,6 @@ private:
 public:
     Test(const std::string& typeName, const std::string& name, UVMComponent* parent): UVMComponent(typeName, name, parent){
         basefilePath = BASES_REPRESENT_DIR + PATH_SEP + "TestBase.py";
-        uvmenvProjectDir = TBENCH_DIR;
     }
     virtual ~Test() = default;
     void addEnvironment(Environment* e);
@@ -21,6 +20,7 @@ public:
 
     void copyBaseFile() override;
 
+    void editFile(const std::string& name);
     void setName(const std::string& name);
 
 private:

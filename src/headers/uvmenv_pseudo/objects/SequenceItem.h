@@ -15,6 +15,7 @@ public:
 
     void copyBaseFile() override;
 
+    void editFile(const std::string& name);
     void setName(const std::string& name);
     void setTestContainer(const std::string& testName);
 private:
