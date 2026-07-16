@@ -8,11 +8,10 @@ After the installation, you will have available the
 `uvmenv` command, which works as described below.
 
 ## General format
-| cmd    |   0  |  1  |  2   |  3   |  4    |
-|--------|------|-----|------|------|-------|
-| uvmenv |  ctx | opt | comp | name | other |
-
-
+Mandatory arguments
+| cmd    |   0  |  1  |  2   |  3   |
+|--------|------|-----|------|------|
+| uvmenv |  ctx | opt | comp | name |
 
 Where:
 |   Param    |   Meaning      |      Mandatory                         | Description                                                                                             |
@@ -21,31 +20,43 @@ Where:
 | `opt`      |  Option        |  Yes                                   | Specific option for domains different with project root                                                 |
 | `comp`     |  Component     |  Yes                                   | The UVM component that you want to handle or specific option for showing when context is "project"      |
 | `name`     |  Name          |  Yes, except for "list"                | Name defined to specific component, it is necessary to let UVMEnv know what is the searched file        |
-| `test`     | Parent test    |  Yes, when component is into a test    | Test where your component is placed                                                                     |
-| `env`      | Parent env     |  Yes, when component is into an env    | Env name where your component is placed                                                                 |
-| `mt`       | Module or type |  Yes, when exists "env" or "test"      | Specific RTL module from which signals will be got to create certain components or type when you want to edit a component subpart (for example, Monitor of some agent) |
-| `attr`     |  Attribute     |  Yes, when component is agent          | Type of agent that you need (standard, passive or active)                                               |
+
+
+
+
+Optional arguments
+|  Option       | Applicable opt                                           | Usage                                                                |
+|---------------|----------------------------------------------------------|----------------------------------------------------------------------|
+| --wave-level  | run                                                      | Define which wave level will be rendered on GTKWave.                 |
+| --test        | all comp                                                 | Specify the test where component lives.                              |
+| --env         | all comp                                                 | Specify the env where component lives.                               |
+| --type        | agent                                                    | Specify which type of agent will be created or which will be edited  |
+| --module      | bfm, seqitem, agent (for Coverage), refmod (only outs)   | Specify some specific module into DUT to generate UVM classes        |
+
+NOTE: Although optional arguments are applicable to specific  options (opt), there is not problem if they are included
+in any other option because internally are processed on independent way. This means the optional arguments are set only 
+for its specific options.
 
 
 ## Format details
 ```bash
 uvmenv
-    new <project_name> <rtltop_name> [init]
+    new <project_name> <rtltop_name>
     search
     help
     project
         init
         view
-        run  [--wave-level N]
+        run
         show
                wave
                report
                coverage
     component
-        create <comp>    <name> [test] [env] <module> <attr>
-        list   <comp>           [test] [env]
-        delete <comp>    <name> [test] [env] 
-        edit   <comp>    <name> [test] [env] <type>
+        create <comp>    <name>
+        list   <comp>          
+        delete <comp>    <name>
+        edit   <comp>    <name>
 ```
 
 ### General handling
@@ -76,26 +87,30 @@ Requires being into a valid UVMEnv project.
 
 
 ### Values for `comp`
-|  General      |  Only for `list` | Only for `edit` |
-|---------------|------------------|-----------------|
-|   env         |   rtlsig         |   config        |
-|   test        |   rtlmod         |   paths         |
-|   bfm         |                  |   utils         |
-|   agent       |                  |                 |
-|   seqce       |                  |                 |
-|   seqitem     |                  |                 |
-|   scoredb     |                  |                 |
-|   refmod      |                  |                 |
-|   misc        |                  |                 |
+|  General      |  Only for `list` | 
+|---------------|------------------| 
+|   env         |   rtlsig         | 
+|   test        |   rtlmod         | 
+|   bfm         |                  | 
+|   agent       |                  | 
+|   seqce       |                  | 
+|   seqitem     |                  | 
+|   scoredb     |                  | 
+|   refmod      |                  | 
+|   misc        |                  | 
 
+<!--  Only for `edit` | -->
+<!-- -----------------| -->
+<!--    config        | -->
+<!--    paths         | -->
+<!--    utils         | -->
+<!--                  | -->
+<!--                  | -->
+<!--                  | -->
+<!--                  | -->
+<!--                  | -->
+<!--                  | -->
 
-
-### Values for `attr`
-Agents on UVMEnv can be generated as passive, active or standard type and you can specify which with the next values:
-- `s` (standard): With monitor, driver and coverage.
-- `a` (active): With driver.
-- `p` (passive) With monitor and coverage.
-- `r` (reactive) With monitor, driver and coverage but activated when DUT demands.
 
 Note: Currently in not implemented functionality for UVM callbacks. 
 It is highly not recommended to do coverage into a drive, please find another mechanism while
