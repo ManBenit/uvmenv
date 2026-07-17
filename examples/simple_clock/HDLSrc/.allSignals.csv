@@ -1,4 +1,0 @@
-module,signal,length,type
-clock,clk,1,INPUT
-clock,reset,1,INPUT
-clock,count,8,OUTPUT

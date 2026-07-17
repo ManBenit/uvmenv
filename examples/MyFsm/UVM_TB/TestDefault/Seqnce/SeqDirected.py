@@ -1,0 +1,49 @@
+############################
+###    COMPONENT FILE    ###
+############################
+
+# ====================
+# Python imports
+# ====================
+import sys
+from pyuvm import uvm_sequence
+
+
+
+# ============================================================
+# Every sequence items are into Seqitem/ of each Test.
+#
+# Use: 
+#     uvmenv component list seqitem <TestName>
+# to show the available scoreboards on your specific Environment.
+#
+# Import the Scoreboards you need, i.e.:
+# import SitDefault
+# ============================================================
+import SitDefault
+
+# Define how many times you want to send the sequence
+REPEAT_SEQ = 1
+inputs = [0, 1, 1, 1, 0, 1, 1]
+
+class SeqDirected(uvm_sequence):
+    def __init__(self, name):
+        super().__init__(name)
+    
+    
+    async def body(self):
+        for i in inputs:
+            transaction = SitDefault('SitDefault')
+
+            await self.start_item(transaction)
+            # Write the focused or random stimulus, i.e.:
+            # transaction.randomize()
+            # transaction.signal1 = 8
+            # transaction.signal2 = 0
+            transaction.randomize()
+            transaction.i_x = i
+            await self.finish_item(transaction)
+
+
+sys.modules[__name__] = SeqDirected
+

@@ -24,7 +24,7 @@ Where:
 
 
 
-Optional arguments
+Optional arguments:
 |  Option       | Applicable opt                                           | Usage                                                                |
 |---------------|----------------------------------------------------------|----------------------------------------------------------------------|
 | --wave-level  | run                                                      | Define which wave level will be rendered on GTKWave.                 |
@@ -33,7 +33,7 @@ Optional arguments
 | --type        | agent                                                    | Specify which type of agent will be created or which will be edited  |
 | --module      | bfm, seqitem, agent (for Coverage), refmod (only outs)   | Specify some specific module into DUT to generate UVM classes        |
 
-NOTE: Although optional arguments are applicable to specific  options (opt), there is not problem if they are included
+NOTE: Although optional arguments are applicable to specific  options (opt), there is no problem if they are included
 in any other option because internally are processed on independent way. This means the optional arguments are set only 
 for its specific options.
 

@@ -1,6 +1,0 @@
-module,signal,length,type
-alu,alu_op,4,INPUT
-alu,zero,1,OUTPUT
-alu,a,32,INPUT
-alu,b,32,INPUT
-alu,result,32,OUTPUT

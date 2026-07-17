@@ -87,7 +87,7 @@ void SequenceItem::copyBaseFile(){
     }, PATH_SEP));
     string topModule = config["dut_design"]["top_module"];
 
-    long randMax = 0;
+    long long randMax = 0;
     for(const auto& [module, signalProps] : dutSignals) {
         if(module == topModule){
             for (const auto& signal : signalProps) {

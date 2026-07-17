@@ -154,7 +154,7 @@ void createNewEnv(const string& projectName, const string& topModule){
     };
     configContent["uvm_components"] = {
         {"itface", {
-            {"bfm_impl", "BFMDefault"}
+            {"bfm_impl", "BfmDefault"}
         }},
         {"refmdl", {
             {"refmdl_impl", "RefDefault"}
