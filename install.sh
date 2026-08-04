@@ -1,19 +1,6 @@
 #!/bin/bash
 
-# =============================================
-# Installation paths
-# =============================================
-REPO_PATH=$(pwd)
 HOME_DIR=/home/$(whoami)
-MAIN_DIR=$HOME_DIR/.UVMEnv
-VENV_DIR=$HOME_DIR/.UVMEnv_virtualenv
-REPOS_DIR=$MAIN_DIR/repos
-BASES_DIR=$MAIN_DIR/bases
-TOOLS_DIR=$MAIN_DIR/tools
-SCRIPTS_DIR=$MAIN_DIR/scripts
-COMMAND=/usr/bin/uvmenv
-# =============================================
-
 
 # =============================================
 # Bash colors
@@ -27,9 +14,54 @@ C_WHITE="\e[37m"
 C_N="\e[39m"
 # =============================================
 
+# ===========================
+# Preprocessing
+# ===========================
+if [ "$1" == "--home" ]; then
+    shift
+    if [ "$1" == "" ]; then
+        echo -e "${C_RED}Wrong installation path ${S_N}"
+        exit 1
+    fi
+
+    if [ ! -d $1 ];then
+        echo -e "${C_RED}Directory $1 does not exists ${S_N}"
+        exit 1
+    fi
+
+    HOME_DIR=$1
+fi
+
+read -p "UVMEnv will be installed at $HOME_DIR, continue? (y/n): " opc
+if [ "$opc" != "Y" ] && [ "$opc" != "y" ]; then
+    echo -e "${C_GEEN}Aborted installation ${S_N}"
+    exit 0;
+fi
+
+# =============================================
+# Installation paths
+# =============================================
+REPO_PATH=$(pwd)
+MAIN_DIR=$HOME_DIR/.UVMEnv
+VENV_DIR=$HOME_DIR/.UVMEnv_virtualenv
+REPOS_DIR=$MAIN_DIR/repos
+BASES_DIR=$MAIN_DIR/bases
+TOOLS_DIR=$MAIN_DIR/tools
+SCRIPTS_DIR=$MAIN_DIR/scripts
+COMMAND=/usr/bin/uvmenv
+# =============================================
+
+
+
 
 
 function main(){
+    # ===========================
+    # Begin installation process
+    # ===========================
+    set -eE
+    trap 'handleError ${LINENO} "$BASH_COMMAND" $?' ERR
+
     local final_msg="INSTALLED"
     PKG_MNGR=$(get_pkg_mngr)
     PY_VERSION=$(python3 --version | awk '{print $2}' | cut -d'.' -f1-2)
@@ -38,7 +70,7 @@ function main(){
 
     if [ "$EUID" -eq 0 ]; then
         printWarning "You should run as NON root, only write root password if necessary during installation"
-        exit 1
+        return 1
     fi
 
     # Firstly, get parameter 'update' value
@@ -51,13 +83,13 @@ function main(){
     # Then, verify if UVMEnv is already installed (without update)
     if [ -d $MAIN_DIR ] && [[ $IS_UPDATE -eq 0 ]]; then
         printWarning "UVMEnv is already installed"
-        exit 0
+        return 0
     fi
 
     # When is set the 'update' option, verify the previous existence of UVMEnv
      if [ ! -d $MAIN_DIR ] && [[ $IS_UPDATE -eq 1 ]]; then
         printError "UVMEnv is not installed for updating it"
-        exit 0
+        return 0
     fi
 
 
@@ -84,13 +116,10 @@ function main(){
 
     installUVMEnv   
 
-    #Finally, show message # TODO: review efectivity
-    if [ "$?" -eq 0  ]; then
-        printInfo "UVMEnv has been succesfully $final_msg"
-    else
-    createUVMEnvInstallDirs -del
-        printError "Something went wront during UVMEnv installation"
-    fi
+    #Finally, show message
+    printInfo "UVMEnv has been succesfully $final_msg"
+    printWarning "You must add this line to your .bashrc:"
+    printWarning "export UVMENV_HOME=$HOME_DIR/bin"
 }
 
 # =============================================
@@ -138,6 +167,22 @@ function get_pkg_mngr(){
     esac
 }
 
+function handleError(){
+    local failed_line=$1
+    local failed_command=$2
+    local exit_value=$3
+
+    createUVMEnvInstallDirs -del
+    printInfo "============================================="
+    printError "Error during installation"
+    printInfo "Failed command: $failed_command,"
+    printInfo "... at line $failed_line."
+    printError "Exit value: $exit_value."
+    printInfo "============================================="
+
+    exit $exit_value
+}
+
 
 # =============================================
 # System requirements
@@ -183,17 +228,24 @@ function installUVMEnv(){
     # Go to current dir (UVMEnv repository)
     cd $REPO_PATH
 
-    #TODO: change to rsync
     # Copy tools
-    cp -r ./install/uvmenv_tools/* $TOOLS_DIR
+    rsync -a ./install/uvmenv_tools/ "$TOOLS_DIR/"
 
     # Copy bases
-    cp -r ./install/uvmenv_bases/* $BASES_DIR
+    rsync -a ./install/uvmenv_bases/ "$BASES_DIR/"
 
     # Copy system scripts
-    cp -r ./install/uvmenv_scripts/* $SCRIPTS_DIR
+    rsync -a ./install/uvmenv_scripts/ "$SCRIPTS_DIR/"
 
     # Compile UVMEnv
+    printInfo "Compiling UVMEnv..."
+    mkdir $HOME_DIR/bin
+    cd ./src
+    g++ -O3 -Wall -std=c++17 \
+        main.cpp $(find implements -type f -name '*.cpp') \
+        -I/usr/include $(python3-config --includes) \
+        -lyaml-cpp $(python3-config --ldflags --embed) \
+        -o $HOME_DIR/bin/uvmenv
 
     # Create completion (ln -s)
 

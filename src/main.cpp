@@ -56,7 +56,6 @@ int main (int argc, char *argv[]) {
     
     string ctx = args[0];
 
-    printInfo("UVMEnv 2.0 - TESTING/DEVELOPING");
     if(argc < 2) return immCtxHandlr.cmdHelp();    
     
     ///// FRAMEWORK HANDLING /////
