@@ -6,7 +6,7 @@
 # Python imports
 # ====================
 import pyuvm
-from pyuvm import uvm_component, uvm_tlm_analysis_fifo, uvm_get_port
+from pyuvm import uvm_subscriber, uvm_tlm_analysis_fifo, uvm_get_port
 from cocotb_coverage.coverage import CoverPoint, CoverCross, coverage_db
 
 # ====================
@@ -28,7 +28,7 @@ from UVMEnvReport import report
 # ============================================================
 import SitDefault
 
-class Coverage(uvm_component):
+class Coverage(uvm_subscriber):
     def __init__(self, name, parent):
         super().__init__(name, parent)
         self.__num_transactions = 0

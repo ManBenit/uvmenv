@@ -78,16 +78,26 @@ void showCoverage(){
 void showHelp() {
     const int w = 15;
     stringstream helpMessage;
-    helpMessage << "Usage:\t uvmenv <ctx> <opt> <comp> <name> [<other>] [--options]" << "\n\n";
+    helpMessage << "Usage:\t uvmenv <ctx> <opt> <comp> <name> [optional_args]" << "\n\n";
 
-    helpMessage << "COMMAND is mandatory." << "\n";
-    helpMessage << "OPTION is required by COMMAND \"project\" and \"component\"." << "\n";
-    helpMessage << "COMPONENT is required when COMMAND is \"component\"." << "\n";
-    helpMessage << "PARAMETERS are required depending on the OPTION and COMPONENT." << "\n";
+    helpMessage << "========== Positional arguments ==========" << "\n";
+    helpMessage << "ctx (context): Current place to run an option." << "\n";
+    helpMessage << "opt (option): Action to do into a context." << "\n";
+    helpMessage << "comp (component): UVM component which will be handled." << "\n";
+    helpMessage << "name (component name): Name of specific component for handling." << "\n";
 
     helpMessage << "\n";
 
-    helpMessage << "COMMAND" << "\n";
+    helpMessage << "========== Optional arguments ==========" << "\n";
+    helpMessage << "--test: UVM test where component lives." << "\n";
+    helpMessage << "--env: UVM env where component lives." << "\n";
+    helpMessage << "--type: Type of agent for creation (std, psv, act, rct)." << "\n";
+    helpMessage << "--wave-level: Wave level which will be rendered on GTKWave." << "\n";
+    helpMessage << "--module: Some specific RTL module to create UVM classes." << "\n";
+
+    helpMessage << "\n";
+
+    helpMessage << "======= Values for ctx (context) =======" << "\n";
     helpMessage << left; // Alineación a la izquierda para el comando
     helpMessage << doTabs(1) << setw(w) << "new"       << "Create a new UVMEnv project." << "\n";
     helpMessage << doTabs(1) << setw(w) << "search"    << "Look for UVMEnv projects into current directory." << "\n";
@@ -97,13 +107,12 @@ void showHelp() {
 
     helpMessage << "\n";
 
-    helpMessage << "OPTION" << "\n";
+    helpMessage << "======= Options \"project\" and \"component\" =======" << "\n";
     helpMessage << "For \"project\"" << "\n";
     helpMessage << doTabs(1) << setw(w) << "init"      << "Create default structure with only one test and environment." << "\n";
     helpMessage << doTabs(1) << setw(w) << "view"      << "Shows project tree." << "\n";
-    helpMessage << doTabs(1) << setw(w) << "run"       << "Starts verification process." << "\n";
-    helpMessage << doTabs(1) << setw(w) << "wave"      << "Shows waveform." << "\n";
-    helpMessage << doTabs(1) << setw(w) << "report"    << "Shows the report file content." << "\n";
+    helpMessage << doTabs(1) << setw(w) << "run"       << "Starts verification process. You can specify wave level with --wave-level option." << "\n";
+    helpMessage << doTabs(1) << setw(w) << "show"      << "Shows an specific output: wave, report, coverage." << "\n";
     helpMessage << "For \"component\"" << "\n";
     helpMessage << doTabs(1) << setw(w) << "create"    << "Create a UVM component." << "\n";
     helpMessage << doTabs(1) << setw(w) << "edit"      << "Allow to edit each file of current UVMEnv project." << "\n";

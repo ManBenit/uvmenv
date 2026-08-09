@@ -229,13 +229,13 @@ function installUVMEnv(){
     cd $REPO_PATH
 
     # Copy tools
-    rsync -a ./install/uvmenv_tools/ "$TOOLS_DIR/"
+    cp -r ./install/uvmenv_tools/* $TOOLS_DIR
 
     # Copy bases
-    rsync -a ./install/uvmenv_bases/ "$BASES_DIR/"
+    cp -r ./install/uvmenv_bases/* $BASES_DIR
 
     # Copy system scripts
-    rsync -a ./install/uvmenv_scripts/ "$SCRIPTS_DIR/"
+    cp -r ./install/uvmenv_scripts/* $SCRIPTS_DIR
 
     # Compile UVMEnv
     printInfo "Compiling UVMEnv..."

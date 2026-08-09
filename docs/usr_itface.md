@@ -16,8 +16,8 @@ Mandatory arguments
 Where:
 |   Param    |   Meaning      |      Mandatory                         | Description                                                                                             |
 |------------|----------------|----------------------------------------|---------------------------------------------------------------------------------------------------------|
-| `ctx`      |  Context       |  Yes                                   | Current domain where you are placed (project root, project or component)                                |
-| `opt`      |  Option        |  Yes                                   | Specific option for domains different with project root                                                 |
+| `ctx`      |  Context       |  Yes                                   | Current place where you want to work (current directory, project, or component)                         |
+| `opt`      |  Option        |  Yes                                   | Specific action for context different with project root                                                 |
 | `comp`     |  Component     |  Yes                                   | The UVM component that you want to handle or specific option for showing when context is "project"      |
 | `name`     |  Name          |  Yes, except for "list"                | Name defined to specific component, it is necessary to let UVMEnv know what is the searched file        |
 
@@ -30,8 +30,8 @@ Optional arguments:
 | --wave-level  | run                                                      | Define which wave level will be rendered on GTKWave.                 |
 | --test        | all comp                                                 | Specify the test where component lives.                              |
 | --env         | all comp                                                 | Specify the env where component lives.                               |
-| --type        | agent                                                    | Specify which type of agent will be created or which will be edited  |
-| --module      | bfm, seqitem, agent (for Coverage), refmod (only outs)   | Specify some specific module into DUT to generate UVM classes        |
+| --type        | agent                                                    | Specify which type of agent will be created.                         |
+| --module      | bfm, seqitem, agent (for Coverage), refmod (only outs)   | Specify some specific module into DUT to generate UVM classes.       |
 
 NOTE: Although optional arguments are applicable to specific  options (opt), there is no problem if they are included
 in any other option because internally are processed on independent way. This means the optional arguments are set only 
