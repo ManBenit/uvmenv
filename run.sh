@@ -22,5 +22,5 @@ docker run -it --rm \
     --name uvmenv_container \
     -e DISPLAY="$DISPLAY_VAR" \
     -v "$X11_SOCKET:$X11_SOCKET" \
-    -v "$(pwd):/home/developer/uvmenv_repo" \
+    -v "$(pwd):/uvmenv_repo" \
     "$IMAGE_NAME" "$@"

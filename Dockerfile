@@ -40,13 +40,13 @@ RUN git clone --depth 1 https://github.com/verilator/verilator.git /tmp/verilato
 RUN useradd -m -s /bin/bash developer && \
     echo "developer ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-WORKDIR /home/developer/uvmenv_repo
-RUN chown -R developer:developer /home/developer/uvmenv_repo
+WORKDIR /uvmenv_repo
+RUN chown -R developer:developer /uvmenv_repo
 
 USER developer
 
 # 6. Copy repository content
-COPY --chown=developer:developer . /home/developer/uvmenv_repo/
+COPY --chown=developer:developer . /uvmenv_repo
 
 RUN mkdir -p /home/developer/uvmenv_install
 
@@ -62,6 +62,8 @@ RUN if [ -f "./install.sh" ]; then echo "y" | ./install.sh --home /home/develope
 ENV USER=developer
 ENV UVMENV_HOME=/home/developer/uvmenv_install
 ENV PATH="${UVMENV_HOME}/bin:${PATH}"
+
+RUN cp -r /uvmenv_repo/examples /home/developer
 
 
 WORKDIR /home/developer
