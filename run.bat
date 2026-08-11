@@ -1,26 +1,26 @@
 @echo off
 setlocal enabledelayedexpansion
 
-:: Unificamos el nombre de la imagen con el script de Linux
+:: Unify image name
 set IMAGE_NAME=uvmenv-framework:latest
 
 echo [INFO] Verificando estado de Docker...
 docker info >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [ERROR] Docker no esta en ejecucion. Por favor inicia Docker Desktop.
+    echo [ERROR] Docker is not running. Please start Docker Desktop.
     pause
     exit /b 1
 )
 
 docker image inspect %IMAGE_NAME% >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [INFO] La imagen %IMAGE_NAME% no existe localmente. Construyendo imagen...
+    echo [INFO] Image %IMAGE_NAME% does not exist locally. Building...
     docker build -t %IMAGE_NAME% .
 )
 
-echo [INFO] Lanzando contenedor con soporte para GTKWave...
+echo [INFO] Launching container...
 
-:: Mapear al directorio de trabajo correcto dentro del contenedor
+:: Map to work directory inside container
 docker run -it --rm ^
     --name uvmenv_container ^
     -e DISPLAY=host.docker.internal:0 ^
@@ -29,5 +29,5 @@ docker run -it --rm ^
 
 if %errorlevel% neq 0 (
     echo.
-    echo [NOTA] Si no abre GTKWave, asegurate de que tu servidor X11 -como VcXsrv- este corriendo con "Disable access control" activado.
+    echo [NOTA] If error running GTKWave, Ensure your server X11 is running with "Disable access control" disabled.
 )
