@@ -1,6 +1,6 @@
 #!/bin/bash
 
-HOME_DIR=/home/$(whoami)
+HOME_DIR=$(echo $UVMENV_HOME)
 
 # =============================================
 # Bash colors

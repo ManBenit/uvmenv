@@ -24,7 +24,7 @@ echo [INFO] Launching container...
 docker run -it --rm ^
     --name uvmenv_container ^
     -e DISPLAY=host.docker.internal:0 ^
-    -v "%cd%:/home/developer/uvmenv_repo" ^
+    -v "%cd%:/uvmenv_repo" ^
     %IMAGE_NAME% %*
 
 if %errorlevel% neq 0 (

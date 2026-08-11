@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Main paths
-USR_HOME_DIR=/home/$(whoami)
+USR_HOME_DIR=$(echo $UVMENV_HOME)
 VENV_DIR=$USR_HOME_DIR/.UVMEnv_virtualenv
 
 # $1: Python version (x.xx)
