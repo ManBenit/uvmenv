@@ -1,9 +1,9 @@
 <p align="center">
-  <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/mainHierarchy.png" 
+  <img src="https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/img/mainHierarchy.png" 
     alt="Main UVMEnv hierarchy" 
     width="70%" 
   />
-  <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/directoryTree.png" 
+  <img src="https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/img/directoryTree.png" 
     alt="Main directories" 
     width="20%" 
   />
@@ -19,7 +19,7 @@ To assist in writing, these files contain instructions and fill-in examples in t
 - `ScoreboardBase.py`
 - `SequenceBase.py`
 - `RefmodelImplBase.py`
-- `AgentCoverageCollectorBase.py`
+- `AgentCoverageBase.py`
 - `AgentMonitorBase.py`
 
 

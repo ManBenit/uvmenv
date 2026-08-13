@@ -1,0 +1,17 @@
+top:
+    tests:
+        TestDefault:
+            seqitems:
+                -   SitDefault
+            sequences:
+                -   SeqDefault
+            envs:
+                EnvDefault:
+                    refmodels:
+                        -   RefDefault
+                    agents:
+                        -   agnt_default
+                    scoreboards:
+                        -   ScbDefault
+    itfaces:
+        -   BfmDefault

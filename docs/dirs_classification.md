@@ -1,17 +1,21 @@
 ## Directories classification
+**[The current classification described has changed at version 2.0]**
+
 <p align="center">
-  <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/mainDirectories.png" 
+  <img src="https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/img/mainDirectories.png" 
     alt="Main UVMEnv hierarchy" 
     width="70%" 
   />
-  <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/directoryTree.png" 
+  <img src="https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/img/directoryTree.png" 
     alt="Main directories and files" 
     width="20%" 
   />
 </p>
 
+UVMEnv official directories are named by following the next format:
+
 The directory and file hierarchy is a direct representation of the proposed structure shown in image, hierarchically corresponding to some visible element in it (except for `Misces` and `OSimon`).
-[Here the directories details](https://github.com/ManBenit/uvmenv/blob/main/docs/dirs_classification/dirs_details.md).
+[Here the directories details](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/dirs_classification/dirs_details.md).
 
 ### Abstract
 

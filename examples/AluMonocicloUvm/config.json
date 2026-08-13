@@ -1,0 +1,26 @@
+{
+    "id": "dXZtOkFsdU1vbm9jaWNsb1V2bTplbnY=",
+    "name": "AluMonocicloUvm",
+    "simtool": "icarus",
+    "dut_design": {
+        "type": "combinatorial",
+        "top_module": "ALU",
+        "sim_units": "ns"
+    },
+    "dut_cs4seq": {
+        "clock_name": "clk",
+        "reset_name": "rst",
+        "sync_cycles": 1,
+        "clock_period": 1,
+        "cycles4wait_reset": 1
+    },
+    "uvm_components": {
+        "itface": {
+            "bfm_impl": "BfmDefault"
+        },
+        "refmdl": {
+            "refmdl_impl": "RefDefault",
+            "ref_alu_mon": "RefAlumon"
+        }
+    }
+}

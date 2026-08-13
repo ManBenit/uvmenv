@@ -1,0 +1,26 @@
+<top abs_name="top" size="12" coverage="12" cover_percentage="100.0">
+  <myfsm size="12" coverage="12" cover_percentage="100.0" abs_name="top.myfsm">
+    <i_clk size="2" coverage="2" cover_percentage="100.0" abs_name="top.myfsm.i_clk" weight="1" at_least="1">
+      <bin0 bin="0" hits="23" abs_name="top.myfsm.i_clk.bin0" />
+      <bin1 bin="1" hits="42" abs_name="top.myfsm.i_clk.bin1" />
+    </i_clk>
+    <i_rst_n size="2" coverage="2" cover_percentage="100.0" abs_name="top.myfsm.i_rst_n" weight="1" at_least="1">
+      <bin0 bin="0" hits="26" abs_name="top.myfsm.i_rst_n.bin0" />
+      <bin1 bin="1" hits="39" abs_name="top.myfsm.i_rst_n.bin1" />
+    </i_rst_n>
+    <i_x size="2" coverage="2" cover_percentage="100.0" abs_name="top.myfsm.i_x" weight="1" at_least="1">
+      <bin0 bin="0" hits="32" abs_name="top.myfsm.i_x.bin0" />
+      <bin1 bin="1" hits="33" abs_name="top.myfsm.i_x.bin1" />
+    </i_x>
+    <o_y size="2" coverage="2" cover_percentage="100.0" abs_name="top.myfsm.o_y" weight="1" at_least="1">
+      <bin0 bin="0" hits="63" abs_name="top.myfsm.o_y.bin0" />
+      <bin1 bin="1" hits="2" abs_name="top.myfsm.o_y.bin1" />
+    </o_y>
+    <o_state size="4" coverage="4" cover_percentage="100.0" abs_name="top.myfsm.o_state" weight="1" at_least="1">
+      <bin0 bin="0" hits="34" abs_name="top.myfsm.o_state.bin0" />
+      <bin1 bin="1" hits="17" abs_name="top.myfsm.o_state.bin1" />
+      <bin2 bin="2" hits="11" abs_name="top.myfsm.o_state.bin2" />
+      <bin3 bin="3" hits="3" abs_name="top.myfsm.o_state.bin3" />
+    </o_state>
+  </myfsm>
+</top>

@@ -1,10 +1,11 @@
 ## Files classification
+**[The current classification described has changed at version 2.0]**
 <p align="center">
-  <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/mainHierarchy.png" 
+  <img src="https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/img/mainHierarchy.png" 
     alt="Main UVMEnv hierarchy" 
     width="70%" 
   />
-  <img src="https://github.com/ManBenit/uvmenv/blob/main/docs/img/directoryTree.png" 
+  <img src="https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/img/directoryTree.png" 
     alt="Main directories" 
     width="20%" 
   />
@@ -12,7 +13,7 @@
 
 In general, file creation is performed through the user interface and
 is based on preassembled code templates. As a result, even if only an empty environment
-is generated, it will run correctly (See the [generic testbench](https://github.com/ManBenit/uvmenv/blob/main/docs/generic_tb.md)).
+is generated, it will run correctly (See the [generic testbench](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/generic_tb.md)).
 
 This implementation approach leverages the repetitive and pattern-based nature of
 software for UVM because it follows a standard.
@@ -30,7 +31,7 @@ which will be replaced through the user interface.
 | **getSignalsBase.py**        | comnd                    |                          |                                  |                                  |                                      |
 | **writeVcdPart**             | comnd                    |                          |                                  |                                  |                                      |
 | **AgentBase.py**             | comp                     |                          | ✅                               |                                  |                                      |
-| **AgentCoverageCollectorBase.py** | comp                |                          |                                  |                                  | ✅                                   |
+| **AgentCoverageBase.py** | comp                |                          |                                  |                                  | ✅                                   |
 | **AgentDriverBase.py**       | comp                     |                          |                                  | ✅                               |                                      |
 | **AgentMonitorBase.py**      | comp                     |                          |                                  |                                  | ✅                                   |
 | **BFMBase.py**               | comp                     |                          | ✅                               |                                  |                                      |
@@ -63,17 +64,17 @@ Each file into `UVMEnv` can be classified in different ways, according different
 This classification refers to the role of files when executing and managing
 a verification environment from their handling through the user interface
 to their use as execution aids or UVM components abstracted as
-[main structure](https://github.com/ManBenit/uvmenv/blob/main/docs/main_structure.md) ilustrates.
+[main structure](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/main_structure.md) ilustrates.
 
 #### Base files
 It's the fundamental characteristic of `UVMEnv` to create verification environments (creating and managing projects and UVM components). 
 
 This code can be rewritten with DUT signals got from Verilator when it contains `KEY_WORDS` or have coding instructions (on comments) for creating each environment component. 
 
-- [Commands](https://github.com/ManBenit/uvmenv/blob/main/docs/files_classification/functionality/base_commands.md).
-- [Components](https://github.com/ManBenit/uvmenv/blob/main/docs/files_classification/functionality/base_components.md).
-- [Configurations](https://github.com/ManBenit/uvmenv/blob/main/docs/files_classification/functionality/base_configurations.md).
-- [Representatives](https://github.com/ManBenit/uvmenv/blob/main/docs/files_classification/functionality/base_representatives.md).
+- [Commands](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/files_classification/functionality/base_commands.md).
+- [Components](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/files_classification/functionality/base_components.md).
+- [Configurations](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/files_classification/functionality/base_configurations.md).
+- [Representatives](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/files_classification/functionality/base_representatives.md).
 
 
 
@@ -95,9 +96,9 @@ Contain the necessary functionality for the user interface. They are copied dire
 ### By malleability
 This classification refers to the way the final files are written, which are used by the user to carry out the verification process.
 
-- [Base created](https://github.com/ManBenit/uvmenv/blob/main/docs/files_classification/malleability/base_created.md).
-- [Fully created](https://github.com/ManBenit/uvmenv/blob/main/docs/files_classification/malleability/fully_created.md).
-- [Partially created](https://github.com/ManBenit/uvmenv/blob/main/docs/files_classification/malleability/partially_created.md).
+- [Base created](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/files_classification/malleability/base_created.md).
+- [Fully created](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/files_classification/malleability/fully_created.md).
+- [Partially created](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/files_classification/malleability/partially_created.md).
 
 
 

@@ -6,7 +6,7 @@
 
 ### Installation paths ####
 REPO_PATH=$(pwd)
-HOME_DIR=/home/$(whoami)
+HOME_DIR=""
 MAIN_DIR=$HOME_DIR/.UVMEnv
 VENV_DIR=$HOME_DIR/.UVMEnv_virtualenv
 REPOS_DIR=$MAIN_DIR/repos

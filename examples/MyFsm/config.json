@@ -1,0 +1,25 @@
+{
+    "id": "dXZtOk15RnNtOmVudg==",
+    "name": "MyFsm",
+    "simtool": "icarus",
+    "dut_design": {
+        "type": "sequential",
+        "top_module": "MyFSM",
+        "sim_units": "ns"
+    },
+    "dut_cs4seq": {
+        "clock_name": "clk",
+        "reset_name": "rst",
+        "sync_cycles": 1,
+        "clock_period": 1,
+        "cycles4wait_reset": 1
+    },
+    "uvm_components": {
+        "itface": {
+            "bfm_impl": "BfmDefault"
+        },
+        "refmdl": {
+            "refmdl_impl": "RefDefault"
+        }
+    }
+}

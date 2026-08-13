@@ -2,7 +2,7 @@
 
 
 To write the `.vcd` file that enables waveform visualization, the `$dumpfile` directive is used through the `writeVcdPart.py` script, which becomes `vcdWriter.py`. Its behavior is described in 
-[base files commands](https://github.com/ManBenit/uvmenv/blob/main/docs/files_classification/functionality/base_commands.md).
+[base files commands](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/files_classification/functionality/base_commands.md).
 
 
 This directive allows waveform generation with a depth level chosen by the user. To do this, the `wave` option is used as follows:

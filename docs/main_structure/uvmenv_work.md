@@ -9,9 +9,9 @@ The next sequence diagram describes all framework functionality, in a general wa
 </p>
 
 Each remarked phase have its own description:
-- [New environment creation](https://github.com/ManBenit/uvmenv/blob/main/docs/opp_description/XXXX.md).
-- [Signals handling using GPI](https://github.com/ManBenit/uvmenv/blob/main/docs/main_structure_extra/cocotb_signals_hand_gpi.md).
-- [Writing of VCD file](https://github.com/ManBenit/uvmenv/blob/main/docs/opp_description/XXXX.md).
+- [New environment creation](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/opp_description/XXXX.md).
+- [Signals handling using GPI](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/main_structure_extra/cocotb_signals_hand_gpi.md).
+- [Writing of VCD file](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/opp_description/XXXX.md).
 
 
 

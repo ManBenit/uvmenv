@@ -1,2 +1,17 @@
 #/examples/*
 #!/examples/.gitkeep
+*/model**
+*/test_project/**
+.vscode/
+docker_build.log
+
+
+
+# ==========================================
+# FILES FOR TESTING ONLY
+# ==========================================
+src/alu_comb/*
+src/alu_seq/*
+src/compilation.log
+src/runTest.sh
+src/uvmenv_test

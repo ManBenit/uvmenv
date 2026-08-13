@@ -2,7 +2,7 @@
 
 
 For creating a new generic project (environment or testbench) you need using the 
-[user interface](https://github.com/ManBenit/uvmenv/blob/main/docs/usr_itface.md), in general steps for this creation are described by the next diagram:
+[user interface](https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/usr_itface.md), in general steps for this creation are described by the next diagram:
 
 <p align="center">
   <img src="../img/uml_files/flux_sequence/FluxGenerarAmbiente.png"
