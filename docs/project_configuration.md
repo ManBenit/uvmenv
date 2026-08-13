@@ -11,7 +11,7 @@ of the BFM (in the **driver** and the **monitor**) or the reference model (in th
 
 
 ```python
-def _import_bfm(self):
+def __import_bfm(self):
     # Get an specific value from .json
     config = load_config('config.json')
     implementation_class = config.uvm_components.itface.bfm_impl
@@ -19,7 +19,7 @@ def _import_bfm(self):
 ```
 
 ```python
-def _import_refmdl(self):
+def __import_refmdl(self):
     # Get an specific value from .json
     config = load_config('config.json')
     implementation_class = config.uvm_components.refmdl.refmdl_impl
@@ -53,26 +53,33 @@ Here is an example of
 [MUX example project](https://github.com/ManBenit/uvmenv/tree/main/examples/mux_2_a_4)
 ```json
 {
-    "id": "dXZtOk11eFRlc3Q6ZW52Cg==",
-    "name": "MuxTest",
+    "id": "dXZtOkFsdUNvbWI6ZW52",
+    "name": "AluComb",
     "simtool": "icarus",
     "dut_design": {
         "type": "combinatorial",
-        "top_module": "MUX",
-        "sync_clock_cycles": "1"
+        "top_module": "alu",
+        "sim_units": "ns"
+    },
+    "dut_cs4seq": {
+        "clock_name": "clk",
+        "reset_name": "rst",
+        "sync_cycles": 1,
+        "clock_period": 1,
+        "cycles4wait_reset": 1
     },
     "uvm_components": {
-        "itface":{
-            "bfm_impl":""
+        "itface": {
+            "bfm_impl": "BfmDefault"
         },
-        "refmdl":{
-            "refmdl_impl":""
+        "refmdl": {
+            "refmdl_impl": "RefDefault"
         }
     }
 }
 ```
 
-where:
+<!-- where:
 
 - `id`: Unique identifier that ensures the current directory is a `UVMEnv` project, allowing the use of the user interface.
 
@@ -88,7 +95,7 @@ where:
 
 - `uvm_components`: An object that contains the specific implementation of polymorphic components. Currently, it only includes the BFM (interface) and reference model.
   - `itface`: An object that holds the names of the BFM implementations.
-  - `refmdl`: An object that holds the names of the reference model implementations.
+  - `refmdl`: An object that holds the names of the reference model implementations. -->
 
 
 

@@ -18,6 +18,25 @@ uvmenv project init
 
 Now, you have a full default project structure, you can verify this by running `uvmenv project view`.
 
+Once you have initialized your project with default components, you can edit the only necessary 
+(but no limited)  files indicated at table bellow, 
+to get a full custom verification process.
+
+| Combinatorial | Sequential | Component                                |
+|---------------|------------|------------------------------------------|
+|   &#10004;    |  &#10004;  | Top (To uncomment default test)          |
+|   &#10004;    |  &#10004;  | Reference model                          |
+|   &#10004;    |  &#10004;  | Sequence item                            |
+|               |  &#10004;  | BFM (To comment control signals)         |
+|               |  &#10004;  | config.json (to edit the type of desing) |
+
+This edition is possible with the next commands:
+- vi Top[ProjectName]
+- uvmenv --test TestDefault --env EnvDefault edit refmod RefDefault
+- uvmenv --test TestDefault --env EnvDefault edit seqitem SitDefault
+- uvmenv --test TestDefault --env EnvDefault edit bfm BfmDefault
+- vi config.json
+
 
 Now you can start the verification process:
 ``` bash
@@ -25,7 +44,7 @@ uvmenv project run
 ```
 
 
-Aditionally, you can see the generated waveform, with `uvmenv wave`, and the generated report, with `uvmenv report`. 
+Aditionally, you can see the generated waveform, with `uvmenv project show wave`, and the generated report, with `uvmenv project show report`. 
 
 (wave is generated in any case and report is setted by default with a report invokation into default monitor).
 

@@ -1,4 +1,5 @@
 ## Files classification
+**[The current classification described has changed at version 2.0]**
 <p align="center">
   <img src="https://github.com/ManBenit/uvmenv/blob/uvmenv-2.0/docs/img/mainHierarchy.png" 
     alt="Main UVMEnv hierarchy" 
