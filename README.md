@@ -55,11 +55,6 @@ which is its hierarchy level.
 
 
 
-
-## More excercices
-- [Verilog to `UVMEnv`](https://github.com/ManBenit/v2uvmenv).
-
-
 ## Extra information
 ```
 This repository contains on its origin academic content, you can find it into `docs` directory since version 1.0.
