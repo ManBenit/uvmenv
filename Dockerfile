@@ -49,6 +49,7 @@ USER developer
 COPY --chown=developer:developer . /uvmenv_repo
 
 RUN mkdir -p /home/developer/uvmenv_install
+RUN mkdir -p /home/developer/workspace
 
 # Clean files with dos2unix to convert all files to Linux format safely
 RUN find . -type f -print0 | xargs -0 dos2unix -q || true
@@ -66,6 +67,11 @@ ENV PATH="${UVMENV_HOME}/bin:${PATH}"
 RUN cp -r /uvmenv_repo/examples /home/developer
 
 
-WORKDIR /home/developer
+WORKDIR /home/developer/workspace
+
+# Force X11
+ENV GDK_BACKEND=x11
+ENV NO_AT_BRIDGE=1
+ENV LIBGL_ALWAYS_INDIRECT=1
 
 CMD ["/bin/bash"]

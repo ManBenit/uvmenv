@@ -3,6 +3,7 @@
 */model**
 */test_project/**
 .vscode/
+docker_build.log
 
 
 
