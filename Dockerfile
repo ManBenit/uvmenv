@@ -45,6 +45,19 @@ RUN chown -R developer:developer /uvmenv_repo
 
 USER developer
 
+# 5.5 Create .vimrc for developer
+RUN echo 'set tabstop=4       " Tab as 4 spaces' > /home/developer/.vimrc && \
+    echo 'set shiftwidth=4    " Indent size when using << or >>' >> /home/developer/.vimrc && \
+    echo 'set expandtab       " Transform Tabs into Spaces when writing' >> /home/developer/.vimrc && \
+    echo '' >> /home/developer/.vimrc && \
+    echo 'set number' >> /home/developer/.vimrc && \
+    echo 'set autoindent' >> /home/developer/.vimrc && \
+    echo '' >> /home/developer/.vimrc && \
+    echo 'augroup ResurrectCursor' >> /home/developer/.vimrc && \
+    echo '  autocmd!' >> /home/developer/.vimrc && \
+    echo '  autocmd BufReadPost * if line("'\''\"") >= 1 && line("'\''\"") <= line("$") && &filetype !~# '\''commit'\'' | execute "normal! g`\"" | endif' >> /home/developer/.vimrc && \
+    echo 'augroup END' >> /home/developer/.vimrc
+
 # 6. Copy repository content
 COPY --chown=developer:developer . /uvmenv_repo
 

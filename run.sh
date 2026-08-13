@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 IMAGE_NAME="uvmenv-framework:latest"
-
+CONTAINER_NAME="uvmenv_container"
 
 # Grant permissions to X11 server if available
 if command -v xhost >/dev/null 2>&1; then
@@ -11,6 +11,7 @@ fi
 X11_SOCKET="/tmp/.X11-unix"
 DISPLAY_VAR="${DISPLAY:-:0}"
 
+# 1. Verify if image exists (build it otherwise)
 if ! docker image inspect "$IMAGE_NAME" >/dev/null 2>&1; then
     echo -e "\e[33m[INFO] Image $IMAGE_NAME does not exist locally. Building, please wait...\e[39m"
     echo -e "\e[33m[INFO] This process can take a few minutes.\e[39m"
@@ -23,13 +24,27 @@ if ! docker image inspect "$IMAGE_NAME" >/dev/null 2>&1; then
     echo -e "\e[32m[INFO] Image successfully created\e[39m"
 fi
 
-echo -e "\e[32m[INFO] Launching container, please wait...\e[39m"
+# 2. Verify if container exists
+if docker container inspect "$CONTAINER_NAME" >/dev/null 2>&1; then
+    echo -e "\e[34m[INFO] Container $CONTAINER_NAME already exists.\e[39m"
+    
+    # Verify if container is running
+    if [ "$(docker inspect -f '{{.State.Running}}' "$CONTAINER_NAME")" = "true" ]; then
+        echo -e "\e[32m[INFO] Container is already running. Opening new terminal session...\e[39m"
+        docker exec -it "$CONTAINER_NAME" /bin/bash
+    else
+        echo -e "\e[32m[INFO] Starting existing stopped container...\e[39m"
+        docker start -i "$CONTAINER_NAME"
+    fi
+else
+    echo -e "\e[32m[INFO] Launching new container, please wait...\e[39m"
 
-# Map to work directory inside container
-docker run -it --rm \
-    --name uvmenv_container \
-    -e DISPLAY="$DISPLAY_VAR" \
-    -v "$X11_SOCKET:$X11_SOCKET" \
-    -v "$(pwd):/uvmenv_repo" \
-    -v uvmenv_data:/home/developer/workspace \
-    "$IMAGE_NAME" "$@"
+    # Map to work directory inside container
+    docker run -it \
+        --name "$CONTAINER_NAME" \
+        -e DISPLAY="$DISPLAY_VAR" \
+        -v "$X11_SOCKET:$X11_SOCKET" \
+        -v "$(pwd):/uvmenv_repo" \
+        -v uvmenv_data:/home/developer/workspace \
+        "$IMAGE_NAME" "$@"
+fi
