@@ -42,7 +42,7 @@ class BfmDefault(BFM):
         
         # Time for waiting Driver request to DUT
         if ISDUTSEQ: await ClockCycles(self.dut.clk, SYNC_CYCLES)
-        else:        await Timer(SYNC_CYCLES, units=SIM_UNITS)
+        else:        await Timer(SYNC_CYCLES, unit=SIM_UNITS)
         
 
     async def get(self):
@@ -52,7 +52,7 @@ class BfmDefault(BFM):
             # or if DUT is active in negedge, then read on RisingEdge.
             await FallingEdge(self.dut.clk)
         else:
-            await Timer(SYNC_CYCLES, units=SIM_UNITS)
+            await Timer(SYNC_CYCLES, unit=SIM_UNITS)
         
         # Define response values from DUT to transaction
         self.__transaction.zero = self.dut.zero.value
@@ -67,7 +67,7 @@ class BfmDefault(BFM):
 
         # Define how long is your clock period (greater or equal with 'ns')
         # Start clock
-        cocotb.start_soon( Clock(self.dut.clk, CLOCK_PERIOD, units=SIM_UNITS).start() ) 
+        cocotb.start_soon( Clock(self.dut.clk, CLOCK_PERIOD, unit=SIM_UNITS).start() ) 
         
         # Make the initial reset
         await self.reset()
