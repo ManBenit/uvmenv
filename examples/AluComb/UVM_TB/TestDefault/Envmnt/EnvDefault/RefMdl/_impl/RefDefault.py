@@ -85,8 +85,6 @@ class RefDefault(RefModel):
         # All you need to analyse is to assign results to transaction signals, i.e.:
         # self.__transaction.SIGNAL = to_bin_repr(SIGNAL, SIGNAL_SIZE)
         # Where SIGNAL_SIZE is auto written by UVMEnv.
-        print(f'[RefDefault] ALU Operation: {self.__transaction.alu_op}, A: {self.__transaction.a}, B: {self.__transaction.b}')
-        print(f'[RefDefault] Result: {result}, Zero: {zero}')
         self.__transaction.zero = to_bin_repr(zero, 1)
         self.__transaction.result = to_bin_repr(result, 32)
 

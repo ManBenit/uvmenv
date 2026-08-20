@@ -1,6 +1,7 @@
 #!/bin/bash
 
-HOME_DIR=$(echo $UVMENV_HOME)
+HOME_DIR="${HOME}"
+IS_UPDATE=0
 
 # =============================================
 # Bash colors
@@ -17,20 +18,33 @@ C_N="\e[39m"
 # ===========================
 # Preprocessing
 # ===========================
-if [ "$1" == "--home" ]; then
-    shift
-    if [ "$1" == "" ]; then
-        echo -e "${C_RED}Wrong installation path ${S_N}"
-        exit 1
-    fi
+for arg in "$@"; do
+    case $arg in
+        --home)
+            shift
+            if [ "$1" == "" ]; then
+                echo -e "${C_RED}Wrong installation path ${S_N}"
+                exit 1
+            fi
 
-    if [ ! -d $1 ];then
-        echo -e "${C_RED}Directory $1 does not exists ${S_N}"
-        exit 1
-    fi
+            if [ ! -d $1 ];then
+                echo -e "${C_RED}Directory $1 does not exists ${S_N}"
+                exit 1
+            fi
 
-    HOME_DIR=$1
-fi
+            HOME_DIR=$1
+            shift
+            ;;
+        --update)
+            IS_UPDATE=1
+            shift
+            ;;
+        *)
+            # Unknown option, ignore it or handle it as needed
+            ;;
+    esac
+done
+
 
 read -p "UVMEnv will be installed at $HOME_DIR, continue? (y/n): " opc
 if [ "$opc" != "Y" ] && [ "$opc" != "y" ]; then
@@ -74,8 +88,7 @@ function main(){
     fi
 
     # Firstly, get parameter 'update' value
-     if [ "$1" == "update" ];then
-        IS_UPDATE=1
+    if [ "$IS_UPDATE" -eq 1 ]; then
         final_msg="UPDATED"
     fi
 
@@ -105,21 +118,24 @@ function main(){
 
     # Create UVMEnv main structure if is installation and remove bases/tools from structure is is update
     if [[ $IS_UPDATE -eq 1 ]]; then
-        updateUVMEnvRepository
+        #updateUVMEnvRepository
         rm -rf $BASES_DIR
         rm -rf $TOOLS_DIR
+        rm -rf $HOME_DIR/bin
+        createUVMEnvInstallDirs
     else
         createUVMEnvInstallDirs
     fi
     
-    installExternalDependencies
+    #installExternalDependencies
 
     installUVMEnv   
 
     #Finally, show message
     printInfo "UVMEnv has been succesfully $final_msg"
-    printWarning "You must add this line to your .bashrc:"
-    printWarning "export UVMENV_HOME=$HOME_DIR/bin"
+    printWarning "You must add these lines on your .bashrc:"
+    printWarning "export PATH=$HOME_DIR/bin:\$PATH"
+    printWarning "export UVMENV_HOME=$HOME_DIR"
 }
 
 # =============================================
@@ -329,8 +345,8 @@ function installPythonDependencies(){
         exit 1
     fi
 
-    python$PY_VERSION -m pip install $upgrade "cocotb<2"
-    python$PY_VERSION -m pip install $upgrade "cocotb-coverage<2"
+    python$PY_VERSION -m pip install $upgrade "cocotb"
+    python$PY_VERSION -m pip install $upgrade "cocotb-coverage"
     python$PY_VERSION -m pip install $upgrade pyuvm
     python$PY_VERSION -m pip install $upgrade pyfiglet
     python$PY_VERSION -m pip install $upgrade colorama

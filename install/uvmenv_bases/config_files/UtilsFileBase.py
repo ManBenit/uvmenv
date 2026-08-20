@@ -4,7 +4,7 @@
 
 import json
 from types import SimpleNamespace
-from cocotb.binary import BinaryValue
+from cocotb.types import LogicArray
 
 
 # Function to load configuration from config.json file.
@@ -18,9 +18,12 @@ def load_config(filename):
 # Function to get binary representation from certain integer
 # @param [value]: Integer value to convert.
 # @param [bitsize]: Signal bit length.
-def to_bin_repr(value: int, bitsize: int) -> BinaryValue:
-    twos_complement_value = value & ((1 << bitsize) - 1)
-    return BinaryValue(value=twos_complement_value, n_bits=bitsize, bigEndian=False)
+def to_bin_repr(value: int, bitsize: int) -> LogicArray:
+    mask = (1 << bitsize) - 1
+    if value < 0:
+        return LogicArray.from_signed(value, bitsize)
+    else:
+        return LogicArray.from_unsigned(value & mask, bitsize)
 
 
 # Function handle special values like 'x', 'z', 'u', 'w' in transaction signals.
