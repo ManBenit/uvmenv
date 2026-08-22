@@ -148,7 +148,11 @@ void createNewEnv(const string& projectName, const string& topModule){
     json configContent;
     configContent["id"] = base64_encode("uvm:" + formattedPName + ":env");
     configContent["name"] = formattedPName;
-    configContent["simtool"] = "icarus";
+    configContent["simulation"] = {
+        {"tool", "icarus"},
+        {"time_unit", "1ns"},
+        {"time_prec", "1ps"}
+    };
     configContent["dut_design"] = {
         {"type", "combinatorial"},
         {"top_module", topModule},
@@ -202,37 +206,48 @@ void runCurrentProject(const string& waveLevel){
     string pyVersion = getPythonVersion();
     string vcdLevel = waveLevel == "" ? "1" : waveLevel;
 
-    // Leer el archivo de configuración JSON
+    // Read JSON config file (config.json)
     ifstream f(CONFIG_FILE);
     json config = json::parse(f);
 
-    // Extraer valores del JSON (equivalente a jq)
-    string simtool = config.value("simtool", "icarus");
+    // Extract necessary values
     string top_module = config["dut_design"].value("top_module", "unknown");
-    string projName = config.value("name", "unknown");
+    string projName   = config.value("name", "unknown");
 
-    // Crear/Sobrescribir el archivo Makefile
+    string simtool    = config["simulation"].value("tool", "icarus");
+    string time_unit  = config["simulation"].value("time_unit", "1ns");
+    string time_prec  = config["simulation"].value("time_prec", "1ps");
+
+    // Create/Override Makefile
     ofstream makefile("Makefile");
 
     if (makefile.is_open()) {
-        makefile << "CWD = $(shell pwd)\n";
-        makefile << "HDL_SRC = " << simtool << "\n";
-        makefile << "SIM ?= " << simtool << "\n";
-        makefile << "\n\n";
-        
-        makefile << "VERILOG_SOURCES = " << rtlFiles << "\n";
-        makefile << "\n\n";
-        
-        makefile << "MODULE = Top" << projName << "\n";
-        makefile << "TOPLEVEL = " << top_module << "\n";
+        makefile << "CWD = $(shell pwd)" << "\n";
+        makefile << "SRC = " << rtlFiles << "\n";
         makefile << "TOPLEVEL_LANG ?= verilog\n";
-        //makefile << (   stof(pyVersion) >= 3.11 ? VENV_DIR + PATH_SEP + "bin" + PATH_SEP + "python" + pyVersion : "python"+pyVersion   );
-        makefile << "#COCOTB_HDL_TIMEOUT = 1ns\n";
-        makefile << "#COCOTB_HDL_TIMEPRECISION = 1ns\n";
         makefile << "\n\n";
-        
-        makefile << "include $(shell cocotb-config --makefiles)/Makefile.sim\n";
-        makefile << "\n";
+
+        makefile << "SIM = " << simtool << "\n";
+        makefile << "TOPLEVEL = " << top_module << "\n";
+        makefile << "MODULE = Top" << projName << "\n";
+        makefile << "\n\n";
+
+        makefile << "COCOTB_HDL_TIMEUNIT = " << time_unit << "\n";
+        makefile << "COCOTB_HDL_TIMEPRECISION = " << time_prec << "\n";
+        makefile << "export WAVES = 1" << "\n";
+        makefile << "\n\n";
+
+        makefile << "ifeq ($(SIM),verilator)" << "\n";
+        makefile << "    EXTRA_ARGS += --timescale " << time_unit << "/" << time_prec << " --trace -Wno-WIDTHEXPAND -Wno-fatal" << "\n";
+        makefile << "    VERILOG_SOURCES = $(SRC)" << "\n";
+        makefile << "else" << "\n";
+        makefile << "    $(shell echo \"\\`timescale " << time_unit << "/" << time_prec << "\" > timescale.v)" << "\n";
+        makefile << "    VERILOG_SOURCES = $(CWD)/timescale.v $(SRC)" << "\n";
+        makefile << "endif" << "\n";
+        makefile << "\n\n";
+
+        makefile << "include $(shell cocotb-config --makefiles)/Makefile.sim" << "\n";
+        makefile << "\n\n";
 
         makefile.close();
     } else {
@@ -249,46 +264,37 @@ void runCurrentProject(const string& waveLevel){
     sys.attr("path").attr("append")(DUT_HDL_DIR);
 
     filesystem::current_path(DUT_HDL_DIR);
-    
-    // Get necessary data for VCD writer
-    string topModule = config["dut_design"]["top_module"];
 
     const string& rtlFullFiles = trim( execCmdReturn(getScript("sys_commands") + "getRTLFullFiles " + DUT_HDL_DIR) );
     string topFile = "";
 
     for(const string& s: splitString(rtlFullFiles, ' ')){
         // s.contains(topModule) // Since C++23
-        if(s.find(topModule) != string::npos){
+        if(s.find(top_module) != string::npos){
             topFile = s;
             break;
         }
     }
-
-    // Copy VCD writer file
-    if( !filesystem::exists("vcdWriter.py") )
-        filesystem::copy(VCD_WRHELPER_FILEBASE, "vcdWriter.py");
-        
-    // Run VCD writer (delete endmodule and write VCD dump)
-    runVcdWriter(topFile, vcdLevel, "1");
-    runVcdWriter(topFile, vcdLevel, "2");
     
     filesystem::current_path(PROJECT_DIR);
-
-
 
     execCmdSimple(getScript("python_control") + "runUVMEnvProject " + PROJECT_DIR + " " + pyVersion);
 
-
-    // Run VCD writer (delete written code and rewrite endmodule)
-    filesystem::current_path(DUT_HDL_DIR);
-    runVcdWriter(topFile, vcdLevel, "3");
-    
-    // Remove VCD writer
-    filesystem::remove("vcdWriter.py");
-
-    filesystem::current_path(PROJECT_DIR);
-
-    filesystem::rename("dut_signals.vcd", joinStr({OUTSIM_DIR, "dut_signals.vcd"}, PATH_SEP));
+    if(simtool == "icarus"){
+        filesystem::rename(
+            joinStr({"sim_build", top_module + ".fst"}, PATH_SEP),
+            joinStr({OUTSIM_DIR, "dut_signals.vcd"}, PATH_SEP)
+        );
+    }
+    else if(simtool == "verilator"){
+        filesystem::rename(
+            "dump.vcd",
+            joinStr({OUTSIM_DIR, "dut_signals.vcd"}, PATH_SEP)
+        );
+    }
+    else{
+        printWarning("Simulation tool not recognized. No waveform file was generated.");
+    }
     // ==================================================================
 
 
@@ -455,19 +461,6 @@ vector<Signal> runSignalsGetter(const string& module, char writeOption, char opt
         printError(err.str());
         return {};
     }
-}
-
-
-void runVcdWriter(const string& topFile, const string& vcdLevel, const string& runningMode){
-    try{
-        py::module_ readingPy = py::module_::import("vcdWriter");
-        readingPy.attr("write_vcd")(topFile, vcdLevel, runningMode);
-    } catch (py::error_already_set &e) {
-        stringstream err("[Error de Python (vcd)] ");
-        err << e.what() << "\n";
-        printError(err.str());
-    }
-
 }
 
 

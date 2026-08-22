@@ -29,7 +29,6 @@ which will be replaced through the user interface.
 | **run.sh**                   |                          | ✅                       |                                  |                                  |                                      |
 | **uninstall.sh**             |                          | ✅                       |                                  |                                  |                                      |
 | **getSignalsBase.py**        | comnd                    |                          |                                  |                                  |                                      |
-| **writeVcdPart**             | comnd                    |                          |                                  |                                  |                                      |
 | **AgentBase.py**             | comp                     |                          | ✅                               |                                  |                                      |
 | **AgentCoverageBase.py** | comp                |                          |                                  |                                  | ✅                                   |
 | **AgentDriverBase.py**       | comp                     |                          |                                  | ✅                               |                                      |

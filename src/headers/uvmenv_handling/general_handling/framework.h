@@ -26,7 +26,6 @@ bool requireProject();
 bool requireDUT();
 bool requireArgs(std::initializer_list<std::string> args, const std::string& msg);
 std::vector<Signal> runSignalsGetter(const std::string& module, char writeOption, char option);
-void runVcdWriter(const std::string& topFile, const std::string& vcdLevel, const std::string& runningMode);
 
 #endif // FRAMEWORK_H
 

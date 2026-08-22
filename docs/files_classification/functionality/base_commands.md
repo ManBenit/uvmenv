@@ -16,8 +16,3 @@ They are named following the `camel_case` convention.
   - `i`: Intern option. Performs the same action as the `r` option but avoids the human-readable format, printing only the type, name, and width of each signal. This is leveraged in the command-line interface to generate different UVM components.
   
   - default: Within the user interface, this option is assigned the value `n`. It corresponds to the main functionality, which consists of reading  DUT signals and their properties, then printing the information on human-readable format.
-
-
-- `writeVcdPart.py`: It is an auxiliary tool for writing/deleting, at the end of the top module code, the code fragment required for writing waveforms using Icarus.
-
-

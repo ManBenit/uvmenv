@@ -57,6 +57,8 @@ function cleanProject(){
     rm -rf $1/sim_build
     rm -f $1/results.xml
     rm -f $1/Makefile
+    rm -f $1/dump.vcd
+    rm -f $1/timescale.v
 }
 
 # $1: File of iteration

@@ -2,6 +2,7 @@
 
 HOME_DIR="${HOME}"
 IS_UPDATE=0
+PROC_MESSAGE="INSTALLED"
 
 # =============================================
 # Bash colors
@@ -37,6 +38,7 @@ for arg in "$@"; do
             ;;
         --update)
             IS_UPDATE=1
+            PROC_MESSAGE="UPDATED"
             shift
             ;;
         *)
@@ -46,7 +48,7 @@ for arg in "$@"; do
 done
 
 
-read -p "UVMEnv will be installed at $HOME_DIR, continue? (y/n): " opc
+read -p "UVMEnv will be $PROC_MESSAGE at $HOME_DIR, continue? (y/n): " opc
 if [ "$opc" != "Y" ] && [ "$opc" != "y" ]; then
     echo -e "${C_GEEN}Aborted installation ${S_N}"
     exit 0;
@@ -76,7 +78,6 @@ function main(){
     set -eE
     trap 'handleError ${LINENO} "$BASH_COMMAND" $?' ERR
 
-    local final_msg="INSTALLED"
     PKG_MNGR=$(get_pkg_mngr)
     PY_VERSION=$(python3 --version | awk '{print $2}' | cut -d'.' -f1-2)
 
@@ -85,11 +86,6 @@ function main(){
     if [ "$EUID" -eq 0 ]; then
         printWarning "You should run as NON root, only write root password if necessary during installation"
         return 1
-    fi
-
-    # Firstly, get parameter 'update' value
-    if [ "$IS_UPDATE" -eq 1 ]; then
-        final_msg="UPDATED"
     fi
 
     # PRE-INSTALLING PROCESS
@@ -129,10 +125,10 @@ function main(){
     
     #installExternalDependencies
 
-    installUVMEnv   
+    installUVMEnv
 
     #Finally, show message
-    printInfo "UVMEnv has been succesfully $final_msg"
+    printInfo "UVMEnv has been succesfully $PROC_MESSAGE"
     printWarning "You must add these lines on your .bashrc:"
     printWarning "export PATH=$HOME_DIR/bin:\$PATH"
     printWarning "export UVMENV_HOME=$HOME_DIR"
