@@ -40,6 +40,18 @@ for arg in "$@"; do
             IS_UPDATE=1
             PROC_MESSAGE="UPDATED"
             shift
+
+            case $1 in
+                all);;
+                verilator);;
+                icarus);;
+                gtkwave);;
+                cocotb);;
+                pyuvm);;
+                *)
+                    # Unknown option, ignore it or handle it as needed
+                    ;;
+            esac
             ;;
         *)
             # Unknown option, ignore it or handle it as needed

@@ -36,7 +36,7 @@ int ComponentCtxHandler::cmdComponent(const vector<string>& args, const string& 
     if(string(args[1]) == "create")      return this->runCreate(args, test, env, module, typeOrComp); // type
     else if(string(args[1]) == "delete") return this->runDelete(args, test, env);
     else if(string(args[1]) == "edit")   return this->runEdit(args, test, env, typeOrComp); // comp
-    else if(string(args[1]) == "list")   return this->runList(args, test, env);
+    else if(string(args[1]) == "list")   return this->runList(args, test, env, typeOrComp);
     else {
         printError("[component] Unknown opt: " + string(args[1]));
         return 5;
@@ -108,7 +108,7 @@ int ComponentCtxHandler::runCreate(const vector<string>& args, const string& tes
     return 0;
 }
 
-int ComponentCtxHandler::runList(const vector<string>& args, const string& test, const string& env){
+int ComponentCtxHandler::runList(const vector<string>& args, const string& test, const string& env, const string& type){
     // ================================
     // Double validation of args
     // Required [3]
@@ -180,7 +180,10 @@ int ComponentCtxHandler::runList(const vector<string>& args, const string& test,
     else if( comp == "rtlsig" ){
         stringstream sigInfo;
 
-        for(const auto& [module, signalProps] : listRtlSignals()) {
+        const bool isRefresh = toLowerCase(type) == "r" || toLowerCase(type) == "refresh";
+        const auto& dutSignals = isRefresh ? refreshRtlSignals() : listRtlSignals();
+
+        for(const auto& [module, signalProps] : dutSignals) {
             // Create file content only with top module signals
             printInfo("\tSignals of " + module);
             for (const auto& signal : signalProps) {

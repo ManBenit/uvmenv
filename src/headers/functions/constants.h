@@ -32,8 +32,8 @@ using namespace std;
     const string OS_NAME = "Windows";
     const string USER_VAR = getenv("USERNAME");
     const string PATH_SEP = "\\";
-    const string SCRIPTS_DIR = "\\scripts\\batch";
     const string SCRIPTS_EXT = ".bat";
+    const string SCRIPTS_DIR = "\\scripts\\batch";
     const string HOME_DIR = getenv("UVMENV_HOME");
     const string INSTALL_DIR = HOME_DIR + "\\.UVMEnv";
     const string VENV_DIR = HOME_DIR + "\\.UVMEnv_virtualenv";
@@ -41,8 +41,8 @@ using namespace std;
     const string OS_NAME = "MacOS";
     const string USER_VAR = getenv("USER");
     const string PATH_SEP = "/";
-    const string SCRIPTS_DIR = "/scripts/bash";
     const string SCRIPTS_EXT = ".sh";
+    const string SCRIPTS_DIR = "/scripts/bash";
     const string HOME_DIR = getenv("UVMENV_HOME");
     const string INSTALL_DIR = HOME_DIR + "/.UVMEnv";
     const string VENV_DIR = HOME_DIR + "/.UVMEnv_virtualenv";
@@ -50,17 +50,17 @@ using namespace std;
     const string OS_NAME = "Linux";
     const string USER_VAR = getenv("USER");
     const string PATH_SEP = "/";
-    //const string SCRIPTS_DIR = "/scripts/bash";
     const string SCRIPTS_EXT = ".sh";
-    // const string HOME_DIR = getenv("UVMENV_HOME");
-    // const string INSTALL_DIR = HOME_DIR + "/.UVMEnv";
-    // const string VENV_DIR = HOME_DIR + "/.UVMEnv_virtualenv";
+    const string SCRIPTS_DIR = "/scripts/bash";
+    const string HOME_DIR = getenv("UVMENV_HOME");
+    const string INSTALL_DIR = HOME_DIR + "/.UVMEnv";
+    const string VENV_DIR = HOME_DIR + "/.UVMEnv_virtualenv";
 #elif defined(__unix__)
     const string OS_NAME = "Unix";
     const string USER_VAR = getenv("USER");
     const string PATH_SEP = "/";
-    const string SCRIPTS_DIR = "/scripts/bash";
     const string SCRIPTS_EXT = ".sh";
+    const string SCRIPTS_DIR = "/scripts/bash";
     const string HOME_DIR = getenv("UVMENV_HOME");
     const string INSTALL_DIR = HOME_DIR + "/.UVMEnv";
     const string VENV_DIR = HOME_DIR + "/.UVMEnv_virtualenv";
@@ -68,8 +68,8 @@ using namespace std;
     const string OS_NAME = "Posix";
     const string USER_VAR = getenv("USER");
     const string PATH_SEP = "/";
-    const string SCRIPTS_DIR = "/scripts/bash";
     const string SCRIPTS_EXT = ".sh";
+    const string SCRIPTS_DIR = "/scripts/bash";
     const string HOME_DIR = getenv("UVMENV_HOME");
     const string INSTALL_DIR = HOME_DIR + "/.UVMEnv";
     const string VENV_DIR = HOME_DIR + "/.UVMEnv_virtualenv";
@@ -82,22 +82,22 @@ using namespace std;
 // =============================================
 // Block for testing purposes
 // =============================================
-const string HOME_DIR                  = "/home/" + USER_VAR + "/Github/uvmenv/install"; // Delete after dev
-const string INSTALL_DIR               = HOME_DIR; // Modify to HOME_DIR + PATH_SEP + ".UVMEnv";
-const string VENV_DIR                  = "/home/" + USER_VAR + "/.UVMEnv_virtualenv";// Modify to HOME_DIR + PATH_SEP + ".UVMEnv_virtualenv";
-const string TOOLS_DIR                 = INSTALL_DIR + PATH_SEP + "uvmenv_tools";
-const string BASES_DIR                 = INSTALL_DIR + PATH_SEP + "uvmenv_bases";
-const string SCRIPTS_DIR               = "/uvmenv_scripts/bash";
+// const string SCRIPTS_DIR               = "/uvmenv_scripts/bash";
+// const string HOME_DIR                  = "/home/" + USER_VAR + "/Github/uvmenv/install"; // Delete after dev
+// const string INSTALL_DIR               = HOME_DIR; // Modify to HOME_DIR + PATH_SEP + ".UVMEnv";
+// const string VENV_DIR                  = "/home/" + USER_VAR + "/.UVMEnv_virtualenv";// Modify to HOME_DIR + PATH_SEP + ".UVMEnv_virtualenv";
+// const string TOOLS_DIR                 = INSTALL_DIR + PATH_SEP + "uvmenv_tools";
+// const string BASES_DIR                 = INSTALL_DIR + PATH_SEP + "uvmenv_bases";
 // =============================================
 
 
 // TODO: Finish to clear unused constants
-//************** DIRECTORIES **************//
-
-
+// =============================================
+// Directories
+// =============================================
 // Repository
-// const string TOOLS_DIR                 = INSTALL_DIR + PATH_SEP + "tools";
-// const string BASES_DIR                 = INSTALL_DIR + PATH_SEP + "bases";
+const string TOOLS_DIR                 = INSTALL_DIR + PATH_SEP + "tools";
+const string BASES_DIR                 = INSTALL_DIR + PATH_SEP + "bases";
 const string BASES_REPRESENT_DIR       = BASES_DIR + PATH_SEP + "representative_files";
 const string BASES_COMPONENT_DIR       = BASES_DIR + PATH_SEP + "component_files";
 const string BASES_COMMAND_DIR         = BASES_DIR + PATH_SEP + "command_files";
@@ -124,7 +124,9 @@ const string REFMODEL_DIR              = ENVIRONMENT_DIR + PATH_SEP + "RefMdl";
 const string MISCELANEOUS_DIR          = TBENCH_DIR + PATH_SEP + "Misces";
 
 
-//************** FILES ************** //
+// =============================================
+// Files
+// =============================================
 const string CONFIG_FILE               = PROJECT_DIR + PATH_SEP + "config.json";
 const string UTILS_FILE                = PROJECT_DIR + PATH_SEP + "utils.py";
 const string PATHS_FILE                = PROJECT_DIR + PATH_SEP + "paths.py";
@@ -135,7 +137,9 @@ const string ENVIRONMENT_FILE          = ENVIRONMENT_DIR + PATH_SEP + "Environme
 const string TEST_FILE                 = TBENCH_DIR + PATH_SEP + "Test.py";
 const string TOP_FILE_PREFIX           = PROJECT_DIR + PATH_SEP + "Top";
 
-// *** BASES *** //
+// =============================================
+// Bases
+// =============================================
 // Command files
 const string PORT_GETTER_FILEBASE      = BASES_COMMAND_DIR + PATH_SEP + " getPortsBase.py";
 const string SIGNAL_GETTER_FILEBASE    = BASES_COMMAND_DIR + PATH_SEP + "getSignalsBase.py";

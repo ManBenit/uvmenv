@@ -76,6 +76,10 @@ unordered_map<string, vector<Signal>> listRtlSignals(){
     return getDUTSignals('n');
 }
 
+unordered_map<string, vector<Signal>> refreshRtlSignals(){
+    return getDUTSignals('r');
+}
+
 vector<string> listRtlModules(){
     // TODO: highlight top module
     vector<string> existingModules;

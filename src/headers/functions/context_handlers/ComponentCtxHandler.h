@@ -10,7 +10,7 @@ class ComponentCtxHandler {
 
     private:
     int runCreate(const std::vector<std::string>& args, const std::string& test, const std::string& env, const std::string& module, const std::string& type);
-    int runList(const std::vector<std::string>& args, const std::string& test, const std::string& env);
+    int runList(const std::vector<std::string>& args, const std::string& test, const std::string& env, const std::string& type);
     int runDelete(const std::vector<std::string>& args, const std::string& test, const std::string& env);
     int runEdit(const std::vector<std::string>& args, const std::string& test, const std::string& env, const std::string& agntComponent);
     

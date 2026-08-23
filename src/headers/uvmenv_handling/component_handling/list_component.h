@@ -30,6 +30,7 @@ std::vector<std::string> listScoreboards       (const std::string& testName, con
 // UVMEnv characteristics
 std::vector<std::string> listMiscelaneous      (const std::string& testName);
 std::unordered_map<std::string, std::vector<Signal>> listRtlSignals();
+std::unordered_map<std::string, std::vector<Signal>> refreshRtlSignals();
 std::vector<std::string> listRtlModules();
 
 

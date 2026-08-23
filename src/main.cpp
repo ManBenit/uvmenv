@@ -40,6 +40,7 @@ int main (int argc, char *argv[]) {
             env = argv[i+1];
             i++;
         }
+        // TODO: Add functionality to this option to set wave level for GTKWave
         else if(string(argv[i]) == "--wave-level"){
             wlevel = argv[i+1];
             i++;
