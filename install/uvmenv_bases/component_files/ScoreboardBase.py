@@ -17,7 +17,10 @@ from SignalsReader import get_dut_signames
 from UVMEnvReport import report
 from utils import config
 ISDUTSEQ = config.dut_design.type == 'sequential'
-
+CLOCK_NAME        =     config.dut_cs4seq.clock_name
+CLOCK_EDGE_ACT    =     config.dut_cs4seq.clock_edge_act
+RESET_NAME        =     config.dut_cs4seq.reset_name
+RESET_EDGE_ACT    =     config.dut_cs4seq.reset_edge_act
 
 
 class CLASS_NAME(uvm_scoreboard):

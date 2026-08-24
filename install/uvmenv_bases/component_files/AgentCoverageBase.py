@@ -34,6 +34,7 @@ class Coverage(uvm_subscriber):
         self.__num_transactions = 0
 
     # Write as many CoverPoints and CoverCross as you need
+    # Remove coverage point for clock and reset signals on sequential DUTs, because they are handled by Cocotb triggers.
 COVER_POINTS
     def __sample_coverage(self, tr: SitDefault):
         pass

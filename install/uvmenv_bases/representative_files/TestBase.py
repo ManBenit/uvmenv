@@ -15,6 +15,10 @@ from cocotb.triggers import Timer, ClockCycles
 # ====================
 from utils import config
 ISDUTSEQ = config.dut_design.type == 'sequential'
+CLOCK_NAME        =     config.dut_cs4seq.clock_name
+CLOCK_EDGE_ACT    =     config.dut_cs4seq.clock_edge_act
+RESET_NAME        =     config.dut_cs4seq.reset_name
+RESET_EDGE_ACT    =     config.dut_cs4seq.reset_edge_act
 
 
 
@@ -92,7 +96,7 @@ class CLASS_NAME(uvm_test):
         # 1. To wait for the last output.
         # ====================================================
         if ISDUTSEQ:
-            await ClockCycles(self.dut.clk, 1)
+            await ClockCycles( getattr(self.dut, CLOCK_NAME, None), 1 )
 
         self.drop_objection()
 

@@ -150,17 +150,20 @@ void createNewEnv(const string& projectName, const string& topModule){
     configContent["name"] = formattedPName;
     configContent["simulation"] = {
         {"tool", "icarus"},
-        {"time_unit", "1ns"},
-        {"time_prec", "1ps"}
+        {"time_unit_mag", 1},
+        {"time_unit",     "ns"},
+        {"time_prec_mag", 1},
+        {"time_prec",     "ps"}
     };
     configContent["dut_design"] = {
         {"type", "combinatorial"},
-        {"top_module", topModule},
-        {"sim_units", "ns"}
+        {"top_module", topModule}
     };
     configContent["dut_cs4seq"] = {
-        {"clock_name", "clk"},
-        {"reset_name", "rst"},
+        {"clock_name",     "clk"},
+        {"clock_edge_act", "high"},
+        {"reset_name",     "rst"},
+        {"reset_edge_act", "high"},
         {"sync_cycles", 1},
         {"clock_period", 1},
         {"cycles4wait_reset", 1}
@@ -214,9 +217,15 @@ void runCurrentProject(const string& waveLevel){
     string top_module = config["dut_design"].value("top_module", "unknown");
     string projName   = config.value("name", "unknown");
 
-    string simtool    = config["simulation"].value("tool", "icarus");
-    string time_unit  = config["simulation"].value("time_unit", "1ns");
-    string time_prec  = config["simulation"].value("time_prec", "1ps");
+    string simtool        = config["simulation"].value("tool", "icarus");
+    int time_unit_mag     = config["simulation"].value("time_unit_mag", 1);
+    string time_unit      = config["simulation"].value("time_unit",     "ns");
+    int time_prec_mag     = config["simulation"].value("time_prec_mag", 1);
+    string time_prec      = config["simulation"].value("time_prec",     "ps");
+
+    stringstream time_unit_stream, time_prec_stream;
+    time_unit_stream << time_unit_mag << time_unit;
+    time_prec_stream << time_prec_mag << time_prec;
 
     // Create/Override Makefile
     ofstream makefile("Makefile");
@@ -232,16 +241,16 @@ void runCurrentProject(const string& waveLevel){
         makefile << "MODULE = Top" << projName << "\n";
         makefile << "\n\n";
 
-        makefile << "COCOTB_HDL_TIMEUNIT = " << time_unit << "\n";
-        makefile << "COCOTB_HDL_TIMEPRECISION = " << time_prec << "\n";
+        makefile << "COCOTB_HDL_TIMEUNIT = " << time_unit_stream.str() << "\n";
+        makefile << "COCOTB_HDL_TIMEPRECISION = " << time_prec_stream.str() << "\n";
         makefile << "export WAVES = 1" << "\n";
         makefile << "\n\n";
 
         makefile << "ifeq ($(SIM),verilator)" << "\n";
-        makefile << "    EXTRA_ARGS += --timescale " << time_unit << "/" << time_prec << " --trace -Wno-WIDTHEXPAND -Wno-fatal" << "\n";
+        makefile << "    EXTRA_ARGS += --timescale " << time_unit_stream.str() << "/" << time_prec_stream.str() << " --trace -Wno-WIDTHEXPAND -Wno-fatal" << "\n";
         makefile << "    VERILOG_SOURCES = $(SRC)" << "\n";
         makefile << "else" << "\n";
-        makefile << "    $(shell echo \"\\`timescale " << time_unit << "/" << time_prec << "\" > timescale.v)" << "\n";
+        makefile << "    $(shell echo \"\\`timescale " << time_unit_stream.str() << "/" << time_prec_stream.str() << "\" > timescale.v)" << "\n";
         makefile << "    VERILOG_SOURCES = $(CWD)/timescale.v $(SRC)" << "\n";
         makefile << "endif" << "\n";
         makefile << "\n\n";
