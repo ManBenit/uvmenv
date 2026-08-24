@@ -1,3 +1,6 @@
+## Warning
+Examples into this path are compatible with version 2.0 but they no have the current version of code, please consider this difference.
+
 ## Examples section
 Here there are 10 example projects done by `UVMEnv`, proved and correctly working, each one ilustrates one acurrent topic of fremework:
 
