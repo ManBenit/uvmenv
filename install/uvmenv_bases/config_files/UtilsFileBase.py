@@ -2,16 +2,32 @@
 ###    CONFIG FILE    ###
 #########################
 
-import json
+import yaml
 from types import SimpleNamespace
 from cocotb.types import LogicArray
 
+
+# Method to convert a dictionary into namespace data, for easier management in dev and correct work of load_config.
+# @param [d]: Dictionary to be converted.
+# @return: SimpleNamespace object if dictionary, List if .yamls contains list (-) or simple type.
+def __dict_to_namespace(data):
+    if isinstance(data, dict):
+        return SimpleNamespace(**{k: __dict_to_namespace(v) for k, v in data.items()})
+    elif isinstance(data, list):
+        return [__dict_to_namespace(item) for item in data]
+    else:
+        return data
 
 # Function to load configuration from config.json file.
 # @param [filename]: Path of .json file.
 def load_config(filename):
     with open(filename, 'r') as config_file:
-        config = json.load(config_file, object_hook=lambda d: SimpleNamespace(**d))
+        # Load YAML as standar dict (safe_load)
+        config_dict = yaml.safe_load(config_file)
+        
+        # Make soncersion to SimpleNamespace
+        config = __dict_to_namespace(config_dict)
+        
     return config
 
 
@@ -35,5 +51,5 @@ def process_unkn_val(value):
     elif 'w' in str(value): return 'W'
 
 
-config = load_config('config.json')
+config = load_config('config.yml')
 
