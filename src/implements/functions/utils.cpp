@@ -12,12 +12,10 @@
 #include <algorithm>
 #include <variant>
 #include <initializer_list>
-#include <nlohmann/json.hpp>
 #include <yaml-cpp/yaml.h>
 
 #include "../../headers/functions/constants.h"
 #include "../../headers/functions/utils.h"
-using json = nlohmann::ordered_json;
 namespace fs = std::filesystem;
 using t_tojoin = std::variant<std::string, char, int>;
 using namespace std;
@@ -310,31 +308,6 @@ string readFile(const string filePath) {
     string content((istreambuf_iterator<char>(inFile)), istreambuf_iterator<char>());
     inFile.close();
     return content;
-}
-
-void writeFileJson(const string& filePath, const json& jsonData) {
-    ofstream file(filePath);
-    fs::path p(filePath);
-
-    if (!file.is_open()) {
-        throw runtime_error("Could not open JSON file ("+p.filename().string()+") for writing: " + filePath);
-    }
-
-    file << jsonData.dump(4); // Pretty print with 4 spaces indentation
-    file.close();
-}
-
-json readFileJson(const string& filePath) {
-    ifstream file(filePath);
-    fs::path p(filePath);
-
-    if (!file.is_open()) {
-        throw runtime_error("Could not open JSON file ("+p.filename().string()+"): " + filePath);
-    }
-    // json jsonData;
-    // file >> jsonData;
-    // return jsonData;
-    return json::parse(file);
 }
 
 void writeFileYaml(const std::string& filePath, YAML::Node& root) {

@@ -6,11 +6,11 @@
 #include <array>
 #include <fstream>
 #include <unordered_map>
-#include <nlohmann/json.hpp>
 #include <yaml-cpp/yaml.h>
 #include <pybind11/embed.h>
 #include <pybind11/stl.h>
 
+#include "../../../headers/uvmenv_handling/general_handling/pconfig_handling.h"
 #include "../../../headers/uvmenv_pseudo/components/Top.h"
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
 #include "../../../headers/uvmenv_handling/general_handling/uvmenv_aux.h"
@@ -18,7 +18,6 @@
 #include "../../../headers/functions/constants.h"
 
 using namespace std;
-using json = nlohmann::ordered_json;
 namespace py = pybind11;
 
 // ===========================================================
@@ -39,17 +38,22 @@ PYBIND11_EMBEDDED_MODULE(signalsGetter, m) {
 bool isUVMEnvProject(const string& path){
     vector<string> pdirParts = splitString( path, PATH_SEP.at(0) );
     string projectIdExpected = "uvm:" + pdirParts[pdirParts.size()-1] + ":env";
-    string configFileName = joinStr({path, "config.json"}, PATH_SEP);
+    string configFileName = joinStr({path, "config.yml"}, PATH_SEP);
 
-    
+    // ==================================
+    // Warning for config.json
+    // ==================================
+    string oldConfigFileName = joinStr({path, "config.json"}, PATH_SEP);
+    if( filesystem::exists(oldConfigFileName) ){
+        printWarning(pdirParts[pdirParts.size()-1] + " - old config file and bases found. Consider a refactor.");
+    }
+    // ==================================
+
     if( !filesystem::exists(configFileName) ){
         return false;
     }
-
-    ifstream config_file(configFileName);
-    json configFileData = json::parse(config_file);
     
-    return base64_decode( configFileData["id"] ) == projectIdExpected;
+    return base64_decode( getProjectId(path) ) == projectIdExpected;
 } 
 
 
@@ -144,41 +148,38 @@ void createNewEnv(const string& projectName, const string& topModule){
     );
     filesystem::create_directory("UVM_TB");
 
+    // ==================================================================
     // Create config file
-    json configContent;
-    configContent["id"] = base64_encode("uvm:" + formattedPName + ":env");
-    configContent["name"] = formattedPName;
-    configContent["simulation"] = {
-        {"tool", "icarus"},
-        {"time_unit_mag", 1},
-        {"time_unit",     "ns"},
-        {"time_prec_mag", 1},
-        {"time_prec",     "ps"}
-    };
-    configContent["dut_design"] = {
-        {"type", "combinatorial"},
-        {"top_module", topModule}
-    };
-    configContent["dut_cs4seq"] = {
-        {"clock_name",     "clk"},
-        {"clock_edge_act", "high"},
-        {"reset_name",     "rst"},
-        {"reset_edge_act", "high"},
-        {"sync_cycles", 1},
-        {"clock_period", 1},
-        {"cycles4wait_reset", 1}
-    };
-    configContent["uvm_components"] = {
-        {"itface", {
-            {"bfm_impl", "BfmDefault"}
-        }},
-        {"refmdl", {
-            {"refmdl_impl", "RefDefault"}
-        }}
-    };
-    writeFileJson("config.json", configContent);
+    // ==================================================================
+    YAML::Node configContent;
 
+    configContent["id"]                              = base64_encode("uvm:" + formattedPName + ":env");
+    configContent["name"]                            = formattedPName;
+
+    configContent["simulation"]["tool"]              = "icarus";
+    configContent["simulation"]["time_unit_mag"]     = 1;
+    configContent["simulation"]["time_unit"]         = "ns";
+    configContent["simulation"]["time_prec_mag"]     = 1;
+    configContent["simulation"]["time_prec"]         = "ps";
+
+    configContent["dut_design"]["type"]              = "combinatorial";
+    configContent["dut_design"]["top_module"]        = topModule;
+
+    configContent["dut_cs4seq"]["clock_name"]        = "clk";
+    configContent["dut_cs4seq"]["clock_edge_act"]    = "high";
+    configContent["dut_cs4seq"]["reset_name"]        = "rst";
+    configContent["dut_cs4seq"]["reset_edge_act"]    = "high";
+    configContent["dut_cs4seq"]["sync_cycles"]       = 1;
+    configContent["dut_cs4seq"]["clock_period"]      = 1;
+    configContent["dut_cs4seq"]["cycles4wait_reset"] = 1;
+
+    configContent["uvm_components"]["itface"]["bfm_impl"]    = "BfmDefault";
+    configContent["uvm_components"]["refmdl"]["refmdl_impl"] = "RefDefault";
+    writeFileYaml("config.yml", configContent);
+
+    // ==================================================================
     // Create project tree file
+    // ==================================================================
     YAML::Node topNode;
     topNode["top"]["tests"] = YAML::Null;
     topNode["top"]["itfaces"] = YAML::Null;
@@ -209,19 +210,15 @@ void runCurrentProject(const string& waveLevel){
     string pyVersion = getPythonVersion();
     string vcdLevel = waveLevel == "" ? "1" : waveLevel;
 
-    // Read JSON config file (config.json)
-    ifstream f(CONFIG_FILE);
-    json config = json::parse(f);
-
     // Extract necessary values
-    string top_module = config["dut_design"].value("top_module", "unknown");
-    string projName   = config.value("name", "unknown");
+    string top_module = getProjectDutDesign(PROJECT_DIR, "top_module");
+    string projName   = getProjectName(PROJECT_DIR);
 
-    string simtool        = config["simulation"].value("tool", "icarus");
-    int time_unit_mag     = config["simulation"].value("time_unit_mag", 1);
-    string time_unit      = config["simulation"].value("time_unit",     "ns");
-    int time_prec_mag     = config["simulation"].value("time_prec_mag", 1);
-    string time_prec      = config["simulation"].value("time_prec",     "ps");
+    string simtool        = getProjectSimulation(PROJECT_DIR, "tool");
+    string time_unit_mag     = getProjectSimulation(PROJECT_DIR, "time_unit_mag");
+    string time_unit      = getProjectSimulation(PROJECT_DIR, "time_unit");
+    string time_prec_mag     = getProjectSimulation(PROJECT_DIR, "time_prec_mag");
+    string time_prec      = getProjectSimulation(PROJECT_DIR, "time_prec");
 
     stringstream time_unit_stream, time_prec_stream;
     time_unit_stream << time_unit_mag << time_unit;
@@ -319,7 +316,6 @@ void searchProjects(){
             if( isUVMEnvProject(entry.path()) ){
                 projects.push_back(entry.path().filename());
             }
-            filesystem::current_path(PROJECT_DIR);
         } 
     }
 

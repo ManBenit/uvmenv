@@ -353,9 +353,10 @@ function installPythonDependencies(){
         exit 1
     fi
 
-    python$PY_VERSION -m pip install $upgrade "cocotb"
-    python$PY_VERSION -m pip install $upgrade "cocotb-coverage"
+    python$PY_VERSION -m pip install $upgrade cocotb
+    python$PY_VERSION -m pip install $upgrade cocotb-coverage
     python$PY_VERSION -m pip install $upgrade pyuvm
+    python$PY_VERSION -m pip install $upgrade pyyaml
     python$PY_VERSION -m pip install $upgrade pyfiglet
     python$PY_VERSION -m pip install $upgrade colorama
     python$PY_VERSION -m pip install $upgrade pytest

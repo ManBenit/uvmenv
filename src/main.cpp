@@ -1,16 +1,14 @@
-#include "test_main.h" // Ommit to prod
 #include "headers/functions/utils.h"
 #include "headers/functions/context_handlers/ComponentCtxHandler.h"
 #include "headers/functions/context_handlers/ImmediateCtxHandler.h"
 #include "headers/functions/context_handlers/ProjectCtxHandler.h"
 using namespace std;
 
-
 int main (int argc, char *argv[]) {
     ComponentCtxHandler compCtxHandlr;
     ImmediateCtxHandler immCtxHandlr;
     ProjectCtxHandler projCtxHandlr;
-
+    
     if(argc == 1){
         return immCtxHandlr.cmdHelp();
     }
@@ -21,7 +19,6 @@ int main (int argc, char *argv[]) {
     string wlevel = "";
     string type = "";
     vector<string> args;
-
 
     for(int i=1; i<argc; i++){
         if(string(argv[i]) == "--module"){
@@ -78,13 +75,6 @@ int main (int argc, char *argv[]) {
     ///// COMPONENT HANDLING /////
     else if(ctx == "component"){
         return compCtxHandlr.cmdComponent(args, test, env, mod, type);
-    }
-
-    else if(ctx == "test") {
-        //component_creation_test();
-        //getting_signals_test();
-
-        //print( joinStr({"uno", "otro"}, ".") );
     }
 
     else {

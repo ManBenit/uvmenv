@@ -1,6 +1,7 @@
 #include "../../../headers/uvmenv_pseudo/objects/SequenceItem.h"
 
 #include "../../../headers/functions/utils.h"
+#include "../../../headers/uvmenv_handling/general_handling/pconfig_handling.h"
 #include "../../../headers/uvmenv_handling/general_handling/uvmenv_aux.h"
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
 
@@ -9,9 +10,7 @@
 #include <fstream>
 #include <cmath>
 #include <filesystem>
-#include <nlohmann/json.hpp>
 using namespace std;
-using json = nlohmann::json;
 
 
 void SequenceItem::setName(const string& name){
@@ -82,10 +81,7 @@ void SequenceItem::copyBaseFile(){
     // Modify class name
     content = regex_replace(content, regex("CLASS_NAME"), name);
 
-    json config = readFileJson(joinStr({
-        PROJECT_DIR, "config.json"
-    }, PATH_SEP));
-    string topModule = config["dut_design"]["top_module"];
+    string topModule = getProjectDutDesign(PROJECT_DIR, "top_module");
 
     long long randMax = 0;
     for(const auto& [module, signalProps] : dutSignals) {

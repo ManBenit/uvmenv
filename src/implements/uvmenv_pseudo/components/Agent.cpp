@@ -1,6 +1,7 @@
 #include "../../../headers/uvmenv_pseudo/components/Agent.h"
 
 #include "../../../headers/functions/utils.h"
+#include "../../../headers/uvmenv_handling/general_handling/pconfig_handling.h"
 #include "../../../headers/uvmenv_handling/general_handling/uvmenv_aux.h"
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
 
@@ -8,9 +9,8 @@
 #include <fstream>
 #include <cmath>
 #include <filesystem>
-#include <nlohmann/json.hpp>
+#include <yaml-cpp/yaml.h>
 using namespace std;
-using json = nlohmann::json;
 
 
 void Agent::setDriver(Driver* d) { 
@@ -168,10 +168,7 @@ void Agent::copyBaseFile(){
         unordered_map<string, vector<Signal>> dutSignals = getDUTSignals('n');
         vector<string> coverPoints;
         
-        json config = readFileJson(joinStr({
-            PROJECT_DIR, "config.json"
-        }, PATH_SEP));
-        string topModule = config["dut_design"]["top_module"];
+        string topModule = getProjectDutDesign(PROJECT_DIR, "top_module");
         string topModuleLower = toLowerCase(topModule);
 
         string coverPLine;

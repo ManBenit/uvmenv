@@ -1,6 +1,7 @@
 #include "../../../headers/uvmenv_pseudo/objects/RefModelImpl.h"
 
 #include "../../../headers/functions/utils.h"
+#include "../../../headers/uvmenv_handling/general_handling/pconfig_handling.h"
 #include "../../../headers/uvmenv_handling/general_handling/uvmenv_aux.h"
 #include "../../../headers/uvmenv_handling/general_handling/framework.h"
 
@@ -8,9 +9,7 @@
 #include <regex>
 #include <fstream>
 #include <filesystem>
-#include <nlohmann/json.hpp>
 using namespace std;
-using json = nlohmann::json;
 
 
 void RefModelImpl::setName(const string& name){
@@ -78,11 +77,7 @@ void RefModelImpl::copyBaseFile(){
     // Modify class name
     content = regex_replace(content, regex("CLASS_NAME"), name);
 
-
-    json config = readFileJson(joinStr({
-        PROJECT_DIR, "config.json"
-    }, PATH_SEP));
-    string topModule = config["dut_design"]["top_module"];
+    string topModule = getProjectDutDesign(PROJECT_DIR, "top_module");
 
     for(const auto& [module, signalProps] : dutSignals) 
         // Create file content only with top module signals
