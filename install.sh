@@ -213,24 +213,20 @@ function handleError(){
 # =============================================
 function installSystemRequirements(){
     # Let's suppose apt
-    local jsonlib_name="nlohmann-json3-dev"
     local ymllib_name="libyaml-cpp-dev"
     local pybind_name="pybind11-dev"
 
     if [ $PKG_MNGR == "dnf" ] || [ $PKG_MNGR == "zypper" ]; then
-        jsonlib_name="nlohmann-json-devel"
         ymllib_name="yaml-cpp-devel"
         pybind_name="pybind11-devel"
     fi
 
     if [ $PKG_MNGR == "pacman" ] || [ $PKG_MNGR == "apk" ]; then
-        jsonlib_name="nlohmann-json"
         ymllib_name="yaml-cpp"
         pybind_name="pybind11"
     fi
 
     printInfo "############### Verifying prerequisites... ###############"
-    sudo $PKG_MNGR install -y $jsonlib_name
     sudo $PKG_MNGR install -y $ymllib_name
     sudo $PKG_MNGR install -y $pybind_name
     sudo $PKG_MNGR install -y git tree jq help2man perl python3 python3-pip make autoconf g++ flex bison ccache gperf
