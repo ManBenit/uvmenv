@@ -24,7 +24,7 @@ def __read_csv(file, rowtype='d'):
 
     return read_signals
 
-def get_dut_signames(module: str = str(cocotb.top), type: str = None, length: int = None):
+def get_dut_signames(module: str = cocotb.top._name, type: str = None, length: int = None):
     hdl_src = next( p for p in sys.path if p.endswith('HDLSrc') )
     retSignals = []
     signals = __read_csv(file=os.path.join(hdl_src, '.allSignals.csv'), rowtype='d')

@@ -86,10 +86,10 @@ class CLASS_NAME(uvm_scoreboard):
                 self.sync_dut_ins.append( self.pending_dut[i].get_ins_only() )
                 self.sync_dut_outs.append( self.pending_dut[i].get_outs_only() )
 
-        # Ensure data pending lists have a coherent size for scoreboarding
-        assert len(self.sync_dut_ins) == len(self.sync_dut_outs), \
+        # Ensure data pending lists have a coherent size for scoreboarding and are greater than 0
+        assert len(self.sync_dut_ins) == len(self.sync_dut_outs) > 0, \
             f'FAILED: DUT Ins({len(self.sync_dut_ins)}) | DUT Outs({len(self.sync_dut_outs)})'
-        assert len(self.sync_dut_outs) == len(self.pending_rmod), \
+        assert len(self.sync_dut_outs) == len(self.pending_rmod) > 0, \
             f'FAILED: DUT Out({len(self.sync_dut_outs)}) | RefModel({len(self.pending_rmod)})'
         
 
@@ -100,10 +100,10 @@ class CLASS_NAME(uvm_scoreboard):
         # You can use the mechanism of general assertions and use filters:
         for prefmod, dutin, dutout in zip(self.pending_rmod, self.sync_dut_ins, self.sync_dut_outs):
             for signame in get_dut_signames(type='INPUT'): # You can filter
-                assert dutin.get(signame) == getattr(prefmod, signame), \
+                assert int( dutin.get(signame) ) == int( getattr(prefmod, signame) ), \
                     f'FAILED [{signame}]: DUT({hex(dutin.get(signame))}) | RefModel({hex(getattr(prefmod, signame))})'
             for signame in get_dut_signames(type='OUTPUT'): # You can filter
-                assert dutout.get(signame) == getattr(prefmod, signame), \
+                assert int( dutout.get(signame) ) == int( getattr(prefmod, signame) ), \
                     f'FAILED [{signame}]: DUT({hex(dutout.get(signame))}) | RefModel({hex(getattr(prefmod, signame))})'
         
         # # You can also validate signals individually:
