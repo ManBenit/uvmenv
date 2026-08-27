@@ -1,3 +1,6 @@
+# IMPORTANT
+Currently was commented the installation of external dependencies (verilator and icarus), while it's ready a better encapsulation of them, but a crtical failure was fixed, now the scoreboarding process is properly working.
+
 # UVMEnv
 
 **Universal Verification Metodology Environments**
