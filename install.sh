@@ -92,8 +92,22 @@ function main(){
 
     PKG_MNGR=$(get_pkg_mngr)
     PY_VERSION=$(python3 --version | awk '{print $2}' | cut -d'.' -f1-2)
+    CC_VERSION=$(gcc --version | awk 'NR==1' | awk '{print $3}' | cut -d'.' -f1-2)
 
     printInfo "Current Python version: $PY_VERSION"
+    printInfo "Current GCC version: $CC_VERSION"
+
+    local valMinPy=$(echo "$PY_VERSION < 3.10" | bc -l)
+    local valMinCc=$(echo "$CC_VERSION < 13"   | bc -l)
+    if [[ $valMinPy -eq 1 ]]; then
+        echo "The minimum version for Python is not satisfied"
+        return 1
+    fi
+    if [[ $valMinCc -eq 1 ]]; then
+        echo "The minimum version for GCC is not satisfied"
+        return 1
+    fi
+
 
     if [ "$EUID" -eq 0 ]; then
         printWarning "You should run as NON root, only write root password if necessary during installation"
@@ -135,7 +149,7 @@ function main(){
         createUVMEnvInstallDirs
     fi
     
-    #installExternalDependencies
+    installExternalDependencies
 
     installUVMEnv
 
@@ -230,13 +244,17 @@ function installSystemRequirements(){
     sudo $PKG_MNGR install -y $ymllib_name
     sudo $PKG_MNGR install -y $pybind_name
     sudo $PKG_MNGR install -y git tree jq help2man perl python3 python3-pip make autoconf g++ flex bison ccache gperf
+    #sudo $PKG_MNGR install -y git tree jq help2man perl python3 python3-pip make autoconf gcc-c++ flex bison ccache gperf
+
+    # Optional installation
     sudo $PKG_MNGR install -y libgoogle-perftools-dev numactl perl-doc
+    #sudo $PKG_MNGR install -y gperftools gperftools-devel numactl numactl-devel perl-doc
     
 
     if [ "$PKG_MNGR" == "apt" ]; then
         sudo $PKG_MNGR install -y libfl2  # Ubuntu only (ignore if gives error)
         sudo $PKG_MNGR install -y libfl-dev  # Ubuntu only (ignore if gives error)
-        sudo $PKG_MNGR install -y zlib1g zlib1g-dev #zlibc  # Ubuntu only (ignore if gives error)
+        sudo $PKG_MNGR install -y zlib1g zlib1g-dev #zlibc zlib1g zlib1g-dev liblz4 liblz4-dev  # Ubuntu only (ignore if gives error)
     fi
 }
 
@@ -396,7 +414,7 @@ function installIcarus(){
 
     # Remove previous compilation if update
     if [[ $IS_UPDATE -eq 1 ]]; then
-        sudo make -j $(nproc) clean
+        make -j $(nproc) clean
     fi
 
     git pull
@@ -406,13 +424,13 @@ function installIcarus(){
 
     local shell=$(ps -p $$ | grep -E 'ksh|bash|zsh|tcsh|sh|csh' | awk '{print $4}')
     if [ "$shell" == "bash" ]; then
-        ./configure
+        ./configure --prefix $HOME_DIR
     else
         sh ./configure
     fi
     
     make -j $(nproc)
-    sudo make install
+    make install
 }
 
 function installVerilator(){
@@ -424,7 +442,7 @@ function installVerilator(){
 
     # Remove previous compilation if update
     if [[ $IS_UPDATE -eq 1 ]]; then
-        sudo make -j $(nproc) clean
+        make -j $(nproc) clean
     fi
 
     git pull         # Make sure git repository is up-to-date
@@ -441,16 +459,16 @@ function installVerilator(){
 
     echo "Verilator version $last_version will be installed..."
 
-    autoconf         # Create ./configure script
-    ./configure      # Configure and create Makefile
-    make -j $(nproc)  # Build Verilator itself (if error, try just 'make')
+    autoconf                           # Create ./configure script
+    ./configure --prefix $HOME_DIR     # Configure and create Makefile
+    make -j $(nproc)                   # Build Verilator itself (if error, try just 'make')
 
     #if [ $? -eq 0 ]; then
     #    echo "Run test?"
     #    read opt
     #fi
 
-    sudo make install
+    make install
 }
 
 
