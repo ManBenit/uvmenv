@@ -245,6 +245,7 @@ function handleError(){
 # System requirements
 # =============================================
 function installSystemRequirements(){
+    printInfo "#=================== Installing system requirements... ===================#"
     # Assume apt
     ## Mandatory installation
     local ymllib_name="libyaml-cpp-dev"
@@ -308,7 +309,6 @@ function installSystemRequirements(){
             ;;
     esac
 
-    printInfo "############### Installing system requirements... ###############"
     # Make mandatory installation
     $INSTALL_CMD $ymllib_name $pybind_name $gral_tools
     # Make optional installation
@@ -355,6 +355,17 @@ function installUVMEnv(){
 
 # $1: Deletion option (--del-full, --del-int)
 function createUVMEnvInstallDirs(){
+    local action="Creating"
+    local dirs="installation"
+
+    if [[ -n "$1" ]]; then
+        action="Deleting"
+        if [[ "$1" == "--del-int" ]]; then
+            dirs="internal"
+        fi
+    fi
+    printInfo "#=================== $action $dirs directories... ===================#"
+
     case $1 in
         # Delete all HOME_DIR
         --del-full)
@@ -406,6 +417,7 @@ function updateUVMEnvRepository(){
 # Python dependencies
 # =============================================
 function activatePythonVenv(){
+    printInfo "#=================== Activating Python virtualenv... ===================#"
     # Always activate python virtualenv to encapsulate UVMEnv functions
 
     # Install venv module if not exists
@@ -448,6 +460,7 @@ function activatePythonVenv(){
 }
 
 function installPythonDependencies(){
+    printInfo "#=================== Installing Python dependencies... ===================#"
     local upgrade=""
 
     # If is update, define the flag
@@ -477,18 +490,18 @@ function installPythonDependencies(){
 function installExternalDependencies(){
     # GTKWave
     if [ "$(which gtkwave)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
-        printInfo "############### Installing GTKWave... ###############"
+        printInfo "#=================== Installing GTKWave... ===================#"
         installGtkwave
     fi
 
     # Simulators
     if [ "$(which iverilog)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
-        printInfo "############### Installing Icarus... ###############"
+        printInfo "#=================== Installing Icarus Verilog... ===================#"
         installIcarus
     fi
 
     if [ "$(which verilator)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
-        printInfo "############### Installing Verilator... ###############"
+        printInfo "#=================== Installing Verilator... ===================#"
         installVerilator
     fi
 }
