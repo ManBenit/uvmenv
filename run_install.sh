@@ -1,6 +1,7 @@
 #!/bin/bash
 
-HOME_DIR="${HOME}"
+IDIR=UVMEnvInstall
+HOME_DIR="${HOME}/$IDIR"
 IS_UPDATE=0
 PROC_MESSAGE="INSTALLED"
 
@@ -33,7 +34,7 @@ for arg in "$@"; do
                 exit 1
             fi
 
-            HOME_DIR=$1
+            HOME_DIR=$1/$IDIR
             shift
             ;;
         --update)
@@ -70,8 +71,8 @@ fi
 # Installation paths
 # =============================================
 REPO_PATH=$(pwd)
-MAIN_DIR=$HOME_DIR/.UVMEnv
-VENV_DIR=$HOME_DIR/.UVMEnv_virtualenv
+MAIN_DIR=$HOME_DIR/uvmenv
+VENV_DIR=$HOME_DIR/uvmenv_virtualenv
 REPOS_DIR=$MAIN_DIR/repos
 BASES_DIR=$MAIN_DIR/bases
 TOOLS_DIR=$MAIN_DIR/tools
@@ -90,24 +91,34 @@ function main(){
     set -eE
     trap 'handleError ${LINENO} "$BASH_COMMAND" $?' ERR
 
+    # Verify if exists Python and GCC
+    if [ "$(python3 --version)" == "" ]; then
+        printError "You need Python 3.10 or later"
+        exit 0
+    fi
+    if [ "$(gcc --version)" == "" ]; then
+        printError "You need GCC 13 or later"
+        exit 0
+    fi
+
     PKG_MNGR=$(get_pkg_mngr)
     PY_VERSION=$(python3 --version | awk '{print $2}' | cut -d'.' -f1-2)
     CC_VERSION=$(gcc --version | awk 'NR==1' | awk '{print $3}' | cut -d'.' -f1-2)
 
+    # If already exists Python and GCC, validate a properly version
     printInfo "Current Python version: $PY_VERSION"
     printInfo "Current GCC version: $CC_VERSION"
 
     local valMinPy=$(echo "$PY_VERSION < 3.10" | bc -l)
     local valMinCc=$(echo "$CC_VERSION < 13"   | bc -l)
     if [[ $valMinPy -eq 1 ]]; then
-        echo "The minimum version for Python is not satisfied"
+        printError "Min Python version unsatisfied (Required 3.10 or later)"
         return 1
     fi
     if [[ $valMinCc -eq 1 ]]; then
-        echo "The minimum version for GCC is not satisfied"
+        printError "Min GCC version unsatisfied (Required 13 or later)"
         return 1
     fi
-
 
     if [ "$EUID" -eq 0 ]; then
         printWarning "You should run as NON root, only write root password if necessary during installation"
@@ -115,17 +126,28 @@ function main(){
     fi
 
     # PRE-INSTALLING PROCESS
-    # Then, verify if UVMEnv is already installed (without update)
-    if [ -d $MAIN_DIR ] && [[ $IS_UPDATE -eq 0 ]]; then
+    ## Then, verify if UVMEnv is already installed (without update)
+    if [ -d $HOME_DIR ] && [[ $IS_UPDATE -eq 0 ]]; then
         printWarning "UVMEnv is already installed"
         return 0
     fi
 
-    # When is set the 'update' option, verify the previous existence of UVMEnv
-     if [ ! -d $MAIN_DIR ] && [[ $IS_UPDATE -eq 1 ]]; then
+    ## When is set the '--update' option, verify the previous existence of UVMEnv
+    if [ ! -d $HOME_DIR ] && [[ $IS_UPDATE -eq 1 ]]; then
         printError "UVMEnv is not installed for updating it"
         return 0
     fi
+
+    ## Validate package manager to define the instruction to install system requirements
+    INSTALL_CMD="sudo $PKG_MNGR install -y"
+    case "$PKG_MNGR" in
+        "pacman")
+            INSTALL_CMD="sudo pacman -S --noconfirm"
+            ;;
+        "apk")
+            INSTALL_CMD="sudo apk add"
+    esac
+
 
 
     # ===========================
@@ -226,32 +248,77 @@ function handleError(){
 # System requirements
 # =============================================
 function installSystemRequirements(){
-    # Let's suppose apt
+    # Assume apt
+    ## Mandatory installation
     local ymllib_name="libyaml-cpp-dev"
     local pybind_name="pybind11-dev"
+    local gral_tools="git tree jq make help2man perl python3-pip autoconf g++ flex bison ccache gperf"
+    # local install_cmd="sudo $PKG_MNGR install -y"
 
-    if [ $PKG_MNGR == "dnf" ] || [ $PKG_MNGR == "zypper" ]; then
-        ymllib_name="yaml-cpp-devel"
-        pybind_name="pybind11-devel"
-    fi
+    ## Optional installation
+    local perftools_pkg="libgoogle-perftools-dev"
+    local numa_pkg="numactl"
+    local perldoc_pkg="perl-doc"
 
-    if [ $PKG_MNGR == "pacman" ] || [ $PKG_MNGR == "apk" ]; then
-        ymllib_name="yaml-cpp"
-        pybind_name="pybind11"
-    fi
+    # Define package names
+    ## Mandatory installation
+    case "$PKG_MNGR" in
+        "dnf"|"zypper")
+            ymllib_name="yaml-cpp-devel"
+            pybind_name="pybind11-devel"
+            gral_tools="git tree jq make help2man perl python3-pip autoconf gcc-c++ flex bison ccache gperf"
+            ;;
+        "pacman")
+            ymllib_name="yaml-cpp"
+            pybind_name="pybind11"
+            gral_tools="git tree jq make help2man perl python-pip autoconf gcc flex bison ccache gperf"
+            # install_cmd="sudo pacman -S --noconfirm"
+            ;;
+        "apk")
+            ymllib_name="yaml-cpp"
+            pybind_name="pybind11"
+            gral_tools="git tree jq make help2man perl py3-pip autoconf g++ flex bison ccache gperf"
+            # install_cmd="sudo apk add"
+            ;;
+        "apt"|"apt-get")
+            # Keep apt values
+            ;;
+        *)
+            printError "Package manager not supported: $PKG_MNGR. Install manually."
+            return 1
+            ;;
+    esac
 
-    printInfo "############### Verifying prerequisites... ###############"
-    sudo $PKG_MNGR install -y $ymllib_name
-    sudo $PKG_MNGR install -y $pybind_name
-    sudo $PKG_MNGR install -y git tree jq help2man perl python3 python3-pip make autoconf g++ flex bison ccache gperf
-    #sudo $PKG_MNGR install -y git tree jq help2man perl python3 python3-pip make autoconf gcc-c++ flex bison ccache gperf
+    ## Optional installation
+    case "$PKG_MNGR" in
+        "dnf"|"zypper")
+            perftools_pkg="gperftools-devel"
+            numa_pkg="numactl-devel"
+            perldoc_pkg="perl-doc"
+            ;;
+        "pacman")
+            perftools_pkg="gperftools"
+            numa_pkg="numactl"
+            perldoc_pkg="perl" # No perl-doc, includes manpages
+            ;;
+        "apk")
+            perftools_pkg="gperftools-dev"
+            numa_pkg="numactl-dev"
+            perldoc_pkg="perl-doc"
+            ;;
+        "apt"|"apt-get")
+            # Keep apt values
+            ;;
+    esac
 
-    # Optional installation
-    sudo $PKG_MNGR install -y libgoogle-perftools-dev numactl perl-doc
-    #sudo $PKG_MNGR install -y gperftools gperftools-devel numactl numactl-devel perl-doc
+    printInfo "############### Installing system requirements... ###############"
+    # Make mandatory installation
+    $INSTALL_CMD $ymllib_name $pybind_name $gral_tools
+    # Make optional installation
+    $INSTALL_CMD $perftools_pkg $numa_pkg $perldoc_pkg
     
 
-    if [ "$PKG_MNGR" == "apt" ]; then
+    if [ "$PKG_MNGR" == "apt" ] || [ "$PKG_MNGR" == "apt-get" ]; then
         sudo $PKG_MNGR install -y libfl2  # Ubuntu only (ignore if gives error)
         sudo $PKG_MNGR install -y libfl-dev  # Ubuntu only (ignore if gives error)
         sudo $PKG_MNGR install -y zlib1g zlib1g-dev #zlibc zlib1g zlib1g-dev liblz4 liblz4-dev  # Ubuntu only (ignore if gives error)
@@ -338,16 +405,41 @@ function updateUVMEnvRepository(){
 # Python dependencies
 # =============================================
 function activatePythonVenv(){
-    # Verify Python version
-    # Return if is <=3.10 cause is not necesary a virtualenv
-    local comp=$(echo "$PY_VERSION > 3.10" | bc -l)
-    if [[ $comp -eq 0 ]]; then
-        return
-    fi
+    # Always activate python virtualenv to encapsulate UVMEnv functions
 
     # Install venv module if not exists
-    if python$PY_VERSION -m venv --help > /dev/null 2>&1; then
-        sudo $PKG_MNGR install python$PY_VERSION-venv
+    if ! python$PY_VERSION -m venv --help > /dev/null 2>&1; then
+        printWarning "Module venv not found. Installing..."
+        
+        local venv_pkg=""
+
+        case "$PKG_MNGR" in
+            "apt"|"apt-get")
+                # Explicit spec
+                venv_pkg="python${PY_VERSION}-venv"
+                ;;
+            "dnf"|"zypper")
+                # Fedora/RHEL/openSUSE include venv at python3-devel or python3
+                venv_pkg="python3-devel"
+                ;;
+            "apk")
+                # Alpine, venv is into python3
+                venv_pkg="py3-virtualenv"
+                ;;
+            "pacman")
+                # Arch includes venv at base package 'python'
+                venv_pkg="python"
+                ;;
+        esac
+
+        if [ -n "$venv_pkg" ]; then
+            $INSTALL_CMD $venv_pkg
+        else
+            printError "Something went wrong while installing venv"
+            exit 1
+        fi
+    else
+        printInfo "python$PY_VERSION-venv available."
     fi
 
     python$PY_VERSION -m venv $VENV_DIR
