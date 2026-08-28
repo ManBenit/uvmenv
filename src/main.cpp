@@ -1,7 +1,7 @@
-#include "headers/functions/utils.h"
-#include "headers/functions/context_handlers/ComponentCtxHandler.h"
-#include "headers/functions/context_handlers/ImmediateCtxHandler.h"
-#include "headers/functions/context_handlers/ProjectCtxHandler.h"
+#include "include/functions/utils.h"
+#include "include/functions/context_handlers/ComponentCtxHandler.h"
+#include "include/functions/context_handlers/ImmediateCtxHandler.h"
+#include "include/functions/context_handlers/ProjectCtxHandler.h"
 using namespace std;
 
 int main (int argc, char *argv[]) {
