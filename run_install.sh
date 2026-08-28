@@ -73,11 +73,11 @@ fi
 REPO_PATH=$(pwd)
 MAIN_DIR=$HOME_DIR/uvmenv
 VENV_DIR=$HOME_DIR/uvmenv_virtualenv
+BINS_DIR=$HOME_DIR/bin
 REPOS_DIR=$MAIN_DIR/repos
 BASES_DIR=$MAIN_DIR/bases
 TOOLS_DIR=$MAIN_DIR/tools
 SCRIPTS_DIR=$MAIN_DIR/scripts
-COMMAND=/usr/bin/uvmenv
 # =============================================
 
 
@@ -163,10 +163,7 @@ function main(){
     # Create UVMEnv main structure if is installation and remove bases/tools from structure is is update
     if [[ $IS_UPDATE -eq 1 ]]; then
         #updateUVMEnvRepository
-        rm -rf $BASES_DIR
-        rm -rf $TOOLS_DIR
-        rm -rf $HOME_DIR/bin
-        createUVMEnvInstallDirs
+        createUVMEnvInstallDirs --del-int
     else
         createUVMEnvInstallDirs
     fi
@@ -232,7 +229,7 @@ function handleError(){
     local failed_command=$2
     local exit_value=$3
 
-    createUVMEnvInstallDirs -del
+    createUVMEnvInstallDirs --del-full
     printInfo "============================================="
     printError "Error during installation"
     printInfo "Failed command: $failed_command,"
@@ -344,38 +341,42 @@ function installUVMEnv(){
 
     # Compile UVMEnv
     printInfo "Compiling UVMEnv..."
-    mkdir $HOME_DIR/bin
+
     cd ./src
     g++ -O3 -Wall -std=c++17 \
         main.cpp $(find implements -type f -name '*.cpp') \
         -I/usr/include $(python3-config --includes) \
         -lyaml-cpp $(python3-config --ldflags --embed) \
-        -o $HOME_DIR/bin/uvmenv
+        -o $BINS_DIR/uvmenv
 
     # Create completion (ln -s)
-
-    # Create command (ln -s)
-    #if [ ! -L $COMMAND ]; then
-    #    sudo ln -s $TOOLS_DIR/command.sh $COMMAND
-    #fi    
-
-    # Delete generated compilation from repo
+    ## TODO
 }
 
-# $1: Deletion option (-del)
+# $1: Deletion option (--del-full, --del-int)
 function createUVMEnvInstallDirs(){
-    if [ "$1" == "-del" ]; then
-        rm -rf $BASES_DIR
-        rm -rf $REPOS_DIR
-        rm -rf $TOOLS_DIR
-        rm -rf $SCRIPTS_DIR
-        rm -rf $VENV_DIR
-    else
-        mkdir -p $BASES_DIR
-        mkdir -p $REPOS_DIR
-        mkdir -p $TOOLS_DIR
-        mkdir -p $SCRIPTS_DIR
-    fi
+    case $1 in
+        # Delete all HOME_DIR
+        --del-full)
+            rm -rf $HOME_DIR
+        ;;
+
+        # Delete only tools, bases and scripts
+        --del-int)
+            rm -rf $BASES_DIR
+            rm -rf $TOOLS_DIR
+            rm -rf $SCRIPTS_DIR
+        ;;
+
+        # Default creation job
+        *)
+            mkdir -p $BINS_DIR
+            mkdir -p $REPOS_DIR
+            mkdir -p $BASES_DIR
+            mkdir -p $TOOLS_DIR
+            mkdir -p $SCRIPTS_DIR
+        ;;
+    esac
 }
 
 function updateUVMEnvRepository(){
@@ -447,15 +448,15 @@ function activatePythonVenv(){
 }
 
 function installPythonDependencies(){
-    local upgrade="--upgrade"
+    local upgrade=""
 
-    # Si no es actualización, solo instala
-    if [[ $IS_UPDATE -eq 0 ]]; then
-        upgrade=""
+    # If is update, define the flag
+    if [[ $IS_UPDATE -eq 1 ]]; then
+        upgrade="--upgrade"
     fi
 
     if [ "$VIRTUAL_ENV" == "" ]; then
-        printError "Wrong virtualenv activation"
+        printError "Something is wrong with virtualenv activation"
         exit 1
     fi
 
