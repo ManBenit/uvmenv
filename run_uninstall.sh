@@ -16,6 +16,13 @@ C_WHITE="\e[37m"
 C_N="\e[39m"
 # =============================================
 
+# ===========================
+# Preprocessing
+# ===========================
+if [ ! -n "$HOME_DIR" ];then
+    echo "Missing env installation path, check UVMENV_HOME"
+    exit 1
+fi
 
 
 read -p "UVMEnv will be $PROC_MESSAGE from $HOME_DIR, continue? (y/n): " opc
@@ -56,7 +63,6 @@ function main(){
     # (which includes encapsulated Verilator and Icarus)
     uninstallVerilator
     uninstallIcarus
-    #uninstallGtkwave
     uninstallUVMEnv
 
     printInfo "Now you can delete the \"UVMEnv config\" block from your .bashrc"
@@ -96,9 +102,6 @@ function uninstallUVMEnv(){
 }
 
 
-function uninstallGtkwave(){
-    sudo apt purge --remove -y gtkwave
-}
 
 function uninstallIcarus(){
     printInfo "#=================== Removing encapsulated Icarus Verilog... ===================#"

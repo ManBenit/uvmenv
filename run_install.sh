@@ -5,6 +5,7 @@ HOME_DIR="${HOME}/$IDIR"
 IS_UPDATE=0
 PROC_MESSAGE="INSTALLED"
 RC_FILE=$HOME/.bashrc
+SPINNER=spinner.sh
 
 # =============================================
 # Bash colors
@@ -25,7 +26,7 @@ for arg in "$@"; do
     case $arg in
         --home)
             shift
-            if [ "$1" == "" ]; then
+            if [ ! -n "$1" ]; then
                 echo -e "${C_RED}Wrong installation path ${S_N}"
                 exit 1
             fi
@@ -127,14 +128,17 @@ function main(){
     fi
 
     # PRE-INSTALLING PROCESS
-    ## Then, verify if UVMEnv is already installed (without update)
+    local envvar_val=$(echo $UVMENV_HOME)
+    # Validation cases
     # TODO: Change validation with env var
+
+    ## User is trying to install and tool is already installed
     if [ -d $HOME_DIR ] && [[ $IS_UPDATE -eq 0 ]]; then
         printWarning "UVMEnv is already installed"
         return 0
     fi
 
-    ## When is set the '--update' option, verify the previous existence of UVMEnv
+    ## User is trying to update and tool is not installed
     if [ ! -d $HOME_DIR ] && [[ $IS_UPDATE -eq 1 ]]; then
         printError "UVMEnv is not installed for updating it"
         return 0
@@ -380,7 +384,7 @@ function installUVMEnv(){
         -lyaml-cpp $(python3-config --ldflags --embed) \
         -o $BINS_DIR/uvmenv &
     local compilation_pid=$!
-    spinner $compilation_pid
+    ../$SPINNER $compilation_pid
 
     # Create completion (ln -s)
     ## TODO
@@ -654,23 +658,6 @@ function check_new_commits() {
         printInfo "No new commits. You are up to date."
         return 1  # False: no new commits
     fi
-}
-
-spinner() {
-    local pid=$1 # PID of process
-    local spinner_chars='|/-\'
-    local i=0
-
-    # While process is alive...
-    while kill -0 $pid 2>/dev/null; do
-        # Extract a diferent character each time
-        local c="${spinner_chars:i++%${#spinner_chars}:1}"
-        printf "\r[%s] Please wait..." "$c"
-        sleep 0.1
-    done
-
-    # Clean line and finish
-    printf "\r[✓] Process finished! \n"
 }
 
 
