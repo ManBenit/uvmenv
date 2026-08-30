@@ -4,6 +4,7 @@ IDIR=UVMEnvInstall
 HOME_DIR="${HOME}/$IDIR"
 IS_UPDATE=0
 PROC_MESSAGE="INSTALLED"
+RC_FILE=$HOME/.bashrc
 
 # =============================================
 # Bash colors
@@ -127,6 +128,7 @@ function main(){
 
     # PRE-INSTALLING PROCESS
     ## Then, verify if UVMEnv is already installed (without update)
+    # TODO: Change validation with env var
     if [ -d $HOME_DIR ] && [[ $IS_UPDATE -eq 0 ]]; then
         printWarning "UVMEnv is already installed"
         return 0
@@ -164,6 +166,7 @@ function main(){
     if [[ $IS_UPDATE -eq 1 ]]; then
         #updateUVMEnvRepository
         createUVMEnvInstallDirs --del-int
+        createUVMEnvInstallDirs --int
     else
         createUVMEnvInstallDirs
     fi
@@ -172,11 +175,21 @@ function main(){
 
     installUVMEnv
 
-    #Finally, show message
+    if [[ "$IS_UPDATE" -eq 0 ]]; then
+        echo -e "\n"                            >> $RC_FILE
+        echo "# ==========================="    >> $RC_FILE
+        echo "# UVMEnv config"                  >> $RC_FILE
+        echo "# ==========================="    >> $RC_FILE
+        echo "export PATH=$HOME_DIR/bin:\$PATH" >> $RC_FILE
+        echo "export UVMENV_HOME=$HOME_DIR"     >> $RC_FILE
+        echo "# ==========================="    >> $RC_FILE
+        echo -e "\n"                            >> $RC_FILE
+    fi
+
     printInfo "UVMEnv has been succesfully $PROC_MESSAGE"
-    printWarning "You must add these lines on your .bashrc:"
-    printWarning "export PATH=$HOME_DIR/bin:\$PATH"
-    printWarning "export UVMENV_HOME=$HOME_DIR"
+    if [[ "$IS_UPDATE" -eq 0 ]]; then
+        printMessage "Please run:\nsource ~/.bashrc"
+    fi
 }
 
 # =============================================
@@ -192,6 +205,10 @@ function printInfo(){
 
 function printWarning(){
     echo -e "${C_YELLOW}$1${C_N}"
+}
+
+function printMessage(){
+    echo -e "${C_CYAN}$1${C_N}"
 }
 
 function get_pkg_mngr(){
@@ -229,10 +246,12 @@ function handleError(){
     local failed_command=$2
     local exit_value=$3
 
-    createUVMEnvInstallDirs --del-full
+    if [[ "$IS_UPDATE" -eq 0 ]]; then
+        createUVMEnvInstallDirs --del-full
+    fi
     printInfo "============================================="
-    printError "Error during installation"
-    printInfo "Failed command: $failed_command,"
+    printError "Error while running process"
+    printInfo "Failed command: $failed_command"
     printInfo "... at line $failed_line."
     printError "Exit value: $exit_value."
     printInfo "============================================="
@@ -327,9 +346,20 @@ function installSystemRequirements(){
 # UVMEnv installation handling
 # =============================================
 function installUVMEnv(){
+    printInfo "#=================== Installing framework... ===================#"
     # Go to current dir (UVMEnv repository)
     cd $REPO_PATH
 
+    # if [[ $IS_UPDATE -eq 1 ]]; then
+    #     printInfo "#========= Checking for existing updates... =========#"
+    #     if check_new_commits; then
+    #         git merge origin/main
+    #     else
+    #         return 0
+    #     fi
+    # fi
+
+    printInfo "Copying internal dirs..."
     # Copy tools
     cp -r ./install/uvmenv_tools/* $TOOLS_DIR
 
@@ -343,11 +373,14 @@ function installUVMEnv(){
     printInfo "Compiling UVMEnv..."
 
     cd ./src
+
     g++ -O3 -Wall -std=c++17 \
-        main.cpp $(find implements -type f -name '*.cpp') \
+        main.cpp $(find impl -type f -name '*.cpp') \
         -I/usr/include $(python3-config --includes) \
         -lyaml-cpp $(python3-config --ldflags --embed) \
-        -o $BINS_DIR/uvmenv
+        -o $BINS_DIR/uvmenv &
+    local compilation_pid=$!
+    spinner $compilation_pid
 
     # Create completion (ln -s)
     ## TODO
@@ -359,8 +392,11 @@ function createUVMEnvInstallDirs(){
     local dirs="installation"
 
     if [[ -n "$1" ]]; then
-        action="Deleting"
-        if [[ "$1" == "--del-int" ]]; then
+        if [[ "$1" == --del* ]]; then
+            action="Deleting"
+        fi
+
+        if [[ "$1" == *-int ]]; then
             dirs="internal"
         fi
     fi
@@ -377,6 +413,13 @@ function createUVMEnvInstallDirs(){
             rm -rf $BASES_DIR
             rm -rf $TOOLS_DIR
             rm -rf $SCRIPTS_DIR
+        ;;
+
+        # Create only tools, bases, and scripts
+        --int)
+            mkdir -p $BASES_DIR
+            mkdir -p $TOOLS_DIR
+            mkdir -p $SCRIPTS_DIR
         ;;
 
         # Default creation job
@@ -488,6 +531,8 @@ function installPythonDependencies(){
 # =============================================
 # This function requires have created REPOS_DIR
 function installExternalDependencies(){
+    # TODO: Validate when exist all this tools out of framework encapsulation and
+    # an update is requested
     # GTKWave
     if [ "$(which gtkwave)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
         printInfo "#=================== Installing GTKWave... ===================#"
@@ -513,26 +558,33 @@ function installGtkwave(){
 
 function installIcarus(){
     if [ ! -d $REPOS_DIR/iverilog ]; then
+        printInfo "#========= Clonning repository... =========#"
         git clone https://github.com/steveicarus/iverilog.git $REPOS_DIR/iverilog
     fi
     
     cd $REPOS_DIR/iverilog
 
-    # Remove previous compilation if update
+    # Validate if exist new remote commits available
     if [[ $IS_UPDATE -eq 1 ]]; then
-        make -j $(nproc) clean
+        printInfo "#========= Checking for existing updates... =========#"
+        printMessage "Current version: $(iverilog -V | awk 'NR==1' | awk '{print $4 " " $6}')"
+        if check_new_commits; then
+            git merge origin/master
+        else
+            return 0
+        fi
     fi
 
-    git pull
-
+    printMessage "Version $(git tag | tail -1) will be installed..."
+    
     chmod 775 autoconf.sh
     ./autoconf.sh
 
-    local shell=$(ps -p $$ | grep -E 'ksh|bash|zsh|tcsh|sh|csh' | awk '{print $4}')
+    local shell=$(basename $SHELL)
     if [ "$shell" == "bash" ]; then
         ./configure --prefix $HOME_DIR
     else
-        sh ./configure
+        sh ./configure --prefix $HOME_DIR
     fi
     
     make -j $(nproc)
@@ -541,32 +593,38 @@ function installIcarus(){
 
 function installVerilator(){
     if [ ! -d $REPOS_DIR/verilator ]; then
+        printInfo "#========= Clonning repository... =========#"
         git clone https://github.com/verilator/verilator.git $REPOS_DIR/verilator
     fi
     
     cd $REPOS_DIR/verilator
 
-    # Remove previous compilation if update
+    # Validate if exist new remote commits available
     if [[ $IS_UPDATE -eq 1 ]]; then
-        make -j $(nproc) clean
+        printInfo "#========= Checking for existing updates... =========#"
+        printMessage "Current version: $(verilator --version | awk '{print $2 " " $4 " " $5}')"
+        if check_new_commits; then
+            git merge origin/master
+        else
+            return 0
+        fi
     fi
 
-    git pull         # Make sure git repository is up-to-date
+    printMessage "Version $(git tag | tail -1) will be installed..."
 
-    local shell=$(ps -p $$ | grep -E 'ksh|bash|zsh|tcsh|sh|csh' | awk '{print $4}')
+
+    # Create ./configure script
+    autoconf
+    
+    local shell=$(basename $SHELL)
     if [ "$shell" == "bash" ]; then
         unset VERILATOR_ROOT
+        ./configure --prefix $HOME_DIR
     else
         unsetenv VERILATOR_ROOT
+        sh ./configure --prefix $HOME_DIR
     fi
 
-    # Get the last version registered on repository
-    local last_version=$(git tag | tail -1)
-
-    echo "Verilator version $last_version will be installed..."
-
-    autoconf                           # Create ./configure script
-    ./configure --prefix $HOME_DIR     # Configure and create Makefile
     make -j $(nproc)                   # Build Verilator itself (if error, try just 'make')
 
     #if [ $? -eq 0 ]; then
@@ -577,8 +635,46 @@ function installVerilator(){
     make install
 }
 
+function check_new_commits() {
 
-main "$@"; exit
+    # 1. Fetch the latest remote metadata silently
+    git fetch origin -q
+
+    # 2. Count how many commits the upstream (@{u}) is ahead of your local (HEAD)
+    local commits_behind=$(git rev-list --count HEAD..@{u} 2>/dev/null)
+
+    # 3. Validate the result
+    if [[ -z "$commits_behind" ]]; then
+        printError "Error: No upstream tracking branch configured for the current branch."
+        return 2
+    elif [[ "$commits_behind" -gt 0 ]]; then
+        printInfo "Yes, there are $commits_behind new commit(s) available."
+        return 0  # True: new commits exist
+    else
+        printInfo "No new commits. You are up to date."
+        return 1  # False: no new commits
+    fi
+}
+
+spinner() {
+    local pid=$1 # PID of process
+    local spinner_chars='|/-\'
+    local i=0
+
+    # While process is alive...
+    while kill -0 $pid 2>/dev/null; do
+        # Extract a diferent character each time
+        local c="${spinner_chars:i++%${#spinner_chars}:1}"
+        printf "\r[%s] Please wait..." "$c"
+        sleep 0.1
+    done
+
+    # Clean line and finish
+    printf "\r[✓] Process finished! \n"
+}
+
+
+main "$@"; exit $?
 
 
 

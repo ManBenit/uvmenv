@@ -2,7 +2,7 @@
 
 # Main paths
 USR_HOME_DIR=$(echo $UVMENV_HOME)
-VENV_DIR=$USR_HOME_DIR/.UVMEnv_virtualenv
+VENV_DIR=$USR_HOME_DIR/uvmenv_virtualenv
 
 # $1: Python version (x.xx)
 function activatePythonVenv(){
