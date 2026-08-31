@@ -2,6 +2,10 @@
 
 IMAGE_NAME="uvmenv-framework:latest"
 CONTAINER_NAME="uvmenv_container"
+SPINNER=spinner.sh
+
+set -eE
+trap 'handleError ${LINENO} "$BASH_COMMAND" $?' ERR
 
 # Grant permissions to X11 server if available
 if command -v xhost >/dev/null 2>&1; then
@@ -15,8 +19,13 @@ DISPLAY_VAR="${DISPLAY:-:0}"
 if ! docker image inspect "$IMAGE_NAME" >/dev/null 2>&1; then
     echo -e "\e[33m[INFO] Image $IMAGE_NAME does not exist locally. Building, please wait...\e[39m"
     echo -e "\e[33m[INFO] This process can take a few minutes.\e[39m"
+
+    docker build -t "$IMAGE_NAME" . > docker_build.log 2>&1 &
+    docker_pid=$!
+    ./$SPINNER $docker_pid
+    wait $pid
     
-    if ! docker build -t "$IMAGE_NAME" . > docker_build.log 2>&1; then
+    if [ $? -ne 0 ] ; then
         echo -e "\e[31m[ERROR] Something went wrong during installation.\e[39m"
         echo -e "\e[31m[ERROR] Open file 'docker_build.log' for more details.\e[39m"
         exit 1
