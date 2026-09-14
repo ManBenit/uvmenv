@@ -6,14 +6,14 @@
 # Python imports
 # ====================
 import pyuvm
-from pyuvm import logging
+import logging
 
 
 # ====================================================
 # HOW TO USE UVMEnv REPORTING MECHANISM
 # ====================================================
 # On the component from you want to write, you must import the next:
-# import pyuvm
+# from pyuvm import <UVM_LEVEL>
 # from UVMEnvReport import report
 #
 # You are able to define your own logging levels 

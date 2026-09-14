@@ -6,9 +6,8 @@
 # Python imports
 # ====================
 import importlib
-import pyuvm
 import copy
-from pyuvm import uvm_monitor, uvm_analysis_port
+from pyuvm import uvm_monitor, uvm_analysis_port, UVM_LOW
 
 # ====================
 # UVMEnv imports
@@ -38,7 +37,7 @@ class Monitor(uvm_monitor):
             self.get_parent().get_parent().refmodel.set(transaction)
 
             # Write on report (optional)
-            report.write(message=str(transaction), component=self, level=pyuvm.INFO)
+            report.write(message=str(transaction), component=self, level=UVM_LOW)
 
             # Send transaction to subscribers
             self.send.write(copy.copy(transaction))

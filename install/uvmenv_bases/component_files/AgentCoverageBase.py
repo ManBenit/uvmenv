@@ -5,8 +5,7 @@
 # ====================
 # Python imports
 # ====================
-import pyuvm
-from pyuvm import uvm_subscriber, uvm_tlm_analysis_fifo, uvm_get_port
+from pyuvm import uvm_subscriber, uvm_tlm_analysis_fifo, uvm_get_port, UVM_LOW
 from cocotb_coverage.coverage import CoverPoint, CoverCross, coverage_db
 
 # ====================
@@ -63,7 +62,7 @@ COVER_POINTS
 
     def report_phase(self):
         super().report_phase()
-        report.write(message=f'Processed {self.__num_transactions} transactions', component=self, level=pyuvm.INFO)
+        report.write(message=f'Processed {self.__num_transactions} transactions', component=self, level=UVM_LOW)
         coverage_db.export_to_xml(filename='OSimon/coverage_report.xml')
 
     
