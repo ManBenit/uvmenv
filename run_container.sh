@@ -17,7 +17,7 @@ DISPLAY_VAR="${DISPLAY:-:0}"
 
 # 1. Verify if image exists (build it otherwise)
 if ! docker image inspect "$IMAGE_NAME" >/dev/null 2>&1; then
-    echo -e "\e[33m[INFO] Image $IMAGE_NAME does not exist locally. Building, please wait...\e[39m"
+    echo -e "\e[33m[INFO] Image $IMAGE_NAME does not exist locally. Building...\e[39m"
     echo -e "\e[33m[INFO] This process can take a few minutes.\e[39m"
 
     docker build -t "$IMAGE_NAME" . > docker_build.log 2>&1 &
@@ -46,7 +46,7 @@ if docker container inspect "$CONTAINER_NAME" >/dev/null 2>&1; then
         docker start -i "$CONTAINER_NAME"
     fi
 else
-    echo -e "\e[32m[INFO] Launching new container, please wait...\e[39m"
+    echo -e "\e[32m[INFO] Launching container...\e[39m"
 
     # Map to work directory inside container
     docker run -it \

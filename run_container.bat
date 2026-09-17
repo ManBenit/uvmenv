@@ -15,15 +15,20 @@ if !errorlevel! neq 0 (
 :: 1. Verify if image exists (build it otherwise)
 docker image inspect %IMAGE_NAME% >nul 2>&1
 if !errorlevel! neq 0 (
-    echo [INFO] Image %IMAGE_NAME% does not exist locally. Building, please wait...
+    echo [INFO] Image %IMAGE_NAME% does not exist locally. Building...
     echo [INFO] This process can take a few minutes.
-    @REM  docker build -t %IMAGE_NAME% . > docker_build.log 2>&1
 
-    :: Launch docker build in the background, redirect logs, and capture the PID
-    for /f "delims=" %%I in ('powershell -NoProfile -Command "(Start-Process -FilePath 'docker' -ArgumentList 'build -t %IMAGE_NAME% .' -RedirectStandardOutput 'docker_build.log' -RedirectStandardError 'docker_build.log' -WindowStyle Hidden -PassThru).Id"') do set "docker_pid=%%I"
-    :: Call the spinner using the captured PID
-    call spinner.bat %docker_pid%
+    :: Ensure no residual flag
+    if exist build_done.flag del /f /q build_done.flag
+    
+    :: Build on background and create flag file
+    start /b "" cmd /c "docker build -t %IMAGE_NAME% . > docker_build.log 2>&1 & type nul > build_done.flag"
+    
+    :: Run spinner
+    call spinner.bat build_done.flag
+    del /f /q build_done.flag
 
+    docker image inspect %IMAGE_NAME% >nul 2>&1
     if !errorlevel! neq 0 (
         echo [ERROR] Something went wrong during installation.
         echo [ERROR] Open file "docker_build.log" for more details.
@@ -49,7 +54,7 @@ if !errorlevel! equ 0 (
         docker start -i %CONTAINER_NAME%
     )
 ) else (
-    echo [INFO] Launching new container, please wait...
+    echo [INFO] Launching container...
 
     :: Map to work directory inside container
     docker run -it ^
@@ -61,7 +66,7 @@ if !errorlevel! equ 0 (
         %IMAGE_NAME% %*
 )
 
-if !errorlevel! neq 0 (
-    echo.
-    echo [NOTA] If error running GTKWave, Ensure your server X11 is running with "Disable access control" disabled.
-)
+@REM  if "%ERRORLEVEL%" neq 0 (
+@REM      echo.
+@REM      echo [NOTA] If error running GTKWave, Ensure your server X11 is running with "Disable access control" disabled.
+@REM  )

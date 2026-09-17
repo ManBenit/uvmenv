@@ -1,50 +1,45 @@
 @echo off
-setlocal EnableDelayedExpansion
+setlocal enabledelayedexpansion
 
-:: Get PID from the first argument
-set "PID=%~1"
+:: Flag file to know when main process finishes
+set "FLAG_FILE=%~1"
 
-if "%PID%"=="" (
-    echo Usage: %0 ^<PID^>
-    exit /b 1
-)
+:: Get backspace natively
+for /f %%a in ('"prompt $H&for %%b in (1) do rem"') do set "BS=%%a"
 
-:: Define spinner characters and initial counter
-set "spinner=|/-\"
-set "i=0"
+:: Create 18 returns variable (Exact length of "[|] Please wait...")
+set "BACK=!BS!!BS!!BS!!BS!!BS!!BS!!BS!!BS!!BS!!BS!!BS!!BS!!BS!!BS!!BS!!BS!!BS!!BS!"
 
-:: Hack to generate a Carriage Return (CR) character to overwrite the current line
-for /f %%A in ('copy /Z "%~f0" nul') do set "CR=%%A"
+:: Create temporary VBScript for no int sleeping
+set "SLEEP_VBS=%temp%\sleep_100ms_%random%.vbs"
+echo WScript.Sleep 100 > "%SLEEP_VBS%"
 
-:: Create a temporary VBScript for a 100ms sleep. 
-:: (Using this instead of PowerShell prevents heavy CPU usage and startup lag)
-set "sleepVBS=%temp%\sleep_100ms.vbs"
-echo WScript.Sleep 100 > "%sleepVBS%"
+set "spinner_chars=|/-\"
+set /a i=0
+
+:: Print first time
+<nul set /p "=[ ] Please wait..."
 
 :loop
-:: Check if process is alive (equivalent to 'kill -0')
-tasklist /FI "PID eq %PID%" /NH 2>nul | find "%PID%" >nul
-if errorlevel 1 goto endloop
+if exist "%FLAG_FILE%" goto :done
 
-:: Extract a different character each time
+:: Calcul current index
 set /a "idx=i %% 4"
-for %%j in (!idx!) do set "c=!spinner:~%%j,1!"
+set "c=!spinner_chars:~%idx%,1!"
 
-:: Print the spinner using the CR character to return to the start of the line
-<nul set /p ="!CR![!c!] Please wait..."
+:: Clear current line using returns and write new frame
+<nul set /p "=!BACK![!c!] Please wait..."
 
-:: Sleep 0.1 seconds
-cscript //nologo "%sleepVBS%"
+:: Call VBScript to wait 0.x seconds
+cscript //nologo "%SLEEP_VBS%"
 
-:: Increment counter and loop
 set /a i+=1
 goto loop
 
-:endloop
-:: Clean line and finish (Using √ as standard CMD doesn't natively render the Unicode \u2713 well)
-echo !CR![√] Process finished!          
+:done
+:: Delete temp file
+if exist "%SLEEP_VBS%" del /f /q "%SLEEP_VBS%"
 
-:: Cleanup temp file
-del "%sleepVBS%" 2>nul
-
+:: Overwrite spinner with success
+echo !BACK![OK] Process finished!          
 exit /b 0
