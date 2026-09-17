@@ -543,18 +543,19 @@ function installExternalDependencies(){
     # TODO: Validate when exist all this tools out of framework encapsulation and
     # an update is requested
     # GTKWave
-    if [ "$(which gtkwave)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
+    
+    if [ ! -n "$(command -v gtkwave)" ] || [[ $IS_UPDATE -eq 1 ]]; then
         printInfo "#=================== Installing GTKWave... ===================#"
         installGtkwave
     fi
 
     # Simulators
-    if [ "$(which iverilog)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
+    if [ ! -n "$(command -v iverilog)" ] || [[ $IS_UPDATE -eq 1 ]]; then
         printInfo "#=================== Installing Icarus Verilog... ===================#"
         installIcarus
     fi
 
-    if [ "$(which verilator)" == "" ] || [[ $IS_UPDATE -eq 1 ]]; then
+    if [ ! -n "$(command -v verilator)" ] || [[ $IS_UPDATE -eq 1 ]]; then
         printInfo "#=================== Installing Verilator... ===================#"
         installVerilator
     fi
