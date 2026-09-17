@@ -42,6 +42,11 @@ for arg in "$@"; do
         --update)
             IS_UPDATE=1
             PROC_MESSAGE="UPDATED"
+            HOME_DIR=$(echo $UVMENV_HOME)
+            if [ ! -n "$HOME_DIR" ]; then
+                echo -e "${C_RED}Missing UVMENV_HOME ${S_N}"
+                exit 1
+            fi
             shift
 
             case $1 in
