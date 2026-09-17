@@ -235,7 +235,7 @@ void runCurrentProject(const string& waveLevel){
 
         makefile << "SIM = " << simtool << "\n";
         makefile << "TOPLEVEL = " << top_module << "\n";
-        makefile << "MODULE = Top" << projName << "\n";
+        makefile << "COCOTB_TEST_MODULES = Top" << projName << "\n";
         makefile << "\n\n";
 
         makefile << "COCOTB_HDL_TIMEUNIT = " << time_unit_stream.str() << "\n";
