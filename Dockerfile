@@ -13,7 +13,7 @@ RUN apt update && apt install -y \
 
 # 2. Install Python global dependencies
 RUN pip3 install --no-cache-dir --break-system-packages \
-    "cocotb<2" "cocotb-coverage<2" pyuvm pyfiglet colorama pytest
+    "cocotb<3" "cocotb-coverage" "pyuvm<6" pyfiglet colorama pytest
 
 # 3. Compile and install Icarus Verilog
 # TIP: Considera usar --branch v12_0 para fijar una versión estable
@@ -61,23 +61,25 @@ RUN echo 'set tabstop=4       " Tab as 4 spaces' > /home/developer/.vimrc && \
 # 6. Copy repository content
 COPY --chown=developer:developer . /uvmenv_repo
 
-RUN mkdir -p /home/developer/uvmenv_install
+# RUN mkdir -p /home/developer/uvmenv_install
 RUN mkdir -p /home/developer/workspace
 
 # Clean files with dos2unix to convert all files to Linux format safely
 RUN find . -type f -print0 | xargs -0 dos2unix -q || true
-RUN chmod +x install.sh
+RUN chmod +x run_install.sh
 
 # Run UVMEnv installation
-RUN chmod +x install.sh 2>/dev/null || true
-RUN if [ -f "./install.sh" ]; then echo "y" | ./install.sh --home /home/developer/uvmenv_install; fi
+RUN chmod +x run_install.sh 2>/dev/null || true
+RUN if [ -f "./run_install.sh" ]; then echo "y" | ./run_install.sh --home /home/developer; fi
 
 # Configure environment variables
 ENV USER=developer
-ENV UVMENV_HOME=/home/developer/uvmenv_install
-ENV PATH="${UVMENV_HOME}/bin:${PATH}"
+# ENV UVMENV_HOME=/home/developer/uvmenv_install
+# ENV PATH="${UVMENV_HOME}/bin:${PATH}"
 
 RUN cp -r /uvmenv_repo/examples /home/developer
+SHELL ["/bin/bash", "-c"]
+RUN source /home/developer/.bashrc
 
 
 WORKDIR /home/developer/workspace

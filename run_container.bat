@@ -17,7 +17,12 @@ docker image inspect %IMAGE_NAME% >nul 2>&1
 if !errorlevel! neq 0 (
     echo [INFO] Image %IMAGE_NAME% does not exist locally. Building, please wait...
     echo [INFO] This process can take a few minutes.
-    docker build -t %IMAGE_NAME% . > docker_build.log 2>&1
+    @REM  docker build -t %IMAGE_NAME% . > docker_build.log 2>&1
+
+    :: Launch docker build in the background, redirect logs, and capture the PID
+    for /f "delims=" %%I in ('powershell -NoProfile -Command "(Start-Process -FilePath 'docker' -ArgumentList 'build -t %IMAGE_NAME% .' -RedirectStandardOutput 'docker_build.log' -RedirectStandardError 'docker_build.log' -WindowStyle Hidden -PassThru).Id"') do set "docker_pid=%%I"
+    :: Call the spinner using the captured PID
+    call spinner.bat %docker_pid%
 
     if !errorlevel! neq 0 (
         echo [ERROR] Something went wrong during installation.

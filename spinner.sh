@@ -14,7 +14,7 @@ spinner() {
     done
 
     # Clean line and finish
-    printf "\r[✓] Process finished! \n"
+    printf "\r[\u2713] Process finished! \n"
 }
 
-spinner "$@"
+spinner "$@"; exit $?

@@ -23,7 +23,7 @@ if ! docker image inspect "$IMAGE_NAME" >/dev/null 2>&1; then
     docker build -t "$IMAGE_NAME" . > docker_build.log 2>&1 &
     docker_pid=$!
     ./$SPINNER $docker_pid
-    wait $pid
+    wait $docker_pid
     
     if [ $? -ne 0 ] ; then
         echo -e "\e[31m[ERROR] Something went wrong during installation.\e[39m"
