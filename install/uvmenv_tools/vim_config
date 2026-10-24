@@ -1,0 +1,18 @@
+set nocompatible
+filetype plugin indent on
+syntax enable
+
+set tabstop=4       " Tab as 4 spaces
+set shiftwidth=4    " Indent size when using << or >>
+set expandtab       " Transform Tabs into Spaces when writing
+
+set number
+set autoindent
+
+set backspace=indent,eol,start
+set whichwrap+=<,>,[,]
+
+augroup ResurrectCursor
+  autocmd!
+  autocmd BufReadPost * if line("'\"") >= 1 && line("'\"") <= line("$") && &filetype !~# 'commit' | execute "normal! g`\"" | endif
+augroup END

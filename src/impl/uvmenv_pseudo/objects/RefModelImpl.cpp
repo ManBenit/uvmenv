@@ -25,10 +25,11 @@ void RefModelImpl::setEnvContainer(const string& envName){
 }
 
 void RefModelImpl::editFile(const string& name){
+    string editor = getProjectFramework(PROJECT_DIR, "editor");
     uvmenvProjectDir = joinStr({
         TBENCH_DIR, testName, "Envmnt", envName, "RefMdl", "_impl", name+".py"
     }, PATH_SEP);
-    const string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDir;
+    const string file = getScript("sys_commands")+"openEditor " + editor + " " + uvmenvProjectDir;
     
     if(!filesystem::exists(uvmenvProjectDir)){
         printError("[Ref model] Does not exist " + name);

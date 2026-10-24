@@ -3,6 +3,7 @@
 #include "../../../include/functions/utils.h"
 #include "../../../include/uvmenv_handling/general_handling/uvmenv_aux.h"
 #include "../../../include/uvmenv_handling/general_handling/framework.h"
+#include "../../../include/uvmenv_handling/general_handling/pconfig_handling.h"
 
 #include <iostream>
 #include <regex>
@@ -20,8 +21,9 @@ void Sequence::setTestContainer(const string& testName){
 }
 
 void Sequence::editFile(const string& name){
+    string editor = getProjectFramework(PROJECT_DIR, "editor");
     uvmenvProjectDir = joinStr({TBENCH_DIR, testName, "Seqnce", name+".py"}, PATH_SEP);
-    const string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDir;
+    const string file = getScript("sys_commands")+"openEditor " + editor + " " + uvmenvProjectDir;
     
     if(!filesystem::exists(uvmenvProjectDir)){
         printError("[Sequence] Does not exist " + name);

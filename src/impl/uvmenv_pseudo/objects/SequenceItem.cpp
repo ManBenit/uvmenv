@@ -22,10 +22,11 @@ void SequenceItem::setTestContainer(const string& testName){
 }
 
 void SequenceItem::editFile(const string& name){
+    string editor = getProjectFramework(PROJECT_DIR, "editor");
     uvmenvProjectDir = joinStr({
         TBENCH_DIR, testName, "SeqItm", name+".py"
     }, PATH_SEP);
-    const string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDir;
+    const string file = getScript("sys_commands")+"openEditor " + editor + " " + uvmenvProjectDir;
     
     if(!filesystem::exists(uvmenvProjectDir)){
         printError("[Sequence item] Does not exist " + name);

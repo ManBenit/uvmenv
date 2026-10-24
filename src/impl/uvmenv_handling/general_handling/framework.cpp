@@ -175,6 +175,9 @@ void createNewEnv(const string& projectName, const string& topModule){
 
     configContent["uvm_components"]["itface"]["bfm_impl"]    = "BfmDefault";
     configContent["uvm_components"]["refmdl"]["refmdl_impl"] = "RefDefault";
+
+    configContent["framework"]["editor"] = "vim";
+
     writeFileYaml("config.yml", configContent);
 
     // ==================================================================

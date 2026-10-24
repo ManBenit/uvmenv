@@ -1,0 +1,12 @@
+# Tab as 4 blank spaces
+set tabsize 4
+set tabstospaces
+
+# Show number lines
+set linenumbers
+
+# Auto-identation
+set autoindent
+
+# Remember last position when opening other file
+set positionlog

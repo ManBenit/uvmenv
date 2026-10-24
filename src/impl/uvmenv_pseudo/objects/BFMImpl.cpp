@@ -19,7 +19,8 @@ void BFMImpl::setName(const string& name){
 }
 
 void BFMImpl::editFile(const string& name){
-    const string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDirPrefix  + PATH_SEP +  name+".py";
+    string editor = getProjectFramework(PROJECT_DIR, "editor");
+    const string file = getScript("sys_commands")+"openEditor " + editor + " " + uvmenvProjectDirPrefix  + PATH_SEP +  name+".py";
 
     if(!filesystem::exists(uvmenvProjectDir)){
         printError("[BFM] Does not exist " + name);

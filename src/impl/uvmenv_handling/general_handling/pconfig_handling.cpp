@@ -1,4 +1,4 @@
-#include "../../../include/uvmenv_handling/component_handling/ptree_handling.h"
+#include "../../../include/uvmenv_handling/general_handling/pconfig_handling.h"
 #include "../../../include/functions/utils.h"
 #include "../../../include/functions/constants.h"
 #include <string>
@@ -22,6 +22,11 @@ string getProjectId(const string& currProj){
 string getProjectName(const string& currProj){
     YAML::Node configFile = readFileYaml(currProj + configFilePath);
     return configFile["name"].as<string>();
+}
+
+string getProjectFramework(const string& currProj, string field){
+    YAML::Node configFile = readFileYaml(currProj + configFilePath);
+    return configFile["framework"][field].as<string>();
 }
 
 string getProjectSimulation(const string& currProj, string field){

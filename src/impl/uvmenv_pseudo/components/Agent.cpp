@@ -53,11 +53,12 @@ void Agent::setAgentType(const string& agentType){
 }
 
 void Agent::editFile(const string& name, const string& element){
+    string editor = getProjectFramework(PROJECT_DIR, "editor");
     uvmenvProjectDir = joinStr({
         TBENCH_DIR, testName, "Envmnt", envName, "Agents", name
     }, PATH_SEP);
     int sysResult = 0;
-    string file = getScript("sys_commands")+"openEditor " + uvmenvProjectDir;
+    string file = getScript("sys_commands")+"openEditor " + editor + " " + uvmenvProjectDir;
 
     if(!filesystem::exists(uvmenvProjectDir)){
         printError("[Agent] Does not exist " + name);

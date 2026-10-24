@@ -1,8 +1,5 @@
 #!/bin/bash
 
-DEFAULT_SYS_EDITOR="vi"
-
-
 
 function viewTreeProject(){
     tree -C | less -R
@@ -23,9 +20,32 @@ function viewCoverage(){
     less $1/coverage_report.xml
 }
 
-# $1: Path of file
+# $1: Selected editor
+# $2: Path of file
 function openEditor(){
-    $DEFAULT_SYS_EDITOR $1
+    local editor=$1
+    local path=$2
+    local default_editor_config="$UVMENV_HOME/uvmenv/tools/${editor}_config"
+    local option="-u"
+    local plugin="--noplugin"
+
+    if [ "$editor" == "nano" ]; then
+        option="-f"
+        plugin=""
+    fi
+
+    if [ "$editor" == "gedit" ]; then
+        option=""
+        default_editor_config=""
+        plugin=""
+    fi
+
+    if [ "$editor" == "gedit" ]; then
+        $editor $path $option $default_editor_config $plugin &> /dev/null &
+    else
+        $editor $path $option $default_editor_config $plugin
+    fi
+    
     exit $?
 }
 
@@ -83,7 +103,7 @@ case $1 in
         viewCoverage $2
         ;;
     "openEditor")
-        openEditor $2
+        openEditor $2 $3
         ;;
 
 
