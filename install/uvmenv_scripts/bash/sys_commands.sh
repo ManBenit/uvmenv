@@ -54,7 +54,8 @@ function openEditor(){
 # $1: Path for RTL files
 function getRTLFullFiles(){
     local files=""
-    local modules_list=($(find $1 -type f \( -name "*.v" -o -name "*.vh" -o -name "*.sv" -o -name "*.svh" \) | sort | uniq))
+    local modules_list=($(find $1 ! -name '.*' \( -type l -o \( -type f \( -name "*.v" -o -name "*.vh" -o -name "*.sv" -o -name "*.svh" \) \) \) | sort | uniq))
+    
 
     for file in $(ls ${modules_list[@]}); do
         files+="$file "
@@ -65,7 +66,7 @@ function getRTLFullFiles(){
 
 # $1: Path for RTL files
 function getRTLModuleNames(){
-    echo $(find $1 -type f \( -name "*.v" -o -name "*.vh" -o -name "*.sv" -o -name "*.svh" \) | sed -E 's/.*\/([^\/]+)\..*/\1/' | sort | uniq)
+    echo $(find $1 ! -name '.*' \( -type l -o \( -type f \( -name "*.v" -o -name "*.vh" -o -name "*.sv" -o -name "*.svh" \) \) \) | sed -E 's/.*\/([^\/]+)(\..*)?/\1/' | sort | uniq)
 }
 
 
