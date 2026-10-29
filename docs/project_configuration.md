@@ -13,7 +13,7 @@ of the BFM (in the **driver** and the **monitor**) or the reference model (in th
 ```python
 def __import_bfm(self):
     # Get an specific value from .json
-    config = load_config('config.json')
+    config = load_config('config.yml')
     implementation_class = config.uvm_components.itface.bfm_impl
     ...
 ```
@@ -21,7 +21,7 @@ def __import_bfm(self):
 ```python
 def __import_refmdl(self):
     # Get an specific value from .json
-    config = load_config('config.json')
+    config = load_config('config.yml')
     implementation_class = config.uvm_components.refmdl.refmdl_impl
     ...
 ```

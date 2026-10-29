@@ -5,7 +5,7 @@
 # ====================
 # Python imports
 # ====================
-import sys
+import sys 
 import pyuvm
 from collections import deque
 from pyuvm import uvm_scoreboard, uvm_tlm_analysis_fifo, uvm_get_port
@@ -17,7 +17,10 @@ from SignalsReader import get_dut_signames
 from UVMEnvReport import report
 from utils import config
 ISDUTSEQ = config.dut_design.type == 'sequential'
-
+CLOCK_NAME        =     config.dut_cs4seq.clock_name
+CLOCK_EDGE_ACT    =     config.dut_cs4seq.clock_edge_act
+RESET_NAME        =     config.dut_cs4seq.reset_name
+RESET_EDGE_ACT    =     config.dut_cs4seq.reset_edge_act
 
 
 class ScbDefault(uvm_scoreboard):
@@ -39,7 +42,7 @@ class ScbDefault(uvm_scoreboard):
         # Create ports for FIFOs
         self.dut_result_get_port = uvm_get_port('dut_result_get_port', self)
         self.refmodel_result_get_port = uvm_get_port('refmodel_result_get_port', self)
-        
+    
     def connect_phase(self):
         # Connect ports with FIFOs exports
         self.dut_result_get_port.connect(self.dut_result_fifo.get_export)
@@ -83,12 +86,12 @@ class ScbDefault(uvm_scoreboard):
                 self.sync_dut_ins.append( self.pending_dut[i].get_ins_only() )
                 self.sync_dut_outs.append( self.pending_dut[i].get_outs_only() )
 
-        # Ensure data pending lists have a coherent size for scoreboarding
-        assert len(self.sync_dut_ins) == len(self.sync_dut_outs), \
+        # Ensure data pending lists have a coherent size for scoreboarding and are greater than 0
+        assert len(self.sync_dut_ins) == len(self.sync_dut_outs) > 0, \
             f'FAILED: DUT Ins({len(self.sync_dut_ins)}) | DUT Outs({len(self.sync_dut_outs)})'
-        assert len(self.sync_dut_outs) == len(self.pending_rmod), \
+        assert len(self.sync_dut_outs) == len(self.pending_rmod) > 0, \
             f'FAILED: DUT Out({len(self.sync_dut_outs)}) | RefModel({len(self.pending_rmod)})'
-        
+    
 
         # ====================================================
         # Scorboarding proposal (using available UVMEnv tools)
@@ -97,18 +100,18 @@ class ScbDefault(uvm_scoreboard):
         # You can use the mechanism of general assertions and use filters:
         for prefmod, dutin, dutout in zip(self.pending_rmod, self.sync_dut_ins, self.sync_dut_outs):
             for signame in get_dut_signames(type='INPUT'): # You can filter
-                assert dutin.get(signame) == getattr(prefmod, signame), \
+                assert int( dutin.get(signame) ) == int( getattr(prefmod, signame) ), \
                     f'FAILED [{signame}]: DUT({hex(dutin.get(signame))}) | RefModel({hex(getattr(prefmod, signame))})'
             for signame in get_dut_signames(type='OUTPUT'): # You can filter
-                assert dutout.get(signame) == getattr(prefmod, signame), \
+                assert int( dutout.get(signame) ) == int( getattr(prefmod, signame) ), \
                     f'FAILED [{signame}]: DUT({hex(dutout.get(signame))}) | RefModel({hex(getattr(prefmod, signame))})'
-        
+    
         # # You can also validate signals individually:
         # cond = tr_dut.SIGNAL_NAME == tr_rmod.SIGNAL_NAME
         # assert cond, \
         #     f'FAILED [SIGNAL_NAME]: DUT({hex(tr_dut.SIGNAL_NAME)}) | RefModel({hex(tr_rmod.SIGNAL_NAME)})'
         # ''''''
-                            
+    
         # # You can use the report mechanism in any moment
         # if cond:
         #     report.write(message=f'[TEST PASSED] SIGNAL_NAME', component=self, level=pyuvm.INFO)
@@ -127,11 +130,7 @@ class ScbDefault(uvm_scoreboard):
         ''' You can write reporting actions here '''
 
 
-    def write(self, t):
+    def write(self, t): 
         pass
 
-
 sys.modules[__name__] = ScbDefault
-
-        
-            

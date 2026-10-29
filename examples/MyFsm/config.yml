@@ -1,0 +1,26 @@
+id: dXZtOk15RnNtOmVudg==
+name: MyFsm
+simulation:
+    tool: icarus
+    time_unit_mag: 1
+    time_unit: ns
+    time_prec_mag: 1
+    time_prec: ps
+dut_design:
+    type: sequential
+    top_module: MyFSM
+dut_cs4seq:
+    clock_name: i_clk
+    clock_edge_act: high
+    reset_name: i_rst_n
+    reset_edge_act: low
+    sync_cycles: 1
+    clock_period: 1
+    cycles4wait_reset: 1
+uvm_components:
+    itface:
+        bfm_impl: BfmDefault
+    refmdl:
+        refmdl_impl: RefDefault
+framework:
+    editor: vim

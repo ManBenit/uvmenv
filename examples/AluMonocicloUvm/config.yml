@@ -1,0 +1,27 @@
+id: dXZtOkFsdU1vbm9jaWNsb1V2bTplbnY=
+name: AluMonocicloUvm
+simulation:
+    tool: icarus
+    time_unit_mag: 1
+    time_unit: ns
+    time_prec_mag: 1
+    time_prec: ps
+dut_design:
+    type: combinatorial
+    top_module: ALU
+dut_cs4seq:
+    clock_name: clk
+    clock_edge_act: high
+    reset_name: rst
+    reset_edge_act: high
+    sync_cycles: 1
+    clock_period: 1
+    cycles4wait_reset: 1
+uvm_components:
+    itface:
+        bfm_impl: BfmDefault
+    refmdl:
+        refmdl_impl: RefDefault
+        ref_alu_mon: RefAlumon
+framework:
+    editor: vim

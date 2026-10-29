@@ -21,6 +21,10 @@ from utils import config
 from UVMEnvReport import report
 
 
+print( Fore.BLUE+pyfiglet.figlet_format('UVMEnv')+Fore.RESET )
+print( Fore.YELLOW+pyfiglet.figlet_format(config.dut_design.top_module)+Fore.RESET )
+
+
 
 # ============================================================
 # Every tests are into UVM_TB/.
@@ -33,9 +37,6 @@ from UVMEnvReport import report
 # import TestDefault
 # ============================================================
 import TestDefault
-
-print( Fore.BLUE+pyfiglet.figlet_format('UVMEnv')+Fore.RESET )
-print( Fore.YELLOW+pyfiglet.figlet_format(config.dut_design.top_module)+Fore.RESET )
 
 
 @cocotb.test()
@@ -93,7 +94,7 @@ async def do_fake_test():
     dut.a.value = 2
     dut.b.value = 3
     dut.eval()
-    await Timer(1, units='ns')
+    await Timer(1, unit='ns')
 
     assert dut.result.value == 5, f'Expected 5, obtained {dut.result.value}'
     cocotb.log.info('Test 1 OK')
@@ -102,7 +103,7 @@ async def do_fake_test():
     dut.a.value = 10
     dut.b.value = -4
     dut.eval()
-    await Timer(1, units='ns')
+    await Timer(1, unit='ns')
 
     assert dut.result.value == 6, f'Expected 6, obtained {dut.result.value}'
     cocotb.log.info('Test 2 OK')

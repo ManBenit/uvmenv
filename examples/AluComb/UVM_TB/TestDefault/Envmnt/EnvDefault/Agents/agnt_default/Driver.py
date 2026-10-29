@@ -30,10 +30,10 @@ class Driver(uvm_driver):
 
             # Send transaction to DUT
             await self.bfm.set(transaction)
-            
+    
             self.seq_item_port.item_done()
 
-            
+    
     def __import_bfm(self):
         # Get an specific value from .json
         implementation_class = config.uvm_components.itface.bfm_impl
@@ -45,5 +45,3 @@ class Driver(uvm_driver):
         except Exception as e:
             self.logger.critical(f'Failed to load BFM implementation: {e}')
             return
-
-    

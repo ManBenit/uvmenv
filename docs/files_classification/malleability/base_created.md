@@ -32,7 +32,7 @@ from utils import load_config
 
 from Test import Test
 
-CONFIG = load_config('config.json')
+CONFIG = load_config('config.yml')
 
 @cocotb.test()
 async def main_test(dut):

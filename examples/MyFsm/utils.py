@@ -2,25 +2,44 @@
 ###    CONFIG FILE    ###
 #########################
 
-import json
+import yaml
 from types import SimpleNamespace
-from cocotb.binary import BinaryValue
+from cocotb.types import LogicArray
 
 
-# Function to load configuration from config.json file.
-# @param [filename]: Path of .json file.
+# Method to convert a dictionary into namespace data, for easier management in dev and correct work of load_config.
+# @param [d]: Dictionary to be converted.
+# @return: SimpleNamespace object if dictionary, List if .yamls contains list (-) or simple type.
+def __dict_to_namespace(data):
+    if isinstance(data, dict):
+        return SimpleNamespace(**{k: __dict_to_namespace(v) for k, v in data.items()})
+    elif isinstance(data, list):
+        return [__dict_to_namespace(item) for item in data]
+    else:
+        return data
+
+# Function to load configuration from config.yml file.
+# @param [filename]: Path of .yml file.
 def load_config(filename):
     with open(filename, 'r') as config_file:
-        config = json.load(config_file, object_hook=lambda d: SimpleNamespace(**d))
+        # Load YAML as standar dict (safe_load)
+        config_dict = yaml.safe_load(config_file)
+        
+        # Make soncersion to SimpleNamespace
+        config = __dict_to_namespace(config_dict)
+        
     return config
 
 
 # Function to get binary representation from certain integer
 # @param [value]: Integer value to convert.
 # @param [bitsize]: Signal bit length.
-def to_bin_repr(value: int, bitsize: int) -> BinaryValue:
-    twos_complement_value = value & ((1 << bitsize) - 1)
-    return BinaryValue(value=twos_complement_value, n_bits=bitsize, bigEndian=False)
+def to_bin_repr(value: int, bitsize: int) -> LogicArray:
+    mask = (1 << bitsize) - 1
+    if value < 0:
+        return LogicArray.from_signed(value, bitsize)
+    else:
+        return LogicArray.from_unsigned(value & mask, bitsize)
 
 
 # Function handle special values like 'x', 'z', 'u', 'w' in transaction signals.
@@ -32,5 +51,5 @@ def process_unkn_val(value):
     elif 'w' in str(value): return 'W'
 
 
-config = load_config('config.json')
+config = load_config('config.yml')
 

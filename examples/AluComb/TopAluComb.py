@@ -21,6 +21,10 @@ from utils import config
 from UVMEnvReport import report
 
 
+print( Fore.BLUE+pyfiglet.figlet_format('UVMEnv')+Fore.RESET )
+print( Fore.YELLOW+pyfiglet.figlet_format(config.dut_design.top_module)+Fore.RESET )
+
+
 
 # ============================================================
 # Every tests are into UVM_TB/.
@@ -33,9 +37,6 @@ from UVMEnvReport import report
 # import TestDefault
 # ============================================================
 import TestDefault
-
-print( Fore.BLUE+pyfiglet.figlet_format('UVMEnv')+Fore.RESET )
-print( Fore.YELLOW+pyfiglet.figlet_format(config.dut_design.top_module)+Fore.RESET )
 
 
 @cocotb.test()

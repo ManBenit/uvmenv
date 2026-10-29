@@ -6,7 +6,7 @@
 # Python imports
 # ====================
 import pyuvm
-from pyuvm import logging
+import logging
 
 
 # ====================================================

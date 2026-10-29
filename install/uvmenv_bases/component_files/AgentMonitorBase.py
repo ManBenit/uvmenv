@@ -44,7 +44,7 @@ class Monitor(uvm_monitor):
 
 
     def __import_bfm(self):
-        # Get an specific value from .json
+        # Get an specific value from .yml
         implementation_class = config.uvm_components.itface.bfm_impl
 
         # Convert value into Python implementation that you want to use

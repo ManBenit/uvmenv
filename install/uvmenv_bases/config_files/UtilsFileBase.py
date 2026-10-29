@@ -9,7 +9,7 @@ from cocotb.types import LogicArray
 
 # Method to convert a dictionary into namespace data, for easier management in dev and correct work of load_config.
 # @param [d]: Dictionary to be converted.
-# @return: SimpleNamespace object if dictionary, List if .yamls contains list (-) or simple type.
+# @return: SimpleNamespace object if dictionary, List if .yaml contains list (-) or simple type.
 def __dict_to_namespace(data):
     if isinstance(data, dict):
         return SimpleNamespace(**{k: __dict_to_namespace(v) for k, v in data.items()})
@@ -18,8 +18,8 @@ def __dict_to_namespace(data):
     else:
         return data
 
-# Function to load configuration from config.json file.
-# @param [filename]: Path of .json file.
+# Function to load configuration from config.yml file.
+# @param [filename]: Path of .yml file.
 def load_config(filename):
     with open(filename, 'r') as config_file:
         # Load YAML as standar dict (safe_load)
