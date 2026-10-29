@@ -66,7 +66,7 @@ function getRTLFullFiles(){
 
 # $1: Path for RTL files
 function getRTLModuleNames(){
-    echo $(find $1 ! -name '.*' \( -type l -o \( -type f \( -name "*.v" -o -name "*.vh" -o -name "*.sv" -o -name "*.svh" \) \) \) | sed -E 's/.*\/([^\/]+)(\..*)?/\1/' | sort | uniq)
+    echo $(find $1 ! -name '.*' \( -type l -o \( -type f \( -name "*.v" -o -name "*.vh" -o -name "*.sv" -o -name "*.svh" \) \) \) | sed -E 's/.*\/([^\/]+)\..*/\1/' | sort | uniq)
 }
 
 
